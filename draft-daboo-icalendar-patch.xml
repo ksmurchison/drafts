@@ -36,6 +36,18 @@
         <uri>http://www.apple.com/</uri>
       </address>
     </author>
+    <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
+      <organization>Carnegie Mellon University</organization>
+      <address>
+        <postal>
+          <street>5000 Forbes Avenue</street>
+          <city>Pittsburgh</city> <region>PA</region>
+          <code>15213</code> <country>USA</country>
+        </postal>
+        <!--<phone>+1 412 268 1982</phone>-->
+        <email>murch@andrew.cmu.edu</email>
+      </address>
+    </author>
     <date />
     <area>Applications</area>
     <keyword>calendaring</keyword>
