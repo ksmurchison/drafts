@@ -1,52 +1,49 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-<!-- $Id: draft-murchison-nntp-compress.xml,v 1.2 2010/01/26 20:31:44 ken Exp $ -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc1951 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.1951.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1951.xml'>
 <!ENTITY rfc1962 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.1962.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1962.xml'>
 <!ENTITY rfc2119 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'>
 <!ENTITY rfc3749 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3749.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3749.xml'>
 <!ENTITY rfc3977 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3977.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3977.xml'>
 <!ENTITY rfc4422 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4422.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4422.xml'>
 <!ENTITY rfc4642 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4642.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4642.xml'>
 <!ENTITY rfc4643 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4643.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4643.xml'>
 <!ENTITY rfc4644 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4644.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4644.xml'>
 <!ENTITY rfc4648 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4648.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4648.xml'>
 <!ENTITY rfc4978 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4978.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4978.xml'>
 <!ENTITY rfc5226 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml'>
 <!ENTITY rfc5234 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml'>
 <!ENTITY rfc5246 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'>
-<!ENTITY rfc7405 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7405.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'>
 <!ENTITY rfc7457 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7457.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7457.xml'>
 <!ENTITY rfc7525 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7525.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml'>
 <!ENTITY ieee1003 PUBLIC ''
-'http://xml.resource.org/public/rfc/bibxml2/reference.IEEE.1003-2.1992.xml'>
+'http://xml2rfc.ietf.org/public/rfc/bibxml2/reference.IEEE.1003-2.1992.xml'>
 ]>
 <?rfc toc="yes" ?>
 <?rfc symrefs="yes" ?>
 <?rfc sortrefs="yes"?>
-<?rfc iprnotified="no" ?>
 <?rfc strict="yes" ?>
+<?rfc rfcedstyle="yes" ?>
 <rfc category="std" ipr="trust200902"
-     docName="draft-murchison-nntp-compress-02">
-<!-- 
+     docName="draft-murchison-nntp-compress-05">
+<!--
 ipr="full3978"
 updates="4642"
 -->
@@ -70,21 +67,37 @@ updates="4642"
 </address>
 </author>
 
-<date month="November" year="2015"/>
+<author initials="J." surname="&#201;lie" fullname="Julien &#201;lie">
+<organization/>
+<address>
+<postal>
+<street>10 all&#233;e Clovis</street>
+<code>93160</code>
+<city>Noisy-le-Grand</city>
+<country>France</country>
+</postal>
+<email>julien@trigofacile.com</email>
+<uri>http://www.trigofacile.com/</uri>
+</address>
+</author>
+
+<date month="June" year="2016"/>
 
 <area>Applications</area>
 <workgroup>Independent Submission</workgroup>
 
 <keyword>NNTP</keyword>
+<keyword>Usenet</keyword>
+<keyword>NetNews</keyword>
 <keyword>COMPRESS</keyword>
 <keyword>DEFLATE</keyword>
 <keyword>compression</keyword>
 
 <abstract>
 
-<t>This memo defines an extension to the Network News Transport
-  Protocol (NNTP) to allow a connection to be effectively and
-  efficiently compressed.</t>
+<t>This document defines an extension to the Network News Transport
+  Protocol (NNTP) that allows a connection to be effectively and
+  efficiently compressed between an NNTP client and server.</t>
 
 </abstract>
 </front>
@@ -103,6 +116,47 @@ updates="4642"
   Security Layer (SASL) encryption <xref target="RFC4422"/>, Virtual
   Private Networks (VPNs), etc.</t>
 
+<t>The point of COMPRESS as an NNTP extension is to act as a compression
+  layer, similarly to a security layer like the one negotiated by
+  STARTTLS <xref target="RFC4642"/>.  Compression can therefore benefit
+  to all NNTP commands sent or received after the use of COMPRESS.
+  This facility responds to a long-standing need for NNTP to compress
+  data, that has partially been addressed by unstandardized commands like
+  XZVER, XZHDR, XFEATURE COMPRESS, or MODE COMPRESS.  These commands
+  are not wholly satisfactory because they enable compression only for
+  the responses sent by the news server.  On the contrary, the COMPRESS
+  command permits to compress data sent by both the client and the
+  server, and removes the constraint of having to implement compression
+  separately in each NNTP command.  Besides, the compression level can be
+  dynamically adjusted and optimized at any time during the connection,
+  which even allows to disable compression for certain commands, if
+  need be.  If the news client wants to stop compression on a particular
+  connection, it can simply use QUIT (<xref target="RFC3977"/> Section
+  5.4), and establish a new connection.  For these reasons, using other
+  NNTP commands than COMPRESS to enable compression is discouraged once
+  COMPRESS is supported.</t>
+
+<t>In order to increase interoperability, it is desirable to have as
+  few different compression algorithms as possible, so this document
+  specifies only one.  The DEFLATE algorithm (defined in <xref
+  target="RFC1951"/>) MUST be implemented as part of this extension.
+  This compression algorithm is standard, widely available, and fairly
+  efficient.</t>
+
+<t>This specification should be read in conjunction with the NNTP
+  base specification <xref target="RFC3977"/>.  In the case of a
+  conflict between these two documents, <xref target="RFC3977"/>
+  takes precedence.</t>
+
+<section title="About TLS-level Compression" anchor="tlslevel">
+
+<t>Though data compression is made possible via the use of TLS with
+  NNTP <xref target="RFC4642"/>, the best current practice is to
+  disable TLS-level compression as explained in Section 3.3 of <xref
+  target="RFC7525"/>.  The COMPRESS command will permit to keep the
+  compression facility in NNTP and control when it is available during
+  a connection.</t>
+
 <t>Compared to TLS-level compression
   <xref target="RFC3749"/>, NNTP COMPRESS has the following
   advantages:
@@ -117,34 +171,40 @@ updates="4642"
   parameters.</t>
 
 <t>COMPRESS can be activated after authentication has completed thus
-reducing the chances that authentication credentials can be leaked via
-a CRIME attack <xref target="RFC7457"/>.</t>
+  reducing the chances that authentication credentials can be leaked via
+  for instance a CRIME attack (<xref target="RFC7457"/> Section 2.6).</t>
 </list></t>
 
-<t>Also note that best current practice is to disable TLS-level
-compression <xref target="RFC7525"/>.</t>
+</section> <!-- tlslevel -->
 
-<t>In order to increase interoperability, it is desirable to have as
-   few different compression algorithms as possible, so this document
-   specifies only one.  The DEFLATE algorithm (defined in
-   <xref target="RFC1951"/>) is standard, widely available and fairly
-   efficient, and MUST be implemented as part of this extension.</t>
-
-<section title="Conventions Used in This Document">
+<section title="Conventions Used in This Document" anchor="conventions">
 
 <t>The notational conventions used in this document are the same as
-  those in <xref target="RFC3977"/> and any term not defined in this
-  document has the same meaning as in that one.</t>
+  those in <xref target="RFC3977"/>, and any term not defined in this
+  document has the same meaning as it does in that one.</t>
 
 <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
   document are to be interpreted as described in
   <xref target="RFC2119"/>.</t>
 
-<t>In the examples, commands from the client are indicated with [C],
-  and responses from the server are indicated with [S].</t>
+<t>In the examples, commands from the client are indicated with [C], and
+  responses from the server are indicated with [S].  The client is the
+  initiator of the NNTP connection; the server is the other endpoint.</t>
 
 </section> <!-- conventions -->
+<section title="Authors' Note" anchor="authorsnote">
+
+<t>Please write the first letter of "Elie" and the penultimate letter
+  of "allee" with an acute accent wherever possible -- they are
+  respectively U+00C9 ("&amp;#201;" in XML) and U+00E9 ("&amp;#233;"
+  in XML).  Also, the letters "ae" in "Baeuerle" should be written as
+  an a-umlaut (U+00E4, "&amp;#228;" in XML), and the first letter of
+  "Angel" as well as the fifth letter of "Gonzalez" should be written
+  with an acute accent (respectively U+00C1 and U+00E1, that is to say
+  "&amp;#193;" and "&amp;#225;" in XML).</t>
+
+</section> <!-- authorsnote -->
 </section> <!-- intro -->
 
 <section title="The COMPRESS Extension" anchor="compressext">
@@ -157,12 +217,13 @@ compression <xref target="RFC7525"/>.</t>
 
 <section title="Advertising the COMPRESS Extension" anchor="advertising">
 
-<t>A server supporting the COMPRESS command as defined in this
-  document will advertise the "COMPRESS" capability label in response
-  to the CAPABILITIES command (<xref target="RFC3977"/> Section
-  5.2).  This capability MAY be advertised both before and after any
-  use of the MODE READER command (<xref target="RFC3977"/> Section
-  5.3), with the same semantics.</t>
+<t>A server supporting the COMPRESS command as defined in this document
+  will advertise the "COMPRESS" capability label in response to the
+  CAPABILITIES command (<xref target="RFC3977"/> Section 5.2).  However,
+  this capability MUST NOT be advertised once a compression layer
+  is active (see Section 2.2.2).  This capability MAY be advertised
+  both before and after any use of the MODE READER command (<xref
+  target="RFC3977"/> Section 5.3), with the same semantics.</t>
 
 <t>The COMPRESS capability label contains a whitespace-separated list
   of available compression algorithms.  This document defines one
@@ -174,18 +235,23 @@ compression <xref target="RFC7525"/>.</t>
   capability.  Unrecognized algorithms MUST be ignored by the
   client.</t>
 
+<t>As the COMPRESS command is related to security because it can
+  weaken encryption, cached results of CAPABILITIES from a previous
+  session MUST NOT be relied on, as per Section 12.6 of <xref
+  target="RFC3977"/>.</t>
+
 <t>Example:</t>
 
 <figure>
 <artwork>
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] READER
-[S] IHAVE
-[S] COMPRESS DEFLATE X-SHRINK
-[S] LIST ACTIVE NEWSGROUPS
-[S] .
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] READER
+   [S] IHAVE
+   [S] COMPRESS DEFLATE X-SHRINK
+   [S] LIST ACTIVE NEWSGROUPS
+   [S] .
 </artwork>
 </figure>
 
@@ -201,18 +267,18 @@ compression <xref target="RFC7525"/>.</t>
 <figure>
 <artwork>
 Syntax
-   COMPRESS algorithm
+  COMPRESS algorithm
 
 Responses
-   206 Compression active
-   403 Unable to activate compression
-   502 Command unavailable [1]
+  206 Compression active
+  403 Unable to activate compression
+  502 Command unavailable [1]
 
 [1] If a compression layer is already active, COMPRESS is not a valid
     command (see Section 2.2.2).
 
 Parameters
-   algorithm = Name of compression algorithm: "DEFLATE"
+  algorithm = Name of compression algorithm (e.g. "DEFLATE")
 </artwork>
 </figure>
 </section> <!-- usage -->
@@ -223,46 +289,57 @@ Parameters
   document) for all commands and/or responses after COMPRESS.</t>
 
 <t>The client MUST NOT send any further commands until it has seen the
-   result of COMPRESS.</t>
+  result of COMPRESS.</t>
 
-<t>If the requested compression algorithm is invalid (e.g., is not
-   supported), the server MUST reject the COMPRESS command with a 503
-   response (<xref target="RFC3977"/> Section 3.2.1).  If the
-   server is unable to activate compression for any reason (e.g., a
-   server configuration or resource problem), the server MUST reject
-   the COMPRESS command with a 403 response (<xref target="RFC3977"/>
-   Section 3.2.1).  Otherwise, the server issues a 206 response and
-   the compression layer takes effect for both client and server
-   immediately following the CRLF of the success reply.</t>
+<t>If the requested compression algorithm is syntactically incorrect,
+  the server MUST reject the COMPRESS command with a 501 response code
+  (<xref target="RFC3977"/> Section 3.2.1).  If the requested compression
+  algorithm is invalid (e.g., is not supported), the server MUST reject
+  the COMPRESS command with a 503 response code (<xref target="RFC3977"/>
+  Section 3.2.1).  If the server is unable to activate compression for
+  any reason (e.g., a server configuration or resource problem), the
+  server MUST reject the COMPRESS command with a 403 response code (<xref
+  target="RFC3977"/> Section 3.2.1).  Otherwise, the server issues a 206
+  response code and the compression layer takes effect for both client
+  and server immediately following the CRLF of the success reply.</t>
+
+<t>Additionally, the client MUST NOT issue a MODE READER command after
+  activating a compression layer, and a server MUST NOT advertise the
+  MODE-READER capability.</t>
 
 <t>Both the client and the server MUST know if there is a compression
-  layer active.  A client MUST NOT attempt to activate compression
-  (via either the COMPRESS or STARTTLS <xref target="RFC4642"/>
-  commands) if a compression layer is already active.  A server MUST
-  NOT return the COMPRESS or STARTTLS capability labels in response to
-  a CAPABILITIES command received after a compression layer is active,
-  and a server MUST reply with a 502 response code if a syntactically
-  valid COMPRESS or STARTTLS command is received while a compression
-  layer is already active.</t>
+  layer active (for instance via the previous use of the COMPRESS
+  command or the negotiation of a TLS-level compression <xref
+  target="RFC3749"/>).  A client MUST NOT attempt to activate compression
+  or negotiate a TLS layer (for instance via the use of the COMPRESS or
+  STARTTLS <xref target="RFC4642"/> commands) if a compression layer is
+  already active.  A server MUST NOT return the COMPRESS or STARTTLS
+  capability labels in response to a CAPABILITIES command received
+  after a compression layer is active, and a server MUST reply with
+  a 502 response code if a syntactically valid COMPRESS or STARTTLS
+  command is received while a compression layer is already active.</t>
 
-<t>In order help mitigate leaking authentication credentials via a
-  CRIME attack <xref target="CRIME"/>, a server SHOULD NOT return any
-  arguments with the AUTHINFO capability label in response to a
-  CAPABILTIES command received after a compression layer is active.
-  In this case, a client SHOULD NOT attempt to utilize any AUTHINFO
-  commands.</t>
+<t>In order to help mitigate leaking authentication credentials via for
+  instance a CRIME attack <xref target="CRIME"/>, authentication SHOULD
+  NOT be attempted when a compression layer is active.  Consequently,
+  a server SHOULD NOT return any arguments with the AUTHINFO capability
+  label (or SHOULD NOT advertise it at all) in response to a CAPABILITIES
+  command received from an unauthenticated client after a compression
+  layer is active, and such a client SHOULD NOT attempt to utilize any
+  AUTHINFO <xref target="RFC4643"/> commands.  It implies that a server
+  SHOULD reply with a 502 response code if a syntactically valid AUTHINFO
+  command is received while a compression layer is already active.</t>
 
 <t>For DEFLATE <xref target="RFC1951"/> (as for many other compression
-  mechanisms), the compressor can trade speed against quality.  The
+  algorithms), the compressor can trade speed against quality.  The
   decompressor MUST automatically adjust to the parameters selected by
-  the sender. Consequently, the client and server are both free to
-  pick the best reasonable rate of compression for the data they
-  send.</t>
+  the sender.  Consequently, the client and server are both free to pick
+  the best reasonable rate of compression for the data they send.</t>
 
 <t>When COMPRESS is combined with TLS <xref target="RFC5246"/>
   or SASL <xref target="RFC4422"/> security layers, the processing
   order of the three layers MUST be first COMPRESS, then SASL, and
-  finally TLS.  That is, before data is transmitted it is first
+  finally TLS.  That is, before data is transmitted, it is first
   compressed.  Second, if a SASL security layer has been negotiated,
   the compressed data is then signed and/or encrypted accordingly.
   Third, if a TLS security layer has been negotiated, the data from
@@ -271,7 +348,12 @@ Parameters
   that before sending, data is compressed before it is encrypted,
   independent of the order in which the client issues the COMPRESS,
   AUTHINFO SASL <xref target="RFC4643"/>, and STARTTLS
-  <xref target="RFC4642"/> commands.</t> 
+  <xref target="RFC4642"/> commands.</t>
+
+<t>When compression is active and either the client or the server
+  receives invalid or corrupted compressed data, the receiving end
+  SHOULD immediately close the connection.  (Then the sending end will
+  in turn do the same.)</t>
 
 </section> <!-- description -->
 
@@ -281,123 +363,140 @@ Parameters
 <t>Example of layering TLS and NNTP compression:</t>
 
 <figure><artwork>
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] READER
-[S] STARTTLS
-[S] AUTHINFO
-[S] COMPRESS DEFLATE
-[S] .
-[C] STARTTLS
-[S] 382 Continue with TLS negotiation
-[TLS negotiation without compression occurs here]
-[Following successful negotiation, all traffic is encrypted]
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] READER
-[S] AUTHINFO USER
-[S] COMPRESS DEFLATE
-[S] .
-[C] AUTHINFO USER fred
-[S] 381 Enter passphrase
-[C] AUTHINFO PASS flintstone
-[S] 281 Authentication accepted
-[C] COMPRESS DEFLATE
-[S] 206 Compression active
-[From this point on, all traffic is compresssed before being encrypted]
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] READER
+   [S] STARTTLS
+   [S] AUTHINFO
+   [S] COMPRESS DEFLATE
+   [S] LIST ACTIVE NEWSGROUPS
+   [S] .
+   [C] STARTTLS
+   [S] 382 Continue with TLS negotiation
+   [TLS negotiation without compression occurs here]
+   [Following successful negotiation, all traffic is encrypted]
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] READER
+   [S] AUTHINFO USER
+   [S] COMPRESS DEFLATE
+   [S] LIST ACTIVE NEWSGROUPS
+   [S] .
+   [C] AUTHINFO USER fred
+   [S] 381 Enter passphrase
+   [C] AUTHINFO PASS flintstone
+   [S] 281 Authentication accepted
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] READER
+   [S] POST
+   [S] COMPRESS DEFLATE
+   [S] LIST ACTIVE NEWSGROUPS
+   [S] .
+   [C] COMPRESS DEFLATE
+   [S] 206 Compression active
+   [Henceforth, all traffic is compressed before being encrypted]
 </artwork></figure>
 
 <t>Example of a server failing to activate compression:</t>
 
 <figure><artwork>
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] IHAVE
-[S] COMPRESS DEFLATE
-[S] .
-[C] COMPRESS DEFLATE
-[S] 403 Unable to activate compression
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] IHAVE
+   [S] COMPRESS DEFLATE
+   [S] .
+   [C] COMPRESS DEFLATE
+   [S] 403 Unable to activate compression
 </artwork></figure>
 
 <t>Example of attempting to use an unsupported compression algorithm:</t>
 
 <figure><artwork>
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] IHAVE
-[S] COMPRESS DEFLATE
-[S] .
-[C] COMPRESS X-SHRINK
-[S] 503 Compression algorithm not supported
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] IHAVE
+   [S] COMPRESS DEFLATE
+   [S] .
+   [C] COMPRESS X-SHRINK
+   [S] 503 Compression algorithm not supported
 </artwork></figure>
 
-<t>Examples of a server refusing to compress twice:</t>
+<t>Example of a server refusing to compress twice:</t>
 
 <figure><artwork>
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] IHAVE
-[S] STARTTLS
-[S] COMPRESS DEFLATE
-[S] .
-[C] STARTTLS
-[S] 382 Continue with TLS negotiation
-[TLS negotiation with compression occurs here]
-[Following successful negotiation, all traffic is protected by TLS]
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] IHAVE
-[S] .
-[C] COMPRESS DEFLATE
-[S] 502 Compression already active via TLS
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] IHAVE
+   [S] STARTTLS
+   [S] COMPRESS DEFLATE
+   [S] .
+   [C] STARTTLS
+   [S] 382 Continue with TLS negotiation
+   [TLS negotiation with compression occurs here]
+   [Following successful negotiation, all traffic is encrypted]
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] IHAVE
+   [S] .
+   [C] COMPRESS DEFLATE
+   [S] 502 Compression already active via TLS
 </artwork></figure>
 
+<t>Example of a server refusing to negotiate a TLS layer after
+  compression has been activated:</t>
+
 <figure><artwork>
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] IHAVE
-[S] STARTTLS
-[S] COMPRESS DEFLATE
-[S] .
-[C] COMPRESS DEFLATE
-[S] 206 Compression active
-[From this point on, all traffic is compresssed]
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] IHAVE
-[S] .
-[C] STARTTLS
-[S] 502 DEFLATE compression already active
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] IHAVE
+   [S] STARTTLS
+   [S] COMPRESS DEFLATE
+   [S] .
+   [C] COMPRESS DEFLATE
+   [S] 206 Compression active
+   [Henceforth, all traffic is compressed]
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] IHAVE
+   [S] .
+   [C] STARTTLS
+   [S] 502 DEFLATE compression already active
 </artwork></figure>
 
-<t>Example of a server not advertising AUTHINFO mechanisms after
-compression has been activated:</t>
+<t>Example of a server not advertising AUTHINFO arguments after
+  compression has been activated:</t>
 
 <figure><artwork>
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] READER
-[S] AUTHINFO USER
-[S] COMPRESS DEFLATE
-[S] .
-[C] COMPRESS DEFLATE
-[S] 206 Compression active
-[From this point on, all traffic is compresssed]
-[C] CAPABILITIES
-[S] 101 Capability list:
-[S] VERSION 2
-[S] READER
-[S] AUTHINFO
-[S] .
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] READER
+   [S] AUTHINFO USER
+   [S] COMPRESS DEFLATE
+   [S] LIST ACTIVE NEWSGROUPS
+   [S] .
+   [C] COMPRESS DEFLATE
+   [S] 206 Compression active
+   [Henceforth, all traffic is compressed]
+   [C] CAPABILITIES
+   [S] 101 Capability list:
+   [S] VERSION 2
+   [S] READER
+   [S] AUTHINFO
+   [S] LIST ACTIVE NEWSGROUPS
+   [S] .
+   [C] AUTHINFO USER fred
+   [S] 502 DEFLATE compression already active
 </artwork></figure>
 
 </section> <!-- examples -->
@@ -413,127 +512,130 @@ compression has been activated:</t>
 <t>NNTP poses some unusual problems for a compression layer.</t>
 
 <t>Upstream traffic is fairly simple.  Most NNTP clients send the same
-  few commands again and again, so any compression algorithm that can 
-  exploit repetition works efficiently.  The article posting and
-  transfer commands (e.g., POST, IHAVE, and TAKETHIS
-  <xref target="RFC4644"/>) are exceptions; clients that send many
-  article posting or transfer commands may want to surround large
-  multi-line data blocks with flushes in the same way as is
-  recommended for servers later in this section.</t>
+  few commands again and again, so any compression algorithm that can
+  exploit repetition works efficiently.  The article posting and transfer
+  commands (e.g., POST, IHAVE, and TAKETHIS <xref target="RFC4644"/>) are
+  exceptions; clients that send many article posting or transfer commands
+  may want to surround large multi-line data blocks with a dictionary
+  flush and/or, depending on the compression algorithm, a change of
+  compression level in the same way as is recommended for servers later
+  in this document (<xref target="deflatespecificities"/>).</t>
 
 <t>Downstream traffic has the unusual property that several kinds of
-  data are sent, confusing all dictionary-based compression
-  algorithms.</t>
+  data are sent, possibly confusing a dictionary-based compression
+  algorithm.</t>
 
 <t>One type is NNTP simple responses and NNTP multi-line responses not
-   related to article header/body retrieval (e.g, CAPABILITIES, GROUP,
-   LISTGROUP, LAST, NEXT, STAT, DATE, NEWNEWS, NEWGROUPS, LIST, CHECK
-   <xref target="RFC4644"/>, etc).  These are highly compressible;
-   zlib using its least CPU-intensive setting compresses typical
-   responses to 25-40% of their original size.</t>
+  related to article header/body retrieval (e.g, CAPABILITIES, GROUP,
+  LISTGROUP, LAST, NEXT, STAT, DATE, NEWNEWS, NEWGROUPS, LIST, CHECK
+  <xref target="RFC4644"/>, etc).  These are highly compressible;
+  zlib using its least CPU-intensive setting compresses typical
+  responses to 25-40% of their original size.</t>
 
 <t>Another type is article headers (as retrieved via the HEAD, HDR,
-   OVER, or ARTICLE commands).  These are equally compressible, and
-   benefit from using the same dictionary as the NNTP responses.</t>
+  OVER, or ARTICLE commands).  These are equally compressible, and
+  benefit from using the same dictionary as the NNTP responses.</t>
 
 <t>A third type is article body text (as retrieved via the BODY or
-   ARTICLE commands).  Text is usually fairly short and includes much
-   ASCII, so the same compression dictionary will do a good job here,
-   too.  When multiple messages in the same thread are read at the
-   same time, quoted lines, etc. can often be compressed almost to
-   zero.</t>
+  ARTICLE commands).  Text is usually fairly short and includes much
+  ASCII, so the same compression dictionary will do a good job here, too.
+  When multiple messages in the same thread are read at the same time,
+  quoted lines, etc. can often be compressed almost to zero.</t>
 
-<t>Finally, attachments (non-text article bodies retrieved via the
-   BODY and ARTICLE commands) are transmitted in encoded form, usually
-   Base64 <xref target="RFC4648"/>, UUencode
-   <xref target="IEEE.1003-2.1992"/>, or yEnc
-   <xref target="yEnc"/>.</t>
+<t>Finally, non-text article bodies or attachments (as retrieved
+  via the BODY and ARTICLE commands) are transmitted in encoded
+  form, usually Base64 <xref target="RFC4648"/>, UUencode <xref
+  target="IEEE.1003-2.1992"/>, or yEnc <xref target="yEnc"/>.</t>
 
-<t>When attachments are retrieved, DEFLATE may be able to compress
-   them, but the format of the attachment's encoding is usually not
-   NNTP-like, so the dictionary built while compressing NNTP does not 
-   help.  The compressor has to adapt its dictionary from NNTP to the
-   attachment's encoding format, and then back.  
-<!--
-    A few file formats aren't compressible at all using deflate, e.g.,
-   .gz, .zip, and .jpg files.
--->
-</t>
+<t>When already compressed articles or attachments are retrieved, a
+  compression algorithm may be able to compress them, but the format
+  of their encoding is usually not NNTP-like, so the dictionary built
+  while compressing NNTP does not help much.  The compressor has to
+  adapt its dictionary from NNTP to the attachment's encoding format,
+  and then back.</t>
 
-<t>When attachments are retrieved in Base64 or UUencode form, these
-   encodings add another problem.  8-bit compression algorithms such
-   as DEFLATE work well on 8-bit file formats, however both Base64 and
-   UUencode transform a file into something resembling 6-bit bytes,
-   hiding most of the 8-bit file format from the compressor.</t>
+<t>When attachments are retrieved in Base64 or UUencode form, the
+  Huffman coding usually compresses those to approximatively only 75%
+  of their encoding size.  8-bit compression algorithms such as DEFLATE
+  work well on 8-bit file formats; however, both Base64 and UUencode
+  transform a file into something resembling 6-bit bytes, hiding most
+  of the 8-bit file format from the compressor.</t>
+
+<t>On the other end, attachments encoded using a compression algorithm
+  that retains the full 8-bit spectrum, like yEnc, are much more likely
+  to be incompressible.</t>
+
+<section title="DEFLATE Specificities" anchor="deflatespecificities">
 
 <t>When using the zlib library (see <xref target="RFC1951"/>), the
-   functions deflateInit2(), deflate(), inflateInit2(), and inflate()
-   suffice to implement this extension.  The windowBits value must be
-   in the range -8 to -15 for deflateInit2(), or else it will use the
-   wrong format.  The windowBits value should be -15 for
-   inflateInit2(), or else it will not be able to decompress a
-   stream with a larger window size.  deflateParams() can be used to
-   improve compression rate and resource use.  The Z_FULL_FLUSH
-   argument to deflate() can be used to clear the dictionary (the
-   receiving peer does not need to do anything).</t>
+  functions deflateInit2(), deflate(), inflateInit2(), and inflate()
+  suffice to implement this extension.  The windowBits value MUST be
+  in the range -8 to -15 for deflateInit2(), or else it will use the
+  wrong format.  The windowBits value SHOULD be -15 for inflateInit2(),
+  or else it will not be able to decompress a stream with a larger
+  window size.  deflateParams() can be used to improve compression
+  rate and resource use.  In order to improve compression efficiency,
+  the Z_PARTIAL_FLUSH argument to deflate() should always be used to
+  flush data.  As far as DEFLATE is concerned, clearing the dictionary
+  never improves compression over the other flushes.  On the contrary,
+  having the 32kB dictionary from previous data, no matter how unrelated,
+  can only help.  If there are no matching strings in there, then it
+  is simply not referenced.  Using Z_FULL_FLUSH clears the dictionary,
+  and consequently always results in compression that is less effective
+  than a Z_PARTIAL_FLUSH.</t>
 
-<t>A server can improve downstream compression if it hints to the
-   compressor that the data type is about to change strongly, e.g., by
-   sending a Z_FULL_FLUSH at the start and end of large non-text
-   multi-line data blocks (before and after 'content-lines' in the
-   definition of 'multi-line-data-block' in <xref target="RFC3977"/>
-   Section 9.8).  Small multi-line data blocks are best left alone.  A
-   possible boundary is 5kB.</t>
+<t>A server can improve downstream compression and the CPU efficiency
+  both of the server and the client if it adjusts the compression
+  level (e.g., using the deflateParams() function in zlib) at the
+  start and end of large non-text multi-line data blocks (before and
+  after 'content-lines' in the definition of 'multi-line-data-block'
+  in <xref target="RFC3977"/> Section 9.8).  It permits to avoid trying
+  to compress incompressible attachments.  Small multi-line data blocks
+  are best left alone.  A possible boundary is 5kB.</t>
 
-<!--
-<t>A server can improve the CPU efficiency both of the server and the
-   client if it adjusts the compression level (e.g., using the
-   deflateParams() function in zlib) at these points, to avoid trying
-   to compress incompressible attachments.  A very simple strategy is
-   to change the level to 0 at the start of a multi-line data block
-   provided the first two bytes are either 0x1F 0x8B (as in
-   deflate-compressed files) or 0xFF 0xD8 (JPEG), and to keep it at
-   1-5 the rest of the time.  More complex strategies are
-   possible.</t>
--->
+<t>A very simple strategy is to change the compression level to 0 at
+  the start of a multi-line data block provided the first two bytes
+  are either 0x1F 0x8B (as in deflate-compressed files) or 0xFF 0xD8
+  (JPEG), and to keep it at 1-5 the rest of the time.  More complex
+  strategies are of course possible, and encouraged.</t>
+
+</section> <!-- deflatespecificities -->
 </section> <!-- efficiency -->
 
 
 <section title="Augmented BNF Syntax for the COMPRESS Extension"
 anchor="ABNF">
 
-<t>This section describes the syntax of the COMPRESS extension using
-  ABNF <xref target="RFC7405"/> <xref target="RFC5234"/>.  It extends
-  the syntax in Section 9 of <xref target="RFC3977"/>, and
-  non-terminals not defined in this document are defined there.  The
-  <xref target="RFC3977"/> ABNF should be imported first before
-attempting to validate these rules.</t>
+<t>This section describes the formal syntax of the COMPRESS extension using
+  ABNF <xref target="RFC5234"/>.  It extends the syntax in Section 9
+  of <xref target="RFC3977"/>, and non-terminals not defined in this
+  document are defined there.  The <xref target="RFC3977"/> ABNF should
+  be imported first, before attempting to validate these rules.</t>
 
 <section title="Commands" anchor="commands">
 
-<t>This syntax extends the non-terminal "command", which represents an
+<t>This syntax extends the non-terminal &lt;command&gt;, which represents an
   NNTP command.</t>
 
 <figure>
-<artwork>
-command =/ compress-command
+<artwork type="abnf">
+  command =/ compress-command
 
-compress-command = "COMPRESS" WS algorithm
+  compress-command = "COMPRESS" WS algorithm
 </artwork>
 </figure>
 </section> <!-- commands -->
 
+<section title="Capability Entries" anchor="capabilities">
 
-<section title="Capability entries" anchor="capabilities">
-
-<t>This syntax extends the non-terminal "capability-entry", which
+<t>This syntax extends the non-terminal &lt;capability&nbhy;entry&gt;, which
   represents a capability that may be advertised by the server.</t>
 
 <figure>
-<artwork>
-capability-entry =/ compress-capability
+<artwork type="abnf">
+  capability-entry =/ compress-capability
 
-compress-capability = "COMPRESS" 1*(WS algorithm)
+  compress-capability = "COMPRESS" 1*(WS algorithm)
 </artwork>
 </figure>
 </section> <!-- capabilities -->
@@ -541,9 +643,9 @@ compress-capability = "COMPRESS" 1*(WS algorithm)
 <section title="General Non-terminals" anchor="non-terminals">
 
 <figure>
-<artwork>
-algorithm = %s"DEFLATE" / 1*20alg-char  ; case-sensitive
-alg-char = UPPER / DIGIT / "-" / "_"
+<artwork type="abnf">
+  algorithm = "DEFLATE" / 1*20alg-char
+  alg-char = UPPER / DIGIT / "-" / "_"
 </artwork>
 </figure>
 
@@ -563,7 +665,7 @@ alg-char = UPPER / DIGIT / "-" / "_"
 <artwork>
 Response code 206
    Generated by: COMPRESS
-   Meaning: Compression layer activated
+   Meaning: compression layer activated
 </artwork>
 </figure>
 </section> <!-- respcodes -->
@@ -571,12 +673,62 @@ Response code 206
 
 <section title="Security Considerations" anchor="security">
 
-<t>TODO</t>
+<t>Security issues are discussed throughout this document.</t>
 
+<t>In general, the security considerations of the NNTP core specification
+  (<xref target="RFC3977"/> Section 12) and the DEFLATE compressed
+  data format specification (<xref target="RFC1951"/> Section 6) are
+  applicable here.</t>
+
+<t>Implementers should be aware that combining compression with
+  encryption like TLS can sometimes reveal information that would not
+  have been revealed without compression, as explained in Section 6
+  of <xref target="RFC3749"/>.  As a matter of fact, adversaries that
+  observe the length of the compressed data might be able to derive
+  information about the corresponding uncompressed data.  The CRIME
+  and the BREACH attacks (<xref target="RFC7457"/> Section 2.6) are
+  examples of such case.</t>
+
+<t>In order to help mitigate leaking authentication credentials, this
+  document states in <xref target="description"/> that authentication
+  SHOULD NOT be attempted when a compression layer is active.  Therefore,
+  when a client wants to authenticate, compress data, and negotiate a TLS
+  layer (without TLS-level compression) in the same NNTP connection, it
+  SHOULD use the STARTTLS, AUTHINFO, and COMPRESS commands in that order.
+  Of course instead of using the STARTTLS command, a client can also use
+  implicit TLS, that is to say it begins the TLS negotiation immediately
+  upon connection on a separate port dedicated to NNTP over TLS.</t>
+
+<t>NNTP commands other than AUTHINFO are not believed to divulgate
+  confidential information as long as only public Netnews newsgroups
+  and articles are accessed.  That is why this specification only
+  adds a restriction to the use of AUTHINFO when a compression layer
+  is active.  In case confidential articles are accessed in private
+  newsgroups, special care is needed: implementations SHOULD NOT compress
+  confidential data together with public data when a security layer is
+  active, for the same reasons as mentioned above in this Section.</t>
+
+<t>Additionally, implementations MAY ensure that the contents of two
+  distinct confidential articles are not compressed together.  This can
+  be achieved for instance with DEFLATE by clearing the compression
+  dictionary each time a confidential article is sent.  More complex
+  implementations are of course possible, and encouraged.</t>
+
+<t>Implementations SHOULD use a default configuration with disabled
+  compression when a security layer is active, and MUST support an option
+  to allow compression to be enabled when a security layer is active.
+  Such an option can be either with global scope or server/connection
+  based.  Implementations MAY unconditionally allow compression to be
+  enabled when no security layer is active.</t>
+
+<t>Future extensions to NNTP that define commands conveying confidential
+  data SHOULD ensure to state that these confidential data SHOULD
+  NOT be compressed together with public data when a security layer
+  is active.</t>
 </section> <!-- security -->
 
 
-<section title="IANA Considerations">
+<section title="IANA Considerations" anchor="iana">
 
 <section title="NNTP Compression Algorithm Registry" anchor="compreg">
 
@@ -585,18 +737,40 @@ Response code 206
   &lt;http://www.iana.org/assignments/nntp-compression-algorithms&gt;.</t>
 
 <t>The purpose of this registry is not only to ensure uniqueness of
-   values used to name NNTP compression algorithms, but also to
-   provide a definitive reference to technical specifications
-   detailing each NNTP compression algorithm available for use on the
-   Internet.</t>
+  values used to name NNTP compression algorithms, but also to
+  provide a definitive reference to technical specifications
+  detailing each NNTP compression algorithm available for use on the
+  Internet.</t>
 
-<t>There is no naming convention for NNTP compression algorithms; any
-   name that conforms to the syntax of a NNTP compression algorithm
-   name can be registered.</t>
+<t>An NNTP compression algorithm is either a private algorithm, or
+  its name is included in the IANA NNTP Compression Algorithm registry
+  (in which case it is a "registered NNTP compression algorithm").
+  Different entries in the registry MUST use different names.</t>
+
+<t>Any name that conforms to the syntax of an NNTP compression algorithm
+  name (<xref target="non-terminals"/>) can be used.  However, the name
+  of a registered NNTP compression algorithm MUST NOT begin with "X".</t>
+
+<t>To avoid the risk of a clash with a future registered NNTP compression
+  algorithm, the names of private compression algorithms SHOULD begin
+  with "X-".</t>
+
+<t>If the server advertises a registered NNTP compression algorithm, it
+  MUST implement the compression algorithm so as to fully conform with
+  its related specification.  If it does not implement the compression
+  algorithm as specified, it MUST NOT list its registered name in the
+  arguments list of the COMPRESS capability label.  In that case,
+  it MAY, but SHOULD NOT, provide a private algorithm (not listed,
+  or listed with a different name) that implements the compression
+  algorithm differently.</t>
+
+<t>A server MUST NOT send different response codes to COMPRESS
+  in response to the availability or use of a private compression
+  algorithm.</t>
 
 <t>The procedure detailed in <xref target="regproc"/> is to be used
-   for registration of a value naming a specific individual
-   mechanism.</t>
+  for registration of a value naming a specific individual compression
+  algorithm.</t>
 
 <t>Comments may be included in the registry as discussed in
   <xref target="regcomments"/> and may be changed as discussed in
@@ -606,116 +780,123 @@ Response code 206
   anchor="regproc">
 
 <t>IANA will register new NNTP compression algorithm names on a First
-   Come First Served basis, as defined in BCP 26
-   <xref target="RFC5226"/>.  IANA has the right to reject obviously
-   bogus registration requests, but will perform no review of claims
-   made in the registration form.</t>
+  Come First Served basis, as defined in BCP 26
+  <xref target="RFC5226"/>.  IANA has the right to reject obviously
+  bogus registration requests, but will perform no review of claims
+  made in the registration form.</t>
 
 <t>Registration of an NNTP compression algorithm is requested by
-filling in the following template and sending it via electronic mail
-to IANA at &lt;iana@iana.org&gt;:</t> 
+  filling in the following template and sending it via electronic mail
+  to IANA at &lt;iana@iana.org&gt;:</t>
 
 <figure>
 <artwork>
-Subject: Registration of NNTP compression algorithm X
+   Subject: Registration of NNTP compression algorithm X
 
-NNTP compression algorithm name:
+   NNTP compression algorithm name:
 
-Security considerations:
+   Security considerations:
 
-Published specification (recommended):
+   Published specification (recommended):
 
-Contact for further information:
+   Contact for further information:
 
-Intended usage: (One of COMMON, LIMITED USE, or OBSOLETE)
+   Intended usage: (One of COMMON, LIMITED USE, or OBSOLETE)
 
-Owner/Change controller:
+   Owner/Change controller:
 
-Note: (Any other information that the author deems relevant may be
-       added here.)
+   Note: (Any other information that the author deems relevant may be
+          added here.)
 </artwork>
 </figure>
 
 <t>While this registration procedure does not require expert review,
-   authors of NNTP compression algorithms are encouraged to seek
-   community review and comment whenever that is feasible.  Authors
-   may seek community review by posting a specification of their
-   proposed mechanism as an Internet-Draft.  NNTP compression
-   algorithms intended for widespread use should be standardized
-   through the normal IETF process, when appropriate.</t>
+  authors of NNTP compression algorithms are encouraged to seek
+  community review and comment whenever that is feasible.  Authors
+  may seek community review by posting a specification of their
+  proposed algorithm as an Internet-Draft.  NNTP compression
+  algorithms intended for widespread use should be standardized
+  through the normal IETF process, when appropriate.</t>
 
 </section> <!-- compreg -->
 
 <section title="Comments on Algorithm Registrations"
   anchor="regcomments">
 
-<t>Comments on a registered NNTP compression algorithm should first be
-   sent to the "owner" of the algorithm and/or to the
-   &lt;ietf-nntp@lists.eyrie.org&gt; mailing list.</t>
+<t>Comments on a registered NNTP compression algorithm should
+  first be sent to the "owner" of the algorithm and/or to the
+  mailing list for the now concluded IETF NNTPEXT working group
+  (&lt;ietf-nntp@lists.eyrie.org&gt;).</t>
 
 <t>Submitters of comments may, after a reasonable attempt to contact
-   the owner, request IANA to attach their comment to the NNTP
-   compression algorithm registration itself by sending mail to
-   &lt;iana@iana.org&gt;.  At IANA's sole discretion, IANA may attach
-   the comment to the NNTP compression algorithm's registration.</t>
+  the owner and/or the above mailing list, request IANA to attach their
+  comment to the NNTP compression algorithm registration itself by
+  sending mail to &lt;iana@iana.org&gt;.  At IANA's sole discretion,
+  IANA may attach the comment to the NNTP compression algorithm's
+  registration.</t>
 
 </section> <!-- regcomments -->
 
 <section title="Change Control" anchor="changecontrol">
 
 <t>Once an NNTP compression algorithm registration has been published
-   by IANA, the author may request a change to its definition.  The
-   change request follows the same procedure as the registration
-   request.</t>
+  by IANA, the owner may request a change to its definition.  The
+  change request follows the same procedure as the initial registration
+  request.</t>
 
 <t>The owner of an NNTP compression algorithm may pass responsibility
-   for the algorithm to another person or agency by informing IANA;
-   this can be done without discussion or review.</t>
+  for the algorithm to another person or agency by informing IANA;
+  this can be done without discussion or review.</t>
 
 <t>The IESG may reassign responsibility for an NNTP compression
-   algorithm.  The most common case of this will be to enable changes
-   to be made to algorithms where the author of the registration has
-   died, has moved out of contact, or is otherwise unable to make
-   changes that are important to the community.</t>
+  algorithm.  The most common case of this will be to enable changes
+  to be made to algorithms where the owner of the registration has
+  died, has moved out of contact, or is otherwise unable to make
+  changes that are important to the community.</t>
 
-<t>NNTP compression algorithm registrations may not be deleted;
-   algorithms that are no longer believed appropriate for use can be
-   declared OBSOLETE by a change to their "intended usage" field; such
-   algorithms will be clearly marked in the lists published by
-   IANA.</t>
+<t>NNTP compression algorithm registrations MUST NOT be deleted;
+  algorithms that are no longer believed appropriate for use can be
+  declared OBSOLETE by a change to their "intended usage" field; such
+  algorithms will be clearly marked in the registry published by
+  IANA.</t>
 
 <t>The IESG is considered to be the owner of all NNTP compression
-   algorithms that are on the IETF standards track.</t>
+  algorithms that are on the IETF standards track.</t>
 
 </section> <!-- changecontrol -->
 
-</section> <!-- compreg -->
+</section> <!-- iana -->
 
-<section title="Registration of the DEFLATE Compression Algorithm">
+<section title="Registration of the DEFLATE Compression Algorithm"
+anchor="registrationalg">
 <t>This section gives a formal definition of the DEFLATE compression
-   algorithm as required by <xref target="regproc"/> for the IANA
-   registry.</t>
+  algorithm as required by <xref target="regproc"/> for the IANA
+  registry.</t>
 
-<t>NNTP compression algorithm name: DEFLATE</t>
+<figure>
+<artwork>
+   NNTP compression algorithm name: DEFLATE
 
-<t>Security considerations: See <xref target="security"/> of this
-  document</t>
+   Security considerations: See Section 6 of this document
 
-<t>Published specification: This document</t>
+   Published specification: This document
 
-<t>Contact for further information: Author of this document</t>
+   Contact for further information: Authors of this document
 
-<t>Intended usage: COMMON</t>
+   Intended usage: COMMON
 
-<t>Owner/Change controller: IESG &lt;iesg@ietf.org&gt;.</t>
+   Owner/Change controller: IESG &lt;iesg@ietf.org&gt;
 
-<t>Note: This algorithm is mandatory to implement</t>
-</section>
+   Note: This algorithm is mandatory to implement
+</artwork>
+</figure>
+</section> <!-- registrationalg -->
 
-<section title="Registration of the NNTP COMPRESS Extension">
+<section title="Registration of the NNTP COMPRESS Extension"
+anchor="registrationext">
 <t>This section gives a formal definition of the COMPRESS extension as
-   required by Section 3.3.3 of <xref target="RFC3977"/> for the IANA
-   registry.
+  required by Section 3.3.3 of <xref target="RFC3977"/> for the IANA
+  registry.
 
 <list style="symbols">
 <t>The COMPRESS extension allows an NNTP connection to be effectively
@@ -737,20 +918,22 @@ Note: (Any other information that the author deems relevant may be
 <t>Use of this extension does alter the capabilities list; once the
   COMPRESS command has been used successfully, the COMPRESS capability
   can no longer be advertised by CAPABILITIES.  Additionally, the
-  STARTTLS and MODE-READER capabilities MUST NOT be advertised after
-  successful execution of the COMPRESS command.</t>
+  STARTTLS and MODE-READER capabilities MUST NOT be advertised, and the
+  AUTHINFO capability label SHOULD either return no arguments or no longer
+  be advertised after successful execution of the COMPRESS command.</t>
 <t>This extension does not cause any pre-existing command to produce a
-  401, 480, or 483 response.</t>
-<t>This extension is unaffected by any use of the MODE READER command,
-  however the MODE READER command MUST NOT be used in the same session
+  401, 480, or 483 response code.</t>
+<t>This extension is unaffected by any use of the MODE READER command;
+  however, the MODE READER command MUST NOT be used in the same session
   following a successful execution of the COMPRESS command.</t>
-<t>The STARTTLS command MUST NOT be used in the same session
-  following a successful execution of the COMPRESS command.</t>
+<t>The STARTTLS command MUST NOT be used, and the AUTHINFO command SHOULD
+  NOT be used, in the same session following a successful execution of
+  the COMPRESS command.</t>
 <t>Published Specification: This document.</t>
-<t>Contact for Further Information: Author of this document.</t>
+<t>Contact for Further Information: Authors of this document.</t>
 <t>Change Controller: IESG &lt;iesg@ietf.org&gt;.</t>
 </list></t>
-</section>
+</section> <!-- registrationext -->
 
 </section> <!-- iana -->
 
@@ -759,16 +942,15 @@ Note: (Any other information that the author deems relevant may be
 
 <back>
 <references title="Normative References">
-&rfc1951;
 &rfc2119;
 &rfc3977;
 &rfc4642;
 &rfc5226;
 &rfc5234;
-&rfc7405;
 </references> <!-- normative -->
 
 <references title="Informative References">
+&rfc1951;
 &rfc1962;
 &rfc3749;
 &rfc4422;
@@ -786,7 +968,7 @@ Note: (Any other information that the author deems relevant may be
 <title>Data compression procedures for data circuit-terminating
   equipment (DCE) using error correction procedures</title>
 <author><organization abbrev="ITU">International Telecommunications
-    Union</organization></author>
+  Union</organization></author>
 <date month="January" year="1990"/>
 </front>
 <seriesInfo name="ITU-T" value="Recommendation V.42bis"/>
@@ -807,14 +989,14 @@ Note: (Any other information that the author deems relevant may be
 <title>The CRIME Attack</title>
 <author initials="J." surname="Rizzo" fullname="Juliano Rizzo"/>
 <author initials="T." surname="Duong" fullname="Thai Duong"/>
-<date month="EKOparty Security Conference," year="2012"/>
+<date month="Ekoparty Security Conference," year="2012"/>
 </front>
 </reference>
 
-<reference anchor="yEnc" target="http://www.yenc.org/yenc-draft.1.3.txt">
+<reference anchor="yEnc" target="http://www.yenc.org/">
 <front>
 <title>yEnc - Efficient encoding for Usenet and eMail</title>
-<author initials="J." surname="Helbing" fullname="J&uuml;rgen Helbing"/>
+<author initials="J." surname="Helbing" fullname="J&#252;rgen Helbing"/>
 <date month="March" year="2002"/>
 </front>
 <format type="TEXT" target="http://www.yenc.org/yenc-draft.1.3.txt"/>
@@ -823,33 +1005,82 @@ Note: (Any other information that the author deems relevant may be
 </references> <!-- informative -->
 
 
-<section title="Acknowledgements">
+<section title="Acknowledgements" anchor="acknowledgements">
 
 <t>This document draws heavily on ideas in <xref target="RFC4978"/>
   by Arnt Gulbrandsen and a large portion of this text was borrowed
   from that specification.</t>
 
-<t>The author would like to thank the following individuals for
-   contributing their ideas and support for writing this
-   specification: Russ Allbery, Michael B&auml;uerle, and Julien
-   &Eacute;LIE,</t>
+<t>The authors would like to thank the following individuals for
+  contributing their ideas and support for writing this specification:
+  Mark Adler, Russ Allbery, Michael B&#228;uerle, &#193;ngel
+  Gonz&#225;lez, and Brian Peterson.</t>
 
 </section> <!-- acknowledgements -->
 
 
 <section title="Document History (to be removed by RFC Editor before
-		publication)">
+		publication)" anchor="history">
+
+<section title="Changes since -04">
+<t><list style="symbols">
+<t>Reworded a sentence wrongly using "MAY NOT" (not a key word defined in
+  <xref target="RFC2119"/>).</t>
+<t>Uppercased a "must" and a "should" in
+  <xref target="deflatespecificities"/>.</t>
+</list></t>
+</section>
+
+<section title="Changes since -03">
+<t><list style="symbols">
+<t>Added a naming convention for NNTP compression algorithms.  Improve the
+  wording of registered vs private compression algorithms.</t>
+<t>If a registered NNTP compression algorithm is advertised, it
+  MUST fully conform with its related specification.</t>
+<t>Fixed the wording of security considerations to reflect that the threat
+  appears when public and confidential data are compressed together inside
+  a security layer.  Thanks to &#193;ngel Gonz&#225;lez for pointing that.</t>
+<t>The default configuration SHOULD be disabled compression when a security
+  layer is active.</t>
+<t>COMPRESS acts as a compression layer, not a transport layer.</t>
+<t>Minor editorial changes.</t>
+</list></t>
+</section>
+
+<section title="Changes since -02">
+<t><list style="symbols">
+<t>Added text stating that the receiving end SHOULD terminate the connection
+  when receiving invalid or corrupted compressed data.</t>
+<t>Explained why COMPRESS permits to do better than existing unstandardized
+  commands like XZVER, XZHDR, MODE COMPRESS, and XFEATURE GZIP.</t>
+<t>Added an example of AUTHINFO command when compression is active.</t>
+<t>The LIST capability label was missing in the examples when READER
+  was also advertised.</t>
+<t>Improved an example to send CAPABILITIES after successful authentication.</t>
+<t>Mentioned that COMPRESS is related to security.  CAPABILITIES is therefore
+  sent again after COMPRESS.</t>
+<t>Re-added discussion of attachments in binary form and incompressible
+  file formats.  Improve the discussion about flushes, and add a specific
+  section about DEFLATE.</t>
+<t>Changed a MUST NOT to SHOULD NOT for the use of AUTHINFO after COMPRESS.</t>
+<t>Algorithm names are case-insensitive.</t>
+<t>Mentioned the use of the 501 response code.</t>
+<t>Added the Security Considerations Section.</t>
+<t>Added Julien &#201;lie as co-author of this document.</t>
+<t>Minor editorial changes.</t>
+</list></t>
+</section>
 
 <section title="Changes since -01">
 <t><list style="symbols">
 <t>Switched to using 206 response code when compression has been
-activated.</t>
+  activated.</t>
 <t>Added text stating that TLS-level compression is susceptible to
-CRIME attack and current BCP is to disable it.</t>
+  CRIME attack and current BCP is to disable it.</t>
 <t>Added text stating that AUTHINFO shouldn't be advertised or used
-after COMPRESS to prevent possible CRIME attack (with example).</t>
+  after COMPRESS to prevent possible CRIME attack (with example).</t>
 <t>Added text stating that a windowBits value of -15 should be used
-for inflateInit2().</t>
+  for inflateInit2().</t>
 <t>Minor editorial changes.</t>
 </list></t>
 </section>
@@ -871,20 +1102,11 @@ for inflateInit2().</t>
 <t>Mentioned UUencode and yEnc encoding of attachments.</t>
 </list></t>
 <t>Added IANA registry of NNTP compression algorithms.</t>
-<t>Miscellaneous editorial changes submitted by Julien &Eacute;lie.</t>
+<t>Miscellaneous editorial changes submitted by Julien &#201;lie.</t>
 </list></t>
 </section>
 
 </section> <!-- history -->
-
-
-<section title="Issues to be addressed">
-<t><list style="symbols">
-<t>Should we restrict the ABNF for compression algorithms?  We
-currently use 'token' but that allows for UTF-8 chars and
-case-insensitivity.</t></list></t>
-</section>
-
 
 </back>
 </rfc>
