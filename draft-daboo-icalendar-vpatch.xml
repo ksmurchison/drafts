@@ -19,9 +19,9 @@
 <?rfc subcompact="no"?>
 <?rfc tocdepth="2"?>
 <?rfc strict="yes"?>
-<rfc category="std" ipr='trust200902' docName='draft-daboo-icalendar-patch-00'>
+<rfc category="std" ipr='trust200902' docName='draft-daboo-icalendar-vpatch-00'>
   <front>
-    <title abbrev="iCalendar Patch Extension">The iCalendar Patch Format</title>
+    <title abbrev="iCalendar VPATCH Component">The iCalendar VPATCH Component</title>
     <author initials="C." surname="Daboo" fullname="Cyrus Daboo">
       <organization abbrev="Apple Inc.">Apple Inc.</organization>
       <address>
@@ -57,18 +57,49 @@
     <keyword>HTTP</keyword>
     <keyword>PATCH</keyword>
     <abstract>
-      <t>This document defines a text based data format that allows small "patches" to be applied to large iCalendar (RFC 5545) data objects, to allow for efficient data updates. It also describes how this new format can be used with the CalDAV calendar data access protocol (RFC 4791).</t>
+      <t>This document defines a new iCalendar (RFC 5545) component
+      that allows small "patches" to be applied to large iCalendar data
+      objects, to allow for efficient data updates. It also describes
+      how this new component can be used with the CalDAV calendar data
+      access protocol (RFC 4791).</t>
     </abstract>
   </front>
   <middle>
     <section title='Introduction'>
-      <t>The <xref target='RFC5545'>iCalendar</xref> data format is in widespread use to represent calendar data. iCalendar data can grow large (e.g., a family calendar containing events over a period of several years). Updating large resources over the network currently requires the entire data to be sent - even if the change itself is minor.</t>
-      <t>This specification defines a text based data format that can be used to "patch" (incrementally update) iCalendar data in an efficient manner. When combined with the HTTP <xref target="RFC5789">PATCH method</xref>, it can be used to update calendar object resources on a <xref target="RFC4791">CalDAV</xref> server, or any resource on an HTTP server that contains iCalendar data.</t>
+      <t>The <xref target='RFC5545'>iCalendar</xref> data format is in
+      widespread use to represent calendar data. iCalendar data can
+      grow large (e.g., a family calendar containing events over a
+      period of several years). Updating large resources over the
+      network currently requires the entire data to be sent - even if
+      the change itself is minor.</t>
+
+      <t>This specification defines a new iCalendar component that can
+      be used to "patch" (incrementally update) iCalendar data in an
+      efficient manner. When combined with the HTTP <xref
+      target="RFC5789">PATCH method</xref>, it can be used to update
+      calendar object resources on a <xref
+      target="RFC4791">CalDAV</xref> server, or any resource on an
+      HTTP server that contains iCalendar data.</t>
     </section>
     <section title='Conventions Used in This Document'>
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target='RFC2119' />.</t>
-      <t>The notation used in this memo is the ABNF notation of <xref target='RFC5234' /> as used by <xref target='RFC5545'>iCalendar</xref>. Any syntax elements shown below that are not explicitly defined in this specification come from <xref target='RFC5545'>iCalendar</xref>,  <xref target='RFC5546'>iTIP</xref>, and  <xref target='RFC4791'>CalDAV</xref>.</t>
-      <t>When XML element types in the namespaces "DAV:" and "urn:ietf:params:xml:ns:caldav" are referenced in this document outside of the context of an XML fragment, the string "DAV:" and "CALDAV:" will be prefixed to the element type names respectively.</t>
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+      "MAY", and "OPTIONAL" in this document are to be interpreted as
+      described in <xref target='RFC2119' />.</t> 
+
+      <t>The notation used in this memo is the ABNF notation of <xref
+      target='RFC5234' /> as used by <xref
+      target='RFC5545'>iCalendar</xref>. Any syntax elements shown
+      below that are not explicitly defined in this specification come
+      from <xref target='RFC5545'>iCalendar</xref>,  <xref
+      target='RFC5546'>iTIP</xref>, and  <xref
+      target='RFC4791'>CalDAV</xref>.</t>
+
+      <t>When XML element types in the namespaces "DAV:" and
+      "urn:ietf:params:xml:ns:caldav" are referenced in this document
+      outside of the context of an XML fragment, the string "DAV:" and
+      "CALDAV:" will be prefixed to the element type names
+      respectively.</t>
     </section>
     <section title="Overview">
       <t>The basic design of the patch format is a series of "commands", each of which have an "action", a "path", and optionally some "data". The "commands" in the patch document MUST be executed sequentially. A failure executing any "command" MUST result in the entire patch operation being cancelled, with the iCalendar object being targeted left in its original state.</t>
