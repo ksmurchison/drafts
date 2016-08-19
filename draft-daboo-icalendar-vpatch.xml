@@ -484,6 +484,7 @@ value     = ":" value CRLF
         </t>
       </section>
     </section>
+
     <section title='Acknowledgments'>
       <t>Thanks to the following for feedback:
       </t>
@@ -509,15 +510,18 @@ value     = ":" value CRLF
     
     <!--
     <section title="Change History (To be removed by RFC Editor before publication)">
-      <t>Changes in draft-daboo-icalendar-patch-01: 
+      <t>Changes in draft-daboo-icalendar-vpatch-01: 
       <list style='numbers'>
         <t></t>
       </list>
       </t>
     </section>
     -->
-    <section title="Patch Examples">
-      <t>Examples of single command patch documents for common iCalendar data operations.</t>
+
+    <section title="VPATCH Examples">
+      <t>Examples of single command patch documents for common
+      iCalendar data operations.</t>
+
       <section title="Add a new component">
         <t>Creates a new "VEVENT" component.</t>
         <t><figure>
@@ -526,8 +530,8 @@ BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
-TARGET:/VCALENDAR
 BEGIN:COMPONENTADD
+TARGET:/VCALENDAR
 BEGIN:VEVENT
 UID:1234
 DTSTART:20150902T103000Z
@@ -540,16 +544,18 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Add a new VALARM component">
-        <t>Creates a new "VALARM" component in the "VEVENT" component with the "UID" property value "1234".</t>
+        <t>Creates a new "VALARM" component in the "VEVENT" component
+        with the "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
-TARGET:/VCALENDAR/VEVENT[UID=1234]
 BEGIN:COMPONENTADD
+TARGET:/VCALENDAR/VEVENT[UID=1234]
 BEGIN:VALARM
 UID:4567
 ACTION:DISPLAY
@@ -562,16 +568,18 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Replace a component">
-        <t>Replace the "VEVENT" component with the "UID" property value "1234" with a new component.</t>
+        <t>Replace the "VEVENT" component with the "UID" property
+        value "1234" with a new component.</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
-TARGET:/VCALENDAR/VEVENT[UID=1234]
 BEGIN:COMPONENTUPDATE
+TARGET:/VCALENDAR/VEVENT[UID=1234]
 BEGIN:VEVENT
 UID:1234
 DTSTART:20150903T123000Z
@@ -584,31 +592,36 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Remove a component">
-        <t>Remove the "VEVENT" component with the "UID" property value "1234".</t>
+        <t>Remove the "VEVENT" component with the "UID" property value
+        "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
+BEGIN:COMPONENTREMOVE
 TARGET:/VCALENDAR/VEVENT[UID=1234]
-REMOVE:*
+END:COMPONENTREMOVE
 END:VPATCH
 END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Add properties to a component">
-        <t>Add "STATUS" and "COMPLETED" properties to the "VTODO" component with the "UID" property value "4321".</t>
+        <t>Add "STATUS" and "COMPLETED" properties to the "VTODO"
+        component with the "UID" property value "4321".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
-TARGET:/VCALENDAR/VTODO[UID=4321]
 BEGIN:PROPERTYADD
+TARGET:/VCALENDAR/VTODO[UID=4321]
 STATUS:COMPLETED
 COMPLETED:20150902T224515Z
 END:PROPERTYADD
@@ -617,55 +630,88 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
-      <section title="Update a property in a component">
-        <t>Update the "SUMMARY" property in the "VEVENT" component with the "UID" property value "1234".</t>
+
+      <section title="Update properties in a component">
+        <t>Update the "SUMMARY" and "LOCATION" properties in the
+        "VEVENT" component with the "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
-TARGET:/VCALENDAR/VEVENT[UID=1234]
 BEGIN:PROPERTYUPDATE
+TARGET:/VCALENDAR/VEVENT[UID=1234]
 SUMMARY:Title was changed
+LOCATION:New place
 END:PROPERTYUPDATE
 END:VPATCH
 END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
+      <section title="Update a targeted property in a component">
+        <t>Update the "ATTENDEE" property with value
+        "mailto:cyrus@example.com" in the "VEVENT" component with the
+        "UID" property value "1234".</t>
+        <t><figure>
+              <artwork><![CDATA[
+BEGIN:VCALENDAR
+PRODID:Example
+VERSION:2.0
+BEGIN:VPATCH
+BEGIN:PROPERTYUPDATE
+TARGET:/VCALENDAR/VEVENT[UID=1234]#ATTENDEE[=mailto:cyrus@example.com]
+ATTENDEE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
+END:PROPERTYUPDATE
+END:VPATCH
+END:VCALENDAR
+]]></artwork>
+            </figure></t>
+      </section>
+
       <section title="Remove a property from a component">
-        <t>Remove the "URL" property from the "VEVENT" component with the "UID" property value "1234".</t>
+        <t>Remove the "URL" property from the "VEVENT" component with
+        the "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
-TARGET:/VCALENDAR/VEVENT[UID=1234]
-REMOVE:URL
+BEGIN:PROPERTYREMOVE
+TARGET:/VCALENDAR/VEVENT[UID=1234]#URL
+END:PROPERTYREMOVE
 END:VPATCH
 END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Remove a property with a specific value from a component">
-        <t>Remove the "ATTENDEE" property with the value "mailto:cyrus@example.com" in the "VEVENT" component with the "UID" property value "1234".</t>
+        <t>Remove the "ATTENDEE" property with the value
+        "mailto:cyrus@example.com" in the "VEVENT" component with the
+        "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
 PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
-TARGET:/VCALENDAR/VEVENT[UID=1234]
-REMOVE:ATTENDEE:mailto:cyrus@example.com
+BEGIN:PROPERTYREMOVE
+TARGET:/VCALENDAR/VEVENT[UID=1234]#ATTENDEE[=mailto:cyrus@example.com]
+END:PROPERTYREMOVE
 END:VPATCH
 END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+<!--
       <section title="Change a parameter on a property with a specific value from a component">
-        <t>Change or add the "PARTSTAT" parameter on the "ATTENDEE" property with the value "mailto:cyrus@example.com" in the "VEVENT" component with the "UID" property value "1234".</t>
+        <t>Change or add the "PARTSTAT" parameter on the "ATTENDEE"
+        property with the value "mailto:cyrus@example.com" in the
+        "VEVENT" component with the "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -679,8 +725,13 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Remove a parameter on a property with a specific value from a component">
-        <t>Remove the "PARTSTAT" parameter from the "ATTENDEE" property with the value "mailto:cyrus@example.com" in the "VEVENT" component with the "UID" property value "1234". Note that the text for the patch command has been split across two lines to fit within the margins of this document.</t>
+        <t>Remove the "PARTSTAT" parameter from the "ATTENDEE"
+        property with the value "mailto:cyrus@example.com" in the
+        "VEVENT" component with the "UID" property value "1234". Note
+        that the text for the patch command has been split across two
+        lines to fit within the margins of this document.</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -694,8 +745,10 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Add a value to a multi-valued property in a component">
-        <t>Add a new value to the "EXDATE" property in the "VEVENT" component with the "UID" property value "1234".</t>
+        <t>Add a new value to the "EXDATE" property in the "VEVENT"
+        component with the "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -709,8 +762,10 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Remove a value from a multi-valued property from a component">
-        <t>Remove a value from the "EXDATE" property in the "VEVENT" component with the "UID" property value "1234".</t>
+        <t>Remove a value from the "EXDATE" property in the "VEVENT"
+        component with the "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -724,8 +779,17 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Attendee updating their participation status">
-        <t>When an attendee updates their participation status in an event, they will typically: update the "PARTSTAT" parameter on their "ATTENDEE" property, remove the "RSVP" parameter on their "ATTENDEE" property, update the "TRANSP" property in the "VEVENT" component. This set of changes is shown below as a series of patch commands, with the attendee having the calendar user address "mailto:cyrus@example.com". The commands target all "VEVENT" components in the iCalendar object being changed.</t>
+        <t>When an attendee updates their participation status in an
+        event, they will typically: update the "PARTSTAT" parameter on
+        their "ATTENDEE" property, remove the "RSVP" parameter on
+        their "ATTENDEE" property, update the "TRANSP" property in the
+        "VEVENT" component. This set of changes is shown below as a
+        series of patch commands, with the attendee having the
+        calendar user address "mailto:cyrus@example.com". The commands
+        target all "VEVENT" components in the iCalendar object being
+        changed.</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -744,10 +808,13 @@ END:VCALENDAR
             </figure></t>
       </section>
     </section>
+
     <section title="Recurrence Examples">
-      <t>Examples of recurring events using a patch to represent recurrence overrides.</t>
+      <t>Examples of recurring events using a patch to represent
+      recurrence overrides.</t>
       <section title="Daily with one override">
-        <t>A daily recurring "VEVENT" component with the "SUMMARY" property overridden for the second instance.</t>
+        <t>A daily recurring "VEVENT" component with the "SUMMARY"
+        property overridden for the second instance.</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -771,8 +838,10 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Daily with one alarm override">
-        <t>A daily recurring "VEVENT" component with a different alarm for the second instance.</t>
+        <t>A daily recurring "VEVENT" component with a different alarm
+        for the second instance.</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -808,8 +877,14 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Daily with two overrides due to Attendee status differences">
-        <t>A daily recurring "VEVENT" component with various "ATTENDEE" properties overridden for the second and third instances, reflecting different attendees' ability to participate. In this case, the attendee "mike@example.com" has declined the second instance only, and the attendee "dave@example.com" has declined the third instance only.</t>
+        <t>A daily recurring "VEVENT" component with various
+        "ATTENDEE" properties overridden for the second and third
+        instances, reflecting different attendees' ability to
+        participate. In this case, the attendee "mike@example.com" has
+        declined the second instance only, and the attendee
+        "dave@example.com" has declined the third instance only.</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -844,8 +919,15 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+
       <section title="Daily with two overrides due to Attendee additions and removals">
-        <t>A daily recurring "VEVENT" component with various "ATTENDEE" properties added or removed from the second and third instances, reflecting different attendees' ability to participate. In this case, the attendee "ken@example.com" has been added to the second instance only, and the attendee "dave@example.com" has been removed from the third instance only.</t>
+        <t>A daily recurring "VEVENT" component with various
+        "ATTENDEE" properties added or removed from the second and
+        third instances, reflecting different attendees' ability to
+        participate. In this case, the attendee "ken@example.com" has
+        been added to the second instance only, and the attendee
+        "dave@example.com" has been removed from the third instance
+        only.</t>
         <t><figure>
               <artwork><![CDATA[
 BEGIN:VCALENDAR
@@ -880,6 +962,7 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+-->
     </section>
   </back>
 </rfc>
