@@ -101,6 +101,7 @@
       "CALDAV:" will be prefixed to the element type names
       respectively.</t>
     </section>
+<!--
     <section title="Overview">
       <t>The basic design of the patch format is a series of "commands", each of which have an "action", a "path", and optionally some "data". The "commands" in the patch document MUST be executed sequentially. A failure executing any "command" MUST result in the entire patch operation being cancelled, with the iCalendar object being targeted left in its original state.</t>
       <t>The "action" item indicates the nature of the change to be executed (e.g., creating a new component or property, updating and existing item).</t>
@@ -440,21 +441,54 @@ value     = ":" value CRLF
             </figure></t>
       </section>
     </section>
+-->
+    <section title='iCalendar Extensions'>
+    </section>
+  
     <section title='Use with iTIP'>
-      <t><xref target="RFC5546">iTIP</xref> defines how iCalendar data can be sent between calendar user agents to schedule calendar components between calendar users. This specification does not define how iCalendar patch documents can be used with iTIP.</t>
+      <t><xref target="RFC5546">iTIP</xref> defines how iCalendar data
+      can be sent between calendar user agents to schedule calendar
+      components between calendar users. This specification does not
+      define how iCalendar patch documents can be used with iTIP.</t>
     </section>
+
     <section title='Use with CalDAV and HTTP'>
-      <t>The <xref target="RFC4791">CalDAV</xref> calendar access protocol allows clients and servers to exchange iCalendar data. iCalendar data is typically stored in calendar object resources on a CalDAV server. A CalDAV client typically updates the calendar object resource data via an HTTP PUT request, which requires sending the entire iCalendar object in the HTTP request body.</t>
-      <t>A server can also support the HTTP <xref target="RFC5789">PATCH method</xref> which allows a patch document to be specified in the request body, and for that patch document to be applied to the resource targeted by the HTTP request. In this case, the server would advertise the <xref target="text-media-type">"application/calendar-patch"</xref> media type in an "Apply-Patch" header as described in Section 3.1 of <xref target="RFC5789"/>.</t>
-      <t>Note that the patch document format defined by this specification does not allow targeting the entire iCalendar object in a "create" action, and hence an HTTP PATCH request cannot be used to create a new resource (a normal HTTP PUT request is used instead).</t>
+      <t>The <xref target="RFC4791">CalDAV</xref> calendar access
+      protocol allows clients and servers to exchange iCalendar
+      data. iCalendar data is typically stored in calendar object
+      resources on a CalDAV server. A CalDAV client typically updates
+      the calendar object resource data via an HTTP PUT request, which
+      requires sending the entire iCalendar object in the HTTP request
+      body.</t>
+
+      <t>A server can also support the HTTP <xref
+      target="RFC5789">PATCH method</xref> which allows a patch
+      document to be specified in the request body, and for that patch
+      document to be applied to the resource targeted by the HTTP
+      request. In this case, the server would advertise the
+      "text/calendar" media type in an "Apply-Patch" header as
+      described in Section 3.1 of <xref target="RFC5789"/>.</t>
+
+      <t>Note that the COMPONENTADD sub-component defined by this
+      specification does not allow targeting the entire iCalendar
+      object, and hence an HTTP PATCH request cannot be used to create
+      a new resource (a normal HTTP PUT request is used instead).</t>
     </section>
+
     <section title='Security Considerations' anchor='security'>
-      <t>This specification does not introduce any addition security concerns beyond those described in <xref target="RFC5545" />, <xref target="RFC5789" />, and <xref target="RFC4791" />.</t>
+      <t>This specification does not introduce any addition security
+      concerns beyond those described in <xref target="RFC5545" />,
+      <xref target="RFC5789" />, and <xref target="RFC4791" />.</t>
     </section>
+
     <section title='Privacy Considerations' anchor='privacy'>
-      <t>This specification does not introduce any addition privacy concerns beyond those described in <xref target="RFC5545" />, <xref target="RFC5789" />, and <xref target="RFC4791" />.</t>
+      <t>This specification does not introduce any addition privacy
+      concerns beyond those described in <xref target="RFC5545" />,
+      <xref target="RFC5789" />, and <xref target="RFC4791" />.</t>
     </section>
+
     <section title='IANA Considerations'>
+<!--
       <t>This document registers one new media type as per .</t>
       <section title='Registration of application/calendar-patch' anchor="text-media-type">
         <t>
@@ -483,6 +517,7 @@ value     = ":" value CRLF
         </list>
         </t>
       </section>
+-->
     </section>
 
     <section title='Acknowledgments'>
