@@ -443,6 +443,244 @@ value     = ":" value CRLF
     </section>
 -->
     <section title='iCalendar Extensions'>
+
+      <section title="VPATCH Component" anchor="vpatch">
+        <t>
+          <list style="hanging">
+            <t hangText="Component Name:">
+              VPATCH
+            </t>
+            <t hangText="Purpose:">
+              Provide a grouping of component properties and sub-components
+              that describe the patch actions to be performed.
+            </t>
+            <t hangText="Format Definition:">
+              A "VPATCH" calendar component is defined by the
+              following notation:
+              <figure><artwork name="abnf">
+patchc     = "BEGIN" ":" "VPATCH" CRLF
+               patchprop action
+             "END" ":" "VPATCH" CRLF
+
+patchprop  = *(
+                ;
+                ; the following are OPTIONAL,
+                ; and MAY occur more than once
+                ;
+                iana-prop / x-prop
+                ;
+              )
+
+action     = 1*( compaddc / compupdatec / compremovec /
+                 propaddc / propupdatec / propremovec /
+                 iana-comp / x-comp
+               )
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section title="COMPONENTADD Component" anchor="compadd">
+        <t>
+          <list style="hanging">
+            <t hangText="Component Name:">
+              COMPONENTADD
+            </t>
+            <t hangText="Purpose:">
+              Provide a set of new sub-components to be added to the
+              targeted component.
+            </t>
+            <t hangText="Format Definition:">
+              A "COMPONENTADD" calendar component is defined by the
+              following notation:
+              <figure><artwork name="abnf">
+compaddc  = "BEGIN" ":" "COMPONENTADD" CRLF
+              target component
+            "END" ":" "COMPONENTADD" CRLF
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section title="COMPONENTUPDATE Component" anchor="compupdate">
+        <t>
+          <list style="hanging">
+            <t hangText="Component Name:">
+              COMPONENTUPDATE
+            </t>
+            <t hangText="Purpose:">
+              Provide a set components to be updated within the
+              targeted component.
+            </t>
+            <t hangText="Format Definition:">
+              A "COMPONENTUPDATE" calendar component is defined by the
+              following notation:
+              <figure><artwork name="abnf">
+compupdatec  = "BEGIN" ":" "COMPONENTUPDATE" CRLF
+                 target component
+               "END" ":" "COMPONENTUPDATE" CRLF
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section title="COMPONENTREMOVE Component" anchor="compremove">
+        <t>
+          <list style="hanging">
+            <t hangText="Component Name:">
+              COMPONENTREMOVE
+            </t>
+            <t hangText="Purpose:">
+              Provide a set of components to be removed from the
+              iCalendar object.
+            </t>
+            <t hangText="Format Definition:">
+              A "COMPONENTREMOVE" calendar component is defined by the
+              following notation:
+              <figure><artwork name="abnf">
+compremovec  = "BEGIN" ":" "COMPONENTREMOVE" CRLF
+                 1*target
+               "END" ":" "COMPONENTREMOVE" CRLF
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section title="PROPERTYADD Component" anchor="propadd">
+        <t>
+          <list style="hanging">
+            <t hangText="Component Name:">
+              PROPERTYADD
+            </t>
+            <t hangText="Purpose:">
+              Provide a set of new properties to be added to the
+              targeted component.
+            </t>
+            <t hangText="Format Definition:">
+              A "PROPERTYADD" calendar component is defined by the
+              following notation:
+              <figure><artwork name="abnf">
+propadd     = "BEGIN" ":" "PROPERTYADD" CRLF
+                target 1*(iana-prop / x-prop)
+              "END" ":" "PROPERTYADD" CRLF
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section title="PROPERTYUPDATE Component" anchor="propupdate">
+        <t>
+          <list style="hanging">
+            <t hangText="Component Name:">
+              PROPERTYUPDATE
+            </t>
+            <t hangText="Purpose:">
+              Provide a set of properties to be updated within the
+              targeted component.
+            </t>
+            <t hangText="Format Definition:">
+              A "PROPERTYUPDATE" calendar component is defined by the
+              following notation:
+              <figure><artwork name="abnf">
+propupdate  = "BEGIN" ":" "PROPERTYUPDATE" CRLF
+                target 1*(iana-prop / x-prop)
+              "END" ":" "PROPERTYUPDATE" CRLF
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section title="PROPERTYREMOVE Component" anchor="propremove">
+        <t>
+          <list style="hanging">
+            <t hangText="Component Name:">
+              PROPERTYREMOVE
+            </t>
+            <t hangText="Purpose:">
+              Provide a set of properties to be removed from the
+              iCalendar object.
+            </t>
+            <t hangText="Format Definition:">
+              A "PROPERTYREMOVE" calendar component is defined by the
+              following notation:
+              <figure><artwork name="abnf">
+propremove  = "BEGIN" ":" "PROPERTYREMOVE" CRLF
+                1*target
+              "END" ":" "PROPERTYREMOVE" CRLF
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section title="TARGET Property" anchor="targetprop">
+        <t>
+          <list style="hanging">
+            <t hangText="Property Name:">
+              TARGET
+            </t>
+            <t hangText="Purpose:">
+              This property specifies a path targeting one or more
+              components or properties within an iCalendar object.
+            </t>
+            <t hangText="Valye Type:">
+              TEXT
+            </t>
+            <t hangText="Property Parameters:">
+              IANA and nonstandard property parameters can be
+              specified on this property.
+            </t>
+            <t hangText="Conformance:">
+              This property can be specified within any "VPATCH"
+              sub-component.
+            </t>
+            <t hangText="Format Definition:">
+              This property is defined by the following notation:
+              <figure><artwork name="abnf">
+target          = "TARGET targetparam ":" targetpath CRLF
+
+targetparam     = *(";" other-param)
+
+targetpath      = 1*comp-segment [prop-segment]
+
+comp-segment    = "/" name [comp-match]
+comp-match      = uid-match [rid-match]
+uid-match       = "[UID=" value "]"
+rid-match       = "[RECURRENCE-ID=" value "]"
+
+prop-segment    = "#" name [prop-match]
+prop-match      = "[" (prop-equal / prop-not-equal) "]"
+
+prop-equal      = "=" value
+prop-not-equal  = "!" value
+              </artwork></figure>
+            </t>
+            <t hangText="Description:">
+            </t>
+          </list>
+        </t>
+      </section>
+
     </section>
   
     <section title='Use with iTIP'>
@@ -518,16 +756,64 @@ value     = ":" value CRLF
         </t>
       </section>
 -->
+      <section title='Component Registrations'>
+        <t>This document defines the following new iCalendar
+        components to be added to the registry defined in Section
+        8.3.1 of <xref target='RFC5545'/>:</t>
+      <texttable>
+        <ttcol>Component</ttcol>
+        <ttcol>Status</ttcol>
+        <ttcol>Reference</ttcol>
+        <c>VPATCH</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="vpatch"/></c>
+        <c>COMPONENTADD</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="compadd"/></c>
+        <c>COMPONENTUPDATE</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="compupdate"/></c>
+        <c>COMPONENTREMOVE</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="compremove"/></c>
+        <c>PROPERTYADD</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="propremove"/></c>
+        <c>PROPERTYUPDATE</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="propremove"/></c>
+        <c>PROPERTYREMOVE</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="propremove"/></c>
+      </texttable>
+      </section>
+
+      <section title='Property Registrations'>
+        <t>This document defines the following new iCalendar
+        properties to be added to the registry defined in Section
+        8.3.2 of <xref target='RFC5545'/>:</t>
+      <texttable>
+        <ttcol>Property</ttcol>
+        <ttcol>Status</ttcol>
+        <ttcol>Reference</ttcol>
+        <c>TARGET</c>
+        <c>Current</c>
+        <c>RFCXXXX, <xref target="targetprop"/></c>
+      </texttable>
+      </section>
     </section>
 
     <section title='Acknowledgments'>
       <t>Thanks to the following for feedback:
       </t>
-            <t>
-                This specification originated from work at the Calendaring and Scheduling Consortium, which has helped with the development and testing of implementations.
-            </t>
+      <t>
+        This specification originated from work at the Calendaring and
+        Scheduling Consortium, which has helped with the development
+        and testing of implementations.
+      </t>
     </section>
   </middle>
+
   <back>
     <references title='Normative References'>
     &rfc2119;
