@@ -153,8 +153,9 @@
       if the version number is greater than "1".</t>  
 
       <t>The table below shows all the allowed combination of action
-      sub-components, targets, and data items. Subsequent sections
-      describe all of these in more detail.</t>
+      sub-components, targets, and data items. The exact syntax and
+      semantics of the patch components and properties are described in
+      more detail in <xref target="extensions"/>.</t>
 
       <texttable>
         <ttcol>Component</ttcol>
@@ -217,7 +218,7 @@
           <c>Delete the specified value from the multi-valued parameter
           identified by the target.</c>
         </texttable>
-    </section>
+      </section>
 <!--
     <section title="Overview">
       <t>The basic design of the patch format is a series of "commands", each of which have an "action", a "path", and optionally some "data". The "commands" in the patch document MUST be executed sequentially. A failure executing any "command" MUST result in the entire patch operation being cancelled, with the iCalendar object being targeted left in its original state.</t>
@@ -560,7 +561,7 @@ value     = ":" value CRLF
       </section>
     </section>
 -->
-    <section title='iCalendar Extensions'>
+    <section title='iCalendar Extensions' anchor="extensions">
 
       <section title="VPATCH Component" anchor="vpatch">
         <t>
@@ -957,7 +958,165 @@ SETPARAMETER;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:""
       </section>
 
     </section>
-  
+
+    <section title="Additional Considerations">
+      <section title="Handling Default Properties and Parameters">
+        <t></t>
+      </section>
+
+      <section title="Handling Recurrences">
+        <t>Recurring events in iCalendar are defined by the "RRULE",
+        "RDATE", and "EXDATE" properties in a "master" iCalendar
+        component. Those rules produce a set of "generated"
+        instances. In some cases specific "generated" instances are
+        changed, resulting in the presence of "overridden"
+        components, which are identified by having the same "UID"
+        property value as the "master" component, and a
+        "RECURRENCE-ID" property whose value matches the start time
+        of the corresponding "generated" instance.</t>
+
+        <t>Patch commands can be used to implicitly create
+        "overridden" components in the targeted iCalendar object by
+        specifying a path that targets the "generated" instance's
+        start time, i.e., what would be the "RECURRENCE-ID" value in
+        the "overridden" component.</t>
+
+        <t>Note that if the value of a "RECURRENCE-ID" match item in
+        a path does not correspond to an existing instance (either
+        because its value does not match a "generated" instance, or
+        its value matches an "EXDATE" in the "master" component),
+        then the patch operation MUST fail.</t>
+        <t>For example, consider the following daily recurring event:
+        <figure><artwork>
+BEGIN:VCALENDAR
+PRODID:test
+VERSION:2.0
+BEGIN:VEVENT
+UID:1234
+DTSTART:20150902T120000Z
+DURATION:PT1H
+SUMMARY:Master component
+RRULE:FREQ=DAILY
+END:VEVENT
+END:VCALENDAR
+        </artwork></figure>
+        The following patch command could be used to update the
+        "SUMMARY" property value of the second instance of the
+        recurring event (note that the first line of the patch
+        command has been split across two lines to fit within the
+        margins of this document):
+        <figure><artwork>
+BEGIN:VPATCH
+BEGIN:UPDATE
+TARGET:/VCALENDAR/VEVENT[UID=1234][RID=20150903T120000Z]#
+SUMMARY:Override second instance
+END:UPDATE
+END:VPATCH
+        </artwork></figure>
+        which results in the following updated iCalendar component:
+        <figure><artwork>
+BEGIN:VCALENDAR
+PRODID:test
+VERSION:2.0
+BEGIN:VEVENT
+UID:1234
+DTSTART:20150902T120000Z
+DURATION:PT1H
+SUMMARY:Master component
+RRULE:FREQ=DAILY
+END:VEVENT
+BEGIN:VEVENT
+UID:1234
+RECURRENCE-ID=20150903T120000Z
+DTSTART:20150903T120000Z
+DURATION:PT1H
+SUMMARY:Override second instance
+END:VEVENT
+END:VCALENDAR
+        </artwork></figure>
+        A similar result could have been achieved by using a
+        "create" action, a path targeting the "VCALENDAR"
+        component, and the "overridden" component supplied as the
+        data item. However, the implicit override behaviour allows
+        for a more compact representation of this type of change.
+        </t>
+
+        <t>Note that there is no equivalent behavior when it comes
+        to removing "overridden" components from an iCalendar object
+        to cancel the instance. In that case, two patch commands are
+        required: one to delete the "overridden" component, and one
+        to create an "EXDATE" property value to cover the
+        cancellation. So, continuing from the example data
+        immediately above, the following patch commands would cancel
+        the instance that was previously overridden:
+        <figure><artwork>
+BEGIN:VPATCH
+BEGIN:REMOVE            
+TARGET:/VCALENDAR/VEVENT[UID=1234][RID=20150903T120000Z]
+END:REMOVE
+BEGIN:ADD
+TARGET:/VCALENDAR/VEVENT[UID=1234][RID=M]
+EXDATE:20150903T120000Z
+END:ADD
+END:VPATCH
+        </artwork></figure>
+        which results in the following updated iCalendar component:
+        <figure><artwork>
+BEGIN:VCALENDAR
+PRODID:test
+VERSION:2.0
+BEGIN:VEVENT
+UID:1234
+DTSTART:20150902T120000Z
+DURATION:PT1H
+SUMMARY:Master component
+RRULE:FREQ=DAILY
+EXDATE:20150903T120000Z
+END:VEVENT
+END:VCALENDAR
+        </artwork></figure>
+        </t>
+      </section>
+      <section title="Folded lines" anchor="folding">
+        <t>iCalendar data can contain "folded" lines (as described
+        in Section 3.1 of <xref target="RFC5545" />). The patch
+        operations described in this specification are a
+        "semantic" rather than "syntactic" update to the
+        data. i.e., they apply to the underlying object model as
+        opposed to the "raw" iCalendar text data. As such, folded
+        lines in the iCalendar data targeted by the patch commands
+        are not significant. Any iCalendar data supplied as data
+        items in a patch command MAY contain folded lines.</t>
+      </section>
+
+      <section title="Encoding" anchor="encoding">
+        <t>Text values in iCalendar use a backslash escape
+        mechanism for certain characters (as described in Section
+        3.3.11 <xref target="RFC5545" />). Patch operations apply
+        to the escaped form of the iCalendar data. For example, to
+        target a "DESCRIPTION" property that contains an encoded
+        line feed character:
+        <figure><artwork>
+DESCRIPTION:Line one\nLine two
+        </artwork></figure>
+        the following TARGET property would be used:
+        <figure><artwork>
+TARGET:/VCALENDAR/VEVENT#DESCRIPTION[=Line one\nLine two]
+        </artwork></figure>
+        Similarly, to update the "DESCRIPTION" property, the
+        following patch command could be used:
+        <figure><artwork>
+BEGIN:VPATCH
+BEGIN:UPDATE
+TARGET:/VCALENDAR/VEVENT#DESCRIPTION
+DESCRIPTION:Line one\nLine two\nLine three
+END:UPDATE
+END:VPATCH
+        </artwork></figure>
+        </t>
+      </section>
+    </section>
+
     <section title='Use with iTIP'>
       <t><xref target="RFC5546">iTIP</xref> defines how iCalendar data
       can be sent between calendar user agents to schedule calendar
