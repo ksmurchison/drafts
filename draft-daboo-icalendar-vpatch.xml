@@ -166,13 +166,11 @@
           <c>Properties and/or Components</c>
           <c>Add the supplied properties and components to the
           components identified by the target.</c>
-<!--
           <c>ADD</c>
           <c>Property</c>
           <c>SETPARAMETER Properties</c>
           <c>Add the supplied parameters to the properties identified
           by the target.</c>
--->
           <c />
           <c />
           <c />
@@ -210,9 +208,14 @@
           <c></c>
           <c>Delete the properties identified by the target.</c>
           <c>REMOVE</c>
-          <c>Parameter</c>
+          <c>Parameter (no value)</c>
           <c></c>
           <c>Delete the parameters identified by the target.</c>
+          <c>REMOVE</c>
+          <c>Parameter (with value)</c>
+          <c></c>
+          <c>Delete the specified value from the multi-valued parameter
+          identified by the target.</c>
         </texttable>
     </section>
 <!--
@@ -843,28 +846,67 @@ PATCH-VERSION:1
               <figure><artwork name="abnf">
 target          = "TARGET *(";" other-param) ":" targetpath CRLF
 
-targetpath      = 1*comp-segment [prop-segment [param-segment]]
+targetpath       = 1*comp-segment [prop-segment [param-segment]]
 
-comp-segment    = "/" name [comp-match]
-comp-match      = uid-match [rid-match]
-uid-match       = "[UID=" value "]"
-rid-match       = "[RID=" value "]"
+comp-segment     = "/" name [comp-match]
+comp-match       = uid-match [rid-match]
+uid-match        = "[UID=" text "]"
+rid-match        = "[RID=" ("M" / ridval) "]"
+  ; "M" matches "master" component
 
-prop-segment    = "#" [name [prop-match]]
+prop-segment     = "#" [name [prop-match]]
   ; name not present when updating multiple properties
-prop-match      = "[" (prop-equal / prop-not-equal) "]"
+prop-match       = "[" (prop-equal / prop-not-equal) "]"
 
-prop-equal      = "=" value
-prop-not-equal  = "!" value
+prop-equal       = "=" value
+prop-not-equal   = "!" value
 
-param-segment   = ";" [param-name]
+param-segment    = ";" [param-name [param-match]]
   ; param-name not present when updating parameters
+param-match      = "[" (param-equal / param-not-equal) "]"
+
+param-equal      = "=" param-value
+param-not-equal  = "!" param-value
               </artwork></figure>
             </t>
-            <t hangText="Example:">
-              The following is an example of this property:
+            <t hangText="Examples:">
+              The following are examples of this property:
               <figure><artwork name="example">
+// Toplevel VCALENDAR component.
+TARGET:/VCALENDAR
+
+// One or more VALARM components in all VTODO components
+TARGET:/VCALENDAR/VTODO/VALARM
+
+// VEVENT component with a specific UID
+// (If the VEVENT is recurring with overrides,
+//  ALL instances would be targeted).
+TARGET:/VCALENDAR/VEVENT[UID=1234]
+
+// Specific instance of a recurring VEVENT component.
+TARGET:/VCALENDAR/VEVENT[UID=1234][RID=20160828]
+
+// One or more ATTACH properties in all VEVENT components.
+TARGET:/VCALENDAR/VEVENT#ATTACH
+
+// One or more properties in a specific VEVENT (UPDATE only).
+TARGET:/VCALENDAR/VEVENT[UID=1234]#
+
+// Specific value of a multi-occuring property in a specific VEVENT.
 TARGET:/VCALENDAR/VEVENT[UID=1234]#ATTENDEE[=mailto:cyrus@example.com]
+
+// Specific value of a multi-valued/multi-occuring property.
+TARGET:/VCALENDAR/VEVENT[UID=1234]#EXDATE[=20160828]
+
+// PARTSTAT parameter on all ATTENDEEs.
+TARGET:/VCALENDAR/VEVENT[UID=1234]#ATTENDEE;PARTSTAT
+
+// One or more parameters on a specific ATTENDEE (UPDATE only).
+TARGET:/VCALENDAR/VEVENT[UID=1234]#ATTENDEE[=mailto:cyrus@example.com];
+
+// Specific value of a multi-valued parameter on a specific ATTENDEE.
+TARGET:/VCALENDAR/VEVENT[UID=1234]#ATTENDEE[=mailto:cyrus@example.com]
+ ;MEMBER[=mailto:ietf-calext@example.org]
               </artwork></figure>
             </t>
           </list>
