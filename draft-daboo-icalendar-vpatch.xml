@@ -65,7 +65,22 @@
       how this new component can be used with the CalDAV calendar data
       access protocol (RFC 4791).</t>
     </abstract>
+
+    <note title='Open Issues'>
+      <t>
+      <list style="symbols">
+        <t>Do we have any content for <xref target="defaults"/>?</t>
+        <t>Do we need/want to handle individual values in multi-valued
+        properties/parameters?  I think I can make this work withou
+        too much complexity.</t>
+        <t>Do we need/want a parameter on TARGET to state what should
+        happen if nothing matches, e.g. if-none-match = (add / ignore /
+        fail) ?</t>
+      </list>
+      </t>
+    </note>
   </front>
+
   <middle>
     <section title='Introduction'>
       <t>The <xref target='RFC5545'>iCalendar</xref> data format is in
@@ -620,7 +635,7 @@ action      = 1*( addc / updatec / removec / iana-comp / x-comp )
               added to the iCalendar object.
             </t>
             <t hangText="Format Definition:">
-              A "ADD" calendar component is defined by the following
+              An "ADD" calendar component is defined by the following
               notation:
               <figure><artwork name="abnf">
 addc        = "BEGIN" ":" "ADD" CRLF
@@ -674,7 +689,7 @@ subcomp     = *(
               updated in the iCalendar object.
             </t>
             <t hangText="Format Definition:">
-              A "UPDATE" calendar component is defined by the
+              An "UPDATE" calendar component is defined by the
               following notation:
               <figure><artwork name="abnf">
 updatec     = "BEGIN" ":" "UPDATE" CRLF
@@ -960,11 +975,12 @@ SETPARAMETER;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:""
     </section>
 
     <section title="Additional Considerations">
-      <section title="Handling Default Properties and Parameters">
+      <section title="Handling Default Properties and Parameters"
+               anchor="defaults">
         <t></t>
       </section>
 
-      <section title="Handling Recurrences">
+      <section title="Handling Recurrences" anchor="recurrences">
         <t>Recurring events in iCalendar are defined by the "RRULE",
         "RDATE", and "EXDATE" properties in a "master" iCalendar
         component. Those rules produce a set of "generated"
