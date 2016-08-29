@@ -181,9 +181,8 @@
       if the version number is greater than "1".</t>  
 
       <t>The table below shows all the allowed combination of action
-      sub-components, targets, and data items. The exact syntax and
-      semantics of the patch components and properties are described in
-      more detail in <xref target="extensions"/>.</t>
+      sub-components, targets, and data items.  Subsequent sections
+      describe all of these in more detail.</t>
 
       <texttable>
         <ttcol>Component</ttcol>
@@ -510,8 +509,16 @@ createprop  = *(
                  ;
                  target /
                  ;
-                 ; The following are OPTIONAL,
-                 ; and MAY occur more than once.
+                 ; The following is REQUIRED if 'target' includes a
+                 ; 'prop-segment' in its 'targetpath', and MAY occur
+                 ; more than once; otherwise it MUST NOT occur.
+                 ;
+                 setparam /
+                 ;
+                 ; The following are OPTIONAL if 'target' does not
+                 ; include a 'prop-segment' in its 'targetpath',
+                 ; and MAY occur more than once; otherwise they MUST
+                 ; NOT occur.
                  ;
                  other-prop
                  ;
@@ -534,6 +541,36 @@ subcomp     = *(
                 </artwork></figure>
               </t>
               <t hangText="Description:">
+                This component provides a mechanism by which elements
+                can be added to an iCalendar object.  The TARGET
+                property MUST identify either iCalendar components or
+                properties.  The TARGET property is processed as
+                follows:
+
+                <list style="symbols">
+                  <t>If the TARGET property matches one or more
+                  iCalendar properties, then the remaining properties
+                  MUST only be SETPARAMETER properties.  The iCalendar
+                  parameters of the SETPARAMETER properties are then 
+                  added to the targeted iCalendar properties.  If
+                  a parameter being added is already present on the
+                  targeted iCalendar property, and that parameter can
+                  be multi-valued, then the server MUST  add the new 
+                  value(s) to the existing parameter; otherwise the
+                  server MUST fail the patch action.  Note that to
+                  replace an existing parameter an "update" action
+                  MUST be used.</t>
+
+                  <t>Else, if the TARGET property matches one or more
+                  iCalendar components, then the remaining properties
+                  and/or components are added as child elements of the
+                  targeted iCalendar components.</t>
+                </list>
+
+                If there is no iCalendar element that matches the
+                TARGET property in the iCalendar object, this action
+                MUST succeed without any changes being applied to the
+                target iCalendar object.
               </t>
             </list>
           </t>
@@ -619,6 +656,7 @@ deleteprop  = *(
                 amended by an extension to this memo, all other
                 properties are ignored.  Each instance of the TARGET
                 property is processed as follows:
+
                 <list style="symbols">
                   <t>If the TARGET property matches one of the values of
                   a multi-valued parameter on an iCalendar
@@ -649,6 +687,11 @@ deleteprop  = *(
                   iCalendar components, then the targeted
                   components are removed from the iCalendar object.</t> 
                 </list>
+
+                If there is no iCalendar element that matches the
+                TARGET property in the iCalendar object, this action
+                MUST succeed without any changes being applied to the
+                target iCalendar object.
               </t>
             </list>
           </t>
