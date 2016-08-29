@@ -79,8 +79,8 @@
           <t>Do we have any content for <xref target="defaults"/>?</t>
 
           <t>Do we need/want to handle individual values in multi-valued
-          properties/parameters?  I think I can make this work without
-          too much complexity.</t>
+          properties/parameters?  Currently these are handled by
+          CREATE and DELETE only.</t>
 
           <t>Do we need/want a parameter on TARGET to state what should
           happen if nothing matches, e.g. if-none-match = (create /
@@ -111,6 +111,7 @@
       target="RFC4791">CalDAV</xref> server, or any resource on an
       HTTP server that contains iCalendar data.</t>
     </section>
+
     <section title='Conventions Used in This Document'>
       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
       NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
@@ -244,196 +245,9 @@
           <c></c>
           <c>Delete the specified value from the multi-valued parameter
           identified by the target.</c>
-        </texttable>
-      </section>
-<!--
-    <section title="Overview">
-      <t>The basic design of the patch format is a series of "commands", each of which have an "action", a "path", and optionally some "data". The "commands" in the patch document MUST be executed sequentially. A failure executing any "command" MUST result in the entire patch operation being cancelled, with the iCalendar object being targeted left in its original state.</t>
-      <t>The "action" item indicates the nature of the change to be executed (e.g., creating a new component or property, updating and existing item).</t>
-      <t>The "path" item identifies the iCalendar elements that are being targeted by the patch. Note that a single patch "command" can target multiple iCalendar elements (e.g., a patch can change the "SUMMARY" iCalendar property in all "VEVENT" iCalendar components in an iCalendar object to the same new value).</t>
-      <t>The optional "data" item is used to supply the data needed to apply the patch (e.g., when creating a new iCalendar component, it will contain the entire new iCalendar component; when updating an iCalendar property value, it will contain the new value.</t>
-      <t>The patch document also contains an optional "version" item at the start, to allow future extensions to the format to be recognized. For now the only version number defined is "1". The "version" item only needs to be present if the version number is greater than "1".</t>
-      <t>The table below shows all the allowed combination of "action", "path" and "data" items. Subsequent sections describe all of these in more detail.
-        </t>
-        <texttable>
-          <ttcol>Action</ttcol>
-          <ttcol>Path</ttcol>
-          <ttcol>Data</ttcol>
-          <ttcol>Description</ttcol>
-          <c>create</c>
-          <c>Component</c>
-          <c>Components</c>
-          <c>Add the components in the "data" item to the components identified by the "path" item.</c>
-          <c>create</c>
-          <c>Property (No Name)</c>
-          <c>Properties</c>
-          <c>Add the properties in the "data" item to the components identified by the "path" item.</c>
-          <c>create</c>
-          <c>Parameter (No Name)</c>
-          <c>Parameters</c>
-          <c>Add the parameters in the "data" item to the properties identified by the "path" item.</c>
-          <c />
-          <c />
-          <c />
-          <c />
-          <c>update</c>
-          <c>Component</c>
-          <c>Components</c>
-          <c>Replace the components identified by the "path" item, with the components in the "data" item.</c>
-          <c>update</c>
-          <c>Property</c>
-          <c>Property</c>
-          <c>Add or replace the property identified by the "path" item, with the property in the "data" item.</c>
-          <c>update</c>
-          <c>Parameter (No Name)</c>
-          <c>Parameters</c>
-          <c>Add or replace the parameters in the properties identified by the "path" item, with the parameters in the "data" item.</c>
-          <c />
-          <c />
-          <c />
-          <c />
-          <c>delete</c>
-          <c>Component</c>
-          <c></c>
-          <c>Delete the components identified by the "path" item.</c>
-          <c>delete</c>
-          <c>Property</c>
-          <c></c>
-          <c>Delete the properties identified by the "path" item.</c>
-          <c>delete</c>
-          <c>Parameter</c>
-          <c></c>
-          <c>Delete the parameters identified by the "path" item.</c>
-          <c></c>
-          <c></c>
-          <c></c>
-          <c></c>
-          <c>add</c>
-          <c>Property</c>
-          <c>Value</c>
-          <c>Add a value to the multi-valued/multi-occurring properties identified by the "path" item.</c>
-          <c>remove</c>
-          <c>Property</c>
-          <c>Value</c>
-          <c>Remove a value from the multi-valued/multi-occurring properties identified by the "path" item.</c>
-          <c />
-          <c />
-          <c />
-          <c />
-          <c>add</c>
-          <c>Parameter</c>
-          <c>Parameter Value</c>
-          <c>Add a value to the multi-valued parameter identified by the "path" item.</c>
-          <c>remove</c>
-          <c>Parameter</c>
-          <c>Parameter Value</c>
-          <c>Remove a value from the multi-valued parameter identified by the "path" item.</c>
-        </texttable>
-      <section title="Action Items" anchor="actions">
-        <t>Unless otherwise specified, if a "path" item does not match any items in the target iCalendar object, then the action MUST succeed without any change being applied to the target iCalendar object.</t>
-        <t>If an action results in violation of any constraints on the overall iCalendar object (e.g., adding a "VALARM" component directly within a "VCALENDAR" component, adding a second "DTSTART" property, when only one is allowed), then the patch operation MUST fail.</t>
-        <section title="create Action">
-          <t>Creates a new iCalendar component, property or parameter in the iCalendar elements targeted by the associated "path" item. The "path" component MUST identify either iCalendar components, properties or parameters.
-            <list style="symbols">
-              <t>If the "path" item targets an iCalendar component, then the "data" item MUST contain one or more iCalendar components. These iCalendar elements are then added as child components to the iCalendar components targeted by the "path" item.</t>
-              <t>If the "path" item targets an iCalendar property with no name (i.e., the path ends with the single character "#" after the last component segment), then the "data" item MUST contain one or more iCalendar properties. These iCalendar properties are then added to the iCalendar component targeted by the "path" item.</t>
-              <t>If the "path" item targets an iCalendar parameter with no name (i.e., the path ends with the single ";" character after the property segment), then the "data" item MUST contain one or more iCalendar parameters. These iCalendar parameters are then added to the iCalendar properties targeted by the "path" item. If the parameter is already present on the targeted iCalendar property, then the server MUST treat this as an "update" action and replace the existing parameter with the new one. This replaces the entire parameter even for the case of a multi-valued parameter.</t>
-            </list>
-          </t>
-          <t>If there is no iCalendar element that matches the "path" item in the targeted iCalendar object, this action MUST succeed without any changes being applied to the target iCalendar object.</t>
-        </section>
-        <section title="update Action">
-          <t>Updates an existing iCalendar component, property or parameter in the iCalendar elements targeted by the associated "path" item. The "path" component MUST identify either iCalendar components, or iCalendar properties, or iCalendar parameters.
-            <list style="symbols">
-              <t>If the "path" item targets an iCalendar component, then the "data" item MUST contain one or more iCalendar components. These iCalendar components replace the iCalendar components targeted by the "path" item.</t>
-              <t>If the "path" item targets an iCalendar property, then the "data" item MUST contain one iCalendar property. That property is added to or replaces the matching properties in the iCalendar component targeted by the "path" item". The addition of a property MUST only occur when the "path" item does not contain a match item.
-              </t>
-              <t>If the "path" item targets an iCalendar parameter with no name (i.e., the path ends with the single ";" character after the property segment), then the "data" item MUST contain one or more iCalendar parameters. Those parameters are then added to or replace the equivalent parameters on the iCalendar properties targeted by the "path" item.</t>
-            </list>
-          </t>
-        </section>
-        <section title="delete Action">
-          <t>Deletes iCalendar components, properties or parameters identified by the associated "path" item. The "path" component MUST identify either iCalendar components, or iCalendar properties, or iCalendar parameters. This action never includes a "data" item.
-            <list style="symbols">
-              <t>If the "path" item targets an iCalendar component, then the iCalendar components targeted by the "path" item are removed.</t>
-              <t>If the "path" item targets an iCalendar property, then the iCalendar properties targeted by the "path" item are removed.</t>
-              <t>If the "path" item targets an iCalendar parameter, then the iCalendar parameters targeted by the "path" item are removed.</t>
-            </list>
-          </t>
-          <t>If there is no iCalendar element that matches the "path" item in the targeted iCalendar object, this action MUST succeed without any changes being applied to the target iCalendar object.</t>
-        </section>
-        <section title="add Action">
-          <t>Adds a value to a multi-valued/multi-occurring iCalendar property or a multi-valued iCalendar parameter.
-            <list style="symbols">
-              <t>If the "path" item targets an iCalendar property, then the "data" item MUST contain one or more iCalendar property values. These iCalendar values are added to the iCalendar properties targeted by the "path" item. If the targeted properties are not ones that support multi-values or can occur multiple times, then the patch operation MUST fail. If the addition of the new iCalendar values would violate any constraints on the overall iCalendar object, then the patch operation MUST fail (e.g., using a value type that does not match the targeted property value type).</t>
-              <t>If the "path" item targets an iCalendar parameter, then the "data" item MUST contain one or more iCalendar parameter values. These iCalendar parameter values are added to the iCalendar parameters targeted by the "path" item. If the targeted iCalendar parameters do not currently exist, they MUST be created by the patch processor. If the targeted parameters are not ones that support multi-values, then the patch operation MUST fail. If the addition of the new iCalendar parameter values would violate any constraints on the overall iCalendar object, then the patch operation MUST fail (e.g., using a value type that does not match the targeted parameter value type).</t>
-            </list>
-          </t>
-        </section>
-        <section title="remove Action">
-          <t>Removes a value from a multi-valued/multi-occurring iCalendar property or a multi-valued iCalendar parameter.
-            <list style="symbols">
-              <t>If the "path" item targets an iCalendar property, then the "data" item MUST contain one or more iCalendar property values. These iCalendar values are removed from the iCalendar properties targeted by the "path" item. If the targeted properties are not ones that support multiple values or can occur multiple times, then the patch operation MUST fail. If the targeted properties do not contain the property values in the "data" item, the operation MUST NOT fail (i.e., removing a non-existent value does not fail). If the property values in the "data" item occur more than once in the targeted properties, then all matching values MUST be removed (i.e., duplicate values will also be removed). If the removal of a property value leaves that property with no value at all, then the property MUST be removed.</t>
-              <t>If the "path" item targets an iCalendar parameter, then the "data" item MUST contain one or more iCalendar parameter values. These iCalendar parameter values are added to the iCalendar parameters targeted by the "path" item. If the targeted parameters are not ones that support multiple values, then the patch operation MUST fail. If the targeted parameters do not contain the parameter values in the "data" item, the operation MUST NOT fail (i.e., removing a non-existent value does not fail). If the parameter values in the "data" item occur more than once in the targeted parameters, then all matching values MUST be removed (i.e., duplicate values will also be removed). If the removal of a parameter value leaves that parameter with no value at all, then the parameter MUST be removed.</t>
-            </list>
-          </t>
-        </section>
-      </section>
-      <section title="Path Item">
-        <t>The "path" item is used to match iCalendar elements that the patch operation will be applied to. The "path" is a list of "segments" (separated by the "/", "#" or ";" characters) that matches an iCalendar element in the iCalendar object model hierarchy. Each component or property segment can include an optional match term that narrows the set of matching elements. The property or parameter segments are empty when creating properties or parameters, respectively.</t>
-        <t>The "path" consists of one or more component segments (which always have a "/" prefix), optionally followed by an property segment (which always has a "#" prefix"), which itself is optionally followed by a parameter segment (which always has a ";" prefix).</t>
-        <t>The "path" always starts with a "/VCALENDAR" component segment since an iCalendar object is always a single "VCALENDAR" component.</t>
-        <t>To target a component inside of another component, a component segment is appended to the path (e.g., "/VCALENDAR/VEVENT" targets "VEVENT" components inside the "VCALENDAR" component. Component segments can include an optional match item. When present, this allows targeting of components that match a specific "UID" property value, or ones that match a specific "UID" property value and also match a "RECURRENCE-ID" value (or lack of "RECURRENCE-ID" property if the value of the match is empty).</t>
-        <t>To target a property inside of a component, a property segment is appended to the component segment at the end of the path (e.g., "/VCALENDAR#VERSION" targets a "VERSION" property inside the "VCALENDAR" component). When creating a new property inside of a component, the property segment name is empty (e.g., "/VCALENDAR/VEVENT#" would allow creation of new properties inside the targeted "VEVENT" components). The property segment can include an optional match item. When present, this allows targeting of properties whose value matches or does not match a specific value.</t>
-        <t>To target a parameter on a property, a parameter segment is appended to the property segment at the end of the path (e.g., "/VCALENDAR/VEVENT#ATTENDEE;PARTSTAT" targets the "PARTSTAT" parameter on an "ATTENDEE" property, inside a "VEVENT" component, inside the "VCALENDAR" component). When creating a new parameter on a property, the parameter segment name is empty (e.g., "/VCALENDAR/VEVENT#ATTENDEE;" would allow creation of new parameters on the targeted "ATTENDEE" properties).</t>
-        <t>Values in match items MUST use URL-style percent (%) encoding of the characters "/", "#", ";" and "]". This allows a path to be quickly split into segments by breaking apart the text on the relevant delimiter characters.</t>
-      <t>Some examples of "path" items follow.</t>
-      <t>Targeting components:
-          <list style="hanging">
-            <t hangText="/VCALENDAR"><vspace />Targets the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT"><vspace />Targets all "VEVENT" components in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT[UID=1234]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234", in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT[UID=1234%2F4567][RECURRENCE-ID=]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234/4567" and do not have a "RECURRENCE-ID" property, in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT[UID=1234][RECURRENCE-ID=20150902T223000Z]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234" and have a "RECURRENCE-ID" property whose UTC value is "20150902T223000Z", in the "VCALENDAR" component in the iCalendar object</t>
-          </list>
-        </t>
-      <t>Targeting properties:
-          <list style="hanging">
-            <t hangText="/VCALENDAR/VEVENT#STATUS"><vspace />Targets all "STATUS" properties in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT[UID=1234]#STATUS"><vspace />Targets all "STATUS" properties in any "VEVENT" components that have a "UID" property value exactly equal to "1234", in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT#ATTENDEE[=mailto:cyrus@example.com]"><vspace />Targets any "ATTENDEE" properties that have the value "mailto:cyrus@example.com" in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT#ATTENDEE[!mailto:cyrus@example.com]"><vspace />Targets any "ATTENDEE" properties that do not have the value "mailto:cyrus@example.com" in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT#"><vspace />Indicates that properties are to be created in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object</t>
-          </list>
-        </t>
-      <t>Targeting parameters:
-          <list style="hanging">
-            <t hangText="/VCALENDAR/VEVENT#ATTENDEE;PARTSTAT"><vspace />Targets the "PARTSTAT" parameter on all "ATTENDEE" properties in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT#ATTENDEE[=mailto:cyrus@example.com];PARTSTAT"><vspace />Targets the "PARTSTAT" parameter on any "ATTENDEE" properties that have the value "mailto:cyrus@example.com" in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object</t>
-            <t hangText="/VCALENDAR/VEVENT#ATTENDEE;"><vspace />Indicates that parameters are to be created on all "ATTENDEE" properties in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object</t>
-          </list>
-        </t>
-      </section>
-      <section title="Data Item">
-        <t>The data item uses iCalendar format content to provide the data for components, properties, parameters, and property values. Data items are always terminated by a single line containing a single period character (0x2E). Components and properties appear as they would in iCalendar (line folding, as described in Section 3.1 of <xref target="RFC5545" />, SHOULD be used).</t>
-        <t>A parameter data item always has a single semi-colon character (0x3B) as a prefix.</t>
-        <t>A property value data item always has an equal sign character (0x3D) as a prefix.</t>
-        <t>For "create" and "update" actions, the type of data item included in the command is always directly related to the "path" that is used:
-          <list style='symbols'>
-            <t>if the "path" targets a component only, then the data item will be one or more components</t>
-            <t>if the "path" targets a property only (including the case where the property name is empty), then the data item will be one or more properties</t>
-            <t>if the "path" targets a parameter only (including the case where the parameter name is empty), then the data item will be one or more parameters.</t>
-          </list>
-        </t>
-        <t>For "add" and "remove" actions, the type of data item included in the command is also directly related to the "path" that is used:
-          <list style='symbols'>
-            <t>if the "path" targets a specific property only (a property name will always be present), then the data item will be one property value</t>
-            <t>if the "path" targets a specific parameter only (a parameter name will always be present), then the data item will be one parameter.</t>
-          </list>
-        </t>
-      </section>
+      </texttable>
     </section>
--->
+
     <section title='iCalendar Extensions' anchor="extensions">
       <t>This specification adds a new "VPATCH" calendar component to
       iCalendar.  The "VPATCH" component is itself a container for
@@ -574,7 +388,7 @@ subcomp     = *(
               </t>
             </list>
           </t>
-        </section>
+        </section> <!-- CREATE -->
 
         <section title="UPDATE Component" anchor="update">
           <t>
@@ -616,10 +430,58 @@ updateprop  = *(
                 </artwork></figure>
               </t>
               <t hangText="Description:">
+                This component provides a mechanism by which elements
+                can be updated in an iCalendar object.  The TARGET
+                property is processed as follows:
+
+                <list style="symbols">
+                  <t>If the TARGET property contains a parameter
+                  segment, then the remaining properties MUST only be
+                  SETPARAMETER properties.  The iCalendar parameters
+                  of the SETPARAMETER properties are added to or
+                  replace the equivalent parameters on the targeted
+                  iCalendar properties.  Note that any parameter name
+                  and match value contained in the TARGET property is
+                  ignored and SHOULD NOT be specified; to replace a
+                  single value of a multi-valued parameter, a DELETE
+                  action followed by a CREATE action MUST be used.</t>
+
+                  <t>Else, if the TARGET property contains a property
+                  segment, then:
+
+                  <list style="symbols">
+                    <t>If the property segment does not include a name
+                    (i.e., the TARGET path ends with the single "#"
+                    character after the component segment), then the
+                    remaining properties contained in the UPDATE
+                    component are added to or replace the equivalent
+                    properties in the targeted iCalendar component.</t> 
+
+                    <t>Otherwise, the equivalent property contained in
+                    the UPDATE component is added to or replaces the
+                    matching properties in the targeted iCalendar
+                    component.  Note that a property match value can
+                    not be used to target and update a single value in
+                    a multi-valued property; to replace a single value
+                    of a multi-valued property, a DELETE action
+                    followed by a CREATE action MUST be used.</t>
+                  </list>
+                  </t>
+
+                  <t>Else, if the TARGET property matches one or more
+                  iCalendar components, then the targeted
+                  iCalendar components are replaced with those
+                  contained in the UPDATE component.</t>
+                </list>
+
+                If there is no iCalendar element that matches the
+                TARGET property in the iCalendar object, this action
+                MUST succeed without any changes being applied to the
+                target iCalendar object.
               </t>
             </list>
           </t>
-        </section>
+        </section> <!-- UPDATE -->
 
         <section title="DELETE Component" anchor="delete">
           <t>
@@ -695,8 +557,8 @@ deleteprop  = *(
               </t>
             </list>
           </t>
-        </section>
-      </section>
+        </section> <!-- DELETE -->
+      </section> <!-- VPATCH -->
 
       <section title="VPATCH Properties" anchor="vpatchprops">
         <t>The VPATCH properties are attributes that apply to the
