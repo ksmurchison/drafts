@@ -378,7 +378,12 @@ subcomp     = *(
                   <t>Else, if the TARGET property matches one or more
                   iCalendar components, then the remaining properties
                   and/or components are added as child elements of the
-                  targeted iCalendar components.</t>
+                  targeted iCalendar components.  If a property being
+                  added is already present on the targeted iCalendar
+                  component, and that property can be multi-valued,
+                  then the server MAY add the new value(s) to the
+                  existing property.  Note that to replace an existing
+                  property an "update" action MUST be used.</t>
                 </list>
 
                 If there is no iCalendar element that matches the
