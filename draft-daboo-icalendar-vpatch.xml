@@ -273,6 +273,12 @@ patchc      = "BEGIN" ":" "VPATCH" CRLF
 
 patchprop   = *(
                  ;
+                 ; The following are REQUIRED,
+                 ; but MUST NOT occur more than once.
+                 ;
+                 dtstamp / uid /
+                 ;
+                 ;
                  ; The following are OPTIONAL,
                  ; but MUST NOT occur more than once.
                  ;
