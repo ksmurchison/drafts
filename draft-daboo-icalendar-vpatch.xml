@@ -437,7 +437,7 @@ updateprop  = *(
                  ; otherwise, they MUST NOT occur.
                  ; If 'prop-segment' includes a 'param-segment', then
                  ; 'setparam' is REQUIRED, and MAY occur more than once;
-                 ; otherwise, 'other-param' is REQUIRED,
+                 ; otherwise, 'other-prop' is REQUIRED,
                  ; and MUST NOT occur more than once
                  ; if 'prop-segment' includes a 'name'.
                  ;
@@ -793,7 +793,9 @@ PATCH-ORDER:1
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-target          = "TARGET *(";" other-param) ":" targetpath CRLF
+target          = "TARGET targetparam ":" targetpath CRLF
+
+targetparam      = *(";" other-param)
 
 targetpath       = 1*comp-segment [prop-segment [param-segment]]
 
