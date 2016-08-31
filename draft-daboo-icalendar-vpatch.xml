@@ -745,10 +745,10 @@ PATCH-ORDER:1
                 inside the "VCALENDAR" component. Component segments
                 can include an optional match item.  When present,
                 this allows targeting of components that match a
-                specific "UID" property value, or ones that match a
-                specific "UID" property value and also match a
-                "RECURRENCE-ID" value (or lack of "RECURRENCE-ID"
-                property if the value of the match is empty).<vspace />
+                specific "UID" property value, and/or ones that match
+                a specific "RECURRENCE-ID" value (or lack of
+                "RECURRENCE-ID" property if the value of the match is
+                "M").<vspace />
 
                 <vspace />To target a property inside of a component,
                 a property segment is appended to the component
@@ -788,8 +788,8 @@ target          = "TARGET *(";" other-param) ":" targetpath CRLF
 
 targetpath       = 1*comp-segment [prop-segment [param-segment]]
 
-comp-segment     = "/" name [comp-match]
-comp-match       = uid-match [rid-match]
+comp-segment     = "/" name comp-match
+comp-match       = [uid-match] [rid-match]
 uid-match        = "[UID=" text "]"
 rid-match        = "[RID=" ("M" / ridval) "]"
   ; "M" matches "master" component
