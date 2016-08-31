@@ -233,9 +233,15 @@
           <c></c>
           <c>Delete the components identified by the target.</c>
           <c>DELETE</c>
-          <c>Property</c>
+          <c>Property (no value)</c>
           <c></c>
           <c>Delete the properties identified by the target.</c>
+          <c>DELETE</c>
+          <c>Property (with value)</c>
+          <c></c>
+          <c>If the property identified by the target is multi-valued,
+          only delete the specified value from the property; otherwise,
+          completely delete the properties identified by the target.</c>
           <c>DELETE</c>
           <c>Parameter (no value)</c>
           <c></c>
@@ -742,7 +748,7 @@ PATCH-ORDER:1
                 <vspace />To target a component inside of another
                 component, a component segment is appended to the path
                 (e.g., "/VCALENDAR/VEVENT" targets "VEVENT" components
-                inside the "VCALENDAR" component. Component segments
+                inside the "VCALENDAR" component). Component segments
                 can include an optional match item.  When present,
                 this allows targeting of components that match a
                 specific "UID" property value, and/or ones that match
@@ -754,10 +760,10 @@ PATCH-ORDER:1
                 a property segment is appended to the component
                 segment at the end of the path (e.g.,
                 "/VCALENDAR#VERSION" targets a "VERSION" property
-                inside the "VCALENDAR" component). When creating a new
-                property inside of a component, the property segment
-                name is empty (e.g., "/VCALENDAR/VEVENT#" would allow
-                creation of new properties inside the targeted
+                inside the "VCALENDAR" component). When updating
+                properties inside of a component, the property segment
+                name MAY be empty (e.g., "/VCALENDAR/VEVENT#" would allow
+                updating multiple properties inside the targeted
                 "VEVENT" components). The property segment can include
                 an optional match item. When present, this allows
                 targeting of properties whose value matches or does
@@ -769,11 +775,14 @@ PATCH-ORDER:1
                 "/VCALENDAR/VEVENT#ATTENDEE;PARTSTAT" targets the
                 "PARTSTAT" parameter on an "ATTENDEE" property, inside
                 a "VEVENT" component, inside the "VCALENDAR"
-                component). When creating a new parameter on a
+                component). When updating parameters on a
                 property, the parameter segment name is empty (e.g.,
-                "/VCALENDAR/VEVENT#ATTENDEE;" would allow creation of
-                new parameters on the targeted "ATTENDEE"
-                properties).<vspace />
+                "/VCALENDAR/VEVENT#ATTENDEE;" would allow updating
+                (replacing) parameters on the targeted "ATTENDEE"
+                properties).  The parameter segment can include
+                an optional match item. When present, this allows
+                targeting of parameters whose value matches or does
+                not match a specific value.<vspace />
 
                 <vspace />Values in match items MUST use URL-style
                 percent (%) encoding of the characters "/", "#", ";" and
