@@ -301,104 +301,7 @@ action      = *( patchc / iana-comp / x-comp )
             </t>
           </list>
         </t>
-<!--
-        <section title="CREATE Component" anchor="create">
-          <t>
-            <list style="hanging">
-              <t hangText="Component Name:">
-                CREATE
-              </t>
-              <t hangText="Purpose:">
-                Provide a set of new properties and sub-components to be
-                added to the iCalendar object.
-              </t>
-              <t hangText="Format Definition:">
-                An "CREATE" calendar component is defined by the following
-                notation:
-                <figure><artwork name="abnf">
-createc     = "BEGIN" ":" "CREATE" CRLF
-                createprop subcomp
-              "END" ":" "CREATE" CRLF
 
-createprop  = *(
-                 ;
-                 ; The following is REQUIRED,
-                 ; but MUST NOT occur more than once.
-                 ;
-                 target /
-                 ;
-                 ; The following is REQUIRED if 'target' includes a
-                 ; 'prop-segment' in its 'targetpath', and MAY occur
-                 ; more than once; otherwise it MUST NOT occur.
-                 ;
-                 setparam /
-                 ;
-                 ; The following are OPTIONAL if 'target' does not
-                 ; include a 'prop-segment' in its 'targetpath',
-                 ; and MAY occur more than once; otherwise they MUST
-                 ; NOT occur.
-                 ;
-                 other-prop
-                 ;
-               )
-              
-subcomp     = *(
-                 ;
-                 ; The following are OPTIONAL,
-                 ; and MAY occur more than once,
-                 ; if and only if 'target' does not include a
-                 ; 'prop-segment' in its 'targetpath';
-                 ; otherwise they MUST NOT occur.
-                 ;
-                 eventc / todoc / journalc / freebusyc /
-                 timezonec / alarmc / standard / daylight /
-                 availabilityc / availablec /
-                 iana-comp / x-comp
-                 ;
-              )
-                </artwork></figure>
-              </t>
-              <t hangText="Description:">
-                This component provides a mechanism by which elements
-                can be added to an iCalendar object.  The TARGET
-                property MUST identify either iCalendar components or
-                properties.  The TARGET property is processed as
-                follows:
-
-                <list style="symbols">
-                  <t>If the TARGET property matches one or more
-                  iCalendar properties, then the remaining properties
-                  MUST only be SETPARAMETER properties.  The iCalendar
-                  parameters of the SETPARAMETER properties are then 
-                  added to the targeted iCalendar properties.  If
-                  a parameter being added is already present on the
-                  targeted iCalendar property, and that parameter can
-                  be multi-valued, then the server MUST  add the new 
-                  value(s) to the existing parameter; otherwise the
-                  server MUST fail the patch action.  Note that to
-                  replace an existing parameter an "update" action
-                  MUST be used.</t>
-
-                  <t>Else, if the TARGET property matches one or more
-                  iCalendar components, then the remaining properties
-                  and/or components are added as child elements of the
-                  targeted iCalendar components.  If a property being
-                  added is already present on the targeted iCalendar
-                  component, and that property can be multi-valued,
-                  then the server MAY add the new value(s) to the
-                  existing property.  Note that to replace an existing
-                  property an "update" action MUST be used.</t>
-                </list>
-
-                If there is no iCalendar element that matches the
-                TARGET property in the iCalendar object, this action
-                MUST succeed without any changes being applied to the
-                target iCalendar object.
-              </t>
-            </list>
-          </t>
-        </section>
--->
         <section title="PATCH Component" anchor="patch">
           <t>
             <list style="hanging">
@@ -406,7 +309,7 @@ subcomp     = *(
                 PATCH
               </t>
               <t hangText="Purpose:">
-                Provide a set components and properties to be
+                Provide a set components, properties, and parameters to be
                 added to, deleted from, or updated in the iCalendar object.
               </t>
               <t hangText="Format Definition:">
@@ -427,7 +330,7 @@ patchprop  = *(
                  ; The following are OPTIONAL,
                  ; and MAY occur more than once.
                  ;
-                 patchdelete / other-prop
+                 patchdelete / patchparam / other-prop
                  ;
                )
 
@@ -445,135 +348,20 @@ subcomp    = *(
                 </artwork></figure>
               </t>
               <t hangText="Description:">
-                This component provides a mechanism by which elements
-                can be updated in an iCalendar object.  The TARGET
-                property is processed as follows:
-
-                <list style="symbols">
-                  <t>If the TARGET property contains a parameter
-                  segment, then the remaining properties MUST only be
-                  SETPARAMETER properties.  The iCalendar parameters
-                  of the SETPARAMETER properties are added to or
-                  replace the equivalent parameters on the targeted
-                  iCalendar properties.  Note that any parameter name
-                  and match value contained in the TARGET property is
-                  ignored and SHOULD NOT be specified; to replace a
-                  single value of a multi-valued parameter, a DELETE
-                  action followed by a CREATE action MUST be used.</t>
-
-                  <t>Else, if the TARGET property contains a property
-                  segment, then:
-
-                  <list style="symbols">
-                    <t>If the property segment does not include a name
-                    (i.e., the TARGET path ends with the single "#"
-                    character after the component segment), then the
-                    remaining properties contained in the UPDATE
-                    component are added to or replace the equivalent
-                    properties in the targeted iCalendar component.</t> 
-
-                    <t>Otherwise, the equivalent property contained in
-                    the UPDATE component is added to or replaces the
-                    matching properties in the targeted iCalendar
-                    component.  Note that a property match value can
-                    not be used to target and update a single value in
-                    a multi-valued property; to replace a single value
-                    of a multi-valued property, a DELETE action
-                    followed by a CREATE action MUST be used.</t>
-                  </list>
-                  </t>
-
-                  <t>Else, if the TARGET property matches one or more
-                  iCalendar components, then the targeted
-                  iCalendar components are replaced with those
-                  contained in the UPDATE component.</t>
-                </list>
-
-                If there is no iCalendar element that matches the
-                TARGET property in the iCalendar object, this action
-                MUST succeed without any changes being applied to the
-                target iCalendar object.
+                This component provides a grouping of patch actions to
+                be performed within the scope of a set of components.
+                If the PATCH-TARGET property matches one or more
+                iCalendar components, then the targeted iCalendar
+                components are patched using the remaining properties
+                and components.  If there is no iCalendar component
+                that matches the PATCH-TARGET property in the
+                iCalendar object, the PATCH action MUST succeed
+                without any changes being applied to the target
+                iCalendar object.
               </t>
             </list>
           </t>
-        </section>
-<!--
-        <section title="DELETE Component" anchor="delete">
-          <t>
-            <list style="hanging">
-              <t hangText="Component Name:">
-                DELETE
-              </t>
-              <t hangText="Purpose:">
-                Provide a set of components, properties, and parameters
-                to be removed from the iCalendar object. 
-              </t>
-              <t hangText="Format Definition:">
-                A "DELETE" calendar component is defined by the
-                following notation:
-                <figure><artwork name="abnf">
-deletec     = "BEGIN" ":" "DELETE" CRLF
-                deleteprop
-              "END" ":" "DELETE" CRLF
-
-deleteprop  = *(
-                 ;
-                 ; The following is REQUIRED
-                 ; and MAY occur more than once.
-                 ;
-                 target
-                 ;
-               )
-                </artwork></figure>
-              </t>
-              <t hangText="Description:">
-                This component provides a mechanism by which elements
-                can be removed from an iCalendar object.  This component
-                MAY contain more than one TARGET property.  Unless
-                amended by an extension to this memo, all other
-                properties are ignored.  Each instance of the TARGET
-                property is processed as follows:
-
-                <list style="symbols">
-                  <t>If the TARGET property matches one of the values of
-                  a multi-valued parameter on an iCalendar
-                  property, then this value is removed from the
-                  targeted parameter.  Note that if the value being
-                  removed is the sole value of the targeted parameter,
-                  then the entire parameter MUST be removed from the
-                  iCalendar property.</t>
-
-                  <t>Else, if the TARGET property matches one or more
-                  parameters on an iCalendar property, then
-                  the targeted parameters are removed from the iCalendar
-                  property.</t>
-
-                  <t>Else, if the TARGET property matches one of the
-                  values of a multi-valued iCalendar property, then
-                  this value is removed from the targeted property.
-                  Note that if the value being removed is the sole
-                  value of the targeted property, then the entire
-                  property MUST be removed from the iCalendar
-                  object.</t>
-
-                  <t>Else, if the TARGET property matches one or more
-                  iCalendar properties, then the targeted
-                  properties are removed from the iCalendar object.</t> 
-
-                  <t>Else, if the TARGET property matches one or more
-                  iCalendar components, then the targeted
-                  components are removed from the iCalendar object.</t> 
-                </list>
-
-                If there is no iCalendar element that matches the
-                TARGET property in the iCalendar object, this action
-                MUST succeed without any changes being applied to the
-                target iCalendar object.
-              </t>
-            </list>
-          </t>
-        </section>
--->
+        </section> <!-- PATCH -->
       </section> <!-- VPATCH -->
 
       <section title="VPATCH Properties" anchor="vpatchprops">
