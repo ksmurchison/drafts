@@ -700,7 +700,8 @@ pdeletepath      = comp-segment /
                     ( prop-segment [param-segment] [value-segment])
   ; PATCH-DELETE path is relative to PATCH-TARGET path
 
-prop-segment     = "#" name [prop-match]
+prop-segment     = prop-prefix [prop-match]
+prop-prefix      = "#" name
 prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
 
 prop-equal       = "=" value
@@ -708,7 +709,8 @@ prop-not-equal   = "!" value
 
 param-match      = "@" param-name [ ( param-equal / param-not-equal ) ]
 
-param-segment    = ";" param-name [param-val-match]
+param-segment    = param-prefix [param-val-match]
+param-prefix     = ";" param-name
 param-val-match  = "[" ( param-equal / param-not-equal ) "]"
 
 param-equal      = "=" param-value
@@ -877,6 +879,28 @@ value-segment    = "=" (value / param-value)
                 This property specifies parameters to be set on
                 the targeted property.  The property value is used to
                 target one or more properties having the specified name.
+                
+                <vspace/>To add or replace a parameter on a property,
+                the path will contain exactly one property segment only.
+                The properties to be targeted are found by matching the
+                properties in the component being targeted by the enclosing
+                "PATCH" component. A property segment can include an optional
+                match item. When present, this allows targeting of properties
+                by value (matching or not matching a specific value), or
+                which have a named parameter present, or by parameter value
+                (matching or not matching a specific value).<vspace/>
+                
+                <vspace/>To add a value to a multi-valued parameter on a property,
+                the path will contain one property segment and one parameter name only.
+                The properties to be targeted are found by matching the
+                properties in the component being targeted by the enclosing
+                "PATCH" component. The parameters being modified on those properties
+                are identified by the parameter name in the path. A property segment
+                can include an optional
+                match item. When present, this allows targeting of properties
+                by value (matching or not matching a specific value), or
+                which have a named parameter present, or by parameter value
+                (matching or not matching a specific value).<vspace/>
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -885,7 +909,7 @@ patchparam  = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
 
 pparamparam  = *(";" other-param)
 
-pparampath   = prop-segment
+pparampath   = prop-segment [param-prefix]
                 </artwork></figure>
               </t>
               <t hangText="Example:">
@@ -893,6 +917,7 @@ pparampath   = prop-segment
                 <figure><artwork name="example">
 PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[=mailto:cyrus@example.com]
 PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[@CN=Cyrus Daboo]
+PATCH-PARAMETER;MEMBER=mailto:newgroup@example.com:#ATTENDEE;MEMBER
                 </artwork></figure>
               </t>
             </list>
