@@ -701,28 +701,18 @@ pdeletepath      = comp-segment /
   ; PATCH-DELETE path is relative to PATCH-TARGET path
 
 prop-segment     = "#" name [prop-match]
-prop-match       = "[" (
-                      prop-match-equal /
-                      prop-match-not-equal /
-                      prop-match-param-exists /
-                      prop-match-param-equal /
-                      prop-match-param-not-equal
-                    ) "]"
+prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
 
-prop-match-equal            = "=" value
-prop-match-not-equal        = "!" value
-prop-match-param-exists     = "@" param-name
-prop-match-param-equal      = "@" param-name "=" param-value
-prop-match-param-not-equal  = "@" param-name "!" param-value
+prop-equal       = "=" value
+prop-not-equal   = "!" value
 
-param-segment    = ";" param-name [param-match]
-param-match      = "[" (
-                      param-match-equal /
-                      param-match-not-equal
-                    ) "]"
+param-match      = "@" param-name [ ( param-equal / param-not-equal ) ]
 
-param-match-equal      = "=" param-value
-param-match-not-equal  = "!" param-value
+param-segment    = ";" param-name [param-val-match]
+param-val-match  = "[" ( param-equal / param-not-equal ) "]"
+
+param-equal      = "=" param-value
+param-not-equal  = "!" param-value
 
 value-segment    = "=" (value / param-value)
                 </artwork></figure>
@@ -939,7 +929,7 @@ pactionbyvalue  = "BYVALUE"
   ; Always remove properties with the same name and value
   ; from the target component, then add this property to the target.
 
-pactionbyparam  = DQUOTE "BYPARAM" ";" param-name "=" param-value DQUOTE
+pactionbyparam  = DQUOTE "BYPARAM" param-match   DQUOTE
   ; Always remove properties with the same name and parameter value
   ; from the target component, then add this property to the target.
                 </artwork></figure>
@@ -960,7 +950,7 @@ pactionbyparam  = DQUOTE "BYPARAM" ";" param-name "=" param-value DQUOTE
 ATTENDEE;PATCH-ACTION=BYVALUE;PARTSTAT=NEEDS-ACTION:
  mailto:cyrus@example.com
 
-DESCRIPTION;PATCH-ACTION="BYPARAM;LANGUAGE=en";LANGUAGE=en:
+DESCRIPTION;PATCH-ACTION="BYPARAM@LANGUAGE=en_GB";LANGUAGE=en_US:
  Meeting to discuss VPATCH
                 </artwork></figure>
               </t>
