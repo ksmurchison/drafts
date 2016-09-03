@@ -620,7 +620,7 @@ rid-match        = "[RID=" ("M" / ridval) "]"
                 This property is used to match iCalendar elements
                 that will be removed.  The
                 property value ("pdeletepath") is a list of "segments"
-                (separated by the "/", "#" or ";" characters) that
+                (separated by the "/", "#", ";", or "=" characters) that
                 matches an iCalendar element in the iCalendar
                 component targeted by PATCH-TARGET.  Each component,
                 property, or parameter segment can include an optional
@@ -632,30 +632,57 @@ rid-match        = "[RID=" ("M" / ridval) "]"
                 or a property segment (which always has a "#"
                 prefix"), which itself is optionally followed by a
                 parameter segment (which always has a ";"
-                prefix).<vspace />
+                prefix), and both optionally followed by a value
+                segment (which always has a "=" prefix).<vspace />
 
-                <vspace />A component segment can include an
-                optional match item.  When present, this allows
+                <vspace />To target one or more components for deletion,
+                the path will contain one or more component segments.
+                The components to be targeted are found by matching
+                sub-component names using the component segment name.
+                Each component segment can include an optional match item. 
+                When present, this allows
                 targeting of components that match a specific "UID"
                 property value, and/or ones that match a specific
                 "RECURRENCE-ID" value (or lack of "RECURRENCE-ID"
                 property if the value of the match is "M").<vspace />
 
-                <vspace />A property segment can include an optional
+                <vspace />To target one or more properties for deletion,
+                the path will contain exactly one property segment only.
+                The properties to be targeted are found by matching the
+                properties in the component being targeted by the enclosing
+                "PATCH" component.
+                A property segment can include an optional
                 match item. When present, this allows targeting of
-                properties whose value matches or does not match a
-                specific value.<vspace />
+                properties by value (matching or not matching a
+                specific value), or which have a named parameter present,
+                or by parameter value (matching or not matching a
+                specific value).<vspace />
 
-                <vspace />To target a parameter on a property, a
-                parameter segment is appended to the property segment
-                at the end of the path (e.g., "#ATTENDEE;PARTSTAT"
-                targets the "PARTSTAT" parameter on an "ATTENDEE"
-                property, inside the component targeted by
-                PATCH-TARGET). The parameter segment can include
+                <vspace />To target a parameter on one or more properties for deletion,
+                the path will contain one property segment, and one parameter segment only.
+                The property segment will match properties (as described above) and the 
+                parameter to be targeted for deletion is found by matching the name
+                of the parameter segment.
+                The parameter segment can include
                 an optional match item. When present, this allows
                 targeting of parameters whose value matches or does
                 not match a specific value.<vspace />
 
+                <vspace/>To target a single value in a multi-valued
+                property for deletion, the path will contain one property segment
+                and one value segment only. The property segment will match
+                properties (as described above) and the 
+                value to be targeted for deletion is found by matching the value
+                in the value segment.<vspace/>
+                
+                <vspace/>To target a single value in a multi-valued
+                parameter for deletion, the path will contain one property segment,
+                one parameter segment, and one value segment only. The property
+                segment will match properties (as described above), the parameter segment will
+                match the parameter (as described above), and the 
+                value to be targeted for deletion is found by matching the value
+                in the value segment.<vspace/>
+                
                 <vspace />Values in match items MUST use URL-style
                 percent (%) encoding of the characters "/", "#", ";" and
                 "]". This allows the 'pdeletepath' to be quickly split into
@@ -669,20 +696,35 @@ patchdelete      = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
 
 pdeleteparam     = *(";" other-param)
 
-pdeletepath      = comp-segment / ( prop-segment [param-segment] )
+pdeletepath      = comp-segment / 
+                    ( prop-segment [param-segment] [value-segment])
   ; PATCH-DELETE path is relative to PATCH-TARGET path
 
 prop-segment     = "#" name [prop-match]
-prop-match       = "[" (prop-equal / prop-not-equal) "]"
+prop-match       = "[" (
+                      prop-match-equal /
+                      prop-match-not-equal /
+                      prop-match-param-exists /
+                      prop-match-param-equal /
+                      prop-match-param-not-equal
+                    ) "]"
 
-prop-equal       = "=" value
-prop-not-equal   = "!" value
+prop-match-equal            = "=" value
+prop-match-not-equal        = "!" value
+prop-match-param-exists     = "@" param-name
+prop-match-param-equal      = "@" param-name "=" param-value
+prop-match-param-not-equal  = "@" param-name "!" param-value
 
 param-segment    = ";" param-name [param-match]
-param-match      = "[" (param-equal / param-not-equal) "]"
+param-match      = "[" (
+                      param-match-equal /
+                      param-match-not-equal
+                    ) "]"
 
-param-equal      = "=" param-value
-param-not-equal  = "!" param-value
+param-match-equal      = "=" param-value
+param-match-not-equal  = "!" param-value
+
+value-segment    = "=" (value / param-value)
                 </artwork></figure>
               </t>
               <t hangText="Examples:">
@@ -725,7 +767,7 @@ param-not-equal  = "!" param-value
                 </list>
 
                 <vspace />Deleting properties.
-                Given PATH-TARGET:/VCALENDAR:
+                Given PATCH-TARGET:/VCALENDAR:
                 <list style="hanging">
                   <t hangText="PATCH-DELETE:#PRODID">
                   <vspace />Deletes the "PRODID" property in the
@@ -733,7 +775,7 @@ param-not-equal  = "!" param-value
                 </list>
 
                 <vspace />Deleting properties (continued).
-                Given PATH-TARGET:/VCALENDAR/VEVENT:
+                Given PATCH-TARGET:/VCALENDAR/VEVENT:
                 <list style="hanging">
 
                   <t hangText="PATCH-DELETE:#STATUS">
@@ -753,15 +795,24 @@ param-not-equal  = "!" param-value
                   "VEVENT" components, in the "VCALENDAR" component in
                   the iCalendar object.</t>
                   
-                  <t hangText="PATCH-DELETE:#EXDATE[=20160828]">
-                  <vspace />Deletes the value "20160828" in the
-                  multi-valued "EXDATE" property in all "VEVENT"
-                  components, in the "VCALENDAR" component in the
-                  iCalendar object.</t>
+                  <t hangText="PATCH-DELETE:#DESCRIPTION[@LANGUAGE]">
+                  <vspace />Deletes any "DESCRIPTION" properties that
+                  have a "LANGUAGE" parameter.</t>
+                  
+                  <t hangText="PATCH-DELETE:#DESCRIPTION[@LANGUAGE=en_GB]">
+                  <vspace />Deletes any "DESCRIPTION" properties that
+                  have a "LANGUAGE" parameter with the value
+                  "en_GB".</t>
+                  
+                  <t hangText="PATCH-DELETE:#DESCRIPTION[@LANGUAGE!en_GB]">
+                  <vspace />Deletes any "DESCRIPTION" properties that
+                  do not have a "LANGUAGE" parameter with the value
+                  "en_GB". That includes "DESCRIPTION" properties
+                  without any "LANGUAGE" parameter.</t>
                 </list>
 
                 <vspace />Deleting parameters.
-                Given PATH-TARGET:/VCALENDAR/VEVENT:
+                Given PATCH-TARGET:/VCALENDAR/VEVENT:
                 <list style="hanging">
                   <t hangText="PATCH-DELETE:#ATTENDEE;PARTSTAT">
                     <vspace />Deletes the "PARTSTAT" parameter on all
@@ -782,6 +833,29 @@ param-not-equal  = "!" param-value
                     "MEMBER" parameter on all "ATTENDEE" properties in
                     all "VEVENT" components in the "VCALENDAR"
                     component in the iCalendar object</t>
+                </list>
+
+                <vspace />Deleting a property value from a multi-valued property.
+                Given PATCH-TARGET:/VCALENDAR/VEVENT:
+                <list style="hanging">
+                  <t hangText="PATCH-DELETE:#EXDATE=20160828">
+                  <vspace />Deletes the value "20160828" in any
+                  "EXDATE" properties in all "VEVENT"
+                  components, in the "VCALENDAR" component in the
+                  iCalendar object. If the resulting property contains
+                  no value, the property itself is also removed.</t>
+                </list>
+
+                <vspace />Deleting a parameter value from a multi-valued parameter.
+                Given PATCH-TARGET:/VCALENDAR/VEVENT:
+                <list style="hanging">
+                  <t hangText="PATCH-DELETE:#ATTENDEE;MEMBER=mailto:group@example.com">
+                  <vspace />Deletes the value "mailto:group@example.com" from any
+                  "MEMBER" parameters in any
+                  "ATTENDEE" properties in all "VEVENT"
+                  components, in the "VCALENDAR" component in the
+                  iCalendar object. If the resulting parameter contains
+                  no value, the parameter itself is also removed.</t>
                 </list>
               </t>
             </list>
@@ -821,13 +895,14 @@ patchparam  = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
 
 pparamparam  = *(";" other-param)
 
-pparampath   = prop-segment [param-segment]
+pparampath   = prop-segment
                 </artwork></figure>
               </t>
               <t hangText="Example:">
-                The following is an example of this property:
+                The following are examples of this property:
                 <figure><artwork name="example">
 PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[=mailto:cyrus@example.com]
+PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[@CN=Cyrus Daboo]
                 </artwork></figure>
               </t>
             </list>
@@ -1454,7 +1529,8 @@ END:VCALENDAR
 
       <section title="Remove a value from a multi-valued parameter on
                       a property with a specific value from a component"> 
-        <t>Remove the "PARTSTAT" parameter from the "ATTENDEE"
+        <t>Remove the "mailto:calext@example.com" value from the "MEMBER"
+        parameter on the "ATTENDEE"
         property with the value "mailto:cyrus@example.com" in the
         "VEVENT" component with the "UID" property value "1234".</t>
         <t><figure>
@@ -1465,8 +1541,8 @@ VERSION:2.0
 BEGIN:VPATCH
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]
-PATCH-DELETE;ACTION=DELETE-VALUE:#ATTENDEE[=mailto:cyrus@example.com]
- ;MEMBER[=mailto:calext@example.com]
+PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com]
+ ;MEMBER=mailto:calext@example.com
 END:PATCH
 END:VPATCH
 END:VCALENDAR
@@ -1495,7 +1571,7 @@ END:VCALENDAR
 
       <section title="Remove a value from a multi-valued property from
                       a component">
-        <t>Remove a value from the "EXDATE" property in the "VEVENT"
+        <t>Remove the value "20150903T120000Z" from the "EXDATE" property in the "VEVENT"
         component with the "UID" property value "1234".</t>
         <t><figure>
               <artwork><![CDATA[
@@ -1505,7 +1581,7 @@ VERSION:2.0
 BEGIN:VPATCH
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]
-PATCH-DELETE;ACTION=DELETE-VALUE:#EXDATE[=20150903T120000Z]
+PATCH-DELETE:#EXDATE=20150903T120000Z
 END:PATCH
 END:VPATCH
 END:VCALENDAR
