@@ -662,11 +662,7 @@ rid-match        = "[RID=" ("M" / ridval) "]"
                 the path will contain one property segment, and one parameter segment only.
                 The property segment will match properties (as described above) and the 
                 parameter to be targeted for deletion is found by matching the name
-                of the parameter segment.
-                The parameter segment can include
-                an optional match item. When present, this allows
-                targeting of parameters whose value matches or does
-                not match a specific value.<vspace />
+                of the parameter segment.<vspace />
 
                 <vspace/>To target a single value in a multi-valued
                 property for deletion, the path will contain one property segment
@@ -698,25 +694,29 @@ pdeleteparam     = *(";" other-param)
 
 pdeletepath      = comp-segment / 
                     ( prop-segment [param-segment] [value-segment])
-  ; PATCH-DELETE path is relative to PATCH-TARGET path
+                 ; PATCH-DELETE path is relative to PATCH-TARGET path
 
 prop-segment     = prop-prefix [prop-match]
 prop-prefix      = "#" name
 prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
 
-prop-equal       = "=" value
-prop-not-equal   = "!" value
+prop-equal       = "=" value-escaped
+prop-not-equal   = "!" value-escaped
 
 param-match      = "@" param-name [ ( param-equal / param-not-equal ) ]
+param-equal      = "=" param-value-escaped
+param-not-equal  = "!" param-value-escaped
 
-param-segment    = param-prefix [param-val-match]
-param-prefix     = ";" param-name
-param-val-match  = "[" ( param-equal / param-not-equal ) "]"
-
-param-equal      = "=" param-value
-param-not-equal  = "!" param-value
+param-segment    = ";" param-name
 
 value-segment    = "=" (value / param-value)
+
+value-escaped       = value
+                    ; % encoding for "/", "#", ";", and "]"
+
+param-value-escaped = param-value
+                    ; % encoding for "/", "#", ";", and "]"
+
                 </artwork></figure>
               </t>
               <t hangText="Examples:">
@@ -818,13 +818,6 @@ value-segment    = "=" (value / param-value)
                     "mailto:cyrus@example.com" in all  "VEVENT"
                     components, in the "VCALENDAR" component in the
                     iCalendar object</t>
-
-                  <t hangText="PATCH-DELETE:#ATTENDEE;MEMBER[=mailto:calext@example.org]">
-                    <vspace />Deletes the value
-                    "mailto:calext@example.com" of the multi-valued
-                    "MEMBER" parameter on all "ATTENDEE" properties in
-                    all "VEVENT" components in the "VCALENDAR"
-                    component in the iCalendar object</t>
                 </list>
 
                 <vspace />Deleting a property value from a multi-valued property.
@@ -909,7 +902,7 @@ patchparam  = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
 
 pparamparam  = *(";" other-param)
 
-pparampath   = prop-segment [param-prefix]
+pparampath   = prop-segment [param-segment]
                 </artwork></figure>
               </t>
               <t hangText="Example:">
