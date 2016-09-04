@@ -406,11 +406,11 @@ patch-version  = "PATCH-VERSION pverparam ":" pvervalue CRLF
 
 pverparam      = *(";" other-param)
 
-pvervalue      = "1"         ; This memo
-                 / pmaxver
+pvervalue      = "1" / pmaxver
+               ; "1" signifies compliance with this memo
 
 pmaxver        = &lt;A IANA-registered VPATCH version identifier&gt;
-                 ;Maximum VPATCH version needed to parse the VPATCH component.
+               ; Maximum VPATCH version needed to parse the VPATCH component.
                 </artwork></figure>
               </t>
               <t hangText="Example:">
@@ -541,17 +541,17 @@ PATCH-ORDER:1
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchtarget   = "PATCH-TARGET ptargetparam ":" ptargetpath CRLF
+patchtarget      = "PATCH-TARGET ptargetparam ":" ptargetpath CRLF
 
-ptargetparam  = *(";" other-param)
+ptargetparam     = *(";" other-param)
 
-ptargetpath   = 1*comp-segment
+ptargetpath      = 1*comp-segment
 
 comp-segment     = "/" name comp-match
 comp-match       = [uid-match] [rid-match]
 uid-match        = "[UID=" text "]"
 rid-match        = "[RID=" ("M" / ridval) "]"
-  ; "M" matches "master" component
+                 ; "M" matches "master" component
                 </artwork></figure>
               </t>
               <t hangText="Examples:">
@@ -688,27 +688,27 @@ rid-match        = "[RID=" ("M" / ridval) "]"
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchdelete      = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
+patchdelete         = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
 
-pdeleteparam     = *(";" other-param)
+pdeleteparam        = *(";" other-param)
 
-pdeletepath      = comp-segment / 
-                    ( prop-segment [param-segment] [value-segment] )
-                 ; PATCH-DELETE path is relative to PATCH-TARGET path
+pdeletepath         = comp-segment / 
+                       ( prop-segment [param-segment] [value-segment] )
+                    ; PATCH-DELETE path is relative to PATCH-TARGET path
 
-prop-segment     = "#" name [prop-match]
-prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
+prop-segment        = "#" name [prop-match]
+prop-match          = "[" ( prop-equal / prop-not-equal / param-match ) "]"
 
-prop-equal       = "=" value-escaped
-prop-not-equal   = "!" value-escaped
+prop-equal          = "=" value-escaped
+prop-not-equal      = "!" value-escaped
 
-param-match      = "@" param-name [ ( param-equal / param-not-equal ) ]
-param-equal      = "=" param-value-escaped
-param-not-equal  = "!" param-value-escaped
+param-match         = "@" param-name [ ( param-equal / param-not-equal ) ]
+param-equal         = "=" param-value-escaped
+param-not-equal     = "!" param-value-escaped
 
-param-segment    = ";" param-name
+param-segment       = ";" param-name
 
-value-segment    = "=" (value / param-value)
+value-segment       = "=" (value / param-value)
 
 value-escaped       = value
                     ; % encoding for "/", "#", ";", and "]"
@@ -897,7 +897,7 @@ param-value-escaped = param-value
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchparam  = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
+patchparam   = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
 
 pparamparam  = *(";" other-param)
 
@@ -935,20 +935,23 @@ pactionparam    = "PATCH-ACTION" "=" pactioncreate / pactionbyname /
                                      x-name
 
 pactioncreate   = "CREATE"
-  ; Always add property to target component.
+                ; Always add property to target component.
 
 pactionbyname   = "BYNAME"
-  ; Always remove properties with the same name
-  ; from the target component, then add this property to the target.
-  ; This value is the default and MAY be omitted.
+                ; Always remove properties with the same name
+                ; from the target component,
+                ; then add this property to the target component.
+                ; This value is the default and MAY be omitted.
 
 pactionbyvalue  = "BYVALUE"
-  ; Always remove properties with the same name and value
-  ; from the target component, then add this property to the target.
+                ; Always remove properties with the same name
+                ; and value from the target component,
+                ; then add this property to the target component.
 
 pactionbyparam  = DQUOTE "BYPARAM" param-match   DQUOTE
-  ; Always remove properties with the same name and parameter value
-  ; from the target component, then add this property to the target.
+                ; Always remove properties with the same name
+                ; and parameter name/value from the target component,
+                ; then add this property to the target component.
                 </artwork></figure>
               </t>
               <t hangText="Description:">
