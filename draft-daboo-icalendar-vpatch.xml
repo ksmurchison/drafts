@@ -693,11 +693,10 @@ patchdelete      = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
 pdeleteparam     = *(";" other-param)
 
 pdeletepath      = comp-segment / 
-                    ( prop-segment [param-segment] [value-segment])
+                    ( prop-segment [param-segment] [value-segment] )
                  ; PATCH-DELETE path is relative to PATCH-TARGET path
 
-prop-segment     = prop-prefix [prop-match]
-prop-prefix      = "#" name
+prop-segment     = "#" name [prop-match]
 prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
 
 prop-equal       = "=" value-escaped
@@ -1211,17 +1210,15 @@ END:VPATCH
           <c>PATCH-ORDER</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patchorder"/></c>
-          <c>PATCH-DELETE</c>
-          <c>Current</c>
-          <c>RFCXXXX, <xref target="patchdelete"/></c>
           <c>PATCH-TARGET</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patchtarget"/></c>
-<!--
+          <c>PATCH-DELETE</c>
+          <c>Current</c>
+          <c>RFCXXXX, <xref target="patchdelete"/></c>
           <c>PATCH-PARAMETER</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patchparam"/></c>
--->
       </texttable>
       </section> <!-- Prop Reg -->
 
