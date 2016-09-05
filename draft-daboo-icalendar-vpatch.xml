@@ -127,122 +127,182 @@
 -->
     </section>
 
-    <section title="Overview">
-      <t> The basic design of the patch format is a single "VPATCH"
-      component containing a series of sub-components, each specifying
-      an action to be performed, one or more targets, and
-      optionally some data.</t>
+    <section title="Overview" anchor="vpatch-component">
+      <t> The basic design of the patch format is a "VPATCH" component (defined in <xref target="vpatch"/>) containing one ot more "PATCH" components (defined in <xref target="patch"/>), each specifying a path (which identifies one or more components in the iCalendar object being patched), and other components and properties that define the set of changes to be made.</t>
+      <t>When multiple "VPATCH" components are present in an iCalendar object, the order in which they are applied is defined by the value of any "PATCH-ORDER" properties in the "VPATCH" component. The "VPATCH" components are sorted in order from lowest "PATCH-ORDER" integer value to highest, with any components not containing a "PATCH-ORDER" property placed last. The patch process is then applied in sorted order (any components with the same "PATCH-ORDER" value can be applied in any order).</t>
+      <t>No specific processing order is defined for multiple "PATCH" components in a "VPATCH" component.</t>
+      <t>The "VPATCH" component also contains an optional "PATCH-VERSION" property to allow future extensions to the format to be recognized. This document only defines version number "1". The "PATCH-VERSION" property only needs to be present if the version number is greater than "1".  If a patch processing engine is unable to handle the indicated version it MUST reject the entire patch operation defined by the enclosing iCalendar object, even if other "VPATCH" components have a "PATCH-VERSION" number that is supported.</t>
+      <t>After applying a patch to an iCalendar object, the basic validity of the resulting iCalendar object SHOULD be checked by the processing engine (e.g., if the patch added an extra "DTSTART" property to a "VEVENT" component that would be considered a violation of <xref target="RFC5545"/>'s cardinality rules for the "DTSTART" property in a "VEVENT"). If this occurs, the patch operation MUST fail.</t>
+      <t>Other validity constraints can be applied if needed. For example, <xref target="RFC4791">CalDAV</xref> requires that the "UID" property be the same in all components in a calendar object resource stored on the server. If a patch operation adds a component to an iCalendar object with a different "UID" value than the existing components, that result would be an invalid CalDAV calendar object resource. If other validity constraints are violated, the patch operation MUST fail.</t>
+      <t>Any failure to process a "VPATCH" component, for whatever reason, MUST result in the entire patch operation being cancelled, with the target iCalendar object left in its original state.</t>
+    </section>
 
-      <t>The name of each sub-component indicates the action to
-      be performed (e.g., adding a new component or property,
-      updating an existing element, removing an existing element).
-      Each of the actions specified by the sub-components MUST be
-      executed sequentially.
-      If an action results in violation of any constraints on the
-      overall iCalendar object (e.g., adding a "VALARM" component
-      directly within a "VCALENDAR" component, adding a second
-      "DTSTART" property, when only one is allowed), then the action
-      MUST fail.  A failure executing any action MUST result in the
-      entire patch operation being cancelled, with the iCalendar
-      object being targeted left in its original state.</t>
-
-      <t>The body of each sub-component contains:
-      <list style="symbols">
-        <t>One or more "TARGET" properties to identify the iCalendar
-        elements to which the patch should be applied.  Unless
-        otherwise specified, if a "TARGET" property does not match any
-        elements in the target iCalendar object, then the action MUST
-        succeed without any change being applied to the target
-        iCalendar object.  Note that a  single "TARGET" property may
-        match multiple iCalendar elements (e.g., a patch can update
-        the "SUMMARY" iCalendar property in all "VEVENT" iCalendar
-        components in an iCalendar object to the same new value).</t>
-
-        <t>Any data needed to apply the patch (e.g., when adding a new
-        iCalendar component, the data will be the entire new iCalendar
-        component; when updating an iCalendar property, the data
-        will be the new property; when removing an element, the
-        data will be absent).</t>
-      </list>
+    <section title="PATCH Component" anchor="patch-component">
+      <t>A "PATCH" component (defined in <xref target="patch"/>) MUST contain one "PATCH-TARGET" property whose value is an iCalendar path (see <xref target="path"/>) that identifies components within the target iCalendar object being patched. The set of patch operations defined by the other components and properties present in the "PATCH" component are then applied to each targeted component (in no specific order). If a "PATCH-TARGET" property does not match any components in the target iCalendar object, then the patch operation MUST succeed without any changes being applied to the target iCalendar object.</t>
+      <t>Four patch operations are supported:
+        <list style="numbers">
+          <t>Component additions or updates: any components within the "PATCH" component are considered to be additions or updates (see <xref target="patch-components"/>).</t>
+          <t>Property additions or updates: any properties (other than those whose name starts with the "PATCH-" prefix) are considered to be additions or updates (see <xref target="patch-properties"/>).</t>
+          <t>Component, property, or property parameter deletion: indicated by the present of one or more "PATCH-DELETE" property (see <xref target="patch-delete"/>).</t>
+          <t>Property parameter additions or updates: indicated by the presence of one or more "PATCH-PARAMETER" properties (see <xref target="patch-parameters"/>).</t>
+        </list>
+        When processing a "PATCH" component, the processing engine MUST follow this order:
+        <list style="symbols">
+          <t>Process all "PATCH-DELETE" properties first.</t>
+          <t>Process all "PATCH-PARAMETER" properties second.</t>
+          <t>Process all other components third.</t>
+          <t>Process all non "PATCH-" prefixed properties fourth.</t>
+        </list>
       </t>
+    </section>
 
-      <t>The "VPATCH" component also contains an optional
-      "PATCH-VERSION" property to allow future extensions to the
-      format to be recognized. This document only defines version
-      number "1".  The "PATCH-VERSION" property only needs to be present
-      if the version number is greater than "1".</t>  
+    <section title="iCalendar Path" anchor="path">
+      <t>The "PATCH-TARGET", "PATCH-DELETE", and "PATCH-PARAMETER" property values are all iCalendar "paths". The path is used to match iCalendar elements that the patch operation will be applied to.  The path is a list of "segments" (separated by the "/", "#", ";" or "=" characters) that matches an iCalendar element in the iCalendar object model hierarchy (a component, a property, a property parameter, a property value, or a property parameter value). A path can either be "absolute" (referring to items within the top-level iCalendar object being targeted) or "relative" (referring to items within some other component as determined by the scope of the operation).</t>
+      
+      <t>A path can start with a series of component segments (which always have a "/" prefix). Those can be followed by a property segment (which always has a "#" prefix"). A property segment can be followed by either a parameter segment (which always has a ";" prefix), or a value segment (which always has a "=" prefix). A parameter segment can be followed by a value segment (which always has a "=" prefix).</t>
 
-      <t>The table below shows all the allowed combination of action
-      sub-components, targets, and data items.  Subsequent sections
-      describe all of these in more detail.</t>
+      <t>An absolute path always starts with a "/VCALENDAR" component segment since an iCalendar object is always a single "VCALENDAR" component.</t>
 
-      <texttable>
-        <ttcol>Component</ttcol>
-          <ttcol>TARGET Value</ttcol>
-          <ttcol>Data</ttcol>
-          <ttcol>Description</ttcol>
-          <c>CREATE</c>
-          <c>Component</c>
-          <c>Properties and/or Components</c>
-          <c>Add the supplied properties and components to the
-          components identified by the target.</c>
-          <c>CREATE</c>
-          <c>Property</c>
-          <c>SETPARAMETER Properties</c>
-          <c>Add the supplied parameters to the properties identified
-          by the target.</c>
-          <c />
-          <c />
-          <c />
-          <c />
-          <c>UPDATE</c>
-          <c>Component</c>
-          <c>Components</c>
-          <c>Replace the components identified by the target, with the
-          supplied components.</c>
-          <c>UPDATE</c>
-          <c>Property (with name)</c>
-          <c>Property</c>
-          <c>Add or replace the property identified by the target,
-          with the supplied property.</c>
-          <c>UPDATE</c>
-          <c>Property (no name)</c>
-          <c>Properties</c>
-          <c>Add or replace properties in the component identified by
-          the target with the supplied properties.</c>
-          <c>UPDATE</c>
-          <c>Parameter (no name)</c>
-          <c>SETPARAMETER Properties</c>
-          <c>Add or replace the parameters in the properties
-          identified by the target, with the supplied parameters.</c>
-          <c />
-          <c />
-          <c />
-          <c />
-          <c>DELETE</c>
-          <c>Component</c>
-          <c></c>
-          <c>Delete the components identified by the target.</c>
-          <c>DELETE</c>
-          <c>Property (no value)</c>
-          <c></c>
-          <c>Delete the properties identified by the target.</c>
-          <c>DELETE</c>
-          <c>Property (with value)</c>
-          <c></c>
-          <c>If the property identified by the target is multi-valued,
-          only delete the specified value from the property; otherwise,
-          completely delete the properties identified by the target.</c>
-          <c>DELETE</c>
-          <c>Parameter (no value)</c>
-          <c></c>
-          <c>Delete the parameters identified by the target.</c>
-          <c>DELETE</c>
-          <c>Parameter (with value)</c>
-          <c></c>
-          <c>Delete the specified value from the multi-valued parameter
-          identified by the target.</c>
-      </texttable>
+      <t>A relative path can start with a component segment or a property segment, with the path assumed to be relative to an enclosing component defined by the context.</t>
+
+      <t>To target a component inside of another component, a component segment is appended to the path. Component segments can include an optional match item.  When present, this allows targeting of components that match a specific "UID" property value, and/or a "RECURRENCE-ID" value (or lack of "RECURRENCE-ID" property to target a "master" recurrence component).</t>
+
+      <t>To target a property inside of a component, a property segment is added to the path. A property segment can include an optional match item. When present, this allows targeting of properties by value (matching or not matching a specific value), or which have a named property parameter present, or by property parameter value (matching or not matching a specific value).</t>
+
+      <t>To target a property parameter, a parameter segment is added to the property segment at the end of the path.  When creating a new property parameter, the parameter segment name is empty.</t>
+
+      <t>To target a single value in a multi-valued property, a value segment is added to the property segment at the end of the path.</t>
+
+      <t>To target a single value in a multi-valued property parameter, a value segment is added to the parameter segment at the end of the path.</t>
+      
+      <t>Values in match items MUST use URL-style percent (%) encoding of the characters "/", "#", ";", "=", and "]".  This allows a path to be quickly split into segments by breaking apart the text on the relevant delimiter characters.</t>
+
+      <t> 
+        The syntax for a path is defined by the following notation (note that some of the syntax elements defined here are not used by this specification, however, it is anticipated that this general path syntax will be useful for other specifications):
+        <figure><artwork name="abnf">
+abs-path         = abs-comp-path [prop-all-path]
+        ; Absolute path for any iCalendar element
+
+rel-full-path    = (comp-path [prop-all-path]) / prop-all-path
+        ; Relative path for any iCalendar element at any depth
+        ; within the enclosing component
+
+rel-one-path     = comp-path / prop-all-path
+        ; Relative path for any iCalendar element immediately
+        ; within the enclosing component
+
+abs-comp-path    = "/VCALENDAR" *comp-segment
+        ; Absolute path for components only
+
+comp-path        = 1*comp-segment
+        ; Path for components only
+
+prop-path        = prop-segment
+        ; Relative path for properties only
+
+prop-param-path  = prop-segment [param-segment]
+        ; Relative path for property and parameter only
+
+prop-all-path    = prop-segment [param-segment] [value-segment]
+        ; Relative path for any element of a property
+
+comp-segment     = "/" name comp-match
+comp-match       = [uid-match] [rid-match]
+uid-match        = "[UID=" text "]"
+rid-match        = "[RID=" ("M" / ridval) "]"
+        ; "M" matches "master" component
+
+prop-segment     = prop-prefix [prop-match]
+prop-prefix      = "#" name
+prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
+
+prop-equal       = "=" value-escaped
+prop-not-equal   = "!" value-escaped
+
+param-match      = "@" param-name [ ( param-equal / param-not-equal ) ]
+param-equal      = "=" param-value-escaped
+param-not-equal  = "!" param-value-escaped
+
+param-segment    = ";" param-name
+
+value-segment    = "=" (value / param-value)
+
+value-escaped       = value
+                    ; % encoding for "/", "#", ";", and "]"
+
+param-value-escaped = param-value
+                    ; % encoding for "/", "#", ";", and "]"
+</artwork></figure>
+      </t>
+      <t>Some examples of "path" items follow.</t>
+      <t>Targeting components (path contains exactly one or more component segments):
+        <list style="hanging">
+          <t hangText="/VCALENDAR"><vspace />Targets the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT"><vspace />Targets all "VEVENT" components in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT[UID=1234]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234", in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT[UID=1234%2F4567][RECURRENCE-ID=]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234/4567" and do not have a "RECURRENCE-ID" property, in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT[UID=1234][RECURRENCE-ID=20150902T223000Z]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234" and have a "RECURRENCE-ID" property whose UTC value is "20150902T223000Z", in the "VCALENDAR" component in the iCalendar object.</t>
+        </list>
+      </t>
+      <t>Targeting properties (path contains exactly zero or more component segments, and one property segment):
+        <list style="hanging">
+          <t hangText="/VCALENDAR/VEVENT#STATUS"><vspace />Targets all "STATUS" properties in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT[UID=1234]#STATUS"><vspace />Targets all "STATUS" properties in any "VEVENT" components that have a "UID" property value exactly equal to "1234", in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE[=mailto:cyrus@example.com]"><vspace />Targets any "ATTENDEE" properties that have the value "mailto:cyrus@example.com" in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE[!mailto:cyrus@example.com]"><vspace />Targets any "ATTENDEE" properties that do not have the value "mailto:cyrus@example.com" in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE[@MEMBER]"><vspace />Targets any "ATTENDEE" properties that have a "MEMBER" property parameter present in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object</t>
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE[@CN=Cyrus Daboo]"><vspace />Targets any "ATTENDEE" properties that have a "CN" property parameter with the value "Cyrus Daboo" present in all "VEVENT" components, in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE[@CN!Cyrus Daboo]"><vspace />Targets any "ATTENDEE" properties that have a "CN" property parameter not equal to the value "Cyrus Daboo", or do not have a "CN" property parameter present in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="#ATTENDEE[=mailto:cyrus@example.com]"><vspace />A relative path that targets any "ATTENDEE" properties that have the value "mailto:cyrus@example.com" in all components the path is relative to.</t>
+        </list>
+      </t>
+      <t>Targeting property parameters (path contains exactly zero or more component segments, one property segment, and one parameter segment):
+        <list style="hanging">
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE;PARTSTAT"><vspace />Targets the "PARTSTAT" parameter on all "ATTENDEE" properties in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE[=mailto:cyrus@example.com];PARTSTAT"><vspace />Targets the "PARTSTAT" parameter on any "ATTENDEE" properties that have the value "mailto:cyrus@example.com" in all  "VEVENT" components, in the "VCALENDAR" component in the iCalendar object.</t>
+        </list>
+      </t>
+      <t>Targeting property values (path contains exactly zero or more component segments, one property segment, and one value segment):
+        <list style="hanging">
+          <t hangText="/VCALENDAR/VEVENT#EXDATE=20160905"><vspace />Targets all "EXDATE" property values with the value "20160905" in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object.</t>
+        </list>
+      </t>
+      <t>Targeting property parameter values (path contains exactly zero or more component segments, one property segment, one parameter segment, and one value segment):
+        <list style="hanging">
+          <t hangText="/VCALENDAR/VEVENT#ATTENDEE;MEMBER=mailto:group@example.com"><vspace />Targets all "MEMBER" property parameter values with the value "mailto:group@example.com" in all "ATTENDEE" properties in all "VEVENT" components in the "VCALENDAR" component in the iCalendar object.</t>
+        </list>
+      </t>
+    </section>
+
+    <section title="Adding or Updating Components" anchor="patch-components">
+      <t>TBD</t>
+    </section>
+
+    <section title="Adding or Updating Properties" anchor="patch-properties">
+      <t>TBD</t>
+    </section>
+
+    <section title="Deleting Components, Properties, or Property Parameters" anchor="patch-delete">
+      <t>The "PATCH-DELETE" property (defined in <xref target="patchdelete"/>) is used to indicate deletion of iCalendar elements from the component identified by the "PATCH-TARGET" property in the same "PATCH" component as the "PATCH-DELETE" property. As such, the value of the "PATCH-DELETE" property is always a relative path (see <xref target="path"/>) that refers to an element that is an immediate "child" of the targeted component.</t>
+      <t>The following operations are supported:
+        <list style="hanging">
+          <t hangText="Delete components"> the "PATCH-DELETE" path value targets components only. The matching components are removed from the "parent" target component.</t>
+          <t hangText="Properties"> the "PATCH-DELETE" path value targets properties only. The matching properties are removed from the "parent" target component.</t>
+          <t hangText="Property parameters"> the "PATCH-DELETE" path value targets property parameters on specific properties only. The matching property parameters are removed from the corresponding property.</t>
+          <t hangText="Property values"> the "PATCH-DELETE" path value targets a property value on specific multi-valued properties only. The matching property value is removed from the the corresponding property. If that results in a property with no value, that property is also removed from its "parent" target component.</t>
+          <t hangText="Property parameter values"> the "PATCH-DELETE" path value targets a property parameter value on a specific multi-valued property parameter on specific properties only. The matching property parameter value is removed from the the corresponding property property. If that results in a property parameter with no value, that property parameter is also removed from from the corresponding property.</t>
+        </list>
+      </t>
+    </section>
+
+    <section title="Adding or Updating Property Parameters" anchor="patch-parameters">
+      <t>The "PATCH-PARAMETER" property (defined in <xref target="patchparameter"/>) is used to indicate addition or update of property parameters and property parameter values to properties contained in the components identified by the "PATCH-TARGET" property in the same "PATCH" component as the "PATCH-PARAMETER" property. As such, the value of the "PATCH-PARAMETER" property is always a relative path (see <xref target="path"/>) that refers to a property that is an immediate "child" of the targeted component.</t>
+      <t>The following operations are supported:
+        <list style="hanging">
+          <t hangText="Add or update property parameters"> the "PATCH-PARAMETER" path value targets a property only. Any property parameters defined on the "PATCH-PARAMETER" replace the matching parameters on the targeted property, or are added to the targeted property if no matching parameters exist.</t>
+          <t hangText="Add a property parameter value"> the "PATCH-PARAMETER" path value targets a multi-valued parameter only. The values in any property parameters defined on the "PATCH-PARAMETER" property are added to the corresponding property parameters of the target properties. If no corresponding property parameter is defined on the target properties, then property parameters are created with the corresponding values.</t>
+        </list>
+      </t>
     </section>
 
     <section title='iCalendar Extensions' anchor="extensions">
@@ -291,7 +351,7 @@ vpatchprop  = *(
 other-prop  = ( iana-prop / x-prop )
 
 action      = *( patchc / iana-comp / x-comp )
-              </artwork></figure>
+</artwork></figure>
             </t>
             <t hangText="Description:">
               This component serves as a container for a series of
@@ -345,7 +405,7 @@ subcomp    = *(
                 iana-comp / x-comp
                 ;
              )
-                </artwork></figure>
+</artwork></figure>
               </t>
               <t hangText="Description:">
                 This component provides a grouping of patch actions to
@@ -397,7 +457,7 @@ subcomp    = *(
                 Otherwise, this property is OPTIONAL.
               </t>
               <t hangText="Description:">
-                A value of "1" corresponds to this memo.
+                A value of "1" corresponds to this memo. See <xref target="vpatch-component"/> for a description of how this property is used.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -411,13 +471,13 @@ pvervalue      = "1"         ; This memo
 
 pmaxver        = &lt;A IANA-registered VPATCH version identifier&gt;
                  ;Maximum VPATCH version needed to parse the VPATCH component.
-                </artwork></figure>
+</artwork></figure>
               </t>
               <t hangText="Example:">
                 The following is an example of this property:
                 <figure><artwork name="example">
 PATCH-VERSION:1
-                </artwork></figure>
+</artwork></figure>
               </t>
             </list>
           </t>
@@ -445,22 +505,7 @@ PATCH-VERSION:1
                 component.
               </t>
               <t hangText="Description:">
-                This property is OPTIONAL and is used to indicate the
-                relative ordering of the associated VPATCH component
-                amongst its siblings.  Its value MUST be an integer
-                greater than or equal to 1 that quantifies the order.
-                Lower values correspond to a higher level of ordering,
-                with 1 being the highest.
-
-                When the property is absent, the default MUST be to
-                interpret the VPATCH instance as being at the lowest
-                level of ordering.
-
-                Note that the value of this property is to be
-                interpreted only in relation to values assigned to
-                other VPATCH instances in the same iCalendar
-                object.  A given value, or the absence of a value,
-                MUST NOT be interpreted on its own.
+                This property is OPTIONAL and is used to indicate the relative ordering of the associated VPATCH component amongst its siblings. See <xref target="vpatch-component"/> for a description of how this property is used.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -468,13 +513,13 @@ PATCH-VERSION:1
 patch-order  = "PATCH-ORDER porderparam ":" integer CRLF
 
 porderparam  = *(";" other-param)
-                </artwork></figure>
+</artwork></figure>
               </t>
               <t hangText="Example:">
                 The following is an example of this property:
                 <figure><artwork name="example">
 PATCH-ORDER:1
-                </artwork></figure>
+</artwork></figure>
               </t>
             </list>
           </t>
@@ -489,7 +534,7 @@ PATCH-ORDER:1
           <t>
             <list style="hanging">
               <t hangText="Property Name:">
-                TARGET
+                PATCH-TARGET
               </t>
               <t hangText="Purpose:">
                 This property specifies a path targeting one or more
@@ -507,36 +552,7 @@ PATCH-ORDER:1
                 sub-component.
               </t>
               <t hangText="Description:">
-                This property is used to match iCalendar components
-                that the patch operations will be applied to.  The
-                property value ("ptargetpath") is a list of "segments"
-                (separated by the "/" character) that matches an
-                iCalendar component in the iCalendar object model
-                hierarchy.  Each component segment can include an
-                optional match term that narrows the set of matching
-                elements.<vspace />
-
-                <vspace />The "ptargetpath" always starts with a
-                "/VCALENDAR" component segment since an iCalendar
-                object is always a single "VCALENDAR"
-                component.<vspace />
-
-                <vspace />To target a component inside of another
-                component, a component segment is appended to the path
-                (e.g., "/VCALENDAR/VEVENT" targets "VEVENT" components
-                inside the "VCALENDAR" component). Component segments
-                can include an optional match item.  When present,
-                this allows targeting of components that match a
-                specific "UID" property value, and/or ones that match
-                a specific "RECURRENCE-ID" value (or lack of
-                "RECURRENCE-ID" property if the value of the match is
-                "M").<vspace />
-
-                <vspace />Values in match items MUST use URL-style
-                percent (%) encoding of the characters "/" and
-                "]". This allows the 'targetpath' to be quickly split into
-                segments by breaking apart the text on the relevant
-                delimiter characters.
+                This property is used to match iCalendar components that the patch operations will be applied to. The path value is always an absolute path, and interpreted as described in <xref target="path"/>.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -545,49 +561,14 @@ patchtarget   = "PATCH-TARGET ptargetparam ":" ptargetpath CRLF
 
 ptargetparam  = *(";" other-param)
 
-ptargetpath   = 1*comp-segment
-
-comp-segment     = "/" name comp-match
-comp-match       = [uid-match] [rid-match]
-uid-match        = "[UID=" text "]"
-rid-match        = "[RID=" ("M" / ridval) "]"
-  ; "M" matches "master" component
-                </artwork></figure>
+ptargetpath   = abs-comp-path
+</artwork></figure>
               </t>
-              <t hangText="Examples:">
-                <list style="hanging">
-                  <t hangText="TARGET:/VCALENDAR">
-                  <vspace />Targets the "VCALENDAR" component in the
-                  iCalendar object.</t>
-
-                  <t hangText="TARGET:/VCALENDAR/VEVENT">
-                  <vspace />Targets all "VEVENT" components in the
-                  "VCALENDAR" component in the iCalendar object.</t>
-
-                  <t hangText="TARGET:/VCALENDAR/VEVENT[UID=1234]">
-                  <vspace />Targets any "VEVENT" components that
-                  have a "UID" property value exactly equal to
-                  "1234", in the "VCALENDAR" component in the
-                  iCalendar object.</t>
-
-                  <t hangText="TARGET:/VCALENDAR/VEVENT[UID=1234%2F4567][RID=M]">
-                  <vspace />Targets any "VEVENT" components that have
-                  a "UID" property value exactly equal to "1234/4567"
-                  and do not have a "RECURRENCE-ID" property, in the
-                  "VCALENDAR" component in the iCalendar object.</t>
-
-                  <t hangText="TARGET:/VCALENDAR/VEVENT[UID=1234][RID=20150902T223000Z]">
-                  <vspace />Targets any "VEVENT" components that have
-                  a "UID" property value exactly equal to "1234" and
-                  have a "RECURRENCE-ID" property whose UTC value is
-                  "20150902T223000Z", in the "VCALENDAR" component in
-                  the iCalendar object.</t>
-
-                  <t hangText="TARGET:/VCALENDAR/VEVENT/VALARM">
-                  <vspace />Targets all "VALARM" components in all
-                  "VEVENT" components in the "VCALENDAR" component
-                  in the iCalendar object.</t>
-                </list>
+              <t hangText="Example:">
+                The following is an example of this property:
+                <figure><artwork name="example">
+PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]#DTSTART
+</artwork></figure>
               </t>
             </list>
           </t>
@@ -617,73 +598,7 @@ rid-match        = "[RID=" ("M" / ridval) "]"
                 sub-component.
               </t>
               <t hangText="Description:">
-                This property is used to match iCalendar elements
-                that will be removed.  The
-                property value ("pdeletepath") is a list of "segments"
-                (separated by the "/", "#", ";", or "=" characters) that
-                matches an iCalendar element in the iCalendar
-                component targeted by PATCH-TARGET.  Each component,
-                property, or parameter segment can include an optional
-                match term that narrows the set of matching
-                elements.<vspace />
-
-                <vspace />The "pdeletepath" consists of either a
-                component segment (which always has a "/" prefix),
-                or a property segment (which always has a "#"
-                prefix"), which itself is optionally followed by a
-                parameter segment (which always has a ";"
-                prefix), and both optionally followed by a value
-                segment (which always has a "=" prefix).<vspace />
-
-                <vspace />To target one or more components for deletion,
-                the path will contain one or more component segments.
-                The components to be targeted are found by matching
-                sub-component names using the component segment name.
-                Each component segment can include an optional match item. 
-                When present, this allows
-                targeting of components that match a specific "UID"
-                property value, and/or ones that match a specific
-                "RECURRENCE-ID" value (or lack of "RECURRENCE-ID"
-                property if the value of the match is "M").<vspace />
-
-                <vspace />To target one or more properties for deletion,
-                the path will contain exactly one property segment only.
-                The properties to be targeted are found by matching the
-                properties in the component being targeted by the enclosing
-                "PATCH" component.
-                A property segment can include an optional
-                match item. When present, this allows targeting of
-                properties by value (matching or not matching a
-                specific value), or which have a named parameter present,
-                or by parameter value (matching or not matching a
-                specific value).<vspace />
-
-                <vspace />To target a parameter on one or more properties for deletion,
-                the path will contain one property segment, and one parameter segment only.
-                The property segment will match properties (as described above) and the 
-                parameter to be targeted for deletion is found by matching the name
-                of the parameter segment.<vspace />
-
-                <vspace/>To target a single value in a multi-valued
-                property for deletion, the path will contain one property segment
-                and one value segment only. The property segment will match
-                properties (as described above) and the 
-                value to be targeted for deletion is found by matching the value
-                in the value segment.<vspace/>
-                
-                <vspace/>To target a single value in a multi-valued
-                parameter for deletion, the path will contain one property segment,
-                one parameter segment, and one value segment only. The property
-                segment will match properties (as described above), the parameter segment will
-                match the parameter (as described above), and the 
-                value to be targeted for deletion is found by matching the value
-                in the value segment.<vspace/>
-                
-                <vspace />Values in match items MUST use URL-style
-                percent (%) encoding of the characters "/", "#", ";" and
-                "]". This allows the 'pdeletepath' to be quickly split into
-                segments by breaking apart the text on the relevant
-                delimiter characters.
+                This property is used to match iCalendar elements that will be deleted. The path value is always a relative path for only immediate components and properties within the targeted component, and interpreted as described in <xref target="patch-delete"/>.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -692,156 +607,16 @@ patchdelete      = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
 
 pdeleteparam     = *(";" other-param)
 
-pdeletepath      = comp-segment / 
-                    ( prop-segment [param-segment] [value-segment])
+pdeletepath      = rel-path
                  ; PATCH-DELETE path is relative to PATCH-TARGET path
-
-prop-segment     = prop-prefix [prop-match]
-prop-prefix      = "#" name
-prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
-
-prop-equal       = "=" value-escaped
-prop-not-equal   = "!" value-escaped
-
-param-match      = "@" param-name [ ( param-equal / param-not-equal ) ]
-param-equal      = "=" param-value-escaped
-param-not-equal  = "!" param-value-escaped
-
-param-segment    = ";" param-name
-
-value-segment    = "=" (value / param-value)
-
-value-escaped       = value
-                    ; % encoding for "/", "#", ";", and "]"
-
-param-value-escaped = param-value
-                    ; % encoding for "/", "#", ";", and "]"
-
-                </artwork></figure>
+</artwork></figure>
               </t>
-              <t hangText="Examples:">
-                <vspace />Deleting components.
-                Given PATCH-TARGET:/VCALENDAR:
-                <list style="hanging">
-
-                  <t hangText="PATCH-DELETE:/VEVENT">
-                  <vspace />Deletes all "VEVENT" components in the
-                  "VCALENDAR" component in the iCalendar object.</t>
-
-                  <t hangText="PATCH-DELETE:/VEVENT[UID=1234]">
-                  <vspace />Deletes any "VEVENT" components that
-                  have a "UID" property value exactly equal to
-                  "1234", in the "VCALENDAR" component in the
-                  iCalendar object.</t>
-
-                  <t hangText="PATCH-DELETE:/VEVENT[UID=1234%2F4567][RID=M]">
-                  <vspace />Deletes any "VEVENT" components that have
-                  a "UID" property value exactly equal to "1234/4567"
-                  and do not have a "RECURRENCE-ID" property, in the
-                  "VCALENDAR" component in the iCalendar object.</t>
-
-                  <t hangText="PATCH-DELETE:/VEVENT[UID=1234][RID=20150902T223000Z]">
-                  <vspace />Deletes any "VEVENT" components that have
-                  a "UID" property value exactly equal to "1234" and
-                  have a "RECURRENCE-ID" property whose UTC value is
-                  "20150902T223000Z", in the "VCALENDAR" component in
-                  the iCalendar object.</t>
-                </list>
-
-                <vspace />Deleting components (continued).
-                Given PATCH-TARGET:/VCALENDAR/VEVENT:
-                <list style="hanging">
-
-                  <t hangText="PATCH-DELETE:/VALARM">
-                  <vspace />Deletes all "VALARM" components in all
-                  "VEVENT" components in the "VCALENDAR" component
-                  in the iCalendar object.</t>
-                </list>
-
-                <vspace />Deleting properties.
-                Given PATCH-TARGET:/VCALENDAR:
-                <list style="hanging">
-                  <t hangText="PATCH-DELETE:#PRODID">
-                  <vspace />Deletes the "PRODID" property in the
-                  "VCALENDAR" component in the iCalendar object.</t>
-                </list>
-
-                <vspace />Deleting properties (continued).
-                Given PATCH-TARGET:/VCALENDAR/VEVENT:
-                <list style="hanging">
-
-                  <t hangText="PATCH-DELETE:#STATUS">
-                  <vspace />Deletes all "STATUS" properties in all "VEVENT"
-                  components in the "VCALENDAR" component in the
-                  iCalendar object.</t>
-
-                  <t hangText="PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com]">
-                  <vspace />Deletes any "ATTENDEE" properties that
-                  have the value "mailto:cyrus@example.com" in all
-                  "VEVENT" components, in the "VCALENDAR" component in
-                  the iCalendar object.</t>
-
-                  <t hangText="PATCH-DELETE:#ATTENDEE[!mailto:cyrus@example.com]">
-                  <vspace />Deletes any "ATTENDEE" properties that do
-                  not have the value "mailto:cyrus@example.com" in all
-                  "VEVENT" components, in the "VCALENDAR" component in
-                  the iCalendar object.</t>
-                  
-                  <t hangText="PATCH-DELETE:#DESCRIPTION[@LANGUAGE]">
-                  <vspace />Deletes any "DESCRIPTION" properties that
-                  have a "LANGUAGE" parameter.</t>
-                  
-                  <t hangText="PATCH-DELETE:#DESCRIPTION[@LANGUAGE=en_GB]">
-                  <vspace />Deletes any "DESCRIPTION" properties that
-                  have a "LANGUAGE" parameter with the value
-                  "en_GB".</t>
-                  
-                  <t hangText="PATCH-DELETE:#DESCRIPTION[@LANGUAGE!en_GB]">
-                  <vspace />Deletes any "DESCRIPTION" properties that
-                  do not have a "LANGUAGE" parameter with the value
-                  "en_GB". That includes "DESCRIPTION" properties
-                  without any "LANGUAGE" parameter.</t>
-                </list>
-
-                <vspace />Deleting parameters.
-                Given PATCH-TARGET:/VCALENDAR/VEVENT:
-                <list style="hanging">
-                  <t hangText="PATCH-DELETE:#ATTENDEE;PARTSTAT">
-                    <vspace />Deletes the "PARTSTAT" parameter on all
-                    "ATTENDEE" properties in all "VEVENT" components in
-                    the "VCALENDAR" component in the iCalendar
-                    object</t>
-
-                  <t hangText="PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com];PARTSTAT">
-                    <vspace />Deletes the "PARTSTAT" parameter on any
-                    "ATTENDEE" properties that have the value
-                    "mailto:cyrus@example.com" in all  "VEVENT"
-                    components, in the "VCALENDAR" component in the
-                    iCalendar object</t>
-                </list>
-
-                <vspace />Deleting a property value from a multi-valued property.
-                Given PATCH-TARGET:/VCALENDAR/VEVENT:
-                <list style="hanging">
-                  <t hangText="PATCH-DELETE:#EXDATE=20160828">
-                  <vspace />Deletes the value "20160828" in any
-                  "EXDATE" properties in all "VEVENT"
-                  components, in the "VCALENDAR" component in the
-                  iCalendar object. If the resulting property contains
-                  no value, the property itself is also removed.</t>
-                </list>
-
-                <vspace />Deleting a parameter value from a multi-valued parameter.
-                Given PATCH-TARGET:/VCALENDAR/VEVENT:
-                <list style="hanging">
-                  <t hangText="PATCH-DELETE:#ATTENDEE;MEMBER=mailto:group@example.com">
-                  <vspace />Deletes the value "mailto:group@example.com" from any
-                  "MEMBER" parameters in any
-                  "ATTENDEE" properties in all "VEVENT"
-                  components, in the "VCALENDAR" component in the
-                  iCalendar object. If the resulting parameter contains
-                  no value, the parameter itself is also removed.</t>
-                </list>
+              <t hangText="Example:">
+                The following are examples of this property:
+                <figure><artwork name="example">
+PATCH-DELETE:/VCALENDAR/VEVENT[UID=1234]
+PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com]
+</artwork></figure>
               </t>
             </list>
           </t>
@@ -869,31 +644,7 @@ param-value-escaped = param-value
                 sub-component.
               </t>
               <t hangText="Description:">
-                This property specifies parameters to be set on
-                the targeted property.  The property value is used to
-                target one or more properties having the specified name.
-                
-                <vspace/>To add or replace a parameter on a property,
-                the path will contain exactly one property segment only.
-                The properties to be targeted are found by matching the
-                properties in the component being targeted by the enclosing
-                "PATCH" component. A property segment can include an optional
-                match item. When present, this allows targeting of properties
-                by value (matching or not matching a specific value), or
-                which have a named parameter present, or by parameter value
-                (matching or not matching a specific value).<vspace/>
-                
-                <vspace/>To add a value to a multi-valued parameter on a property,
-                the path will contain one property segment and one parameter name only.
-                The properties to be targeted are found by matching the
-                properties in the component being targeted by the enclosing
-                "PATCH" component. The parameters being modified on those properties
-                are identified by the parameter name in the path. A property segment
-                can include an optional
-                match item. When present, this allows targeting of properties
-                by value (matching or not matching a specific value), or
-                which have a named parameter present, or by parameter value
-                (matching or not matching a specific value).<vspace/>
+                This property specifies parameters to be set on the targeted property. The path value is always a relative path to a property within the target component, and interpreted as described in <xref target="patch-parameters"/>.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -902,8 +653,8 @@ patchparam  = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
 
 pparamparam  = *(";" other-param)
 
-pparampath   = prop-segment [param-segment]
-                </artwork></figure>
+pparampath   = prop-param-path
+</artwork></figure>
               </t>
               <t hangText="Example:">
                 The following are examples of this property:
@@ -911,14 +662,14 @@ pparampath   = prop-segment [param-segment]
 PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[=mailto:cyrus@example.com]
 PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[@CN=Cyrus Daboo]
 PATCH-PARAMETER;MEMBER=mailto:newgroup@example.com:#ATTENDEE;MEMBER
-                </artwork></figure>
+</artwork></figure>
               </t>
             </list>
           </t>
         </section> <!-- PATCH-PARAMETER -->
       </section> <!-- Patch Properties -->
 
-      <section title="PATCH-ACTION Parameter" anchor="patchaction">
+      <section title="PATCH-ACTION Property Parameter" anchor="patchaction">
           <t>
             <list style="hanging">
               <t hangText="Parameter Name:">
@@ -936,41 +687,33 @@ pactionparam    = "PATCH-ACTION" "=" pactioncreate / pactionbyname /
                                      x-name
 
 pactioncreate   = "CREATE"
-  ; Always add property to target component.
+      ; Always add property to target component.
 
 pactionbyname   = "BYNAME"
-  ; Always remove properties with the same name
-  ; from the target component, then add this property to the target.
-  ; This value is the default and MAY be omitted.
+      ; Always remove properties with the same name
+      ; from the target component, then add this property to the target.
+      ; This value is the default and MAY be omitted.
 
 pactionbyvalue  = "BYVALUE"
-  ; Always remove properties with the same name and value
-  ; from the target component, then add this property to the target.
+      ; Always remove properties with the same name and value
+      ; from the target component, then add this property to the target.
 
 pactionbyparam  = DQUOTE "BYPARAM" param-match   DQUOTE
-  ; Always remove properties with the same name and parameter value
-  ; from the target component, then add this property to the target.
-                </artwork></figure>
+      ; Always remove properties with the same name and parameter value
+      ; from the target component, then add this property to the target.
+</artwork></figure>
               </t>
               <t hangText="Description:">
-                This parameter can be specified on properties
-                contained in a PATCH component and MUST NOT be
-                specified on properties outside of a PATCH component.
-                This parameter specifies whether the property should
-                be added to the target component or should replace
-                existing properties in the target component.  In the
-                latter case, the parameter also specifies how to match
-                existing properties.
+                This parameter can be specified on properties contained in a PATCH component and MUST NOT be specified on properties outside of a PATCH component. This parameter specifies whether the property should be added to the target component or should replace existing properties in the target component.  In the latter case, the parameter also specifies how to match existing properties. The processing of this property parameter is described in <xref target="patch-properties"/>
               </t>
               <t hangText="Examples:">
-                The following are examples of this parameter:
+                The following are examples of this property parameter:
                 <figure><artwork name="example">
 ATTENDEE;PATCH-ACTION=BYVALUE;PARTSTAT=NEEDS-ACTION:
  mailto:cyrus@example.com
-
 DESCRIPTION;PATCH-ACTION="BYPARAM@LANGUAGE=en_GB";LANGUAGE=en_US:
  Meeting to discuss VPATCH
-                </artwork></figure>
+</artwork></figure>
               </t>
             </list>
           </t>
@@ -1018,7 +761,7 @@ SUMMARY:Master component
 RRULE:FREQ=DAILY
 END:VEVENT
 END:VCALENDAR
-        </artwork></figure>
+</artwork></figure>
         The following patch command could be used to update the
         "SUMMARY" property value of the second instance of the
         recurring event (note that the first line of the patch
@@ -1031,7 +774,7 @@ PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234][RID=20150903T120000Z]
 SUMMARY:Override second instance
 END:PATCH
 END:VPATCH
-        </artwork></figure>
+</artwork></figure>
         which results in the following updated iCalendar component:
         <figure><artwork>
 BEGIN:VCALENDAR
@@ -1052,7 +795,7 @@ DURATION:PT1H
 SUMMARY:Override second instance
 END:VEVENT
 END:VCALENDAR
-        </artwork></figure>
+</artwork></figure>
         A similar result could have been achieved by using a
         a path targeting the "VCALENDAR" component, and the entire
         "overridden" component supplied as the data. However, the
@@ -1075,11 +818,11 @@ PATCH-TARGET:/VCALENDAR
 PATCH-DELETE:/VEVENT[UID=1234][RID=20150903T120000Z]
 END:PATCH
 BEGIN:PATCH
-TARGET:/VCALENDAR/VEVENT[UID=1234][RID=M]
+PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234][RID=M]
 EXDATE;ACTION=CREATE:20150903T120000Z
 END:PATCH
 END:VPATCH
-        </artwork></figure>
+</artwork></figure>
         which results in the following updated iCalendar component:
         <figure><artwork>
 BEGIN:VCALENDAR
@@ -1094,7 +837,7 @@ RRULE:FREQ=DAILY
 EXDATE:20150903T120000Z
 END:VEVENT
 END:VCALENDAR
-        </artwork></figure>
+</artwork></figure>
         </t>
       </section>
       <section title="Folded lines" anchor="folding">
@@ -1118,11 +861,11 @@ END:VCALENDAR
         line feed character:
         <figure><artwork>
 DESCRIPTION:Line one\nLine two
-        </artwork></figure>
+</artwork></figure>
         the following PATCH-DELETE property would be used:
         <figure><artwork>
 PATCH-DELETE:#DESCRIPTION[=Line one\nLine two]
-        </artwork></figure>
+</artwork></figure>
         Similarly, to update the "DESCRIPTION" property, the
         following patch command could be used:
         <figure><artwork>
@@ -1132,8 +875,12 @@ PATCH-TARGET:/VCALENDAR/VEVENT
 DESCRIPTION:Line one\nLine two\nLine three
 END:UPDATE
 END:VPATCH
-        </artwork></figure>
+</artwork></figure>
         </t>
+      </section>
+
+      <section title="Generation" anchor="generation">
+        <t>This specification does not define how patch data is generated, as that is likely to be highly dependent on the nature of the implementation. However, it is recommended that patch generators use sets of commands that keep the overall patch data as compact as possible, since one of the goals of this specification is to reduce the size of data needed to do updates. One example is the choice of whether to update an entire property, or just property parameters, when changes are made to just property parameters. In some cases, the data in a property parameter can be large, so repeating that in a full property update may result in larger data than simple using the "PATCH-PARAMETER" property to do an update. On the other hand, if lots of property parameters are being updated or removed, it can be more efficient to update the entire property rather than using lots of "PATCH-PARAMETER" and "PATCH-DELETE" properties.</t>
       </section>
     </section>
 
@@ -1404,7 +1151,7 @@ PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
 BEGIN:PATCH
-TARGET:/VCALENDAR/VTODO[UID=4321]
+PATCH-TARGET:/VCALENDAR/VTODO[UID=4321]
 STATUS;ACTION=CREATE:COMPLETED
 COMPLETED;ACTION=CREATE:20150902T224515Z
 END:PATCH
@@ -1446,7 +1193,7 @@ VERSION:2.0
 BEGIN:VPATCH
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]
-ATTENDEE;ACTION=UPDATE-VALUE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
+ATTENDEE;ACTION=BYVALUE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
 END:PATCH
 END:VPATCH
 END:VCALENDAR
@@ -1558,6 +1305,8 @@ END:VCALENDAR
             </figure></t>
       </section>
 
+<!-- We do not support this operation right now
+
       <section title="Add a value to a multi-valued property in a component">
         <t>Add a new value to the "EXDATE" property in the "VEVENT"
         component with the "UID" property value "1234".</t>
@@ -1576,6 +1325,7 @@ END:VCALENDAR
 ]]></artwork>
             </figure></t>
       </section>
+-->
 
       <section title="Remove a value from a multi-valued property from
                       a component">
@@ -1602,10 +1352,10 @@ END:VCALENDAR
         event, they will typically: update the "PARTSTAT" parameter on
         their "ATTENDEE" property, remove the "RSVP" parameter on
         their "ATTENDEE" property, update the "TRANSP" property in the
-        "VEVENT" component. This set of changes is shown below as a
-        series of patch commands, with the attendee having the
-        calendar user address "mailto:cyrus@example.com". The commands
-        target all "VEVENT" components in the iCalendar object being
+        "VEVENT" component. This set of changes is shown below in a
+        single "PATCH" component, with the attendee having the
+        calendar user address "mailto:cyrus@example.com". The patch
+        targets all "VEVENT" components in the iCalendar object being
         changed.</t>
         <t><figure>
               <artwork><![CDATA[
@@ -1614,7 +1364,7 @@ PRODID:Example
 VERSION:2.0
 BEGIN:VPATCH
 BEGIN:PATCH
-TARGET:/VCALENDAR/VEVENT
+PATCH-TARGET:/VCALENDAR/VEVENT
 PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com];RSVP
 PATCH-PARAMETER;PARTSTAT=ACCEPTED:#ATTENDEE[=mailto:cyrus@example.com]
 TRANSP:OPAQUE
@@ -1623,6 +1373,130 @@ END:VPATCH
 END:VCALENDAR
 ]]></artwork>
             </figure></t>
+      </section>
+      <section title="Recurring event adding one override">
+        <t>A daily recurring "VEVENT" component with the "SUMMARY"
+        property being overridden for the second instance.</t>
+        <t>
+        <figure>
+          <preamble>iCalendar object before the patch:</preamble>
+              <artwork><![CDATA[
+BEGIN:VCALENDAR
+PRODID:Example
+VERSION:2.0
+BEGIN:VEVENT
+UID:1234
+DTSTART:20160905
+DURATION:PT1H
+SUMMARY:Test event
+RRULE:FREQ=DAILY
+END:VEVENT
+END:VCALENDAR
+]]></artwork>
+            </figure>
+        <figure>
+          <preamble>Patch:</preamble>
+              <artwork><![CDATA[
+BEGIN:VCALENDAR
+PRODID:Example
+VERSION:2.0
+BEGIN:VPATCH
+BEGIN:PATCH
+PATCH-TARGET:/VCALENDAR/VEVENT[RID=20160906]
+SUMMARY:Test event - modified
+END:PATCH
+END:VPATCH
+END:VCALENDAR
+]]></artwork>
+            </figure>
+        <figure>
+          <preamble>iCalendar object after the patch:</preamble>
+              <artwork><![CDATA[
+BEGIN:VCALENDAR
+PRODID:Example
+VERSION:2.0
+BEGIN:VEVENT
+UID:1234
+DTSTART:20160905
+DURATION:PT1H
+SUMMARY:Test event
+RRULE:FREQ=DAILY
+END:VEVENT
+BEGIN:VEVENT
+UID:1234
+RECURRENCE-ID:20160906
+DTSTART:20160905
+DURATION:PT1H
+SUMMARY:Test event - modified
+END:VEVENT
+END:VCALENDAR
+]]></artwork>
+            </figure>
+        </t>
+      </section>
+      <section title="Removal of an overriden instance">
+        <t>A daily recurring "VEVENT" component has one existing instance override removed with an "EXDATE" added for it.</t>
+        <t>
+        <figure>
+          <preamble>iCalendar object before the patch:</preamble>
+              <artwork><![CDATA[
+BEGIN:VCALENDAR
+PRODID:Example
+VERSION:2.0
+BEGIN:VEVENT
+UID:1234
+DTSTART:20160905
+DURATION:PT1H
+SUMMARY:Test event
+RRULE:FREQ=DAILY
+END:VEVENT
+BEGIN:VEVENT
+UID:1234
+RECURRENCE-ID:20160906
+DTSTART:20160905
+DURATION:PT1H
+SUMMARY:Test event - modified
+END:VEVENT
+END:VCALENDAR
+]]></artwork>
+            </figure>
+        <figure>
+          <preamble>Patch:</preamble>
+              <artwork><![CDATA[
+BEGIN:VCALENDAR
+PRODID:Example
+VERSION:2.0
+BEGIN:VPATCH
+BEGIN:PATCH
+PATCH-TARGET:/VCALENDAR
+PATCH-DELETE:/VEVENT[RID=20160906]
+END:PATCH
+BEGIN:PATCH
+PATCH-TARGET:/VCALENDAR/VEVENT[RID=M]
+EXDATE;PATCH-ACTION=CREATE:20160906
+END:PATCH
+END:VPATCH
+END:VCALENDAR
+]]></artwork>
+            </figure>
+        <figure>
+          <preamble>iCalendar object after the patch:</preamble>
+              <artwork><![CDATA[
+BEGIN:VCALENDAR
+PRODID:Example
+VERSION:2.0
+BEGIN:VEVENT
+UID:1234
+DTSTART:20160905
+DURATION:PT1H
+SUMMARY:Test event
+RRULE:FREQ=DAILY
+EXDATE:20160906
+END:VEVENT
+END:VCALENDAR
+]]></artwork>
+            </figure>
+        </t>
       </section>
     </section>
 <!--
@@ -1680,7 +1554,7 @@ END:VEVENT
 BEGIN:VINSTANCE
 UID:1234
 RECURRENCE-ID:20150903T103000Z
-TARGET:VALARM[UID=4567]
+PATCH-TARGET:VALARM[UID=4567]
 BEGIN:COMPONENTUPDATE
 BEGIN:VALARM
 UID:4567
