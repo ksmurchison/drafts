@@ -466,12 +466,12 @@ patch-version  = "PATCH-VERSION pverparam ":" pvervalue CRLF
 
 pverparam      = *(";" other-param)
 
-pvervalue      = "1"         ; This memo
-                 / pmaxver
+pvervalue      = "1" / pmaxver
+               ; "1" signifies compliance with this memo
 
 pmaxver        = &lt;A IANA-registered VPATCH version identifier&gt;
-                 ;Maximum VPATCH version needed to parse the VPATCH component.
-</artwork></figure>
+               ; Maximum VPATCH version needed to parse the VPATCH component.
+                </artwork></figure>
               </t>
               <t hangText="Example:">
                 The following is an example of this property:
@@ -557,9 +557,9 @@ PATCH-ORDER:1
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchtarget   = "PATCH-TARGET ptargetparam ":" ptargetpath CRLF
+patchtarget      = "PATCH-TARGET ptargetparam ":" ptargetpath CRLF
 
-ptargetparam  = *(";" other-param)
+ptargetparam     = *(";" other-param)
 
 ptargetpath   = abs-comp-path
 </artwork></figure>
@@ -603,9 +603,9 @@ PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]#DTSTART
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchdelete      = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
+patchdelete         = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
 
-pdeleteparam     = *(";" other-param)
+pdeleteparam        = *(";" other-param)
 
 pdeletepath      = rel-path
                  ; PATCH-DELETE path is relative to PATCH-TARGET path
@@ -649,7 +649,7 @@ PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com]
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchparam  = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
+patchparam   = "PATCH-PARAMETER pparamparam ":" pparampath CRLF
 
 pparamparam  = *(";" other-param)
 
@@ -687,21 +687,24 @@ pactionparam    = "PATCH-ACTION" "=" pactioncreate / pactionbyname /
                                      x-name
 
 pactioncreate   = "CREATE"
-      ; Always add property to target component.
+                ; Always add property to target component.
 
 pactionbyname   = "BYNAME"
-      ; Always remove properties with the same name
-      ; from the target component, then add this property to the target.
-      ; This value is the default and MAY be omitted.
+                ; Always remove properties with the same name
+                ; from the target component,
+                ; then add this property to the target component.
+                ; This value is the default and MAY be omitted.
 
 pactionbyvalue  = "BYVALUE"
-      ; Always remove properties with the same name and value
-      ; from the target component, then add this property to the target.
+                ; Always remove properties with the same name
+                ; and value from the target component,
+                ; then add this property to the target component.
 
 pactionbyparam  = DQUOTE "BYPARAM" param-match   DQUOTE
-      ; Always remove properties with the same name and parameter value
-      ; from the target component, then add this property to the target.
-</artwork></figure>
+                ; Always remove properties with the same name
+                ; and parameter name/value from the target component,
+                ; then add this property to the target component.
+                </artwork></figure>
               </t>
               <t hangText="Description:">
                 This parameter can be specified on properties contained in a PATCH component and MUST NOT be specified on properties outside of a PATCH component. This parameter specifies whether the property should be added to the target component or should replace existing properties in the target component.  In the latter case, the parameter also specifies how to match existing properties. The processing of this property parameter is described in <xref target="patch-properties"/>
@@ -958,17 +961,15 @@ END:VPATCH
           <c>PATCH-ORDER</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patchorder"/></c>
-          <c>PATCH-DELETE</c>
-          <c>Current</c>
-          <c>RFCXXXX, <xref target="patchdelete"/></c>
           <c>PATCH-TARGET</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patchtarget"/></c>
-<!--
+          <c>PATCH-DELETE</c>
+          <c>Current</c>
+          <c>RFCXXXX, <xref target="patchdelete"/></c>
           <c>PATCH-PARAMETER</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patchparam"/></c>
--->
       </texttable>
       </section> <!-- Prop Reg -->
 
