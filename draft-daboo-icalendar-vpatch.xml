@@ -132,17 +132,17 @@
     </section>
 
     <section title="Overview" anchor="vpatch-component">
-      <t> The basic design of the patch format is a "VPATCH" component (defined in <xref target="vpatch"/>) containing one ot more "PATCH" components (defined in <xref target="patch"/>), each specifying a path (which identifies one or more components in the iCalendar object being patched), and other components and properties that define the set of changes to be made.</t>
+      <t> The basic design of the patch format is a "VPATCH" component (defined in <xref target="vpatch"/>) containing one or more "PATCH" components (defined in <xref target="patch"/>), each specifying a path (which identifies one or more components in the iCalendar object being patched), and other components and properties that define the set of changes to be made.</t>
       <t>When multiple "VPATCH" components are present in an iCalendar object, the order in which they are applied is defined by the value of any "PATCH-ORDER" properties in the "VPATCH" component. The "VPATCH" components are sorted in order from lowest "PATCH-ORDER" integer value to highest, with any components not containing a "PATCH-ORDER" property placed last. The patch process is then applied in sorted order (any components with the same "PATCH-ORDER" value can be applied in any order).</t>
       <t>No specific processing order is defined for multiple "PATCH" components in a "VPATCH" component.</t>
       <t>The "VPATCH" component also contains an optional "PATCH-VERSION" property to allow future extensions to the format to be recognized. This document only defines version number "1". The "PATCH-VERSION" property only needs to be present if the version number is greater than "1".  If a patch processing engine is unable to handle the indicated version it MUST reject the entire patch operation defined by the enclosing iCalendar object, even if other "VPATCH" components have a "PATCH-VERSION" number that is supported.</t>
       <t>After applying a patch to an iCalendar object, the basic validity of the resulting iCalendar object SHOULD be checked by the processing engine (e.g., if the patch added an extra "DTSTART" property to a "VEVENT" component that would be considered a violation of <xref target="RFC5545"/>'s cardinality rules for the "DTSTART" property in a "VEVENT"). If this occurs, the patch operation MUST fail.</t>
       <t>Other validity constraints can be applied if needed. For example, <xref target="RFC4791">CalDAV</xref> requires that the "UID" property be the same in all components in a calendar object resource stored on the server. If a patch operation adds a component to an iCalendar object with a different "UID" value than the existing components, that result would be an invalid CalDAV calendar object resource. If other validity constraints are violated, the patch operation MUST fail.</t>
-      <t>Any failure to process a "VPATCH" component, for whatever reason, MUST result in the entire patch operation being cancelled, with the target iCalendar object left in its original state.</t>
+      <t>Any failure to process a "VPATCH" component, for whatever reason, MUST result in the entire patch operation being cancelled, with the iCalendar object being patched left in its original state.</t>
     </section>
 
     <section title="PATCH Component" anchor="patch-component">
-      <t>A "PATCH" component (defined in <xref target="patch"/>) MUST contain one "PATCH-TARGET" property whose value is an iCalendar path (see <xref target="path"/>) that identifies components within the target iCalendar object being patched. The set of patch operations defined by the other components and properties present in the "PATCH" component are then applied to each targeted component (in the order specified below). If a "PATCH-TARGET" property does not match any components in the target iCalendar object, then the patch operation MUST succeed without any changes being applied to the target iCalendar object.</t>
+      <t>A "PATCH" component (defined in <xref target="patch"/>) MUST contain one "PATCH-TARGET" property whose value is an iCalendar path (see <xref target="path"/>) that identifies components within the iCalendar object being patched. The set of components thus identified are the "target components" for the patch operations. The set of patch operations defined by the other components and properties present in the "PATCH" component are then applied to each target component (in the order specified below). If a "PATCH-TARGET" property does not match any components in the iCalendar object being patched, then the patch operation MUST succeed without any changes being applied to the iCalendar object being patched.</t>
       <t>Four patch operations are supported:
         <list style="numbers">
           <t>Component additions or updates: any components within the "PATCH" component are considered to be additions or updates (see <xref target="patch-components"/>).</t>
@@ -161,7 +161,7 @@
     </section>
 
     <section title="iCalendar Path" anchor="path">
-      <t>The "PATCH-TARGET", "PATCH-DELETE", and "PATCH-PARAMETER" property values are all iCalendar "paths". The path is used to match iCalendar elements that the patch operation will be applied to.  The path is a list of "segments" (separated by the "/", "#", ";" or "=" characters) that matches an iCalendar element in the iCalendar object model hierarchy (a component, a property, a property parameter, a property value, or a property parameter value). A path can either be "absolute" (referring to items within the top-level iCalendar object being targeted) or "relative" (referring to items within some other component as determined by the scope of the operation).</t>
+      <t>The "PATCH-TARGET", "PATCH-DELETE", and "PATCH-PARAMETER" property values are all iCalendar "paths". The path is used to match iCalendar elements that the patch operation will be applied to.  The path is a list of "segments" (separated by the "/", "#", ";" or "=" characters) that matches an iCalendar element in the iCalendar object model hierarchy (a component, a property, a property parameter, a property value, or a property parameter value). A path can either be "absolute" (referring to items within the top-level iCalendar object being patched) or "relative" (referring to items within some other component as determined by the scope of the operation).</t>
       
       <t>A path can start with a series of component segments (which always have a "/" prefix). Those can be followed by a property segment (which always has a "#" prefix"). A property segment can be followed by either a parameter segment (which always has a ";" prefix), or a value segment (which always has a "=" prefix). A parameter segment can be followed by a value segment (which always has a "=" prefix).</t>
 
@@ -279,7 +279,13 @@ param-value-escaped = param-value
     </section>
 
     <section title="Adding or Updating Components" anchor="patch-components">
-      <t>TBD</t>
+      <t>Any iCalendar component defined in the "PATCH" component (referred to below as the "action component") is treated as either an addition to the target component, or as an update of an existing component in the target component. The following rules are used to process such components:
+      <list style="numbers">
+        <t>If the action component contains a "UID" property and a "RECURRENCE-ID" property, then any components with the same values for both their "UID" and "RECURRENCE-ID" properties, that are immediate sub-components of the target component, are removed from the target component, and the action component is added to the target component.</t>
+        <t>If the action component contains a "UID" property and does not contain a "RECURRENCE-ID" property, then any components with the same value for their "UID" property, and containing no "RECURRENCE-ID" property, that are immediate sub-components of the target component, are removed from the target component, and the action component is added to the target component.</t>
+        <t>If the action component does not contain a "UID" property, then all components with the same name that do not contain a "UID" property, that are immediate sub-components of the target component, are removed from the target component, and the action component is added to the target component.</t>
+      </list>
+      </t>
     </section>
 
     <section title="Adding or Updating Properties" anchor="patch-properties">
@@ -287,7 +293,7 @@ param-value-escaped = param-value
     </section>
 
     <section title="Deleting Components, Properties, or Property Parameters" anchor="patch-delete">
-      <t>The "PATCH-DELETE" property (defined in <xref target="patchdelete"/>) is used to indicate deletion of iCalendar elements from the component identified by the "PATCH-TARGET" property in the same "PATCH" component as the "PATCH-DELETE" property. As such, the value of the "PATCH-DELETE" property is always a relative path (see <xref target="path"/>) that refers to an element that is an immediate "child" of the targeted component.</t>
+      <t>The "PATCH-DELETE" property (defined in <xref target="patchdelete"/>) is used to indicate deletion of iCalendar elements from the component identified by the "PATCH-TARGET" property in the same "PATCH" component as the "PATCH-DELETE" property. As such, the value of the "PATCH-DELETE" property is always a relative path (see <xref target="path"/>) that refers to an element that is an immediate "child" of the target component.</t>
       <t>The following operations are supported:
         <list style="hanging">
           <t hangText="Delete components"> the "PATCH-DELETE" path value targets components only. The matching components are removed from the "parent" target component.</t>
@@ -300,10 +306,10 @@ param-value-escaped = param-value
     </section>
 
     <section title="Adding or Updating Property Parameters" anchor="patch-parameters">
-      <t>The "PATCH-PARAMETER" property (defined in <xref target="patchparam"/>) is used to indicate addition or update of property parameters and property parameter values to properties contained in the components identified by the "PATCH-TARGET" property in the same "PATCH" component as the "PATCH-PARAMETER" property. As such, the value of the "PATCH-PARAMETER" property is always a relative path (see <xref target="path"/>) that refers to a property that is an immediate "child" of the targeted component.</t>
+      <t>The "PATCH-PARAMETER" property (defined in <xref target="patchparam"/>) is used to indicate addition or update of property parameters and property parameter values to properties contained in the components identified by the "PATCH-TARGET" property in the same "PATCH" component as the "PATCH-PARAMETER" property. As such, the value of the "PATCH-PARAMETER" property is always a relative path (see <xref target="path"/>) that refers to a property that is an immediate "child" of the target component.</t>
       <t>The following operations are supported:
         <list style="hanging">
-          <t hangText="Add or update property parameters"> the "PATCH-PARAMETER" path value targets a property only. Any property parameters defined on the "PATCH-PARAMETER" replace the matching parameters on the targeted property, or are added to the targeted property if no matching parameters exist.</t>
+          <t hangText="Add or update property parameters"> the "PATCH-PARAMETER" path value targets a property only. Any property parameters defined on the "PATCH-PARAMETER" replace the matching parameters on the target property, or are added to the target property if no matching parameters exist.</t>
           <t hangText="Add a property parameter value"> the "PATCH-PARAMETER" path value targets a multi-valued parameter only. The values in any property parameters defined on the "PATCH-PARAMETER" property are added to the corresponding property parameters of the target properties. If no corresponding property parameter is defined on the target properties, then property parameters are created with the corresponding values.</t>
         </list>
       </t>
@@ -414,14 +420,14 @@ subcomp    = *(
               <t hangText="Description:">
                 This component provides a grouping of patch actions to
                 be performed within the scope of a set of components.
-                If the PATCH-TARGET property matches one or more
-                iCalendar components, then the targeted iCalendar
+                If the "PATCH-TARGET" property matches one or more
+                iCalendar components, then the target
                 components are patched using the remaining properties
                 and components.  If there is no iCalendar component
-                that matches the PATCH-TARGET property in the
-                iCalendar object, the PATCH action MUST succeed
-                without any changes being applied to the target
-                iCalendar object.
+                that matches the "PATCH-TARGET" property in the
+                iCalendar object, the "PATCH" action MUST succeed
+                without any changes being applied to the
+                iCalendar object being patched.
               </t>
             </list>
           </t>
@@ -429,9 +435,9 @@ subcomp    = *(
       </section> <!-- VPATCH -->
 
       <section title="VPATCH Properties" anchor="vpatchprops">
-        <t>The VPATCH properties are attributes that apply to the
-        VPATCH component, as a whole.  These properties do not appear
-        within VPATCH sub-components.  They SHOULD be
+        <t>The "VPATCH" properties are attributes that apply to the
+        "VPATCH" component, as a whole.  These properties do not appear
+        within "VPATCH" sub-components.  They SHOULD be
         specified after the "BEGIN:VPATCH" delimiter string and prior
         to any sub-component.</t>
 
@@ -443,8 +449,8 @@ subcomp    = *(
               </t>
               <t hangText="Purpose:">
                 This property specifies the identifier corresponding to the
-                highest version number of the VPATCH specification
-                that is required in order to interpret the VPATCH
+                highest version number of the "VPATCH" specification
+                that is required in order to interpret the "VPATCH"
                 component.
               </t>
               <t hangText="Value Type:">
@@ -455,7 +461,7 @@ subcomp    = *(
                 specified on this property.
               </t>
               <t hangText="Conformance:">
-                This property can be specified once in an VPATCH
+                This property can be specified once in an "VPATCH"
                 component.  The default value is "1". This property
                 MUST be specified if its value is greater than "1".
                 Otherwise, this property is OPTIONAL.
@@ -495,7 +501,7 @@ PATCH-VERSION:1
               </t>
               <t hangText="Purpose:">
                 This property specifies the ordering of the associated
-                VPATCH component.
+                "VPATCH" component.
               </t>
               <t hangText="Value Type:">
                 INTEGER
@@ -505,11 +511,11 @@ PATCH-VERSION:1
                 specified on this property.
               </t>
               <t hangText="Conformance:">
-                This property can be specified once in a VPATCH
+                This property can be specified once in a "VPATCH"
                 component.
               </t>
               <t hangText="Description:">
-                This property is OPTIONAL and is used to indicate the relative ordering of the associated VPATCH component amongst its siblings. See <xref target="vpatch-component"/> for a description of how this property is used.
+                This property is OPTIONAL and is used to indicate the relative ordering of the associated "VPATCH" component amongst its siblings. See <xref target="vpatch-component"/> for a description of how this property is used.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -552,7 +558,7 @@ PATCH-ORDER:1
                 specified on this property.
               </t>
               <t hangText="Conformance:">
-                This property MUST be specified within any PATCH
+                This property MUST be specified within any "PATCH"
                 sub-component.
               </t>
               <t hangText="Description:">
@@ -586,9 +592,9 @@ PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]#DTSTART
               </t>
               <t hangText="Purpose:">
                 This property specifies a path (relative to
-                PATCH-TARGET) targeting one or more components,
+                "PATCH-TARGET") targeting one or more components,
                 properties, or parameters to be removed from the
-                iCalendar components targeted by PATCH-TARGET.
+                target components identified by "PATCH-TARGET".
               </t>
               <t hangText="Value Type:">
                 TEXT
@@ -598,11 +604,11 @@ PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]#DTSTART
                 specified on this property.
               </t>
               <t hangText="Conformance:">
-                This property can be specified within a PATCH
+                This property can be specified within a "PATCH"
                 sub-component.
               </t>
               <t hangText="Description:">
-                This property is used to match iCalendar elements that will be deleted. The path value is always a relative path for only immediate components and properties within the targeted component, and interpreted as described in <xref target="patch-delete"/>.
+                This property is used to match iCalendar elements that will be deleted. The path value is always a relative path for only immediate components and properties within the target component, and interpreted as described in <xref target="patch-delete"/>.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -634,7 +640,7 @@ PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com]
               </t>
               <t hangText="Purpose:">
                 This property specifies a set of parameters to be
-                set on the targeted property.
+                set on the target property.
               </t>
               <t hangText="Value Type:">
                 TEXT
@@ -644,11 +650,11 @@ PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com]
                 specified on this property.
               </t>
               <t hangText="Conformance:">
-                This property can be specified within a PATCH
+                This property can be specified within a "PATCH"
                 sub-component.
               </t>
               <t hangText="Description:">
-                This property specifies parameters to be set on the targeted property. The path value is always a relative path to a property within the target component, and interpreted as described in <xref target="patch-parameters"/>.
+                This property specifies parameters to be set on the target property. The path value is always a relative path to a property within the target component, and interpreted as described in <xref target="patch-parameters"/>.
               </t>
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
@@ -711,7 +717,7 @@ pactionbyparam  = DQUOTE "BYPARAM" param-match   DQUOTE
                 </artwork></figure>
               </t>
               <t hangText="Description:">
-                This parameter can be specified on properties contained in a PATCH component and MUST NOT be specified on properties outside of a PATCH component. This parameter specifies whether the property should be added to the target component or should replace existing properties in the target component.  In the latter case, the parameter also specifies how to match existing properties. The processing of this property parameter is described in <xref target="patch-properties"/>
+                This parameter can be specified on properties contained in a "PATCH" component and MUST NOT be specified on properties outside of a "PATCH" component. This parameter specifies whether the property should be added to the target component or should replace existing properties in the target component.  In the latter case, the parameter also specifies how to match existing properties. The processing of this property parameter is described in <xref target="patch-properties"/>
               </t>
               <t hangText="Examples:">
                 The following are examples of this property parameter:
@@ -745,7 +751,7 @@ DESCRIPTION;PATCH-ACTION="BYPARAM@LANGUAGE=en_GB";LANGUAGE=en_US:
         of the corresponding "generated" instance.</t>
 
         <t>Patch commands can be used to implicitly create
-        "overridden" components in the targeted iCalendar object by
+        "overridden" components in the iCalendar object being patched by
         specifying a path that targets the "generated" instance's
         start time, i.e., what would be the "RECURRENCE-ID" value in
         the "overridden" component.</t>
