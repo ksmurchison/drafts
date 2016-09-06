@@ -80,6 +80,10 @@
 
           <t>Do we need/want to handle individual values in multi-valued
           properties/parameters?</t>
+
+          <t>What media type do we advertise in "Accept-Patch" header?
+          Just "text/calendar"?  "text/calendar; component=VPATCH"?  Do
+          we need a "patch-version" parameter?</t>
         </list>
       </t>
     </note>
@@ -908,7 +912,7 @@ END:VPATCH
       document to be specified in the request body, and for that patch
       document to be applied to the resource targeted by the HTTP
       request. In this case, the server would advertise the
-      "text/calendar" media type in an "Apply-Patch" header as
+      "text/calendar" media type in an "Accept-Patch" header as
       described in Section 3.1 of <xref target="RFC5789"/>.</t>
 
       <t>Note that the CREATE sub-component defined by this
