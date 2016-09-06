@@ -70,8 +70,6 @@
     <note title='Open Issues'>
       <t>
         <list style="symbols">
-          <t>Do we have any content for <xref target="defaults"/>?</t>
-
           <t>Do we need/want to handle individual values in multi-valued
           properties/parameters?</t>
 
@@ -212,12 +210,14 @@ rid-match        = "[RID=" ("M" / ridval) "]"
 
 prop-segment     = prop-prefix [prop-match]
 prop-prefix      = "#" name
-prop-match       = "[" ( prop-equal / prop-not-equal / param-match ) "]"
+prop-match       = "[" ( prop-equal / prop-not-equal /
+                         param-match ) "]"
 
 prop-equal       = "=" value-escaped
 prop-not-equal   = "!" value-escaped
 
-param-match      = "@" param-name [ ( param-equal / param-not-equal ) ]
+param-match      = "@" param-name [ ( param-equal /
+                                      param-not-equal ) ]
 param-equal      = "=" param-value-escaped
 param-not-equal  = "!" param-value-escaped
 
@@ -486,7 +486,8 @@ pvervalue      = "1" / pmaxver
                ; "1" signifies compliance with this memo
 
 pmaxver        = &lt;A IANA-registered VPATCH version&gt;
-               ; Maximum VPATCH version needed to parse the VPATCH component.
+               ; Maximum VPATCH version needed to parse the VPATCH
+               ; component.
                 </artwork></figure>
               </t>
               <t hangText="Example:">
@@ -675,7 +676,8 @@ pparampath   = prop-param-path
               <t hangText="Example:">
                 The following are examples of this property:
                 <figure><artwork name="example">
-PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[=mailto:cyrus@example.com]
+PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:
+  #ATTENDEE[=mailto:cyrus@example.com]
 PATCH-PARAMETER;PARTSTAT=NEEDS-ACTION:#ATTENDEE[@CN=Cyrus Daboo]
 PATCH-PARAMETER;MEMBER=mailto:newgroup@example.com:#ATTENDEE;MEMBER
 </artwork></figure>
@@ -698,8 +700,10 @@ PATCH-PARAMETER;MEMBER=mailto:newgroup@example.com:#ATTENDEE;MEMBER
               <t hangText="Format Definition:">
                 This parameter is defined by the following notation:
                 <figure><artwork name="abnf">
-pactionparam    = "PATCH-ACTION" "=" pactioncreate / pactionbyname /
-                                     pactionbyvalue / pactionbyparam /
+pactionparam    = "PATCH-ACTION" "=" pactioncreate /
+                                     pactionbyname /
+                                     pactionbyvalue /
+                                     pactionbyparam /
                                      x-name
 
 pactioncreate   = "CREATE"
@@ -718,12 +722,13 @@ pactionbyvalue  = "BYVALUE"
 
 pactionbyparam  = DQUOTE "BYPARAM" param-match   DQUOTE
                 ; Always remove properties with the same name
-                ; and parameter name/value from the target component,
-                ; then add this property to the target component.
+                ; and parameter name/value from the target
+                ; component, then add this property to the target
+                ; component.
                 </artwork></figure>
               </t>
               <t hangText="Description:">
-                This parameter can be specified on properties contained in a "PATCH" component and MUST NOT be specified on properties outside of a "PATCH" component. This parameter specifies whether the property should be added to the target component or should replace existing properties in the target component.  In the latter case, the parameter also specifies how to match existing properties. The processing of this property parameter is described in <xref target="patch-properties"/>
+                This parameter can be specified on properties contained in a "PATCH" component and MUST NOT be specified on properties outside of a "PATCH" component. This parameter specifies whether the property should be added to the target component or should replace existing properties in the target component.  In the latter case, the parameter also specifies how to match existing properties. The processing of this property parameter is described in <xref target="patch-properties"/>.
               </t>
               <t hangText="Examples:">
                 The following are examples of this property parameter:
@@ -924,15 +929,12 @@ Accept-Patch: text/calendar; component=VPATCH; charset=utf-8
     </section>
 
     <section title='Security Considerations' anchor='security'>
-      <t>This specification does not introduce any addition security
-      concerns beyond those described in <xref target="RFC5545" />,
-      <xref target="RFC5789" />, and <xref target="RFC4791" />.</t>
+      <t>Patch processing engines MUST ensure that the result of applying a patch is a valid iCalendar object in the context of the application using the calendar data. At the very least, the resulting iCalendar object MUST comply with the requirements of <xref target="RFC5545" />.</t>
+      <t>Security considerations described in <xref target="RFC5545" />, <xref target="RFC5789" />, and <xref target="RFC4791" /> MUST be adhered to.</t>
     </section>
 
     <section title='Privacy Considerations' anchor='privacy'>
-      <t>This specification does not introduce any addition privacy
-      concerns beyond those described in <xref target="RFC5545" />,
-      <xref target="RFC5789" />, and <xref target="RFC4791" />.</t>
+        <t>Privacy considerations described in <xref target="RFC5545" />, <xref target="RFC5789" />, and <xref target="RFC4791" /> MUST be adhered to.</t>
     </section>
 
     <section title='IANA Considerations'>
@@ -947,7 +949,7 @@ Accept-Patch: text/calendar; component=VPATCH; charset=utf-8
           <c>VPATCH</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="vpatch"/></c>
-          <c>UPDATE</c>
+          <c>PATCH</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patch"/></c>
         </texttable>
@@ -1235,7 +1237,8 @@ UID:abcd
 DTSTAMP:20160901T000000Z
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]
-ATTENDEE;PATCH-ACTION=BYVALUE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
+ATTENDEE;PATCH-ACTION=BYVALUE;PARTSTAT=ACCEPTED:mailto:cyrus
+ @example.com
 END:PATCH
 END:VPATCH
 END:VCALENDAR
@@ -1301,7 +1304,8 @@ UID:abcd
 DTSTAMP:20160901T000000Z
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]
-PATCH-PARAMETER;PARTSTAT=ACCEPTED:#ATTENDEE[=mailto:cyrus@example.com]
+PATCH-PARAMETER;PARTSTAT=ACCEPTED:#ATTENDEE[=mailto:cyrus@ex
+ ample.com]
 END:PATCH
 END:VPATCH
 END:VCALENDAR
@@ -1424,7 +1428,8 @@ DTSTAMP:20160901T000000Z
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT
 PATCH-DELETE:#ATTENDEE[=mailto:cyrus@example.com];RSVP
-PATCH-PARAMETER;PARTSTAT=ACCEPTED:#ATTENDEE[=mailto:cyrus@example.com]
+PATCH-PARAMETER;PARTSTAT=ACCEPTED:#ATTENDEE[=mailto:cyrus@ex
+ ample.com]
 TRANSP:OPAQUE
 END:PATCH
 END:VPATCH
@@ -1494,7 +1499,7 @@ END:VCALENDAR
             </figure>
         </t>
       </section>
-      <section title="Removal of an overriden instance">
+      <section title="Removal of an overridden instance">
         <t>A daily recurring "VEVENT" component has one existing instance override removed with an "EXDATE" added for it.</t>
         <t>
         <figure>
@@ -1561,160 +1566,5 @@ END:VCALENDAR
         </t>
       </section>
     </section>
-<!--
-    <section title="Recurrence Examples">
-      <t>Examples of recurring events using a patch to represent
-      recurrence overrides.</t>
-      <section title="Daily with one override">
-        <t>A daily recurring "VEVENT" component with the "SUMMARY"
-        property overridden for the second instance.</t>
-        <t><figure>
-              <artwork><![CDATA[
-BEGIN:VCALENDAR
-PRODID:Example
-VERSION:2.0
-BEGIN:VEVENT
-UID:1234
-DTSTART:20160902T103000Z
-DURATION:PT1H
-SUMMARY:Test event
-RRULE:FREQ=DAILY
-END:VEVENT
-BEGIN:VINSTANCE
-UID:1234
-RECURRENCE-ID:20160903T103000Z
-BEGIN:PROPERTYUPDATE
-SUMMARY:Test event
-END:PROPERTYUPDATE
-END:VINSTANCE
-END:VCALENDAR
-]]></artwork>
-            </figure></t>
-      </section>
-
-      <section title="Daily with one alarm override">
-        <t>A daily recurring "VEVENT" component with a different alarm
-        for the second instance.</t>
-        <t><figure>
-              <artwork><![CDATA[
-BEGIN:VCALENDAR
-PRODID:Example
-VERSION:2.0
-BEGIN:VEVENT
-UID:1234
-DTSTART:20160902T103000Z
-DURATION:PT1H
-SUMMARY:Test event
-RRULE:FREQ=DAILY
-BEGIN:VALARM
-UID:4567
-ACTION:DISPLAY
-TRIGGER:-PT30M
-DESCRIPTION:30 minutes before meeting
-END:VALARM
-END:VEVENT
-BEGIN:VINSTANCE
-UID:1234
-RECURRENCE-ID:20160903T103000Z
-PATCH-TARGET:VALARM[UID=4567]
-BEGIN:COMPONENTUPDATE
-BEGIN:VALARM
-UID:4567
-ACTION:DISPLAY
-TRIGGER:-PT10M
-DESCRIPTION:10 minutes before meeting
-END:VALARM
-END:COMPONENTUPDATE
-END:VINSTANCE
-END:VCALENDAR
-]]></artwork>
-            </figure></t>
-      </section>
-
-      <section title="Daily with two overrides due to Attendee status differences">
-        <t>A daily recurring "VEVENT" component with various
-        "ATTENDEE" properties overridden for the second and third
-        instances, reflecting different attendees' ability to
-        participate. In this case, the attendee "mike@example.com" has
-        declined the second instance only, and the attendee
-        "dave@example.com" has declined the third instance only.</t>
-        <t><figure>
-              <artwork><![CDATA[
-BEGIN:VCALENDAR
-PRODID:Example
-VERSION:2.0
-BEGIN:VEVENT
-UID:1234
-DTSTART:20160902T103000Z
-DURATION:PT1H
-SUMMARY:Test event
-RRULE:FREQ=DAILY
-ORGANIZER:mailto:cyrus@example.com
-ATTENDEE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
-ATTENDEE;PARTSTAT=ACCEPTED:mailto:mike@example.com
-ATTENDEE;PARTSTAT=ACCEPTED:mailto:dave@example.com
-END:VEVENT
-BEGIN:VINSTANCE
-UID:1234
-RECURRENCE-ID:20160903T103000Z
-BEGIN:PROPERTYUPDATE
-ATTENDEE;PARTSTAT=DECLINED:mailto:mike@example.com
-END:PROPERTYUPDATE
-END:VINSTANCE
-BEGIN:VINSTANCE
-UID:1234
-RECURRENCE-ID:20160904T103000Z
-BEGIN:PROPERTYUPDATE
-ATTENDEE;PARTSTAT=DECLINED:mailto:dave@example.com
-END:PROPERTYUPDATE
-END:VINSTANCE
-END:VCALENDAR
-]]></artwork>
-            </figure></t>
-      </section>
-
-      <section title="Daily with two overrides due to Attendee additions and removals">
-        <t>A daily recurring "VEVENT" component with various
-        "ATTENDEE" properties added or removed from the second and
-        third instances, reflecting different attendees' ability to
-        participate. In this case, the attendee "ken@example.com" has
-        been added to the second instance only, and the attendee
-        "dave@example.com" has been removed from the third instance
-        only.</t>
-        <t><figure>
-              <artwork><![CDATA[
-BEGIN:VCALENDAR
-PRODID:Example
-VERSION:2.0
-BEGIN:VEVENT
-UID:1234
-DTSTART:20160902T103000Z
-DURATION:PT1H
-SUMMARY:Test event
-RRULE:FREQ=DAILY
-ORGANIZER:mailto:cyrus@example.com
-ATTENDEE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
-ATTENDEE;PARTSTAT=ACCEPTED:mailto:mike@example.com
-ATTENDEE;PARTSTAT=ACCEPTED:mailto:dave@example.com
-END:VEVENT
-BEGIN:VINSTANCE
-UID:1234
-RECURRENCE-ID:20160903T103000Z
-BEGIN:PROPERTYCREATE
-ATTENDEE;PARTSTAT=ACCEPTED:mailto:ken@example.com
-END:PROPERTYCREATE
-END:VINSTANCE
-BEGIN:VINSTANCE
-UID:1234
-RECURRENCE-ID:20160904T103000Z
-BEGIN:PROPERTYDELETE
-ATTENDEE:mailto:dave@example.com
-END:PROPERTYDELETE
-END:VINSTANCE
-END:VCALENDAR
-]]></artwork>
-            </figure></t>
-      </section>
--->
   </back>
 </rfc>
