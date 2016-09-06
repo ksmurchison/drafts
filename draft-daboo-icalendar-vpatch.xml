@@ -70,12 +70,6 @@
     <note title='Open Issues'>
       <t>
         <list style="symbols">
-          <t>Does this spec update RFC 5545?  It doesn't touch
-          existing elements, so perhaps not.</t>
-
-          <t>Do we want to use "RID=M"to specify "master"
-          component (no RECURRENCE-ID) or simply use "RID="?</t>
-
           <t>Do we have any content for <xref target="defaults"/>?</t>
 
           <t>Do we need/want to handle individual values in multi-valued
