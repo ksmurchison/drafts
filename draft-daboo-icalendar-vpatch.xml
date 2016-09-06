@@ -466,7 +466,7 @@ subcomp    = *(
                 component.
               </t>
               <t hangText="Value Type:">
-                TEXT
+                INTEGER
               </t>
               <t hangText="Property Parameters:">
                 IANA and nonstandard property parameters can be
@@ -475,7 +475,7 @@ subcomp    = *(
               <t hangText="Conformance:">
                 This property can be specified once in an "VPATCH"
                 component.  The default value is "1". This property
-                MUST be specified if its value is other than "1".
+                MUST be specified if its value is greater than "1".
                 Otherwise, this property is OPTIONAL.
               </t>
               <t hangText="Description:">
@@ -491,7 +491,7 @@ pverparam      = *(";" other-param)
 pvervalue      = "1" / pmaxver
                ; "1" signifies compliance with this memo
 
-pmaxver        = &lt;A IANA-registered VPATCH version identifier&gt;
+pmaxver        = &lt;A IANA-registered VPATCH version&gt;
                ; Maximum VPATCH version needed to parse the VPATCH component.
                 </artwork></figure>
               </t>
@@ -1012,30 +1012,51 @@ END:VPATCH
           <c>PATCH-ACTION</c>
           <c>Current</c>
           <c>RFCXXXX, <xref target="patchaction"/></c>
-      </texttable>
+        </texttable>
       </section> <!-- Param Reg -->
 
-      <section title='Patch Action Registrations'>
-        <t>This document defines the following values to initialize
-        the patch action registry:</t>
-        <texttable>
-          <ttcol>Patch Action</ttcol>
-          <ttcol>Status</ttcol>
-          <ttcol>Reference</ttcol>
-          <c>CREATE</c>
-          <c>Current</c>
-          <c>RFCXXXX, <xref target="patchaction"/></c>
-          <c>BYNAME</c>
-          <c>Current</c>
-          <c>RFCXXXX, <xref target="patchaction"/></c>
-          <c>BYVALUE</c>
-          <c>Current</c>
-          <c>RFCXXXX, <xref target="patchaction"/></c>
-          <c>BYPARAM</c>
-          <c>Current</c>
-          <c>RFCXXXX, <xref target="patchaction"/></c>
-      </texttable>
-      </section> <!-- Paction Reg -->
+      <section title='Property and Parameter Value Registries'>
+        <t>Two new IANA registrys for iCalendar elements have been
+        added.  Additional codes MAY be used, provided the process
+        described in Section 8.2.1 of <xref target="RFC5545" /> is
+        used to register them, using the template in Section 8.2.6 of
+        <xref target="RFC5545" />.</t>
+
+        <section title='Patch Version Registry'>
+          <t>The following table has been used to initialize the Patch
+          Version Registry:</t>
+          <texttable>
+            <ttcol>Patch Version</ttcol>
+            <ttcol>Status</ttcol>
+            <ttcol>Reference</ttcol>
+            <c>1</c>
+            <c>Current</c>
+            <c>RFCXXXX</c>
+          </texttable>
+        </section> <!-- Paction Reg -->
+
+        <section title='Patch Action Registry'>
+          <t>The following table has been used to initialize the Patch
+          Action Registry:</t>
+          <texttable>
+            <ttcol>Patch Action</ttcol>
+            <ttcol>Status</ttcol>
+            <ttcol>Reference</ttcol>
+            <c>CREATE</c>
+            <c>Current</c>
+            <c>RFCXXXX, <xref target="patchaction"/></c>
+            <c>BYNAME</c>
+            <c>Current</c>
+            <c>RFCXXXX, <xref target="patchaction"/></c>
+            <c>BYVALUE</c>
+            <c>Current</c>
+            <c>RFCXXXX, <xref target="patchaction"/></c>
+            <c>BYPARAM</c>
+            <c>Current</c>
+            <c>RFCXXXX, <xref target="patchaction"/></c>
+          </texttable>
+        </section> <!-- Paction Reg -->
+      </section> <!-- Param value Reg -->
     </section> <!-- IANA -->
 
     <section title='Acknowledgments'>
