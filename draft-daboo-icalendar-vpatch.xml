@@ -931,9 +931,15 @@ END:VPATCH
       document to be applied to the resource targeted by the HTTP
       request. In this case, the server would advertise the
       "text/calendar" media type in an "Accept-Patch" header as
-      described in Section 3.1 of <xref target="RFC5789"/>.</t>
+      described in Section 3.1 of <xref target="RFC5789"/>.  Note that
+      a "component" parameter with a value of "VPATCH" MUST be
+      specified on the media type.  For example:
+      <figure><artwork>
+Accept-Patch: text/calendar; component=VPATCH; charset=utf-8
+      </artwork></figure>
+      </t>
 
-      <t>The CREATE sub-component defined by this
+      <t>The PATCH-TARGET property defined by this
       specification does not allow targeting the entire iCalendar
       object, and hence an HTTP PATCH request cannot be used to create
       a new resource (a normal HTTP PUT request is used instead).</t>
