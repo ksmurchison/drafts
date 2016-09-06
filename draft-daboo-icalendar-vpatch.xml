@@ -136,7 +136,7 @@
     </section>
 
     <section title="PATCH Component" anchor="patch-component">
-      <t>A "PATCH" component (defined in <xref target="patch"/>) MUST contain one "PATCH-TARGET" property whose value is an iCalendar path (see <xref target="path"/>) that identifies components within the iCalendar object being patched. The set of components thus identified are the "target components" for the patch operations. The set of patch operations defined by the other components and properties present in the "PATCH" component are then applied to each target component (in the order specified below). If a "PATCH-TARGET" property does not match any components in the iCalendar object being patched, then the patch operation MUST succeed without any changes being applied to the iCalendar object being patched.</t>
+      <t>A "PATCH" component (defined in <xref target="patch"/>) MUST contain one "PATCH-TARGET" property whose value is an iCalendar path (see <xref target="path"/>) that identifies components within the iCalendar object being patched (see <xref target="recurrences"/> for special handling of components representing recurring items). The set of components thus identified are the "target components" for the patch operations. The set of patch operations defined by the other components and properties present in the "PATCH" component are then applied to each target component (in the order specified below). If a "PATCH-TARGET" property does not match any components in the iCalendar object being patched, then the patch operation MUST succeed without any changes being applied to the iCalendar object being patched.</t>
       <t>Four patch operations are supported:
         <list style="numbers">
           <t>Component additions or updates: any components within the "PATCH" component are considered to be additions or updates (see <xref target="patch-components"/>).</t>
@@ -163,7 +163,7 @@
 
       <t>A relative path can start with a component segment or a property segment, with the path assumed to be relative to an enclosing component defined by the context.</t>
 
-      <t>To target a component inside of another component, a component segment is appended to the path. Component segments can include an optional match item.  When present, this allows targeting of components that match a specific "UID" property value, and/or a "RECURRENCE-ID" value (or lack of "RECURRENCE-ID" property to target a "master" recurrence component).</t>
+      <t>To target a component inside of another component, a component segment is appended to the path. Component segments can include an optional match item.  When present, this allows targeting of components that match a specific "UID" property value, and/or a "RECURRENCE-ID" value (or lack of "RECURRENCE-ID" property to target a "master" recurrence component). See <xref target="recurrences"/> for special handling of components representing recurring items.</t>
 
       <t>To target a property inside of a component, a property segment is added to the path. A property segment can include an optional match item. When present, this allows targeting of properties by value (matching or not matching a specific value), or which have a named property parameter present, or by property parameter value (matching or not matching a specific value).</t>
 
@@ -742,31 +742,18 @@ DESCRIPTION;PATCH-ACTION="BYPARAM@LANGUAGE=en_GB";LANGUAGE=en_US:
     <section title="Additional Considerations">
       <section title="Handling Default Properties and Parameters"
                anchor="defaults">
-        <t></t>
+        <t>iCalendar properties and property parameters can have default values, which allows those items to be omitted from the iCalendar data, but with the default value assumed. A patch operation might add properties or property parameters with default values. A patch processing engine MAY choose to remove properties or property parameters with default values from the patched iCalendar object.</t>
       </section>
 
       <section title="Handling Recurrences" anchor="recurrences">
-        <t>Recurring events in iCalendar are defined by the "RRULE",
-        "RDATE", and "EXDATE" properties in a "master" iCalendar
-        component. Those rules produce a set of "generated"
-        instances. In some cases specific "generated" instances are
-        changed, resulting in the presence of "overridden"
-        components, which are identified by having the same "UID"
-        property value as the "master" component, and a
-        "RECURRENCE-ID" property whose value matches the start time
-        of the corresponding "generated" instance.</t>
+        <t>Recurring events (or other types of component) in iCalendar are defined by the "RRULE", "RDATE", and "EXDATE" properties in a "master" iCalendar component. Those rules produce a set of "generated" instances. In some cases specific "generated" instances are changed, resulting in the presence of "overridden" components, which are identified by having the same "UID" property value as the "master" component, and a "RECURRENCE-ID" property whose value matches the start time of the corresponding "generated" instance (which can be different from the actual start time of the overridden instance).</t>
 
-        <t>Patch commands can be used to implicitly create
-        "overridden" components in the iCalendar object being patched by
-        specifying a path that targets the "generated" instance's
-        start time, i.e., what would be the "RECURRENCE-ID" value in
-        the "overridden" component.</t>
+        <t>When a set of master and overridden recurring components exist in the iCalendar object being patched, each can be uniquely targeted by using the "RID=" match item in the component segment of the path value of a "PATCH-TARGET" property. To target the master component, a "RID=M" match item is used. To target an overridden component, the "RID=" value is set to the value of the "RECURRENCE-ID" property in the overridden component.</t>
+        
+        <t>Patch commands can also be used to implicitly create overridden components in the iCalendar object being patched by specifying a path with a "RID=" match item, using what would be the overridden component's "RECURRENCE-ID" value if it existed as a separate component. This is useful when an overridden component needs to be added, but the changes to it are small (e.g., an instance where only the summary of the event is different).</t>
 
-        <t>If the value of a "RECURRENCE-ID" match item in
-        a path does not correspond to an existing instance (either
-        because its value does not match a "generated" instance, or
-        its value matches an "EXDATE" in the "master" component),
-        then the patch operation MUST fail.</t>
+        <t>If the value of a "RID=" match item in a path does not correspond to an existing instance (either because its value does not match a "generated" instance, or its value matches an "EXDATE" in the "master" component), then the patch operation MUST fail.</t>
+
         <t>For example, consider the following daily recurring event:
         <figure><artwork>
 BEGIN:VCALENDAR
@@ -783,9 +770,7 @@ END:VCALENDAR
 </artwork></figure>
         The following patch command could be used to update the
         "SUMMARY" property value of the second instance of the
-        recurring event (note that the first line of the patch
-        command has been split across two lines to fit within the
-        margins of this document):
+        recurring event:
         <figure><artwork>
 BEGIN:VPATCH
 UID:abcd
@@ -818,20 +803,13 @@ END:VEVENT
 END:VCALENDAR
 </artwork></figure>
         A similar result could have been achieved by using a
-        a path targeting the "VCALENDAR" component, and the entire
+        path targeting the "VCALENDAR" component, and the entire
         "overridden" component supplied as the data. However, the
         implicit override behaviour allows for a more compact
         representation of this type of change.
         </t>
 
-        <t>There is no equivalent behavior when it comes
-        to removing "overridden" components from an iCalendar object
-        to cancel the instance. In that case, two patch commands are
-        required: one to delete the "overridden" component, and one
-        to create an "EXDATE" property value to cover the
-        cancellation. So, continuing from the example data
-        immediately above, the following patch commands would cancel
-        the instance that was previously overridden:
+        <t>There is no equivalent behavior when it comes to removing "overridden" components from an iCalendar object to cancel the instance. In that case, two "PATCH" components are required: one to delete the "overridden" component, and one to create an "EXDATE" property value in the master component to cover the cancellation. So, continuing from the example data immediately above, the following patch commands would cancel the instance that was previously overridden:
         <figure><artwork>
 BEGIN:VPATCH
 UID:abcd
@@ -842,7 +820,7 @@ PATCH-DELETE:/VEVENT[UID=1234][RID=20160903T120000Z]
 END:PATCH
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234][RID=M]
-EXDATE;ACTION=CREATE:20160903T120000Z
+EXDATE;PATCH-ACTION=CREATE:20160903T120000Z
 END:PATCH
 END:VPATCH
 </artwork></figure>
@@ -1212,8 +1190,8 @@ UID:abcd
 DTSTAMP:20160901T000000Z
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VTODO[UID=4321]
-STATUS;ACTION=CREATE:COMPLETED
-COMPLETED;ACTION=CREATE:20160902T224515Z
+STATUS;PATCH-ACTION=CREATE:COMPLETED
+COMPLETED;PATCH-ACTION=CREATE:20160902T224515Z
 END:PATCH
 END:VPATCH
 END:VCALENDAR
@@ -1257,7 +1235,7 @@ UID:abcd
 DTSTAMP:20160901T000000Z
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]
-ATTENDEE;ACTION=BYVALUE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
+ATTENDEE;PATCH-ACTION=BYVALUE;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
 END:PATCH
 END:VPATCH
 END:VCALENDAR
@@ -1394,7 +1372,7 @@ UID:abcd
 DTSTAMP:20160901T000000Z
 BEGIN:PATCH
 PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]
-EXDATE;ACTION=CREATE-VALUE:20160903T120000Z
+EXDATE;PATCH-ACTION=CREATE-VALUE:20160903T120000Z
 END:PATCH
 END:VPATCH
 END:VCALENDAR
