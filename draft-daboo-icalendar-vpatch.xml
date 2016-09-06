@@ -138,7 +138,7 @@
     </section>
 
     <section title="PATCH Component" anchor="patch-component">
-      <t>A "PATCH" component (defined in <xref target="patch"/>) MUST contain one "PATCH-TARGET" property whose value is an iCalendar path (see <xref target="path"/>) that identifies components within the target iCalendar object being patched. The set of patch operations defined by the other components and properties present in the "PATCH" component are then applied to each targeted component (in no specific order). If a "PATCH-TARGET" property does not match any components in the target iCalendar object, then the patch operation MUST succeed without any changes being applied to the target iCalendar object.</t>
+      <t>A "PATCH" component (defined in <xref target="patch"/>) MUST contain one "PATCH-TARGET" property whose value is an iCalendar path (see <xref target="path"/>) that identifies components within the target iCalendar object being patched. The set of patch operations defined by the other components and properties present in the "PATCH" component are then applied to each targeted component (in the order specified below). If a "PATCH-TARGET" property does not match any components in the target iCalendar object, then the patch operation MUST succeed without any changes being applied to the target iCalendar object.</t>
       <t>Four patch operations are supported:
         <list style="numbers">
           <t>Component additions or updates: any components within the "PATCH" component are considered to be additions or updates (see <xref target="patch-components"/>).</t>
@@ -240,8 +240,8 @@ param-value-escaped = param-value
           <t hangText="/VCALENDAR"><vspace />Targets the "VCALENDAR" component in the iCalendar object.</t>
           <t hangText="/VCALENDAR/VEVENT"><vspace />Targets all "VEVENT" components in the "VCALENDAR" component in the iCalendar object.</t>
           <t hangText="/VCALENDAR/VEVENT[UID=1234]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234", in the "VCALENDAR" component in the iCalendar object.</t>
-          <t hangText="/VCALENDAR/VEVENT[UID=1234%2F4567][RECURRENCE-ID=]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234/4567" and do not have a "RECURRENCE-ID" property, in the "VCALENDAR" component in the iCalendar object.</t>
-          <t hangText="/VCALENDAR/VEVENT[UID=1234][RECURRENCE-ID=20150902T223000Z]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234" and have a "RECURRENCE-ID" property whose UTC value is "20150902T223000Z", in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT[UID=1234%2F4567][RID=M]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234/4567" and do not have a "RECURRENCE-ID" property, in the "VCALENDAR" component in the iCalendar object.</t>
+          <t hangText="/VCALENDAR/VEVENT[UID=1234][RID=20150902T223000Z]"><vspace />Targets any "VEVENT" components that have a "UID" property value exactly equal to "1234" and have a "RECURRENCE-ID" property whose UTC value is "20150902T223000Z", in the "VCALENDAR" component in the iCalendar object.</t>
         </list>
       </t>
       <t>Targeting properties (path contains exactly zero or more component segments, and one property segment):
@@ -290,7 +290,7 @@ param-value-escaped = param-value
           <t hangText="Properties"> the "PATCH-DELETE" path value targets properties only. The matching properties are removed from the "parent" target component.</t>
           <t hangText="Property parameters"> the "PATCH-DELETE" path value targets property parameters on specific properties only. The matching property parameters are removed from the corresponding property.</t>
           <t hangText="Property values"> the "PATCH-DELETE" path value targets a property value on specific multi-valued properties only. The matching property value is removed from the the corresponding property. If that results in a property with no value, that property is also removed from its "parent" target component.</t>
-          <t hangText="Property parameter values"> the "PATCH-DELETE" path value targets a property parameter value on a specific multi-valued property parameter on specific properties only. The matching property parameter value is removed from the the corresponding property property. If that results in a property parameter with no value, that property parameter is also removed from from the corresponding property.</t>
+          <t hangText="Property parameter values"> the "PATCH-DELETE" path value targets a property parameter value on a specific multi-valued property parameter on specific properties only. The matching property parameter value is removed from the the corresponding property parameter. If that results in a property parameter with no value, that property parameter is also removed from from the corresponding property.</t>
         </list>
       </t>
     </section>
@@ -557,9 +557,9 @@ PATCH-ORDER:1
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchtarget      = "PATCH-TARGET ptargetparam ":" ptargetpath CRLF
+patchtarget   = "PATCH-TARGET ptargetparam ":" ptargetpath CRLF
 
-ptargetparam     = *(";" other-param)
+ptargetparam  = *(";" other-param)
 
 ptargetpath   = abs-comp-path
 </artwork></figure>
@@ -603,12 +603,12 @@ PATCH-TARGET:/VCALENDAR/VEVENT[UID=1234]#DTSTART
               <t hangText="Format Definition:">
                 This property is defined by the following notation:
                 <figure><artwork name="abnf">
-patchdelete         = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
+patchdelete   = "PATCH-DELETE pdeleteparam ":" pdeletepath CRLF
 
-pdeleteparam        = *(";" other-param)
+pdeleteparam  = *(";" other-param)
 
-pdeletepath      = rel-path
-                 ; PATCH-DELETE path is relative to PATCH-TARGET path
+pdeletepath   = rel-one-path
+              ; PATCH-DELETE path is relative to PATCH-TARGET path
 </artwork></figure>
               </t>
               <t hangText="Example:">
