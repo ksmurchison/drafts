@@ -74,8 +74,8 @@
           properties/parameters?</t>
 
           <t>What media type do we advertise in "Accept-Patch" header?
-          Just "text/calendar"?  "text/calendar; component=VPATCH"?  Do
-          we need a "patch-version" parameter?</t>
+          Just "text/calendar"?  Currently using "text/calendar;
+          component=VPATCH; optinfo=PATCH-VERSION:1"</t>
         </list>
       </t>
     </note>
@@ -915,10 +915,18 @@ END:VPATCH
       request. In this case, the server would advertise the
       "text/calendar" media type in an "Accept-Patch" header as
       described in Section 3.1 of <xref target="RFC5789"/>.  Note that
-      a "component" parameter with a value of "VPATCH" MUST be
-      specified on the media type.  For example:
+      the requirements for parameters on this media type are as follows:
+      <list style="symbols">
+        <t>MUST include a "component" parameter with a value of
+        "VPATCH"</t>
+        <t>MUST include an "optinfo" parameter with a value of
+        "PATCH-VERSION:&lt;n&gt;", where &lt;n&gt; is the maximum
+        patch version supported by the server</t>
+        <t>MAY include a "charset" parameter as appropriate</t>
+      </list>For example:
       <figure><artwork>
-Accept-Patch: text/calendar; component=VPATCH; charset=utf-8
+Accept-Patch: text/calendar; component=VPATCH;
+ optinfo="PATCH-VERSION:1"; charset=utf-8
       </artwork></figure>
       </t>
 
