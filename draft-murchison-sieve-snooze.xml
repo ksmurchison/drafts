@@ -257,7 +257,7 @@ snooze :weekdays ["1", "3", "5", "2", "4"]
           awakened at Fri, 19 Jun 2020 08:00:00 local time in Melbourne.</t>
 
           <t>A message snoozed at Fri, 19 Jun 2020 12:00:00 UTC would be
-          awakened at Mon, 21 Jun 2020 08:00:00 local time in Melbourne.</t>
+          awakened at Mon, 22 Jun 2020 08:00:00 local time in Melbourne.</t>
         </list></t>
       </section>
 
