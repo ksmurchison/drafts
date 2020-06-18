@@ -242,7 +242,7 @@ Usage: snooze [":mailbox" string]
 require ["snooze"];
 
 snooze :weekdays ["1", "3", "5", "2", "4"]
-       :tzid "Australia/Melbourne" ["12:00", "08:00", "16:00"];
+       :tzid "Australia/Melbourne" ["12:00:00", "08:00:00", "16:00:00"];
 ]]></artwork>
         </figure>
 
