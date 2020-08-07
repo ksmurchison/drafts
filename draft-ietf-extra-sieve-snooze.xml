@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!DOCTYPE rfc SYSTEM 'rfc2629.dtd'
+[
+<!ENTITY rfc2119 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'>
+<!ENTITY rfc2045 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml'>
+<!ENTITY rfc2046 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2046.xml'>
+<!ENTITY rfc2047 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2047.xml'>
+<!ENTITY rfc2231 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2231.xml'>
+<!ENTITY rfc2342 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2342.xml'>
+<!ENTITY rfc3501 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml'>
+<!ENTITY rfc4234 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4234.xml'>
+<!ENTITY rfc4865 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4865.xml'>
+<!ENTITY rfc5228 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5228.xml'>
+<!ENTITY rfc5229 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5229.xml'>
+<!ENTITY rfc5230 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5230.xml'>
+<!ENTITY rfc5232 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5232.xml'>
+<!ENTITY rfc5234 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml'>
+<!ENTITY rfc5260 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml'>
+<!ENTITY rfc5321 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml'>
+<!ENTITY rfc5322 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5322.xml'>
+<!ENTITY rfc5429 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5429.xml'>
+<!ENTITY rfc5435 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5435.xml'>
+<!ENTITY rfc5436 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5436.xml'>
+<!ENTITY rfc5437 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5437.xml'>
+<!ENTITY rfc5490 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5490.xml'>
+<!ENTITY rfc6131 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6131.xml'>
+<!ENTITY rfc7942 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml'>
+<!ENTITY rfc8174 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml'>
+<!ENTITY rfc8474 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml'>
+<!ENTITY rfc8579 PUBLIC ''
+'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml'>
+<!ENTITY mailboxid PUBLIC ''
+'http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.gondwana-sieve-mailboxid.xml'>
+]>
+
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc strict="yes"?>
+<rfc category="std" ipr='trust200902'
+     updates="5232"
+     docName='draft-ietf-extra-sieve-snooze-00'>
+  <front>
+    <title abbrev="Sieve Snooze">Sieve Email Filtering: Snooze Extension</title>
+    <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city> <region>PA</region>
+          <code>19102</code> <country>USA</country>
+        </postal>
+        <email>murch@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <author initials="R." surname="Signes" fullname="Ricardo Signes">
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city> <region>PA</region>
+          <code>19102</code> <country>USA</country>
+        </postal>
+        <email>rjbs@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <author initials="N." surname="Jenkins" fullname="Neil Jenkins">
+      <organization abbrev="Fastmail">Fastmail Pty Ltd</organization>
+      <address>
+        <postal>
+          <street>Level 2, 114 William Street</street>
+          <city>Melbourne</city> <region>VIC</region>
+          <code>3000</code> <country>Australia</country>
+        </postal>
+        <email>neilj@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <date />
+
+    <area>ART</area>
+    <workgroup>EXTRA</workgroup>
+
+    <keyword>Sieve</keyword>
+    <abstract>
+      <t>This document describes the "snooze" extension to the Sieve email
+      filtering language.
+      The "snooze" extension gives Sieve the ability to postpone the
+      filing of an incoming into a target mailbox until a later point
+      in time.</t> 
+    </abstract>
+<!--
+    <note title="Open Issues">
+      <t>
+        <list style="symbols">
+        </list>
+      </t>
+    </note>
+-->
+  </front>
+
+  <middle>
+    <section title='Introduction'>
+      <t>Users are not always ready, willing, or able to read and
+      respond to email messages at the time of their arrival.
+      Sometimes it is desirable to have messages appear in a mailbox
+      at a more convenient time for the user to act upon them.</t>
+
+      <t>This document defines a new Sieve action command "snooze"
+      that postpones filing a message into a target mailbox until a
+      later point in time.
+      The capability string associated with this extension is
+      "snooze".</t>
+
+    </section>
+
+    <section title='Conventions Used in This Document'>
+      <t>Conventions for notations are as in Section 1.1 of <xref
+      target='RFC5228'/>, including use of the "Usage:" label for the
+      definition of action and tagged arguments syntax.</t>
+
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+      "MAY", and "OPTIONAL" in this document are to be interpreted as
+      described in BCP&nbsp;14
+      <xref target='RFC2119' /> <xref target='RFC8174' /> 
+      when, and only when, they appear in all capitals, as shown
+      here.</t>
+
+    </section>  <!-- Intro -->
+    
+    <section title='Snooze Action' anchor='snooze'>
+
+      <figure>
+        <artwork><![CDATA[
+Usage: snooze *AWAKEN-OPTIONS <times: string-list>
+]]></artwork>
+      </figure>
+
+      <figure>
+        <preamble>The AWAKEN-OPTIONS argument is defined here
+        in <xref target='RFC4234'>ABNF</xref> syntax so that it can be
+        modified by other extensions.</preamble>
+        <artwork><![CDATA[
+AWAKEN-OPTIONS = MAILBOX / WEEKDAYS / TZID
+                  ; each option MUST NOT appear more than once
+                  ; however, per Section 2.6.2 of RFC 5228,
+                  ; the tagged arguments in AWAKEN-OPTIONS
+                  ; may appear in any order
+
+MAILBOX  = ":mailbox" string
+WEEKDAYS = ":weekdays" string-list
+TZID     = ":tzid" string
+]]></artwork>
+      </figure>
+
+      <t>The snooze action is semantically equivalent to a delayed
+      fileinto action (see Section 4.1 of <xref target='RFC5228' />).
+      The arguments of the snooze action specify when, where, and
+      how the awakened message will be filed.</t>
+
+      <t>The process of actually snoozing and awakening (delaying the
+      filing of) the message is implementation specific and outside
+      the scope of this document.
+      However, <xref target='snoozing'/> discusses possible
+      methods for implementing the snooze action.</t>
+
+      <section title='Mailbox Argument' anchor='mailboxarg'>
+        <t>The optional :mailbox argument is used to specify the target
+        mailbox that the message will be filed into when it is awakened.
+        It is equivalent to the mailbox argument of the fileinto
+        action (see Section 4.1 of <xref target='RFC5228' />).</t>
+
+        <t>If :mailbox is omitted, or if the specified mailbox doesn&apos;t
+        exist at the time of awakening, the message will be filed
+        into the user&apos;s main mailbox.
+        For instance, in an implementation where the IMAP server is
+        running scripts on behalf of the user at time of delivery,
+        the user&apos;s "INBOX" would be the implicit target for
+        awakening messages.</t>
+      </section>
+
+      <section title='Weekdays Argument' anchor='weekdays'>
+        <t>The optional :weekdays argument specifies the set of days
+        on which the specified set of awakening times apply.
+        Each day of the week is expressed as an integer between
+        "0" and "6". "0" is Sunday, "1" is Monday, etc.
+        This syntax matches that of the "weekday" date-part argument
+        to the date test extension (see Section 4.2 of
+        <xref target='RFC5260' />).</t>
+
+        <t>If :weekdays is omitted, the set of awakening times applies
+        to every day of the week.</t>
+        
+      </section>
+
+      <section title='Times and TZID Arguments' anchor='times'>
+        <t>The required times argument, along with the optional :tzid
+        argument, are used to specify when a snoozed message will be
+        awakened.
+        Each time is specified in "hh:mm:ss" format and is interpreted
+        as the local time in the time zone specified by the :tzid
+        argument.</t>
+
+        <t>The value of the :tzid argument MUST be a time zone
+        identifier from the
+        <xref target='tzdb'>IANA Time Zone Database</xref>.
+        If :tzid is omitted, the time zone of the Sieve
+        interpreter is used.
+        </t>
+
+        <t>The combination of the weekdays and times form a
+        chronological list of awaken times.  When a message is
+        snoozed, it is assigned the next future awaken time in the
+        list.  If a message is snoozed on a day with no awaken times,
+        or after the last awaken time on a given day,
+        the first awaken time on the next available day is used.
+        </t>
+
+        <t>If the local time in the specified time zone occurs more
+        than once (daylight saving to standard time transition), the
+        first occurrence of the specified time value is used.
+        If the local time in the specified time zone does not occur
+        (standard to daylight saving time transition), the specified
+        time value is interpreted using the UTC offset prior to the
+        transition.</t>
+        
+        <section title='Awaken Times Examples'>
+          <t>The following examples show, given the specified snooze
+          action and a set of message arrival times, the corresponding
+          times at which the message would be awakened and filed.</t>
+
+          <figure>
+            <preamble>The following example shows awaken times rolling
+            into the next day or week.
+            Note that 2020-07-30 falls on a Thursday.</preamble>
+            <artwork><![CDATA[
+require "snooze";
+snooze :weekdays ["1", "3", "5", "2", "4"]
+       :tzid "Australia/Melbourne" ["12:00:00",
+                                    "08:00:00", "16:00:00"];
+]]></artwork>
+          </figure>
+
+          <texttable>
+            <ttcol align='center'>Arrival (UTC)</ttcol>
+            <ttcol align='center'>Arrival (Melbourne)</ttcol>
+            <ttcol align='center'>Awaken (Melbourne)</ttcol>
+            <c>2020-07-30T00:00:00Z</c>
+            <c>--07-30T10:00:00+10</c>
+            <c>--07-30T12:00:00+10</c>
+            <c>2020-07-30T04:00:00Z</c>
+            <c>--07-30T14:00:00+10</c>
+            <c>--07-30T16:00:00+10</c>
+            <c>2020-07-30T08:00:00Z</c>
+            <c>--07-30T18:00:00+10</c>
+            <c>--07-31T08:00:00+10</c>
+            <c>2020-07-31T12:00:00Z</c>
+            <c>--07-31T22:00:00+10</c>
+            <c>--08-03T08:00:00+10</c>
+            <c>2020-08-01T16:00:00Z</c>
+            <c>--08-02T02:00:00+10</c>
+            <c>--08-03T08:00:00+10</c>
+          </texttable>
+
+          <figure>
+            <preamble>The following example shows awaken times falling
+            before, during, and after a daylight saving to standard
+            time transition.
+            Note that the transition occurs at 2020-11-01T02:00:00-04.
+            </preamble>
+            <artwork><![CDATA[
+require "snooze";
+snooze :tzid "America/New_York" "01:30:00";
+]]></artwork>
+          </figure>
+
+          <texttable>
+            <ttcol align='center'>Arrival (UTC)</ttcol>
+            <ttcol align='center'>Arrival (New York)</ttcol>
+            <ttcol align='center'>Awaken (New York)</ttcol>
+            <c>2020-11-01T05:00:00Z</c>
+            <c>--11-01T01:00:00-04</c>
+            <c>--11-01T01:30:00-04</c>
+            <c>2020-11-01T06:00:00Z</c>
+            <c>--11-01T01:00:00-05</c>
+            <c>--11-02T01:30:00-05</c>
+            <c>2020-11-01T07:00:00Z</c>
+            <c>--11-01T02:00:00-05</c>
+            <c>--11-02T01:30:00-05</c>
+          </texttable>
+
+          <figure>
+            <preamble>The following example shows awaken times falling
+            before, during, and after a standard to daylight saving
+            time transition.
+            Note that the transition occurs at 2021-03-14T02:00:00-05.
+            </preamble>
+            <artwork><![CDATA[
+require "snooze";
+snooze :tzid "America/New_York" "02:30:00";
+]]></artwork>
+          </figure>
+
+          <texttable>
+            <ttcol align='center'>Arrival (UTC)</ttcol>
+            <ttcol align='center'>Arrival (New York)</ttcol>
+            <ttcol align='center'>Awaken (New York)</ttcol>
+            <c>2021-03-13T06:30:00Z</c>
+            <c>--03-13T01:30:00-05</c>
+            <c>--03-13T02:30:00-05</c>
+            <c>2021-03-14T06:30:00Z</c>
+            <c>--03-14T01:30:00-05</c>
+            <c>--03-14T03:30:00-04</c>
+            <c>2021-03-14T07:30:00Z</c>
+            <c>--03-14T03:30:00-04</c>
+            <c>--03-15T02:30:00-04</c>
+          </texttable>
+        </section>
+
+      </section>
+
+      <section title='Interaction with Extensions to the Fileinto Action'
+               anchor='extensions'>
+        <t>Some tagged arguments defined in extensions to the fileinto
+        action can be used together with the snooze action.
+        The sections below describe these interactions.
+        Tagged arguments in future extensions to the fileinto action
+        need to describe their interaction with the snooze extension,
+        if any.</t>
+
+        <t>When any fileinto extension arguments are used with the
+        snooze extension, the corresponding extension MUST be enabled,
+        and the arguments are defined to have the same syntax,
+        semantics, and treatment as they do with the fileinto action.</t>
+
+        <section title='Imap4flags Extension' anchor='imap4flags'>
+          <t>When the <xref target='RFC5232'>"imap4flags"</xref>
+          extension is enabled in a script, two additional tagged
+          arguments are added to "snooze" that allow manipulating the
+          set of flags on a snoozed message.</t>
+
+          <figure>
+            <artwork><![CDATA[
+AWAKEN-OPTIONS /= ADDFLAGS / REMOVEFLAGS
+
+ADDFLAGS    = ":addflags" string-list
+REMOVEFLAGS = ":removeflags" string-list
+]]></artwork>
+          </figure>
+
+          <t>The optional :addflags and :removeflags arguments are used
+          to specify which <xref target='RFC3501'>IMAP</xref> flags
+          should be added to and/or removed from the set of IMAP flags
+          present on the snoozed message at the time of awakening.
+          Note that depending on the method used to snooze a message,
+          the set of IMAP flags present at the time of awakening may
+          be the empty set.</t>
+
+          <t>This document doesn&apos;t dictate how the Sieve interpreter
+          will set the IMAP flags.
+          In particular, the Sieve interpreter may work as an IMAP
+          client or may have direct access to the mailstore.</t>
+
+          <t>The general requirements for flag handling specified in
+          Section 2 of <xref target='RFC5232' /> MUST be followed.</t>
+        </section>
+
+        <section title='Mailbox Extension' anchor='mailboxext'>
+          <t>This document extends the definition of the
+          <xref target='RFC5490'>":create"</xref> tagged argument so
+          that it can be used with the snooze action.</t>
+
+          <figure>
+            <artwork><![CDATA[
+AWAKEN-OPTIONS /= CREATE
+
+CREATE = ":create"
+           ; MUST NOT be appear unless MAILBOX also appears
+]]></artwork>
+          </figure>
+
+          <t>If the optional ":create" argument is specified with
+          snooze, it instructs the Sieve interpreter to create the
+          target mailbox, if needed, before attempting to file the
+          awakened message into the target mailbox.</t>
+
+        </section>
+
+        <section title='Special-Use Extension' anchor='specialuse'>
+          <t>This document extends the definition of the
+          <xref target='RFC8579'>":specialuse"</xref> tagged argument
+          so that it can be used with the snooze action.</t> 
+
+          <figure>
+            <artwork><![CDATA[
+AWAKEN-OPTIONS /= SPECIAL-USE
+
+SPECIAL-USE = ":specialuse" string
+]]></artwork>
+          </figure>
+
+          <t>If the optional ":specialuse" argument is specified with
+          snooze, it instructs the Sieve interpreter to check whether
+          a mailbox exists with the specific special-use flag assigned
+          to it.  If such a mailbox exists, the awakened message is filed
+          into the special-use mailbox.  Otherwise, the awakened message
+          is filed into the target mailbox.</t>
+
+          <t>If both the optional ":specialuse" and ":create"
+          arguments are specified with snooze, the Sieve interpreter
+          is instructed to create the target mailbox per Section 4.1
+          of <xref target='RFC8579'/>, if needed.</t>
+
+        </section>
+
+        <section title='MailboxID Extension'
+                 anchor='mailboxid'>
+          <t>This document extends the definition of the
+          <xref
+              target='I-D.gondwana-sieve-mailboxid'>":mailboxid"</xref>
+          tagged argument so that it can be used with the snooze action.</t>
+
+          <figure>
+            <artwork><![CDATA[
+AWAKEN-OPTIONS /= MAILBOXID
+
+MAILBOXID = ":mailboxid" string
+]]></artwork>
+          </figure>
+
+          <t>If the optional ":mailboxid" argument is specified with
+          snooze, it instructs the Sieve interpreter to check whether
+          a mailbox exists in the user&apos;s
+          <xref target='RFC2342'>personal namespace </xref> with the
+          specified <xref target='RFC8474'>MAILBOXID</xref>.
+          If such a mailbox exists, the awakened message is filed
+          into that mailbox.  Otherwise, the awakened message
+          is filed into the target mailbox.</t>
+
+          <t>If both the optional ":mailboxid" and ":specialuse"
+          arguments are specified with snooze, the Sieve interpreter
+          is instructed to resolve the mailboxid first.
+          If a mailbox with the specified mailboxid does not exist,
+          then the process in <xref target='specialuse' /> is followed.</t>
+
+        </section>
+
+      </section> <!-- extensions -->
+
+    </section> <!-- snooze -->
+
+    <section title='Mechanics of Snoozing Messages' anchor='snoozing'>
+      <t>The process of snoozing is implementation specific and
+      outside the scope of this document.
+      However, the sections below outline possible methods of snoozing
+      and awakening a message to be filed.</t>
+
+      <section title='SMTP Future Message Release' anchor='futurerelease'>
+        <t>A Sieve interpreter may implement the snooze action by
+        leveraging the
+        <xref target='RFC4865'>SMTP Future Message Release</xref>
+        submission extension.
+        The message would be snoozed by queuing it for redelivery with
+        a release time that corresponds to the calculated awaken time.
+        The target mailbox for the awakened message would need to be
+        encoded into the recipient address or into a message header
+        field. Care MUST be taken to prevent the awakened
+        message from being re-snoozed by the Sieve script and causing
+        a message loop.</t>
+      </section> <!-- futurerelease -->
+
+      <section title='"Snoozed" Mailbox' anchor='snoozedmbox'>
+        <t>A Sieve interpreter may implement the snooze action by
+        leveraging the user&apos;s existing mail store.
+        The message would be snoozed by storing the message in a
+        special "snoozed" mailbox and then moved into the target
+        mailbox at the calculated awaken time.</t>
+
+        <t>If a user&apos;s Sieve script enables the
+        <xref target='RFC5232'>"imap4flags"</xref> extension,
+        and if the "setflag" and/or "addflag" actions have been used to
+        store IMAP flags in the imap4flags internal variable,
+        the Sieve interpreter MAY use the current value of the
+        internal variable as the set of flags to associate with the
+        message when storing it into the "snoozed" mailbox.
+        Note that in this case, the ":addflag" and ":removeflag"
+        tagged arguments to the snooze action operate on this set of
+        flags, but MUST NOT do so until the message is awakened.</t>
+      </section> <!-- snoozedmbox -->
+
+    </section> <!-- snoozing -->
+
+    <section title="Implementation Status" anchor="impl">
+
+      <t>&lt; RFC Editor: before publication please remove this section
+	and the reference to <xref target="RFC7942"/> &gt;</t>
+
+      <t>This section records the status of known implementations of
+	the protocol defined by this specification at the time of
+	posting of this Internet-Draft, and is based on a proposal
+	described in <xref target="RFC7942"/>.  The
+	description of implementations in this section is intended to
+	assist the IETF in its decision processes in progressing
+	drafts to RFCs.  Please note that the listing of any
+	individual implementation here does not imply endorsement by
+	the IETF.  Furthermore, no effort has been spent to verify the
+	information presented here that was supplied by IETF
+	contributors.  This is not intended as, and must not be
+	construed to be, a catalog of available implementations or
+	their features.  Readers are advised to note that other
+	implementations may exist.</t>
+
+	<t>According to <xref target="RFC7942"/>,
+	"this will allow reviewers and working groups to assign due
+	consideration to documents that have the benefit of running
+	code, which may serve as evidence of valuable
+	experimentation and feedback that have made the implemented
+	protocols more mature.  It is up to the individual working
+	groups to use this information as they see fit".</t>
+
+      <section title="Cyrus Server" anchor="cyrus" toc="exclude">
+	<t>The open source <eref
+	target="http://www.cyrusimap.org/">Cyrus Server</eref> project
+        is a highly scalable enterprise mail system which supports
+	Sieve email filtering at the point of final delivery.  This
+        production level Sieve implementation supports all of the
+        requirements described in this document.  This implementation
+        is freely distributable under a BSD style license from
+	<eref target="http://www.cmu.edu/computing/">
+          Computing Services at Carnegie Mellon University</eref>.</t>
+      </section>
+
+    </section> <!-- Implementations -->
+ 
+    <section title='Security Considerations' anchor='security'>
+      <t>Security considerations are discussed in
+      <xref target='RFC5228' />, <xref target='RFC5232' />,
+      <xref target='RFC8579' />, and
+      <xref target='I-D.gondwana-sieve-mailboxid' />.
+      </t>
+
+      <t>It is believed that this extension doesn't introduce any
+      additional security concerns.</t>
+    </section>
+
+    <section title='Privacy Considerations' anchor='privacy'>
+      <t>It is believed that this extension doesn't introduce any
+      privacy considerations beyond those in <xref target='RFC5228'/>.</t>
+    </section>
+
+    <section title='IANA Considerations'>
+
+      <section title="Registration of Sieve Extension">
+	<t>
+	  <list style='empty'>
+	    <t>To: iana@iana.org</t>
+	    <t>Subject: Registration of new Sieve extension</t>
+	    <t>Capability name: snooze</t>
+	    <t>Description: Adds the "snooze" action command to
+            postpone filing a message into a target mailbox until a
+            later point in time.</t>
+	    <t>RFC number: RFC XXXX</t>
+	    <t>Contact address: The Sieve discussion list
+            &lt;sieve@ietf.org&gt;</t>
+	  </list>
+	</t>
+      </section>
+
+    </section> <!-- IANA -->
+<!--
+    <section title='Acknowledgments'>
+      <t>The authors would like to thank the following individuals for
+      contributing their ideas and support for writing this
+      specification: .</t>
+    </section>
+-->
+  </middle>
+
+  <back>
+    <references title='Normative References'>
+      &rfc2119;
+      &rfc2342;
+      &rfc3501;
+      &rfc4234;
+      &rfc5228;
+      &rfc5232;
+      &rfc5490;
+      &rfc8174;
+      &rfc8474;
+      &rfc8579;
+      &mailboxid;
+
+      <reference anchor='tzdb'
+                 target="https://www.iana.org/time-zones">
+        <front>
+          <title>Time Zone Database</title>
+          <author>
+            <organization>Internet Assigned Numbers Authority</organization>
+          </author>
+          <date />
+        </front>
+      </reference>
+    </references>
+
+    <references title='Informative References'>
+      &rfc4865;
+      &rfc5260;
+      &rfc7942;
+    </references>
+<!--
+    <section title="Change History (To be removed by RFC Editor before
+                    publication)">
+      <t>Changes since draft-ietf-extra-sieve-snooze-00:
+      <list style='symbols'>
+      </list>
+      </t>
+    </section>
+-->
+  </back>
+</rfc>
