@@ -245,7 +245,7 @@ emailpropext = *(
       extended here as:
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop  /= *(
+alarmprop  =/ *(
 
               ; the following is OPTIONAL,
               ; but MUST NOT occur more than once
@@ -275,7 +275,7 @@ alarmprop  /= *(
       extended here as:
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop  /= *(
+alarmprop  =/ *(
 
               ; the following is OPTIONAL,
               ; but MAY occur more than once
@@ -309,7 +309,7 @@ alarmprop  /= *(
       syntax below.
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop       /= *(
+alarmprop       =/ *(
 
                    ; the following is OPTIONAL,
                    ; but MUST NOT occur more than once
@@ -460,7 +460,7 @@ ACKNOWLEDGED:20090604T084500Z
       </list>
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop       /= *(
+alarmprop       =/ *(
 
                    ; the following is OPTIONAL,
                    ; but MUST NOT occur more than once
