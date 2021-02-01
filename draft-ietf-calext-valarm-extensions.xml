@@ -147,10 +147,10 @@
       <figure>
         <artwork name="abnf"><![CDATA[
 alarmcext  = "BEGIN" ":" "VALARM" CRLF
-             alarmprop
+             *alarmprop
              "END" ":" "VALARM" CRLF
 
-alarmprop  = *(
+alarmprop  = (
 
              ; the following are REQUIRED,
              ; but MUST NOT occur more than once
@@ -163,16 +163,16 @@ alarmprop  = *(
 
              actionprops /
 
-             ; the following is OPTIONAL,
+             ; the following are OPTIONAL,
              ; and MAY occur more than once
 
              x-prop / iana-prop
 
              )
         
-actionprops = audiopropext / disppropext / emailpropext
+actionprops = *audiopropext / *disppropext / *emailpropext
 
-audiopropext  = *(
+audiopropext  = (
 
                 ; 'duration' and 'repeat' are both OPTIONAL,
                 ; and MUST NOT occur more than once each,
@@ -187,7 +187,7 @@ audiopropext  = *(
         
                 )
 
-disppropext = *(
+disppropext = (
 
               ; the following are REQUIRED,
               ; but MUST NOT occur more than once
@@ -202,7 +202,7 @@ disppropext = *(
         
               )
 
-emailpropext = *(
+emailpropext = (
 
                ; the following are all REQUIRED,
                ; but MUST NOT occur more than once
@@ -225,7 +225,8 @@ emailpropext = *(
         
                attach
         
-               )]]></artwork>
+               )
+]]></artwork>
       </figure></t>
     </section>
 
@@ -245,7 +246,7 @@ emailpropext = *(
       extended here as:
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop  =/ *(
+alarmprop  =/ (
 
               ; the following is OPTIONAL,
               ; but MUST NOT occur more than once
@@ -275,10 +276,10 @@ alarmprop  =/ *(
       extended here as:
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop  =/ *(
+alarmprop  =/ (
 
               ; the following is OPTIONAL,
-              ; but MAY occur more than once
+              ; and MAY occur more than once
 
               related
 
@@ -309,7 +310,7 @@ alarmprop  =/ *(
       syntax below.
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop       =/ *(
+alarmprop       =/ (
 
                    ; the following is OPTIONAL,
                    ; but MUST NOT occur more than once
@@ -364,9 +365,9 @@ alarmprop       =/ *(
             by the following notation:
             <figure>
               <artwork name="abnf"><![CDATA[
-acknowledged = "ACKNOWLEDGED" acknowledgedparam ":" datetime CRLF
+acknowledged = "ACKNOWLEDGED" *acknowledgedparam ":" datetime CRLF
  
-acknowledgedparam  = *(
+acknowledgedparam  = (
 
                      ; the following is OPTIONAL,
                      ; and MAY occur more than once
@@ -460,7 +461,7 @@ ACKNOWLEDGED:20090604T084500Z
       </list>
       <figure>
         <artwork name="abnf"><![CDATA[
-alarmprop       =/ *(
+alarmprop       =/ (
 
                    ; the following is OPTIONAL,
                    ; but MUST NOT occur more than once
@@ -523,9 +524,9 @@ alarmprop       =/ *(
             by the following notation:
             <figure>
               <artwork name="abnf"><![CDATA[
-proximity = "PROXIMITY" proximityparam ":" proximityvalue CRLF
+proximity = "PROXIMITY" *proximityparam ":" proximityvalue CRLF
  
-proximityparam  = *(
+proximityparam  = (
 
                   ; the following is OPTIONAL,
                   ; and MAY occur more than once
@@ -695,6 +696,7 @@ END:VALARM
                     publication)"> 
       <t>Changes in ietf-03: 
       <list style='numbers'>
+        <t>Fixed ABNF to be properly extended.</t>
         <t>Addressed AD review comments from Barry Leiba.</t>
       </list></t>
       <t>Changes in ietf-02: 
