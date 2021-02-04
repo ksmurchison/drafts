@@ -1,64 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-<!DOCTYPE rfc SYSTEM 'rfc2629.dtd'
-[
-<!ENTITY rfc2119 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'>
-<!ENTITY rfc2045 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml'>
-<!ENTITY rfc2046 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2046.xml'>
-<!ENTITY rfc2047 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2047.xml'>
-<!ENTITY rfc2231 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2231.xml'>
-<!ENTITY rfc2342 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2342.xml'>
-<!ENTITY rfc3501 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml'>
-<!ENTITY rfc4234 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4234.xml'>
-<!ENTITY rfc4865 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4865.xml'>
-<!ENTITY rfc5228 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5228.xml'>
-<!ENTITY rfc5229 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5229.xml'>
-<!ENTITY rfc5230 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5230.xml'>
-<!ENTITY rfc5232 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5232.xml'>
-<!ENTITY rfc5234 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml'>
-<!ENTITY rfc5260 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml'>
-<!ENTITY rfc5321 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml'>
-<!ENTITY rfc5322 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5322.xml'>
-<!ENTITY rfc5429 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5429.xml'>
-<!ENTITY rfc5435 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5435.xml'>
-<!ENTITY rfc5436 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5436.xml'>
-<!ENTITY rfc5437 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5437.xml'>
-<!ENTITY rfc5490 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5490.xml'>
-<!ENTITY rfc6131 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6131.xml'>
-<!ENTITY rfc7942 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml'>
-<!ENTITY rfc8174 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml'>
-<!ENTITY rfc8474 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml'>
-<!ENTITY rfc8579 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml'>
-<!ENTITY mailboxid PUBLIC ''
-'http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.gondwana-sieve-mailboxid.xml'>
-]>
+<!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
 
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
@@ -67,7 +9,7 @@
 <?rfc strict="yes"?>
 <rfc category="std" ipr='trust200902'
      updates="5232"
-     docName='draft-ietf-extra-sieve-snooze-00'>
+     docName='draft-ietf-extra-sieve-snooze-01'>
   <front>
     <title abbrev="Sieve Snooze">Sieve Email Filtering: Snooze Extension</title>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
@@ -448,7 +390,7 @@ SPECIAL-USE = ":specialuse" string
                  anchor='mailboxid'>
           <t>This document extends the definition of the
           <xref
-              target='I-D.gondwana-sieve-mailboxid'>":mailboxid"</xref>
+              target='I-D.ietf-extra-sieve-mailboxid'>":mailboxid"</xref>
           tagged argument so that it can be used with the snooze action.</t>
 
           <figure>
@@ -468,11 +410,8 @@ MAILBOXID = ":mailboxid" string
           into that mailbox.  Otherwise, the awakened message
           is filed into the target mailbox.</t>
 
-          <t>If both the optional ":mailboxid" and ":specialuse"
-          arguments are specified with snooze, the Sieve interpreter
-          is instructed to resolve the mailboxid first.
-          If a mailbox with the specified mailboxid does not exist,
-          then the process in <xref target='specialuse' /> is followed.</t>
+          <t>It is an error to specify both ":mailboxid" and
+          ":specialuse" in the same snooze action.</t>
 
         </section>
 
@@ -567,7 +506,7 @@ MAILBOXID = ":mailboxid" string
       <t>Security considerations are discussed in
       <xref target='RFC5228' />, <xref target='RFC5232' />,
       <xref target='RFC8579' />, and
-      <xref target='I-D.gondwana-sieve-mailboxid' />.
+      <xref target='I-D.ietf-extra-sieve-mailboxid' />.
       </t>
 
       <t>It is believed that this extension doesn't introduce any
@@ -609,17 +548,17 @@ MAILBOXID = ":mailboxid" string
 
   <back>
     <references title='Normative References'>
-      &rfc2119;
-      &rfc2342;
-      &rfc3501;
-      &rfc4234;
-      &rfc5228;
-      &rfc5232;
-      &rfc5490;
-      &rfc8174;
-      &rfc8474;
-      &rfc8579;
-      &mailboxid;
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2342.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4234.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5228.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5232.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5490.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-mailboxid.xml"?>
 
       <reference anchor='tzdb'
                  target="https://www.iana.org/time-zones">
@@ -634,18 +573,22 @@ MAILBOXID = ":mailboxid" string
     </references>
 
     <references title='Informative References'>
-      &rfc4865;
-      &rfc5260;
-      &rfc7942;
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4865.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"?>
     </references>
-<!--
+
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
       <t>Changes since draft-ietf-extra-sieve-snooze-00:
       <list style='symbols'>
+        <t>Disallow both :mailboxid and :specialuse in the same snooze
+        action.</t>
+        <t>Updated :mailboxid reference to
+        draft-ietf-extra-sieve-mailboxid</t>
       </list>
       </t>
     </section>
--->
+
   </back>
 </rfc>
