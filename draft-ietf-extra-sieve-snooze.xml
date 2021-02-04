@@ -521,7 +521,14 @@ MAILBOXID = ":mailboxid" string
     <section title='IANA Considerations'>
 
       <section title="Registration of Sieve Extension">
-	<t>
+        <t>This document defines the following new Sieve extension
+        to be added to the registry defined in
+        Section 6.2 of <xref target="RFC5228" /> and located here:
+        <eref target="https://www.iana.org/assignments/sieve-extensions/sieve-extensions.xhtml#sieve-extensions"/>
+        </t>
+
+	<t>IANA are requested to add a capability to the Sieve
+        Extensions registry:
 	  <list style='empty'>
 	    <t>To: iana@iana.org</t>
 	    <t>Subject: Registration of new Sieve extension</t>
@@ -535,15 +542,34 @@ MAILBOXID = ":mailboxid" string
 	  </list>
 	</t>
       </section>
-
-    </section> <!-- IANA -->
 <!--
+      <section title="Registration of IMAP Mailbox Name Attribute">
+        <t>This document defines the following new IMAP mailbox name
+        attribute to be added to the registry defined in
+        Section 6.2 of <xref target="RFC8457" /> and located here:
+        <eref target="https://www.iana.org/assignments/imap-mailbox-name-attributes/imap-mailbox-name-attributes.xhtml#imap-mailbox-name-attributes"/>
+        </t>
+
+	<t>IANA are requested to add an attribute to the IMAP Mailbox
+        Name Attribute registry:
+	  <list style='empty'>
+	    <t>To: iana@iana.org</t>
+	    <t>Subject: Registration of new IMAP Mailbox Name Attribute</t>
+	    <t>Attribute name: Snoozed</t>
+	    <t>Description: Messages that have been snoozed.</t>
+	    <t>Reference: RFC XXXX</t>
+	  </list>
+	</t>
+      </section>
+-->
+    </section> <!-- IANA -->
+
     <section title='Acknowledgments'>
       <t>The authors would like to thank the following individuals for
       contributing their ideas and support for writing this
-      specification: .</t>
+      specification: Ned Freed, Barry Leiba, and Alexey Melnikov.</t>
     </section>
--->
+
   </middle>
 
   <back>
@@ -558,6 +584,7 @@ MAILBOXID = ":mailboxid" string
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml"?>
+<!--      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8457.xml"?>-->
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-mailboxid.xml"?>
 
       <reference anchor='tzdb'
