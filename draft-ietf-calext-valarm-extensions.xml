@@ -38,7 +38,7 @@
 <?rfc tocdepth="2"?>
 <?rfc strict="yes"?>
 <rfc category="std" updates='5545'
-     ipr='trust200902' docName='draft-ietf-calext-valarm-extensions-04'>
+     ipr='trust200902' docName='draft-ietf-calext-valarm-extensions-05'>
   <front>
     <title abbrev="VALARM Extensions">VALARM Extensions for iCalendar</title>
     <author initials="C." surname="Daboo" fullname="Cyrus Daboo">
@@ -566,7 +566,9 @@ END:VALARM
     </section>
 
     <section title='Security Considerations'>
-      <t>VALARMs, if not monitored properly, can be used to "spam"
+      <t>In addition to the security properties of iCalendar
+      (see Section 7 of <xref target="RFC5545"/>),
+      VALARMs, if not monitored properly, can be used to "spam"
       users and/or leak personal information.  For instance, an
       unwanted audio or display alert could be considered spam.  Or an
       email alert could be used to leak a user&apos;s location to a third
@@ -694,6 +696,10 @@ END:VALARM
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)"> 
+      <t>Changes in ietf-04: 
+      <list style='numbers'>
+        <t>Addressed security review comments from Valery Smyslov.</t>
+      </list></t>
       <t>Changes in ietf-03: 
       <list style='numbers'>
         <t>Fixed ABNF to be properly extended.</t>
