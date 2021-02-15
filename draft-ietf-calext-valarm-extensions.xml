@@ -501,7 +501,7 @@ alarmprop       =/ (
             <t hangText="Description:">This property is used to
             indicate that an alarm has a location-based trigger. Its
             value identifies the direction of motion used to trigger
-            the alarm. One or more location values are set using
+            the alarm. One or more location values MUST be set using
             "STRUCTURED-LOCATION" properties.</t>
 
             <t>When the property value is set to "ARRIVE", the alarm
@@ -636,8 +636,14 @@ END:VALARM
       <section title="Proximity Value Registry">
           <t>This document creates a new iCalendar registry for values
           of the "PROXIMITY" property located here:
-          <eref target="https://www.iana.org/assignments/icalendar#proximity-values"/>
+          <eref target="https://www.iana.org/assignments/icalendar#proximity-values"/></t>
+          <t>Additional values MAY be used, provided the process described in
+          Section 8.2.1 of <xref target="RFC5545"/> is used to
+          register them, using the template in Section 8.2.6 of
+          <xref target="RFC5545"/>.
           </t>
+          <t>The following table has been used to initialize the
+          Proximity Value Registry.</t>
         <texttable>
           <ttcol>Value</ttcol>
           <ttcol>Status</ttcol>
@@ -699,6 +705,8 @@ END:VALARM
       <t>Changes in ietf-04: 
       <list style='numbers'>
         <t>Addressed security review comments from Valery Smyslov.</t>
+        <t>Addressed Genart review comments from Roni Even.</t>
+        <t>Added text addressing management of Proximity Value Registry.</t>
       </list></t>
       <t>Changes in ietf-03: 
       <list style='numbers'>
