@@ -351,6 +351,12 @@ REMOVEFLAGS = ":removeflags" string-list
 ]]></artwork>
           </figure>
 
+          <t>If the "setflag" and/or "addflag" actions have been used to
+          store IMAP flags in the imap4flags internal variable,
+          the Sieve interpreter MUST use the current value of the
+          internal variable as the set of flags to associate with the
+          message when storing it into the "snoozed" mailbox.</t>
+
           <t>The optional :addflags and :removeflags arguments are used
           to specify which <xref target='RFC3501'>IMAP</xref> flags
           should be added to and/or removed from the set of IMAP flags
@@ -365,6 +371,33 @@ REMOVEFLAGS = ":removeflags" string-list
 
           <t>The general requirements for flag handling specified in
           Section 2 of <xref target='RFC5232' /> MUST be followed.</t>
+
+          <section title='Example'>
+            <t>The following example leverage the
+            <xref target="RFC5260">Date</xref>,
+            <xref target="RFC5231">Relational</xref>, and
+            <xref target="RFC5232">Imap4flags</xref> extensions
+            to snooze messages received after business hours until the
+            following work day.  Note that the message is marked as
+            important when it is snoozed, and will be marked as unread
+            when it is awakened.</t>
+
+            <figure>
+              <artwork><![CDATA[
+require ["snooze", "imap4flags", "date", "relational"];
+
+if anyof(header :is "from" "boss@example.com",
+         currentdate :is "weekday" "0",
+         currentdate :is "weekday" "6",
+         currentdate :value "ge" "hour" "17") {
+    setflag "\\Important";
+    snooze :removeflags "\\Seen"
+           :weekdays ["1". "2", "3", "4", "5"]
+           :tzid "American/New_York", "09:00";
+}
+]]></artwork>
+            </figure>
+          </section>
         </section>
 
         <section title='Mailbox Extension' anchor='mailboxext'>
@@ -632,6 +665,7 @@ MAILBOXID = ":mailboxid" string
     <references title='Informative References'>
 <!--      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4865.xml"?>-->
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5231.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"?>
     </references>
 
@@ -646,6 +680,8 @@ MAILBOXID = ":mailboxid" string
         <t>Specified that snooze cancels implicit keep.</t>
         <t>Specified that implementations MUST use a "snoozed" mailbox.</t>
         <t>Added registration of \Snoozed Special-Use Attribute.</t>
+        <t>Added example of manipulating IMAP flags at both snooze
+        time and awaken time.</t>
         <t>Miscellaneous editorial changes.</t>
       </list>
       </t>
