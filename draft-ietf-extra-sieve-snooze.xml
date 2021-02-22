@@ -58,7 +58,7 @@
       <t>This document describes the "snooze" extension to the Sieve email
       filtering language.
       The "snooze" extension gives Sieve the ability to postpone the
-      filing of an incoming into a target mailbox until a later point
+      delivery of an incoming into a target mailbox until a later point
       in time.</t> 
     </abstract>
 <!--
@@ -77,12 +77,23 @@
       respond to email messages at the time of their arrival.
       Sometimes it is desirable to have messages appear in a mailbox
       at a more convenient time for the user to act upon them.</t>
-
+<!--
       <t>This document defines a new Sieve action command "snooze"
       that postpones filing a message into a target mailbox until a
       later point in time.
       The capability string associated with this extension is
       "snooze".</t>
+
+      <t>This document defines a new Sieve action command that enables
+      sieve scripts to postpone the filing a message into a target
+      mailbox until a later point in time.
+      The capability string associated with this extension is
+      "snooze".</t>
+-->
+      <t>This document defines an extension to the
+      <xref target='RFC5228'>Sieve language</xref> that enables
+      scripts to postpone the delivery of a message into a target
+      mailbox until a later point in time.</t>
 
     </section>
 
@@ -100,6 +111,11 @@
       here.</t>
 
     </section>  <!-- Intro -->
+
+    <section title='Capability Identifier' anchor='capability'>
+      <t>Sieve implementations that implement this extension have
+      an identifier of "snooze" for use with the capability mechanism.</t>
+    </section>
     
     <section title='Snooze Action' anchor='snooze'>
 
@@ -126,16 +142,30 @@ TZID     = ":tzid" string
 ]]></artwork>
       </figure>
 
+      <t>The "snooze" action cancels the implicit keep and postpones
+      delivery of the message into the specified mailbox at a later
+      point in time.</t>
+
       <t>The snooze action is semantically equivalent to a delayed
       fileinto action (see Section 4.1 of <xref target='RFC5228' />).
       The arguments of the snooze action specify when, where, and
       how the awakened message will be filed.</t>
-
+<!--
       <t>The process of actually snoozing and awakening (delaying the
       filing of) the message is implementation specific and outside
       the scope of this document.
       However, <xref target='snoozing'/> discusses possible
       methods for implementing the snooze action.</t>
+-->
+      <t>A Sieve interpreter MUST implement the snooze action by
+      delivering the message to a special "snoozed" mailbox within its
+      mailstore.
+      IMAP and JMAP servers MUST apply the
+      <xref target="snoozed">"Snoozed"</xref> attribute to this
+      mailbox.
+      The message will reside in this special mailbox until the
+      prescribed awaken time at which it will be moved into the
+      specified target mailbox.</t>
 
       <section title='Mailbox Argument' anchor='mailboxarg'>
         <t>The optional :mailbox argument is used to specify the target
@@ -325,8 +355,7 @@ REMOVEFLAGS = ":removeflags" string-list
           to specify which <xref target='RFC3501'>IMAP</xref> flags
           should be added to and/or removed from the set of IMAP flags
           present on the snoozed message at the time of awakening.
-          Note that depending on the method used to snooze a message,
-          the set of IMAP flags present at the time of awakening may
+          Note the set of IMAP flags present at the time of awakening may
           be the empty set.</t>
 
           <t>This document doesn&apos;t dictate how the Sieve interpreter
@@ -418,7 +447,7 @@ MAILBOXID = ":mailboxid" string
       </section> <!-- extensions -->
 
     </section> <!-- snooze -->
-
+<!--
     <section title='Mechanics of Snoozing Messages' anchor='snoozing'>
       <t>The process of snoozing is implementation specific and
       outside the scope of this document.
@@ -437,7 +466,7 @@ MAILBOXID = ":mailboxid" string
         field. Care MUST be taken to prevent the awakened
         message from being re-snoozed by the Sieve script and causing
         a message loop.</t>
-      </section> <!-- futurerelease -->
+      </section>
 
       <section title='"Snoozed" Mailbox' anchor='snoozedmbox'>
         <t>A Sieve interpreter may implement the snooze action by
@@ -456,10 +485,10 @@ MAILBOXID = ":mailboxid" string
         Note that in this case, the ":addflag" and ":removeflag"
         tagged arguments to the snooze action operate on this set of
         flags, but MUST NOT do so until the message is awakened.</t>
-      </section> <!-- snoozedmbox -->
+      </section>
 
-    </section> <!-- snoozing -->
-
+    </section>
+-->
     <section title="Implementation Status" anchor="impl">
 
       <t>&lt; RFC Editor: before publication please remove this section
@@ -534,16 +563,17 @@ MAILBOXID = ":mailboxid" string
 	    <t>Subject: Registration of new Sieve extension</t>
 	    <t>Capability name: snooze</t>
 	    <t>Description: Adds the "snooze" action command to
-            postpone filing a message into a target mailbox until a
-            later point in time.</t>
+            postpone delivery of a message into a target mailbox until
+            a later point in time.</t>
 	    <t>RFC number: RFC XXXX</t>
 	    <t>Contact address: The Sieve discussion list
             &lt;sieve@ietf.org&gt;</t>
 	  </list>
 	</t>
       </section>
-<!--
-      <section title="Registration of IMAP Mailbox Name Attribute">
+
+      <section title="Registration of IMAP Mailbox Name Attribute"
+               anchor="snoozed">
         <t>This document defines the following new IMAP mailbox name
         attribute to be added to the registry defined in
         Section 6.2 of <xref target="RFC8457" /> and located here:
@@ -561,7 +591,7 @@ MAILBOXID = ":mailboxid" string
 	  </list>
 	</t>
       </section>
--->
+
     </section> <!-- IANA -->
 
     <section title='Acknowledgments'>
@@ -584,7 +614,7 @@ MAILBOXID = ":mailboxid" string
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml"?>
-<!--      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8457.xml"?>-->
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8457.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-mailboxid.xml"?>
 
       <reference anchor='tzdb'
@@ -600,7 +630,7 @@ MAILBOXID = ":mailboxid" string
     </references>
 
     <references title='Informative References'>
-      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4865.xml"?>
+<!--      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4865.xml"?>-->
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"?>
     </references>
@@ -613,6 +643,10 @@ MAILBOXID = ":mailboxid" string
         action.</t>
         <t>Updated :mailboxid reference to
         draft-ietf-extra-sieve-mailboxid</t>
+        <t>Specified that snooze cancels implicit keep.</t>
+        <t>Specified that implementations MUST use a "snoozed" mailbox.</t>
+        <t>Added registration of \Snoozed Special-Use Attribute.</t>
+        <t>Miscellaneous editorial changes.</t>
       </list>
       </t>
     </section>
