@@ -139,7 +139,8 @@
       written, it is hard to extend this by adding, e.g., a new
       property common to all types of alarm. Since many of the
       extensions defined in this document need to extend the base
-      syntax, an alternative form for the base syntax is defined here,
+      syntax, an alternative but equivalent form for the base syntax
+      is defined here, 
       with the goal of simplifying specification of the
       extensions.</t>
 
@@ -147,7 +148,7 @@
       <figure>
         <artwork name="abnf"><![CDATA[
 alarmcext  = "BEGIN" ":" "VALARM" CRLF
-             *alarmprop  *alarmcomp
+             *alarmprop  *alarm-subcomp
              "END" ":" "VALARM" CRLF
 
 alarmprop  = (
@@ -227,14 +228,14 @@ emailpropext = (
         
                )
 
-alarmcomp  = (
+alarm-subcomp = (
 
-             ; the following are OPTIONAL,
-             ; and MAY occur more than once
+                ; the following are OPTIONAL,
+                ; and MAY occur more than once
 
-             x-comp / iana-comp
+                x-comp / iana-comp
 
-             )
+                )
 ]]></artwork>
       </figure></t>
     </section>
@@ -267,7 +268,7 @@ alarmprop  =/ (
       </figure></t>
     </section>
 
-    <section title="Alarm Related To">
+    <section title="Alarm Related To" anchor="RELATED">
       <t>It is often convenient to relate one or more "VALARM"
       components to other "VALARM" components (e.g., see <xref
       target="snooze"/>). This can be accomplished if the "VALARM"
@@ -315,7 +316,9 @@ alarmprop  =/ (
       alarms have been missed.</t>
       <t>To address these needs, this specification adds an
       "ACKNOWLEDGED" property to "VALARM" components to indicate when
-      the alarm was last sent or acknowledged. This is defined by the
+      the alarm was last acknowledged (or sent, if acknowledgement is
+      not possible).
+      This is defined by the
       syntax below.
       <figure>
         <artwork name="abnf"><![CDATA[
@@ -399,6 +402,62 @@ ACKNOWLEDGED:20090604T084500Z
     <section title="Snoozing Alarms" anchor="snooze">
       <t>Users often want to "snooze" an alarm, and this specification
       defines a standard approach to accomplish that.</t>
+
+      <t>To "snooze" an alarm that has been triggered, clients MUST do
+      the following:
+
+      <list style='numbers'>
+        <t>Set the "ACKNOWLEDGED" property
+        (see <xref target="ACKNOWLEDGED"/>) on the triggered alarm.
+        <vspace blankLines="1"/>
+        </t>
+
+        <t>Create a new "VALARM" component (the "snooze" alarm) within
+        the parent component of the triggered alarm
+        (i.e., as a "sibling" component of the triggered alarm).
+
+        <list style='letters'>
+          <t>The new "snooze" alarm MUST be set to trigger
+          at the user's chosen "snooze" interval after the original alarm
+          triggered. Clients SHOULD use an absolute "TRIGGER" property
+          with a "DATE-TIME" value specified in UTC.</t>
+
+          <t>The new "snooze" alarm MUST have a "RELATED-TO" property
+          (see <xref target="RELATED"/>)
+          with a value set to the "UID" property value of the original
+          "VALARM" component that was triggered.
+          If the triggered "VALARM" component does not
+          already have a "UID" property, the client MUST add one. The
+          "RELATED-TO" property added to the new "snooze" alarm MUST
+          include a "RELTYPE" property parameter with a value set to
+          "SNOOZE" (see <xref target='SNOOZE-PARAM'/>).</t>
+        </list>
+        </t>
+
+        <t>When the "snooze" alarm is triggered, the client MUST do the
+        following:
+        
+        <list style='letters'>
+          <t>Reset the "ACKNOWLEDGED" property on the original related
+          alarm.</t>
+
+          <t>If the "snooze" alarm is itself "snoozed", the client MUST
+          remove the "snooze" alarm component, and return to step 2.
+          <vspace blankLines="1"/>
+
+          Otherwise, if the "snooze" alarm is dismissed, the client
+          MUST do one of the following:
+          <list style="symbols">
+            <t>Set the "ACKNOWLEDGED" property on the "snooze" alarm.</t>
+            <t>Remove the "snooze" alarm component.</t>
+          </list>
+          </t>
+        </list>
+        </t>
+
+      </list>
+      </t>
+<!--
       <t>To "snooze" an alarm, clients create a new "VALARM" component
       within the parent component of the "VALARM" that was triggered
       and is being "snoozed" (i.e., as a "sibling" component of the
@@ -423,20 +482,15 @@ ACKNOWLEDGED:20090604T084500Z
         (see <xref target="ACKNOWLEDGED"/>)</t>
         <t>Remove the component</t>
       </list>
-<!--
-      <t>When the "snooze" alarm is triggered and dismissed the client
-      MUST either set the "ACKNOWLEDGED" property
-      (see <xref target="ACKNOWLEDGED"/>) on the corresponding
-      "VALARM" component, or remove the corresponding component.
--->
+
       Alternatively, if the "snooze" alarm
       is itself "snoozed", the client MUST remove the original
       "snooze" alarm and create a new one, with the appropriate
       trigger time and relationship set.</t>
-
+-->
       <t>Note that regardless of the final disposition of the "snooze"
       alarm when triggered, the original "VALARM" component is left
-      unchanged.</t>
+      unchanged other than updating its "ACKNOWLEDGED" property.</t>
 
       <section title="Relationship Type Property Parameter" anchor="SNOOZE-PARAM">
         <t>
@@ -446,7 +500,148 @@ ACKNOWLEDGED:20090604T084500Z
             "snoozed" "VALARM" component to the original alarm that
             the "snooze" was generated for.
         </t>
-        </section>
+      </section>
+
+      <section title="Example">
+        <t>The following example shows the snoozing, re-snoozing, and
+        dismissal of an alarm.  Note that the encompassing
+        VCALENDAR component has been omitted for brevity and that the
+        line-breaks surrounding the VALARM components are for clarity
+        only and would not be present in the actual iCalendar data.</t>
+
+        <t>Assume that we have the following event with an alarm set
+        to trigger 15 minutes before the meeting:
+        <figure>
+          <artwork><![CDATA[
+BEGIN:VEVENT
+CREATED:20210302T151004Z
+UID:AC67C078-CED3-4BF5-9726-832C3749F627
+DTSTAMP:20210302T151704Z
+DTSTART;TZID=America/New_York:20210302T103000
+DTEND;TZID=America/New_York:20210302T113000
+SUMMARY:Meeting
+
+BEGIN:VALARM
+UID:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
+TRIGGER:-PT15M
+DESCRIPTION:Event reminder
+ACTION:DISPLAY
+END:VALARM
+
+END:VEVENT
+]]></artwork>
+        </figure>
+        </t>
+
+        <t>When the alarm is triggered, the user decides to snooze it
+        for 5 minutes.  The client acknowledges the original alarm and
+        creates a new "snooze" alarm as a sibling of, and relates it
+        to, the original alarm (note that both VALARMs reside within the
+        same "parent" VEVENT):
+        <figure>
+          <artwork><![CDATA[
+BEGIN:VEVENT
+CREATED:20210302T151004Z
+UID:AC67C078-CED3-4BF5-9726-832C3749F627
+DTSTAMP:20210302T151704Z
+DTSTART;TZID=America/New_York:20210302T103000
+DTEND;TZID=America/New_York:20210302T113000
+SUMMARY:Meeting
+
+BEGIN:VALARM
+UID:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
+TRIGGER:-PT15M
+DESCRIPTION:Event reminder
+ACTION:DISPLAY
+ACKNOWLEDGED:20210302T151514Z
+END:VALARM
+
+BEGIN:VALARM
+UID:DE7B5C34-83FF-47FE-BE9E-FF41AE6DD097
+TRIGGER;VALUE=DATE-TIME:20210302T152000Z
+RELATED-TO;RELTYPE=SNOOZE:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
+DESCRIPTION:Event reminder
+ACTION:DISPLAY
+END:VALARM
+
+END:VEVENT
+]]></artwork>
+        </figure>
+        </t>
+
+        <t>When the "snooze" alarm is triggered, the user decides to
+        snooze it again for an additional 5 minutes.  The client
+        once again acknowledges the original alarm, removes the triggered
+        "snooze" alarm, and creates another new "snooze" alarm as a
+        sibling of, and relates it to, the original alarm (note the
+        different UID for the new snooze alarm):
+        <figure>
+          <artwork><![CDATA[
+BEGIN:VEVENT
+CREATED:20210302T151004Z
+UID:AC67C078-CED3-4BF5-9726-832C3749F627
+DTSTAMP:20210302T151704Z
+DTSTART;TZID=America/New_York:20210302T103000
+DTEND;TZID=America/New_York:20210302T113000
+SUMMARY:Meeting
+
+BEGIN:VALARM
+UID:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
+TRIGGER:-PT15M
+DESCRIPTION:Event reminder
+ACTION:DISPLAY
+ACKNOWLEDGED:20210302T151514Z
+END:VALARM
+
+BEGIN:VALARM
+UID:87D690A7-B5E8-4EB4-8500-491F50AFE394
+TRIGGER;VALUE=DATE-TIME:20210302T152500Z
+RELATED-TO;RELTYPE=SNOOZE:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
+DESCRIPTION:Event reminder
+ACTION:DISPLAY
+END:VALARM
+
+END:VEVENT
+]]></artwork>
+        </figure>
+        </t>
+
+        <t>When the second "snooze" alarm is triggered, the user
+        decides to dismiss it.  The client acknowledges both the
+        original alarm and the second "snooze" alarm:
+        <figure>
+          <artwork><![CDATA[
+BEGIN:VEVENT
+CREATED:20210302T151004Z
+UID:AC67C078-CED3-4BF5-9726-832C3749F627
+DTSTAMP:20210302T151704Z
+DTSTART;TZID=America/New_York:20210302T103000
+DTEND;TZID=America/New_York:20210302T113000
+SUMMARY:Meeting
+
+BEGIN:VALARM
+UID:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
+TRIGGER:-PT15M
+DESCRIPTION:Event reminder
+ACTION:DISPLAY
+ACKNOWLEDGED:20210302T153100Z
+END:VALARM
+
+BEGIN:VALARM
+UID:87D690A7-B5E8-4EB4-8500-491F50AFE394
+TRIGGER;VALUE=DATE-TIME:20210302T152500Z
+RELATED-TO;RELTYPE=SNOOZE:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
+DESCRIPTION:Event reminder
+ACTION:DISPLAY
+ACKNOWLEDGED:20210302T153100Z
+END:VALARM
+
+END:VEVENT
+]]></artwork>
+        </figure>
+        </t>
+
+      </section>
 
     </section>
 
@@ -459,12 +654,12 @@ ACKNOWLEDGED:20090604T084500Z
       components to indicate when an alarm can be triggered based on
       location.
       <list>
-        <t>A "PROXIMITY" property - indicates that a location based trigger is to
+        <t>"PROXIMITY" property - indicates that a location based trigger is to
         be used and which direction of motion is used for the
         trigger</t>
-        <t>A <xref target="I-D.ietf-calext-eventpub-extensions">
-        "VLOCATION"</xref> component - used to indicate the actual
-        location to trigger off, specified with a URL property containing a
+        <t><xref target="I-D.ietf-calext-eventpub-extensions">
+        "VLOCATION" component(s)</xref> - used to indicate the actual
+        location(s) to trigger off of, specified with a URL property containing a
         <xref target="RFC5870">geo: URI</xref> which allows for two or three
         coordinate values with an optional uncertainty</t>
       </list>
@@ -479,7 +674,7 @@ alarmprop       =/ (
 
                    )
 
-alarmcomp       =/ (
+alarm-subcomp   =/ (
 
                    ; the following is OPTIONAL,
                    ; and MAY occur more than once, but only
@@ -512,26 +707,30 @@ alarmcomp       =/ (
             <t hangText="Conformance:">This property can be specified
             within "VALARM" calendar components.</t>
             <t hangText="Description:">This property is used to
-            indicate that an alarm has a location-based trigger. Its
-            value identifies the direction of motion used to trigger
-            the alarm. One or more location values MUST be set using
-            "STRUCTURED-LOCATION" properties.</t>
+            indicate that an alarm has a location-based trigger.
+            Its value identifies the action that will trigger the alarm.</t>
 
             <t>When the property value is set to "ARRIVE", the alarm
             is triggered when the calendar user agent arrives in the
-            vicinity of any of the specified locations. When set to
+            vicinity of one or more locations.  When set to
             "DEPART", the alarm is triggered when the calendar user
-            agent departs from the vicinity of any specified
-            locations.  Note that the meaning of "vicinity" in this
+            agent departs from the vicinity of one or more locations.
+            Each location which MUST be specified with a "VLOCATION"
+            component.
+            Note that the meaning of "vicinity" in this
             context is implementation defined.</t>
 
             <t>When the property value is set to "CONNECT", the alarm
-            is triggered when the calendar user agent connects to an
-            automobile that is enabled for
+            is triggered when the calendar user agent connects to a
+            automobile to which is has been paired via
             <xref target="BTcore">Bluetooth(R)</xref>.
             When set to "DISCONNECT", the alarm is
-            triggered when the calendar user agent disconnects from an
-            automobile that is enabled for Bluetooth(R).</t>
+            triggered when the calendar user agent disconnects from a
+            automobile to which it has been paired via Bluetooth(R).
+            Note that neither current implementations of proximty
+            alarms nor this document have a mechanism to target a
+            particular automobile.
+            Such a mechanism may be specified in a future extension.</t>
 
             <t hangText="Format Definition:">This property is defined
             by the following notation:
@@ -556,10 +755,10 @@ proximityvalue  = "ARRIVE" / "DEPART" /
         </t>
       </section>
       <section title="Example">
-        <t>The following example shows a "VALARM" component with a
+        <t>The following example shows a VALARM component with a
         proximity trigger set to trigger when the device running the
         calendar user agent leaves the vicinity defined by the
-        structured location property. Note use of the "u=" parameter
+        URL property in the VLOCATION component. Note use of the "u=" parameter
         with the "geo" URI to define the uncertainty of the location
         determination.
             <figure>
@@ -584,9 +783,10 @@ END:VALARM
     <section title='Security Considerations'>
       <t>In addition to the security properties of iCalendar
       (see Section 7 of <xref target="RFC5545"/>),
-      VALARMs, if not monitored properly, can be used to "spam"
+      VALARMs, if not monitored properly, can be used to disturb
       users and/or leak personal information.  For instance, an
-      unwanted audio or display alert could be considered spam.  Or an
+      undesirable audio alert could cause embarassment.  An
+      unwanted display alert could be considered an annoyance.  Or an
       email alert could be used to leak a user&apos;s location to a third
       party or to send unsolicited email to multiple users.
       Therefore, CalDAV clients and servers that accept iCalendar data
@@ -697,7 +897,6 @@ END:VALARM
 
     <references title='Normative References'>
       &rfc2119;
-      &rfc4791;
       &rfc5545;
       &rfc5870;
       &rfc7986;
@@ -706,6 +905,7 @@ END:VALARM
     </references>
 
     <references title='Informative References'>
+      &rfc4791;
       &rfc5546;
 
       <reference anchor="BTcore"
@@ -726,8 +926,16 @@ END:VALARM
                     publication)"> 
       <t>Changes in ietf-05: 
       <list style='numbers'>
-        <t>Updated to use a VLOCATION component rather than a
-        (deprecated) STRUCTURED-LOCATION property for proximity alarms.</t>
+        <t>Updated to use VLOCATION components rather than
+        (deprecated) STRUCTURED-LOCATION properties for proximity
+        alarms.</t>
+        <t>Reorganized and clarified the process of snoozing an alarm
+        and added an example.</t>
+        <t>Noted that there is currently no mechanism for specifying
+        a particular automobile for CONNECT/DISCONNECT proximity alarms.</t>
+        <t>Replaced the term "spam" with new wording in Security
+        Considerations.</t>
+        <t>Addressed IESG comments from Benjamim Kaduk.</t>
         <t>Addressed IESG comments from Robert Wilton.</t>
         <t>Addressed IESG comments Alissa Cooper.</t>
       </list></t>
