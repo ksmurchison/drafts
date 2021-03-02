@@ -38,7 +38,7 @@
 <?rfc tocdepth="2"?>
 <?rfc strict="yes"?>
 <rfc category="std" updates='5545'
-     ipr='trust200902' docName='draft-ietf-calext-valarm-extensions-05'>
+     ipr='trust200902' docName='draft-ietf-calext-valarm-extensions-06'>
   <front>
     <title abbrev="VALARM Extensions">VALARM Extensions for iCalendar</title>
     <author initials="C." surname="Daboo" fullname="Cyrus Daboo">
@@ -547,7 +547,7 @@ proximityvalue  = "ARRIVE" / "DEPART" /
         proximity trigger set to trigger when the device running the
         calendar user agent leaves the vicinity defined by the
         structured location property. Note use of the "u=" parameter
-        with the "geo" URI to define the precision of the location
+        with the "geo" URI to define the uncertainty of the location
         determination.
             <figure>
               <artwork name="abnf"><![CDATA[
@@ -577,6 +577,9 @@ END:VALARM
       from a third party (e.g. via <xref target="RFC5546">iTIP</xref>,
       a subscription feed, or a shared calendar) SHOULD remove all
       VALARMs from the data prior to storing in their calendar system.</t>
+
+      <t>Security considerations related to unique identifiers for VALARMs
+      are discussed in <xref target='uid'/>.</t> 
     </section>
 
     <section title='Privacy Considerations'>
@@ -595,6 +598,9 @@ END:VALARM
       SHOULD give users the option of storing and/or acknowledging the
       alarms on the local device only and not storing the alarm and/or
       acknowledgment on a remote server.</t>
+
+      <t>Privacy considerations related to unique identifiers for VALARMs
+      are discussed in <xref target='uid'/>.</t> 
     </section>
 
     <section title='IANA Considerations'>
@@ -702,6 +708,11 @@ END:VALARM
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)"> 
+      <t>Changes in ietf-05: 
+      <list style='numbers'>
+        <t>Addressed IESG comments from Robert Wilton.</t>
+        <t>Addressed IESG comments Alissa Cooper.</t>
+      </list></t>
       <t>Changes in ietf-04: 
       <list style='numbers'>
         <t>Addressed security review comments from Valery Smyslov.</t>
