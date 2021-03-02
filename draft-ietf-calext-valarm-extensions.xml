@@ -147,7 +147,7 @@
       <figure>
         <artwork name="abnf"><![CDATA[
 alarmcext  = "BEGIN" ":" "VALARM" CRLF
-             *alarmprop
+             *alarmprop  *alarmcomp
              "END" ":" "VALARM" CRLF
 
 alarmprop  = (
@@ -226,6 +226,15 @@ emailpropext = (
                attach
         
                )
+
+alarmcomp  = (
+
+             ; the following are OPTIONAL,
+             ; and MAY occur more than once
+
+             x-comp / iana-comp
+
+             )
 ]]></artwork>
       </figure></t>
     </section>
@@ -446,17 +455,17 @@ ACKNOWLEDGED:20090604T084500Z
       reached. It is also desirable to be able to trigger alarms based
       on location, e.g. when arriving at or departing from a
       particular location.</t>
-      <t>This specification adds the following properties to "VALARM"
+      <t>This specification adds the following elements to "VALARM"
       components to indicate when an alarm can be triggered based on
       location.
       <list>
-        <t>"PROXIMITY" - indicates that a location based trigger is to
+        <t>A "PROXIMITY" property - indicates that a location based trigger is to
         be used and which direction of motion is used for the
         trigger</t>
-        <t><xref target="I-D.ietf-calext-eventpub-extensions">
-          "STRUCTURED-LOCATION"</xref> - used to indicate the actual
-        location to trigger off, specified using a <xref
-        target="RFC5870">geo: URI</xref> which allows for two or three
+        <t>A <xref target="I-D.ietf-calext-eventpub-extensions">
+        "VLOCATION"</xref> component - used to indicate the actual
+        location to trigger off, specified with a URL property containing a
+        <xref target="RFC5870">geo: URI</xref> which allows for two or three
         coordinate values with an optional uncertainty</t>
       </list>
       <figure>
@@ -468,11 +477,15 @@ alarmprop       =/ (
 
                    proximity /
 
+                   )
+
+alarmcomp       =/ (
+
                    ; the following is OPTIONAL,
                    ; and MAY occur more than once, but only
                    ; when a PROXIMITY property is also present
 
-                   structured-location
+                   locationc
 
                    )
 ]]></artwork>
@@ -553,12 +566,15 @@ proximityvalue  = "ARRIVE" / "DEPART" /
               <artwork name="abnf"><![CDATA[
 BEGIN:VALARM
 UID:77D80D14-906B-4257-963F-85B1E734DBB6
-TRIGGER;VALUE=DATE-TIME:19760401T005545Z
 ACTION:DISPLAY
-DESCRIPTION:Remember to buy milk
 TRIGGER;VALUE=DATE-TIME:19760401T005545Z
+DESCRIPTION:Remember to buy milk
 PROXIMITY:DEPART
-STRUCTURED-LOCATION;VALUE=URI:geo:40.443,-79.945;u=10
+BEGIN:VLOCATION
+UID:123456-abcdef-98765432
+NAME:Office
+URL:geo:40.443,-79.945;u=10
+END:VLOCATION
 END:VALARM
 ]]></artwork>
             </figure></t>
@@ -710,6 +726,8 @@ END:VALARM
                     publication)"> 
       <t>Changes in ietf-05: 
       <list style='numbers'>
+        <t>Updated to use a VLOCATION component rather than a
+        (deprecated) STRUCTURED-LOCATION property for proximity alarms.</t>
         <t>Addressed IESG comments from Robert Wilton.</t>
         <t>Addressed IESG comments Alissa Cooper.</t>
       </list></t>
