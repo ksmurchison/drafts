@@ -38,7 +38,7 @@
 <?rfc tocdepth="2"?>
 <?rfc strict="yes"?>
 <rfc category="std" updates='5545'
-     ipr='trust200902' docName='draft-ietf-calext-valarm-extensions-06'>
+     ipr='trust200902' docName='draft-ietf-calext-valarm-extensions-07'>
   <front>
     <title abbrev="VALARM Extensions">VALARM Extensions for iCalendar</title>
     <author initials="C." surname="Daboo" fullname="Cyrus Daboo">
@@ -139,16 +139,18 @@
       written, it is hard to extend this by adding, e.g., a new
       property common to all types of alarm. Since many of the
       extensions defined in this document need to extend the base
-      syntax, an alternative but equivalent form for the base syntax
-      is defined here, 
-      with the goal of simplifying specification of the
-      extensions.</t>
+      syntax, an alternative form for the base syntax is defined here,
+      with the goal of simplifying specification of the extensions
+      while augmenting the existing functionality defined in
+      <xref target="RFC5545"/> to allow for nested sub-components
+      (as required by
+      <xref target="proximity">proximity alarm triggers</xref>).</t>
 
       <t>A "VALARM" calendar component is re-defined by the following notation: 
       <figure>
         <artwork name="abnf"><![CDATA[
 alarmcext  = "BEGIN" ":" "VALARM" CRLF
-             *alarmprop  *alarm-subcomp
+             *alarmprop *alarm-subcomp
              "END" ":" "VALARM" CRLF
 
 alarmprop  = (
@@ -438,7 +440,7 @@ ACKNOWLEDGED:20090604T084500Z
         following:
         
         <list style='letters'>
-          <t>Reset the "ACKNOWLEDGED" property on the original related
+          <t>Update the "ACKNOWLEDGED" property on the original related
           alarm.</t>
 
           <t>If the "snooze" alarm is itself "snoozed", the client MUST
@@ -516,7 +518,7 @@ ACKNOWLEDGED:20090604T084500Z
 BEGIN:VEVENT
 CREATED:20210302T151004Z
 UID:AC67C078-CED3-4BF5-9726-832C3749F627
-DTSTAMP:20210302T151704Z
+DTSTAMP:20210302T151004Z
 DTSTART;TZID=America/New_York:20210302T103000
 DTEND;TZID=America/New_York:20210302T113000
 SUMMARY:Meeting
@@ -543,7 +545,7 @@ END:VEVENT
 BEGIN:VEVENT
 CREATED:20210302T151004Z
 UID:AC67C078-CED3-4BF5-9726-832C3749F627
-DTSTAMP:20210302T151704Z
+DTSTAMP:20210302T151516Z
 DTSTART;TZID=America/New_York:20210302T103000
 DTEND;TZID=America/New_York:20210302T113000
 SUMMARY:Meeting
@@ -580,7 +582,7 @@ END:VEVENT
 BEGIN:VEVENT
 CREATED:20210302T151004Z
 UID:AC67C078-CED3-4BF5-9726-832C3749F627
-DTSTAMP:20210302T151704Z
+DTSTAMP:20210302T152026Z
 DTSTART;TZID=America/New_York:20210302T103000
 DTEND;TZID=America/New_York:20210302T113000
 SUMMARY:Meeting
@@ -590,7 +592,7 @@ UID:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
 TRIGGER:-PT15M
 DESCRIPTION:Event reminder
 ACTION:DISPLAY
-ACKNOWLEDGED:20210302T151514Z
+ACKNOWLEDGED:20210302T152024Z
 END:VALARM
 
 BEGIN:VALARM
@@ -614,7 +616,7 @@ END:VEVENT
 BEGIN:VEVENT
 CREATED:20210302T151004Z
 UID:AC67C078-CED3-4BF5-9726-832C3749F627
-DTSTAMP:20210302T151704Z
+DTSTAMP:20210302T152508Z
 DTSTART;TZID=America/New_York:20210302T103000
 DTEND;TZID=America/New_York:20210302T113000
 SUMMARY:Meeting
@@ -624,7 +626,7 @@ UID:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
 TRIGGER:-PT15M
 DESCRIPTION:Event reminder
 ACTION:DISPLAY
-ACKNOWLEDGED:20210302T153100Z
+ACKNOWLEDGED:20210302T152507Z
 END:VALARM
 
 BEGIN:VALARM
@@ -633,7 +635,7 @@ TRIGGER;VALUE=DATE-TIME:20210302T152500Z
 RELATED-TO;RELTYPE=SNOOZE:8297C37D-BA2D-4476-91AE-C1EAA364F8E1
 DESCRIPTION:Event reminder
 ACTION:DISPLAY
-ACKNOWLEDGED:20210302T153100Z
+ACKNOWLEDGED:20210302T152507Z
 END:VALARM
 
 END:VEVENT
@@ -645,7 +647,7 @@ END:VEVENT
 
     </section>
 
-    <section title="Alarm Proximity Trigger">
+    <section title="Alarm Proximity Trigger" anchor="proximity">
       <t>VALARMs are currently triggered when a specific date-time is
       reached. It is also desirable to be able to trigger alarms based
       on location, e.g. when arriving at or departing from a
@@ -655,8 +657,7 @@ END:VEVENT
       location.
       <list>
         <t>"PROXIMITY" property - indicates that a location based trigger is to
-        be used and which direction of motion is used for the
-        trigger</t>
+        be used and which action is used for the trigger</t>
         <t><xref target="I-D.ietf-calext-eventpub-extensions">
         "VLOCATION" component(s)</xref> - used to indicate the actual
         location(s) to trigger off of, specified with a URL property containing a
@@ -924,6 +925,11 @@ END:VALARM
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)"> 
+      <t>Changes in ietf-06:
+      <list style='numbers'>
+        <t>Corrected timestamps in snooze example.</t>
+        <t>Editorial changes from Benjamim Kaduk.</t>
+      </list></t>
       <t>Changes in ietf-05: 
       <list style='numbers'>
         <t>Updated to use VLOCATION components rather than
