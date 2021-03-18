@@ -41,7 +41,7 @@
 <rfc category="std" ipr='trust200902'
      obsoletes="8536"
      submissionType="independent" consensus="no"
-     docName='draft-murchison-rfc8536bis-00'>
+     docName='draft-murchison-rfc8536bis-01'>
 
   <front>
     <title abbrev="TZif">
@@ -117,8 +117,10 @@
 
       <t>This document obsoletes RFC 8536, providing editorial improvements,
       new details, and errata fixes while keeping full compatibility with
-      the interchange format of RFC 8536. It does not create a new version
-      of the format.  The changes from RFC 8536 are summarized in
+      the interchange format of RFC 8536.
+<!--      It does not create a new version of the format.-->
+      Additionally, a new version of the format is defined.
+      The changes from RFC 8536 are summarized in
       <xref target="changes"/>.</t>
 <!--
       <t>This document obsoletes <xref target="RFC8536"/>, with the
@@ -265,7 +267,7 @@
       <xref target='issues'>Common Interoperability Issues</xref>.</t>
 
       <t>Version 1 files terminate after the version 1 data block.
-      Files from versions 2 and 3 extend the format by appending a second
+      Files from versions 2 and higher extend the format by appending a second
       44-octet version 2+ header, a variable-length version 2+ data block
       containing eight-octet (64-bit) transition times and leap-second
       occurrences, and a variable-length
@@ -284,7 +286,7 @@
 
       <figure title='General Format of TZif Files'>
         <artwork type='inline' align='center'><![CDATA[
-   Version 1       Versions 2 & 3
+   Version 1        Versions 2+
 +-------------+   +-------------+
 |  Version 1  |   |  Version 1  |
 |   Header    |   |   Header    |
@@ -367,6 +369,11 @@
 		  except that it MAY use the TZ string extensions
                   <xref target='tzstrext'>described below</xref>.
 	        </t>
+	        <t hangText="'4' (0x34)">
+		  Version 4 - The file MUST conform to all version 3
+                  requirements, and additionally MAY contain leap
+                  second table truncation and/or expiry.
+	        </t>
 	      </list>
 	    </t>
 	    <t hangText="isutcnt:">
@@ -427,7 +434,7 @@
 
         <t>In the version 1 data block, time values are 32 bits
         (TIME_SIZE = 4 octets).  In the version 2+ data block, present
-        only in version 2 and 3 files, time values are 64 bits
+        only in version 2 and higher files, time values are 64 bits
         (TIME_SIZE = 8 octets).</t>
 
         <t>The data block is structured as follows
@@ -590,6 +597,28 @@
 		  in the first leap-second record (or for all
 		  timestamps if there are no leap-second records).
                 </t>
+<!--
+     corr(ection):  A four-octet signed integer specifying the value of
+-         LEAPCORR on or after the occurrence.  The correction value in
+-         the first leap-second record, if present, MUST be either one
+-         (1) or minus one (-1).  The correction values in adjacent leap-
+-         second records MUST differ by exactly one (1).  The value of
++         LEAPCORR on or after the occurrence.  If timecnt and leapcnt are
++         both nonzero and the first transition time equals the first
++         leap-second occurrence, LEAPCORR is unspecified for timestamps
++         before the first transition time (this indicates the TZif file was
++         truncated at the start; see Section 5.1).  Otherwise, the value of
+          LEAPCORR is zero for timestamps that occur before the
+          occurrence time in the first leap-second record (or for all
+-         timestamps if there are no leap-second records).
++         timestamps if there are no leap-second records) and the correction
++         value in the first leap-second record, if present, MUST be either one
++         (1) or minus one (-1).  The correction values in adjacent leap-
++         second records MUST differ by exactly one (1), except that
++         if there are two or more leap-second records the correction
++         value of the last record MAY be the same as the second-to-last
++         record, to indicate the expiration time of the leap-second table.
+-->
               </list>
 	    </t>
 	    <t hangText="standard/wall indicators:" anchor="stdwall">
@@ -686,7 +715,7 @@
               <xref
                   target="POSIX"/> with ASCII encoding, possibly utilizing
               <xref target='tzstrext'>extensions described below</xref>
-              in version 3 files.
+              in version 3 and higher files.
 	      If the string is empty, the corresponding information is
 	      not available.
 	      If the string is nonempty and one or more transitions
@@ -702,12 +731,12 @@
 	  </list>
         </t>
 
-	<t>The TZif footer is present only in version 2 and 3 files,
+	<t>The TZif footer is present only in version 2 and higher files,
 	as the obsolescent version 1 format was designed before the
 	need for a footer was apparent.</t>
 	
         <section anchor='tzstrext' title='TZ String Extensions'>
-	  <t>The TZ string in a version 3 TZif file MAY use the
+	  <t>The TZ string in a version 3 or higher TZif file MAY use the
 	  following extensions to POSIX TZ strings.
 	  These extensions are described using the terminology of
             Section 8.3 of the "Base Definitions" volume of 
@@ -798,7 +827,7 @@
 	This is for compatibility with POSIX requirements for
 	time zone abbreviations.</t>
 
-        <t>When reading a version 2 or 3 file, implementations
+        <t>When reading a version 2 or higher file, implementations
 	SHOULD ignore the version 1 header and data block except for
         the purpose of skipping over them.</t>
 
@@ -1253,7 +1282,7 @@ EST5EDT,M3.2.0,M11.1.0
         32 bits.</t>
 	
 	<t>Some readers designed for version 2 might mishandle
-        timestamps after a version 3 file's last transition, because
+        timestamps after a version 3 or higher file's last transition, because
         they cannot parse extensions to POSIX in the TZ-like string.
 	As a partial workaround, a writer can output more transitions
         than necessary, so that only far-future timestamps are
