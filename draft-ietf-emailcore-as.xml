@@ -16,6 +16,10 @@
 <!ENTITY rfc2045 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml">
 <!ENTITY rfc2821 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2821.xml">
 <!ENTITY rfc2822 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2822.xml">
+<!ENTITY ID.RFC5321bis PUBLIC ''
+ "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml">
+<!ENTITY ID.RFC5322bis PUBLIC ''
+ "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml">
 <!--
  &lt;!ENTITY rfc1425 PUBLIC ''
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1425.xml"&gt;
@@ -104,7 +108,7 @@
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
 			 surname="Klensin" role="editor">
-	  <organization/>
+      <organization/>
       <address>
         <postal>
           <street>1770 Massachusetts Ave, Ste 322</street>
@@ -115,233 +119,229 @@
         <phone>+1 617 245 1457</phone>
         <email>john-ietf@jck.com</email>
       </address>
-	</author>
+    </author>
 
-	<author initials="K." surname="Murchison"
-			fullname="Kenneth Murchison" role="editor"> 
-	   <organization abbrev="Fastmail">Fastmail US LLC</organization>
-	   <address>
-		  <postal>
-			 <street>1429 Walnut Street - Suite 1201</street>
-			 <city>Philadelphia</city> <region>PA</region>
-			 <code>19102</code> <country>USA</country>
-		  </postal>
-		  <email>murch@fastmailteam.com</email>
-	   </address>
-	</author>
+    <author initials="K." surname="Murchison"
+	    fullname="Kenneth Murchison" role="editor"> 
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+	<postal>
+	  <street>1429 Walnut Street - Suite 1201</street>
+	  <city>Philadelphia</city> <region>PA</region>
+	  <code>19102</code> <country>USA</country>
+	</postal>
+	<email>murch@fastmailteam.com</email>
+      </address>
+    </author>
 	
-	<author initials="E." surname="Sam" fullname="E Sam" role="editor">
-	   <organization/>
-	  <address>
-		<email>winshell64@gmail.com </email>
-	  </address>
-	</author>
+    <author initials="E." surname="Sam" fullname="E Sam" role="editor">
+      <organization/>
+      <address>
+	<email>winshell64@gmail.com </email>
+      </address>
+    </author>
 
     <date />
 
     <!-- Meta-data Declarations -->
     <area>ART</area>
-	<workgroup> EMAILCORE </workgroup>	
+    <workgroup> EMAILCORE </workgroup>	
 
     <!-- WG name at the upper left corner of the doc,
          IETF fine for individual submissions.  You can also
          omit this element in which case it defaults to "Network Working Group" -
          a hangover from the ancient history of the IETF!
-    <workgroup>Network Working Group</workgroup>   -->
+         <workgroup>Network Working Group</workgroup>   -->
 
-	<!-- You can add <keyword/> elements here.  They will be incorporated into HTML output
+    <!-- You can add <keyword/> elements here.  They will be incorporated into HTML output
          files in a meta tag but they have no effect on text or nroff output. -->
-	<!-- <keyword>Text</keyword> (as many of those elements as needed -->
+    <!-- <keyword>Text</keyword> (as many of those elements as needed -->
 
 	
     <abstract>
-      <t>Electronic mail is one of the oldest Internet applications
-		 that is still in very active use.  While the basic protocols
-		 and formats for mail transport and message formats have
-		 evolved slowly over the years, events and thinking in more
-		 recent years have supplemented those core protocols with
-		 additional features and suggestions for their use.  This
-		 Applicability Statement describes the relationship among many
-		 of those protocols and provides guidance and makes
-		 recommendations for the use of features of the core
-		 protocols.  </t> 
+      <t> Electronic mail is one of the oldest Internet
+      applications that is still in very active use.  While the
+      basic protocols and formats for mail transport and message
+      formats have evolved slowly over the years, events and
+      thinking in more recent years have supplemented those core
+      protocols with additional features and suggestions for their
+      use.
+      This Applicability Statement describes the relationship
+      among many of those protocols and provides guidance and
+      makes recommendations for the use of features of the core
+      protocols.</t>
     </abstract>
-<!--
-	<note title="Note on draft-ietf-emailcore-as-01">
-		  <t> This version is provided as a document management
-			 convenience to update the author list and make an
-			 un-expired version available to the WG.  There are no
-			 substantive changes from the prior version. </t>
-	</note>
--->	
   </front>
 
   <middle>
     <section title="Introduction">
       <t> In its current form, this draft is a placeholder and
-		 beginning of an outline 
-	     for the Applicability Statement that has been discussed
-	     as a complement for proposed revisions of the base
-		 protocol specifications for SMTP <xref target="RFC5321"/>
-		 (being revised as
-		 <xref target="ID.RFC5321bis">ID.RFC5321bis</xref>)
-		 and Internet Message Format <xref target="RFC5322"/>
-		 (being revised as
-		 <xref target="ID.RFC5322bis">ID.RFC5322bis</xref>).
-		 Among other things, it is expected to capture topics that a
-		 potential WG concludes are important but that should not
-		 become part of those core documents.</t>
+      beginning of an outline for the Applicability Statement that has
+      been discussed as a complement for proposed revisions of the
+      base protocol specifications for SMTP <xref target="RFC5321"/>
+      (being revised as <xref target="I-D.ietf-emailcore-rfc5321bis"/>)
+      and Internet Message Format <xref target="RFC5322"/>
+      (being revised as <xref target="I-D.ietf-emailcore-rfc5322bis"/>).
+      Among other things, it is expected to capture topics that a
+      potential WG concludes are important but that should not become
+      part of those core documents.</t>
 	  
-	  <t> As discussed in <xref target="RFC2026"> RFC 2026</xref>,
-		   <!-- Section 3.2 and maybe 7 if we can settle how to reference those -->
-		 <list hangIndent="5" style="empty">
-		 <t>"An Applicability Statement specifies how, and under what
-			circumstances, one or more TSs may be applied to support
-			a particular Internet capability."</t></list>
-		 That form of a standards track document is appropriate
-		 because one of the roles of such a document is to explain the
-		 relationship among technical specifications, describe how they
-		 are used together, and make statements about what is
-		 "required, recommended, or elective".</t>
+      <t> As discussed in <xref target="RFC2026"/>,
+      <!-- Section 3.2 and maybe 7 if we can settle how to reference those -->
+      <list hangIndent="5" style="empty">
+	<t>"An Applicability Statement specifies how, and under what
+	circumstances, one or more TSs may be applied to support
+	a particular Internet capability."</t></list>
+	That form of a standards track document is appropriate
+	because one of the roles of such a document is to explain the
+	relationship among technical specifications, describe how they
+	are used together, and make statements about what is
+	"required, recommended, or elective".</t>
 	  
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in
-	  <xref target="RFC2119">RFC 2119</xref> and
-	  <xref target="RFC8174">RFC 8174</xref>.</t>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in
+	<xref target="RFC2119"/> and
+	<xref target="RFC8174"/>.</t>
 
-    </section>
+      </section>
 
-	<section title="Applicability of Some SMTP Provisions">
-	   <t> Over the years since RFC 5321 was published in October
-		  2008, usage of SMTP has evolved, machines and 
-		  network speeds have increased, and the frequency with which
-		  SMTP senders and receivers have to be prepared to deal with
-		  systems that are disconnected from the Internet for long
-		  periods or that require many hops to reach has decreased.
-		  During the same period, the IETF
-		  <!-- Could say "Internet" above, but I'm not sure it would be true -->
-		  has become much more sensitive to privacy and security
-		  issues and the need to be more resistant or robust against
-		  spam and other attacks.  In addition SMTP (and Message
-		  Format) extensions have been introduced that are expected to
-		  evolve the Internet's mail system to better accommodate
-		  environments in which Basic Latin Script is not the
-		  norm.</t>
-	   <t> This section describes adjustments
-		  that may be appropriate for SMTP under various circumstances
-		  and discusses the applicability of other protocols that
-		  represent newer work or that are intended to deal with
-		  relatively newer issues.</t>
+      <section title="Applicability of Some SMTP Provisions">
+	<t> Over the years since RFC 5321 was published in October
+	2008, usage of SMTP has evolved, machines and 
+	network speeds have increased, and the frequency with which
+	SMTP senders and receivers have to be prepared to deal with
+	systems that are disconnected from the Internet for long
+	periods or that require many hops to reach has decreased.
+	During the same period, the IETF
 
-           <section title="Use of Address Literals">
-             <t> The <spanx style='verb'>address-literal</spanx> ABNF
-             non-terminal is used in 
-             various places in <xref target="ID.RFC5321bis" /> grammar
-             however, an <spanx style='verb'>address-literal</spanx>
-             (or 'localhost') as the argument to EHLO command or the
-             <spanx style='verb'>Domain</spanx> part of the
-             <spanx style='verb'>Mailbox</spanx> argument to the MAIL
-             FROM command is quite likely to result in the message
-             being rejected as a matter of policy at many sites, since
-             they are deemed to be signs of at best a misconfigured
-             server, and at worst either a compromised host or a
-             server that's intentionally configured to hide its
-             identity. </t>
-           </section>
+	<!-- Could say "Internet" above, but I'm not sure it would be true -->
 
-           <section
-               title="Handling of the Domain Argument to the EHLO Command">
-             <t> If the <spanx style='verb'>Domain</spanx> argument to
-             the EHLO command does not have an address record in the
-             DNS that matches the IP address of the client, the SMTP
-             server may refuse any mail from the client as part of
-             established anti-abuse practice.
-             Operational experience has demonstrated that the lack of
-             a matching address record for the the domain name
-             argument is at best an indication of a poorly-configured
-             MTA, and at worst that of an abusive host. </t>
-           </section>
-	</section>
+	has become much more sensitive to privacy and security
+	issues and the need to be more resistant or robust against
+	spam and other attacks.  In addition SMTP (and Message
+	Format) extensions have been introduced that are expected to
+	evolve the Internet's mail system to better accommodate
+	environments in which Basic Latin Script is not the
+	norm.</t>
 
-	<section title="Applicability of Message Format Provisions">
-	   <t>Placeholder:
-		  <vspace blankLines="0"/>
-		  I am not sure what, if anything, goes here.  If nothing
-		  does, we drop the section.</t>
-	   <t> <cref>... Actual content to be supplied after WG
-		  consideration.</cref> </t>
-	</section>
-    <section title="Use of empty quote strings in email messages">
-       <t>
-         The <spanx style='verb'>quoted-string</spanx> ABNF
-         non-terminal is used in various places in rfc5322bis
-         grammar.
-         While it allows for empty quoted string, such construct is
-         going to cause interoperability issues when used in certain
-         header fields.
-         In particular, use of empty quoted  strings is NOT
-         RECOMMENDED in "received-token" (a component of a Received
-         header field), "keywords" (a component of a Keywords header
-         field) and "local-part" (left hand side of email addresses).
-         Use of empty quoted strings is in particular problematic in
-         the "local-part".
-         For example, all of the following email addresses are non
-         interoperable: 
-       </t>
-      <t>"".bar@example.com </t>
-      <t>foo.""@example.net</t>
-      <t>""@example.com</t>
-      <t>Use of empty quoted strings is fine in "display-name".</t>
-    </section>
+	<t> This section describes adjustments
+	that may be appropriate for SMTP under various circumstances
+	and discusses the applicability of other protocols that
+	represent newer work or that are intended to deal with
+	relatively newer issues.</t>
 
-	<section title="MIME and Its Implications">
-	   <t>When the work leading to the original version of the
-		  MIME specification was 
-		  completed in 1992 <xref target="RFC1341"/>, the intention
-		  was that it be kept separate from the specification for
-		  basic mail headers in <xref target="RFC0822">RFC 822</xref>.
-		  That plan was carried forward into RFC 822's successors,
-		  <xref target="RFC2822">RFC 2822</xref> and
-		  <xref target="RFC5322">RFC 5322</xref> and the successors of
-		  that original MIME specification including
-		  <xref target="RFC2045"> RFC 2045</xref>. The decision to do
-		  so was different from the one made for SMTP, for which the
-		  core specification was changed to allow for the extension
-		  mechanism <xref target="RFC1425"/> which was then
-		  incorporated into RFC 5321 and its
-		  predecessor <xref target="RFC2821"/>.</t>
-	   <t>Various uses of MIME have become nearly ubiquitous in
-		  contemporary email while others may have fallen into disuse
-		  or been repurposed from the intent of their original
-		  design.</t>
-	   <t> It may be appropriate to make some clear statements about
-		  the applicability of MIME and its features.</t>
-    </section>
+        <section title="Use of Address Literals">
+          <t> The <spanx style='verb'>address-literal</spanx> ABNF
+          non-terminal is used in various places in
+          <xref target="I-D.ietf-emailcore-rfc5321bis" /> grammar
+          however, an <spanx style='verb'>address-literal</spanx>
+          (or 'localhost') as the argument to EHLO command or the
+          <spanx style='verb'>Domain</spanx> part of the
+          <spanx style='verb'>Mailbox</spanx> argument to the MAIL
+          FROM command is quite likely to result in the message
+          being rejected as a matter of policy at many sites, since
+          they are deemed to be signs of at best a misconfigured
+          server, and at worst either a compromised host or a
+          server that's intentionally configured to hide its
+          identity. </t>
+        </section>
 
-	<section title="Other Stuff">
-	    <t> It is fairly clear that there will be things that do not
-		   fit into the sections outlined above.  As one example, if
-		   the IETF wants to say something specific about signatures
-		   over headers or what (non-trace) headers may reasonably be
-		   altered in transit, that may be more appropriate to other
-		   sections than to any of the three suggested above.</t>
-	</section>
+        <section
+            title="Handling of the Domain Argument to the EHLO Command">
+          <t> If the <spanx style='verb'>Domain</spanx> argument to
+          the EHLO command does not have an address record in the
+          DNS that matches the IP address of the client, the SMTP
+          server may refuse any mail from the client as part of
+          established anti-abuse practice.
+          Operational experience has demonstrated that the lack of
+          a matching address record for the the domain name
+          argument is at best an indication of a poorly-configured
+          MTA, and at worst that of an abusive host. </t>
+        </section>
+      </section>
+
+      <section title="Applicability of Message Format Provisions">
+	<t>Placeholder:
+	<vspace blankLines="0"/>
+	I am not sure what, if anything, goes here.  If nothing
+	does, we drop the section.</t>
+	<t> <cref>... Actual content to be supplied after WG
+	consideration.</cref> </t>
+      </section>
+
+      <section title="Use of empty quote strings in email messages">
+        <t>
+          The <spanx style='verb'>quoted-string</spanx> ABNF
+          non-terminal is used in various places in rfc5322bis
+          grammar.
+          While it allows for empty quoted string, such construct is
+          going to cause interoperability issues when used in certain
+          header fields.
+          In particular, use of empty quoted  strings is NOT
+          RECOMMENDED in "received-token" (a component of a Received
+          header field), "keywords" (a component of a Keywords header
+          field) and "local-part" (left hand side of email addresses).
+          Use of empty quoted strings is in particular problematic in
+          the "local-part".
+          For example, all of the following email addresses are non
+          interoperable: 
+        </t>
+        <t>"".bar@example.com </t>
+        <t>foo.""@example.net</t>
+        <t>""@example.com</t>
+        <t>Use of empty quoted strings is fine in "display-name".</t>
+      </section>
+
+      <section title="MIME and Its Implications">
+	<t>When the work leading to the original version of the
+	MIME specification was 
+	completed in 1992 <xref target="RFC1341"/>, the intention
+	was that it be kept separate from the specification for
+	basic mail headers in <xref target="RFC0822">RFC 822</xref>.
+	That plan was carried forward into RFC 822's successors,
+	<xref target="RFC2822"/> and
+	<xref target="RFC5322"/> and the successors of
+	that original MIME specification including
+	<xref target="RFC2045"/>. The decision to do
+	so was different from the one made for SMTP, for which the
+	core specification was changed to allow for the extension
+	mechanism <xref target="RFC1425"/> which was then
+	incorporated into RFC 5321 and its predecessor <xref
+        target="RFC2821"/>.</t>
+
+        <t>Various uses of MIME have become nearly ubiquitous in
+	contemporary email while others may have fallen into disuse
+	or been repurposed from the intent of their original design.</t>
+        <t> It may be appropriate to make some clear statements about
+        the applicability of MIME and its features.</t> 
+      </section>
+
+      <section title="Other Stuff">
+	<t> It is fairly clear that there will be things that do not
+	fit into the sections outlined above.  As one example, if
+	the IETF wants to say something specific about signatures
+	over headers or what (non-trace) headers may reasonably be
+	altered in transit, that may be more appropriate to other
+        sections than to any of the three suggested above.</t>
+      </section>
 	   
 
-    <section anchor="Acknowledgments" title="Acknowledgments">
-        <t>The Emailcore group arose out of discussions on the ietf-smtp group over changes
-            and additions that should be made to the core email protocols.
-            It was agreed upon that it was time to create a working group that would fix
-            many potential errors and opportunities for misunderstandings within the RFCs</t>
-    </section>
+      <section anchor="Acknowledgments" title="Acknowledgments">
+        <t>The Emailcore group arose out of discussions on the
+        ietf-smtp group over changes and additions that should be made
+        to the core email protocols.
+        It was agreed upon that it was time to create a working group
+        that would fix many potential errors and opportunities for
+        misunderstandings within the RFCs.</t>
+      </section>
 
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" title="IANA Considerations">
       <t>This memo includes no requests to or actions for IANA.  The
-		 IANA registries associated with the protocol specifications
-		 it references are specified in their respective documents.</t>
+      IANA registries associated with the protocol specifications
+      it references are specified in their respective documents.</t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -378,79 +378,40 @@
 
     <references title="Informative References">
 
-	   &rfc1341;  <!-- MIME -->
-	   &rfc0822;
-	   &rfc2822;
-	   &rfc2821;
+      &rfc1341;  <!-- MIME -->
+      &rfc0822;
+      &rfc2822;
+      &rfc2821;
 
- 	   &rfc5321;
-	   &rfc5322;
+      &rfc5321;
+      &rfc5322;
 
-	  <reference anchor="RFC1425"
-				 target="https://www.rfc-editor.org/info/rfc1425">
-		 <!-- as of 2020-03-20 bibxml entry does not work - see Entity above -->
+      &ID.RFC5321bis;
+      &ID.RFC5322bis;
+
+      <reference anchor="RFC1425"
+		 target="https://www.rfc-editor.org/info/rfc1425">
+	<!-- as of 2020-03-20 bibxml entry does not work - see Entity above -->
         <front>
           <title>SMTP Service Extensions</title>
           <author initials="J." surname="Klensin" fullname="J. Klensin">
             <organization> WG Chair </organization> <!-- faked -->
           </author>
-		  <author initials="N." surname="Freed" fullname="N. Freed" role="editor">
-		    <organization/>
-		  </author>
-		  <author initials="M." surname="Rose" fullname="M. Rose">
-		    <organization/>
-		  </author>
-		  <author initials="E." surname="Stefferud" fullname="E. Stefferud">
-		    <organization/>
-		  </author>
-		  <author initials="D." surname="Crocker" fullname="D. Crocker">
-		    <organization/>
-		  </author>
+	  <author initials="N." surname="Freed" fullname="N. Freed" role="editor">
+	    <organization/>
+          </author>
+          <author initials="M." surname="Rose" fullname="M. Rose">
+            <organization/>
+          </author>
+          <author initials="E." surname="Stefferud" fullname="E. Stefferud">
+	    <organization/>
+	  </author>
+	  <author initials="D." surname="Crocker" fullname="D. Crocker">
+	    <organization/>
+          </author>
           <date year="1993" month="February"/>
-		</front>
-	  </reference>
-
-	  <reference anchor="ID.RFC5321bis"
-				 target="https://datatracker.ietf.org/doc/draft-klensin-rfc5321bis/">
-		 <front>
-			<title>Simple Mail Transfer Protocol</title>
-			<author fullname="John C Klensin" initials="J.C."
-					 surname="Klensin">      <organization/> 
-			  <address />
-			</author>
-			<date year="2021" month="Feburary" day="20"/>
-		 </front>
-	  </reference>
-      <reference anchor="RFC6648"
-                 target="https://www.rfc-editor.org/info/rfc6648">
-         <!-- as of 2020-03-20 bibxml entry does not work - see Entity above -->
-        <front>
-          <title>Deprecating the "X-" Prefix and Similar Constructs in Application Protocols</title>
-          <author initials="P." surname="Saint-Andre" fullname="P. Saint-Andre">
-            <organization> WG Chair </organization> <!-- faked -->
-          </author>
-          <author initials="N." surname="Nottingham" fullname="N. Nottingham" role="editor">
-            <organization/>
-          </author>
-          <author initials="D." surname="Crocker" fullname="D. Crocker">
-            <organization/>
-          </author>
-          <date year="2012" month="June"/>
         </front>
       </reference>
-
-
-	  <reference anchor="ID.RFC5322bis"
-				 target="https://datatracker.ietf.org/doc/draft-resnick-rfc5322bis/">
-		 <front>
-			<title>Internet Message Format</title>
-			<author initials="P." surname="Resnick">
-			   <organization>  Episteme </organization>
-			   <address />
-			</author>
-			<date year="2021" month="March" day="29"/>
-		 </front>
-	  </reference>
 	  
       <!-- Right back at the beginning we defined an entity which (we asserted) would contain
              XML needed for a reference... this is where we use it. -->
@@ -475,50 +436,53 @@
 
 <!--   Sections below here become  Appendices.  -->
 	
-	<section title="Change Log" anchor="ChangeLog">
-	    <t>RFC Editor: Please remove this appendix before
-	publication.</t>
+    <section title="Change Log" anchor="ChangeLog">
+      <t>RFC Editor: Please remove this appendix before publication.</t>
 
-	<section title="Changes from draft-klensin-email-core-as-00 (2020-03-30) to
-			 draft-ietf-emailcore-as-00">
-          <t><list style="symbols">
-			 <t> Change of filename, metadata, and date to reflect
-				transition to WG document for new emailcore WG.  No
-				other substantive changes </t>
-		  </list></t>
-	</section>
+      <section title="Changes from draft-klensin-email-core-as-00
+                      (2020-03-30) to draft-ietf-emailcore-as-00">
+        <t><list style="symbols">
+	  <t> Change of filename, metadata, and date to reflect
+	  transition to WG document for new emailcore WG.  No
+	  other substantive changes </t>
+	</list></t>
+      </section>
 	
-	<section title="Changes from draft-ietf-emailcore-as-00 (2020-10-06) to -01">
-          <t><list style="symbols">
-			 <t>Added co-authors (list is in alphabetical order for
-				the present). </t>
-			 <t> Updated references to 5321bis and 5322bis. </t>
-			 <t> Added note at top, "This version is provided as a
-				document management convenience to update the author
-				list and make an un-expired version available to the
-				WG.  There are no substantive changes from the prior
-				version", which should be removed for version -02.</t>
-		  </list></t>
-	</section>
+      <section
+          title="Changes from draft-ietf-emailcore-as-00 (2020-10-06) to -01">
+        <t><list style="symbols">
+	  <t>Added co-authors (list is in alphabetical order for
+	  the present). </t>
+	  <t> Updated references to 5321bis and 5322bis. </t>
+	  <t> Added note at top, "This version is provided as a
+	  document management convenience to update the author
+	  list and make an un-expired version available to the
+	  WG.  There are no substantive changes from the prior
+	  version", which should be removed for version -02.</t>
+	</list></t>
+      </section>
 
-        <section title="Changes from draft-ietf-emailcore-as-01 (2021-04-09) to -02">
-          <t><list style="symbols">
-            <t> Added new editors and also added some issues the emailcore group will be dealing with. </t>
-            <t> Added reference to RFC 6648.</t>
-          </list></t>
-        </section>
+      <section
+          title="Changes from draft-ietf-emailcore-as-01 (2021-04-09) to -02">
+        <t><list style="symbols">
+          <t> Added new editors and also added some issues the
+          emailcore group will be dealing with. </t>
+          <t> Added reference to RFC 6648.</t>
+        </list></t>
+      </section>
 
-        <section title="Changes from draft-ietf-emailcore-as-02 (2021-08-XX) to -03">
-          <t><list style="symbols">
-            <t>Moved discussion of address-literals (issue #1) and
-            domain names in EHLO (issue #19) under SMTP Provisions
-            section</t>
-            <t> Marked all authors as editors. </t>
-            <t> Miscellaneous editorial changes. </t>
-          </list></t>
-        </section>
+      <section
+          title="Changes from draft-ietf-emailcore-as-02 (2021-08-XX) to -03">
+        <t><list style="symbols">
+          <t>Moved discussion of address-literals (issue #1) and
+          domain names in EHLO (issue #19) under SMTP Provisions
+          section</t>
+          <t> Marked all authors as editors. </t>
+          <t> Miscellaneous editorial changes. </t>
+        </list></t>
+      </section>
 	
-	</section>
+    </section>
 
   </back>
 </rfc>
