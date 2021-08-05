@@ -250,10 +250,8 @@
 
         <section
             title="Handling of the Domain Argument to the EHLO Command">
-          <t> For SMTP connections over the public internet,
-          if the <spanx style='verb'>Domain</spanx> argument to
-          the EHLO command is 'localhost' or
-          does not have an address record in the
+          <t> If the <spanx style='verb'>Domain</spanx> argument to
+          the EHLO command does not have an address record in the
           DNS that matches the IP address of the client, the SMTP
           server may refuse any mail from the client as part of
           established anti-abuse practice.
