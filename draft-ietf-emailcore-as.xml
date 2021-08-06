@@ -16,6 +16,7 @@
 <!ENTITY rfc2045 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml">
 <!ENTITY rfc2821 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2821.xml">
 <!ENTITY rfc2822 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2822.xml">
+<!ENTITY rfc7085 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7085.xml">
 <!ENTITY ID.RFC5321bis PUBLIC ''
  "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml">
 <!ENTITY ID.RFC5322bis PUBLIC ''
@@ -231,6 +232,19 @@
 	represent newer work or that are intended to deal with
 	relatively newer issues.</t>
 
+        <section
+            title="Handling of the Domain Argument to the EHLO Command">
+          <t> If the <spanx style='verb'>Domain</spanx> argument to
+          the EHLO command does not have an address record in the
+          DNS that matches the IP address of the client, the SMTP
+          server may refuse any mail from the client as part of
+          established anti-abuse practice.
+          Operational experience has demonstrated that the lack of
+          a matching address record for the the domain name
+          argument is at best an indication of a poorly-configured
+          MTA, and at worst that of an abusive host. </t>
+        </section>
+
         <section title="Use of Address Literals">
           <t> The <spanx style='verb'>address-literal</spanx> ABNF
           non-terminal is used in various places in
@@ -248,50 +262,56 @@
           identity. </t>
         </section>
 
-        <section
-            title="Handling of the Domain Argument to the EHLO Command">
-          <t> If the <spanx style='verb'>Domain</spanx> argument to
-          the EHLO command does not have an address record in the
-          DNS that matches the IP address of the client, the SMTP
-          server may refuse any mail from the client as part of
-          established anti-abuse practice.
-          Operational experience has demonstrated that the lack of
-          a matching address record for the the domain name
-          argument is at best an indication of a poorly-configured
-          MTA, and at worst that of an abusive host. </t>
+        <section title="Use of Addresses in Top-Level Domains">
+          <t> While addresses in top-level domains (TLDs) are
+          syntactically valid, mail to these addresses has never
+          worked reliably.
+          A handful of country code TLDs have top level MX records but
+          they have never been widely used nor 
+          well supported. In 2013 <xref target="RFC7085" /> found 18
+          TLDs with MX records, which dropped to 17 in 2021 despite
+          many new TLDs having been added. </t>
+
+          <t> Mail sent to addresses with single label domains has
+          typically expected the address to be an abbreviation to be
+          completed by a search list, so mail to bob@sales would be
+          completed to bob@sales.example.com.
+          This shortcut has led to unfortunate consequnces; in one
+          famous case, in 1991 when the .CS domain was added to the
+          root, mail in computer science departments started to fail
+          as mail to bob@cs was now treated as mail to
+          Czechoslovakia.
+          Hence, for reliable service, mail SHOULD NOT use addreses
+          that contain single label domains. </t>
         </section>
       </section>
 
       <section title="Applicability of Message Format Provisions">
-	<t>Placeholder:
-	<vspace blankLines="0"/>
-	I am not sure what, if anything, goes here.  If nothing
-	does, we drop the section.</t>
-	<t> <cref>... Actual content to be supplied after WG
-	consideration.</cref> </t>
-      </section>
+        <t> This section describes adjustments to the Internet Message
+        Format that may be appropriate under various circumstances. </t>
 
-      <section title="Use of empty quote strings in email messages">
-        <t>
-          The <spanx style='verb'>quoted-string</spanx> ABNF
-          non-terminal is used in various places in rfc5322bis
-          grammar.
-          While it allows for empty quoted string, such construct is
-          going to cause interoperability issues when used in certain
-          header fields.
-          In particular, use of empty quoted  strings is NOT
-          RECOMMENDED in "received-token" (a component of a Received
-          header field), "keywords" (a component of a Keywords header
-          field) and "local-part" (left hand side of email addresses).
-          Use of empty quoted strings is in particular problematic in
-          the "local-part".
-          For example, all of the following email addresses are non
-          interoperable: 
-        </t>
-        <t>"".bar@example.com </t>
-        <t>foo.""@example.net</t>
-        <t>""@example.com</t>
-        <t>Use of empty quoted strings is fine in "display-name".</t>
+        <section title="Use of Empty Quoted Strings">
+          <t>
+            The <spanx style='verb'>quoted-string</spanx> ABNF
+            non-terminal is used in various places in rfc5322bis
+            grammar.
+            While it allows for empty quoted string, such construct is
+            going to cause interoperability issues when used in certain
+            header fields.
+            In particular, use of empty quoted  strings is NOT
+            RECOMMENDED in "received-token" (a component of a Received
+            header field), "keywords" (a component of a Keywords header
+            field) and "local-part" (left hand side of email addresses).
+            Use of empty quoted strings is in particular problematic in
+            the "local-part".
+            For example, all of the following email addresses are non
+            interoperable: 
+          </t>
+          <t>"".bar@example.com </t>
+          <t>foo.""@example.net</t>
+          <t>""@example.com</t>
+          <t>Use of empty quoted strings is fine in "display-name".</t>
+        </section>
       </section>
 
       <section title="MIME and Its Implications">
@@ -387,6 +407,8 @@
       &rfc5321;
       &rfc5322;
 
+      &rfc7085;
+
       &ID.RFC5321bis;
       &ID.RFC5322bis;
 
@@ -475,9 +497,12 @@
       <section
           title="Changes from draft-ietf-emailcore-as-02 (2021-08-XX) to -03">
         <t><list style="symbols">
-          <t>Moved discussion of address-literals (issue #1) and
+          <t> Moved discussion of address-literals (issue #1) and
           domain names in EHLO (issue #19) under SMTP Provisions
           section</t>
+          <t> Moved discussion of empty quoted-strings under
+          Message Format Provisions section</t>
+          <t> Added text on use of addresses in TLDs (issue #50) </t>
           <t> Marked all authors as editors. </t>
           <t> Miscellaneous editorial changes. </t>
         </list></t>
