@@ -495,7 +495,7 @@
       </section>
 
       <section
-          title="Changes from draft-ietf-emailcore-as-02 (2021-08-XX) to -03">
+          title="Changes from draft-ietf-emailcore-as-02 (2021-08-06) to -03">
         <t><list style="symbols">
           <t> Moved discussion of address-literals (issue #1) and
           domain names in EHLO (issue #19) under SMTP Provisions
