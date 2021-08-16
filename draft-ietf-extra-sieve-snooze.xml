@@ -9,7 +9,7 @@
 <?rfc strict="yes"?>
 <rfc category="std" ipr='trust200902'
      updates="5232"
-     docName='draft-ietf-extra-sieve-snooze-01'>
+     docName='draft-ietf-extra-sieve-snooze-02'>
   <front>
     <title abbrev="Sieve Snooze">Sieve Email Filtering: Snooze Extension</title>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
@@ -58,8 +58,8 @@
       <t>This document describes the "snooze" extension to the Sieve email
       filtering language.
       The "snooze" extension gives Sieve the ability to postpone the
-      delivery of an incoming into a target mailbox until a later point
-      in time.</t> 
+      delivery of an incoming email message into a target mailbox
+      until a later point in time.</t> 
     </abstract>
 <!--
     <note title="Open Issues">
@@ -160,9 +160,9 @@ TZID     = ":tzid" string
       <t>A Sieve interpreter MUST implement the snooze action by
       delivering the message to a special "snoozed" mailbox within its
       mailstore.
-      IMAP and JMAP servers MUST apply the
-      <xref target="snoozed">"Snoozed"</xref> attribute to this
-      mailbox.
+      <xref target="RFC3501">IMAP</xref> and <xref target="RFC8621">JMAP</xref>
+      servers MUST apply the <xref target="snoozed">"Snoozed"</xref>
+      attribute to this mailbox.
       The message will reside in this special mailbox until the
       prescribed awaken time at which it will be moved into the
       specified target mailbox.</t>
@@ -176,7 +176,7 @@ TZID     = ":tzid" string
         <t>If :mailbox is omitted, or if the specified mailbox doesn&apos;t
         exist at the time of awakening, the message will be filed
         into the user&apos;s main mailbox.
-        For instance, in an implementation where the IMAP server is
+        For instance, in an implementation where an IMAP server is
         running scripts on behalf of the user at time of delivery,
         the user&apos;s "INBOX" would be the implicit target for
         awakening messages.</t>
@@ -373,7 +373,7 @@ REMOVEFLAGS = ":removeflags" string-list
           Section 2 of <xref target='RFC5232' /> MUST be followed.</t>
 
           <section title='Example'>
-            <t>The following example leverage the
+            <t>The following example leverages the
             <xref target="RFC5260">Date</xref>,
             <xref target="RFC5231">Relational</xref>, and
             <xref target="RFC5232">Imap4flags</xref> extensions
@@ -451,8 +451,7 @@ SPECIAL-USE = ":specialuse" string
         <section title='MailboxID Extension'
                  anchor='mailboxid'>
           <t>This document extends the definition of the
-          <xref
-              target='I-D.ietf-extra-sieve-mailboxid'>":mailboxid"</xref>
+          <xref target='RFC9042'>":mailboxid"</xref>
           tagged argument so that it can be used with the snooze action.</t>
 
           <figure>
@@ -567,8 +566,7 @@ MAILBOXID = ":mailboxid" string
     <section title='Security Considerations' anchor='security'>
       <t>Security considerations are discussed in
       <xref target='RFC5228' />, <xref target='RFC5232' />,
-      <xref target='RFC8579' />, and
-      <xref target='I-D.ietf-extra-sieve-mailboxid' />.
+      <xref target='RFC8579' />, and <xref target='RFC9042' />.
       </t>
 
       <t>It is believed that this extension doesn't introduce any
@@ -648,7 +646,7 @@ MAILBOXID = ":mailboxid" string
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8457.xml"?>
-      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-mailboxid.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9042.xml"?>
 
       <reference anchor='tzdb'
                  target="https://www.iana.org/time-zones">
@@ -667,10 +665,19 @@ MAILBOXID = ":mailboxid" string
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5231.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8621.xml"?>
     </references>
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
+      <t>Changes since draft-ietf-extra-sieve-snooze-01:
+      <list style='symbols'>
+        <t>Updated :mailboxid reference to RFC9042.</t>
+        <t>Added an informative reference to RFC8621.</t>
+        <t>Miscellaneous editorial changes.</t>
+      </list>
+      </t>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-00:
       <list style='symbols'>
         <t>Disallow both :mailboxid and :specialuse in the same snooze
