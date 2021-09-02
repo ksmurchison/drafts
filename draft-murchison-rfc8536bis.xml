@@ -353,26 +353,22 @@
                   nonempty, MUST strictly adhere to the
 		  requirements for the TZ environment variable
                   as defined in
-                  Section 8.3 of the "Base Definitions" volume of 
+                  Section 8.3 of the "Base Definitions" volume of
 	          <xref target="POSIX"/>
 		  and MUST encode the POSIX portable character set as
 		  ASCII.
 	        </t>
 	        <t hangText="'3' (0x33)">
-		  Version 3 - The file MUST contain the version 1
-	          header and data block, a version 2+ header and data
-                  block, and a footer.
-                  The TZ string in the
-		  <xref target='footer'>footer</xref>, if
-		  nonempty, MUST conform to POSIX requirements
-		  with ASCII encoding,
-		  except that it MAY use the TZ string extensions
+		  Version 3 - The file MUST conform to all version 2
+		  requirements, except that the TZ string in the
+		  <xref target='footer'>footer</xref>
+		  MAY use the TZ string extensions
                   <xref target='tzstrext'>described below</xref>.
 	        </t>
 	        <t hangText="'4' (0x34)">
 		  Version 4 - The file MUST conform to all version 3
-                  requirements, and additionally MAY contain leap
-                  second table truncation and/or expiry.
+		  requirements, except that the leap second table
+		  MAY contain an expiration time.
 	        </t>
 	      </list>
 	    </t>
@@ -588,37 +584,27 @@
 	        <t hangText="corr(ection):">
 	          A four-octet signed integer specifying the value
 		  of LEAPCORR on or after the occurrence.
-		  The correction value in the first leap-second record,
-		  if present, MUST be either one (1) or minus one (-1).
-                  The correction values in adjacent leap-second
-                  records MUST differ by exactly one (1).
-		  The value of LEAPCORR is zero
+
+		  If "timecnt" and "leapcnt" are both nonzero and the first
+		  transition time equals the first leap-second occurrence,
+		  LEAPCORR is unspecified for timestamps before the first
+		  transition time (this indicates the TZif file was
+		  <xref target='truncation'>truncated at the start</xref>).
+
+		  Otherwise, the value of LEAPCORR is zero
 		  for timestamps that occur before the occurrence time
 		  in the first leap-second record (or for all
-		  timestamps if there are no leap-second records).
+		  timestamps if there are no leap-second records),
+		  and the correction value in the first leap-second record,
+		  if present, MUST be either one (1) or minus one (-1).
+                  <vspace/><vspace/>
+		  The correction values in adjacent leap-second
+		  records MUST differ by exactly one (1),
+		  except that if there are two or more leap-second records
+		  the correction value of the last record MAY be the
+		  same as the second-to-last record, with the last record
+		  indicating the expiration time of the leap-second table.
                 </t>
-<!--
-     corr(ection):  A four-octet signed integer specifying the value of
--         LEAPCORR on or after the occurrence.  The correction value in
--         the first leap-second record, if present, MUST be either one
--         (1) or minus one (-1).  The correction values in adjacent leap-
--         second records MUST differ by exactly one (1).  The value of
-+         LEAPCORR on or after the occurrence.  If timecnt and leapcnt are
-+         both nonzero and the first transition time equals the first
-+         leap-second occurrence, LEAPCORR is unspecified for timestamps
-+         before the first transition time (this indicates the TZif file was
-+         truncated at the start; see Section 5.1).  Otherwise, the value of
-          LEAPCORR is zero for timestamps that occur before the
-          occurrence time in the first leap-second record (or for all
--         timestamps if there are no leap-second records).
-+         timestamps if there are no leap-second records) and the correction
-+         value in the first leap-second record, if present, MUST be either one
-+         (1) or minus one (-1).  The correction values in adjacent leap-
-+         second records MUST differ by exactly one (1), except that
-+         if there are two or more leap-second records the correction
-+         value of the last record MAY be the same as the second-to-last
-+         record, to indicate the expiration time of the leap-second table.
--->
               </list>
 	    </t>
 	    <t hangText="standard/wall indicators:" anchor="stdwall">
@@ -805,11 +791,10 @@
 	<t>Implementations that only understand version 1 MUST ignore
 	any data that extends beyond the calculated end of the version
 	1 data block.</t>
-	
-        <t>Implementations SHOULD generate a version 3 file if
-        TZ string extensions are necessary to accurately
-        model transition times.
-        Otherwise, version 2 files SHOULD be generated.</t>
+
+	<t>When generating a nonempty TZif footer, implementations
+	SHOULD use TZ string extensions only if they are necessary to
+	accurately model transition times.</t>
 
 	<t>The sequence of time changes defined by the version 1
         header and data block SHOULD be a contiguous sub-sequence
@@ -820,6 +805,11 @@
 	contiguous sub-sequence.  It also lets writers not
 	supporting obsolescent readers use a "timecnt" of zero
 	in the version 1 data block to save space.</t>
+
+	<t>When a TZif file contains a leap second table expiration
+	time, TZif readers SHOULD either refuse to process
+	post-expiration timestamps, or process them as if the expiration
+	time did not exist (possibly with an error indication).</t>
 
         <t>Time zone designations SHOULD consist of at least three (3)
         and no more than six (6) ASCII characters from the set of
@@ -1295,18 +1285,22 @@ EST5EDT,M3.2.0,M11.1.0
 	As a partial workaround, a writer can substitute standard time
         for the next time zone east -- e.g., "AST4" for permanent
         Atlantic Standard Time (-04).</t>
-	
+
+	<t>Some readers designed for version 2 or 3, and that require strict
+	conformance to RFC 8536, reject version 4 files whose leap second
+	tables end in expiration times.</t>
+
 	<t>Some readers ignore the footer and instead predict future
         timestamps from the time type of the last transition.
 	As a partial workaround, a writer can output more transitions
         than necessary.</t>
-	
+
 	<t>Some readers do not use time type 0 for timestamps before
         the first transition, in that they infer a time type using a
         heuristic that does not always select time type 0.
 	As a partial workaround, a writer can output a dummy (no-op)
 	first transition at an early time.</t>
-	
+
 	<t>Some readers mishandle timestamps before the first
         transition that has a timestamp not less than -2**31.
 	Readers that support only 32-bit timestamps are likely to be
@@ -1315,7 +1309,7 @@ EST5EDT,M3.2.0,M11.1.0
         bits.
 	As a partial workaround, a writer can output a dummy
         transition at timestamp -2**31.</t>
-	
+
 	<t>Some readers mishandle a transition if its timestamp has
         the minimum possible signed 64-bit value.
 	Timestamps less than -2**59 are not recommended.</t>
@@ -1927,6 +1921,9 @@ EST5EDT,M3.2.0,M11.1.0
     <section title="Changes from RFC 8536" anchor="changes">
       <t>
       <list style='symbols'>
+	<t>Added specification of the version 4 format and the
+        optional leap second expiration time, along with relevant
+        interoperability considerations.</t> 
         <t>Applied erratum <xref target="Err6435"/>.</t>
         <t>Addressed erratum <xref target="Err6426"/>
         and several other errors in the examples.</t>
@@ -1941,7 +1938,17 @@ EST5EDT,M3.2.0,M11.1.0
     </section>
 
     <section title="Change Log">
-      <t>This section is to be removed by RFC Editor before publication.</t> 
+      <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section title="Since rfc8536bis-00">
+        <t>
+          <list style='symbols'>
+	    <t>Added specification of the version 4 format and the
+            optional leap second expiration time, along with relevant
+            interoperability considerations.</t> 
+          </list>
+        </t>
+      </section>
 
       <section title="Since RFC 8536">
         <t>
