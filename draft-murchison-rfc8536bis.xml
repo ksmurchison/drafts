@@ -1916,14 +1916,158 @@ EST5EDT,M3.2.0,M11.1.0
         </texttable>
       </section>
 
+      <section anchor='v4example'
+               title='Truncated Version 4 File Representing
+                      America/New_York (with Leap Seconds Expiration)'>
+
+        <t>The following TZif file has been truncated to start on
+        2022-01-01T00:00:00Z and to end on 2022-07-01T00:00:00Z.</t>
+
+        <t>In this example:
+        <list style='symbols'>
+          <t>The version 4 header leverages the fact that by specifying
+          'isutcnt' and 'isstdcnt' as zero, all transition times
+          associated with local time types are assumed to be specified
+          as local wall-clock time
+          (see the definitions of UT/local indicators
+          and standard/wall indicators in <xref target="data"/>).</t>
+
+          <t>The first leap second occurrence matches the first
+          transition time, indicating that the file has been truncated
+          at the start.</t>
+
+          <t>The last leap second correction matches the
+          second-to-last leap second correction, indicating the
+          expiration time of the leap second table.</t>
+        </list>
+        </t>
+
+        <texttable>
+          <ttcol>File Offset</ttcol> <ttcol>Hexadecimal Octets</ttcol>
+          <ttcol>Record Name / Field Name</ttcol> <ttcol>Field Value</ttcol>
+          <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
+          <c>004</c> <c>34</c> <c>version</c> <c>'4' (4)</c>
+          <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
+          <c>020</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
+          <c>024</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
+          <c>028</c> <c>00 00 00 02</c> <c>leapcnt</c> <c>2</c>
+          <c>032</c> <c>00 00 00 03</c> <c>timecnt</c> <c>3</c>
+          <c>036</c> <c>00 00 00 04</c> <c>typecnt</c> <c>2</c>
+          <c>040</c> <c>00 00 00 08</c> <c>charcnt</c> <c>8</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>044</c> <c>61 cf 99 80</c> <c>trans time[0]</c>
+          <c>1640995200 (2022-01-01T00:00:00Z)</c>
+
+          <c>048</c> <c>62 2d 96 8b</c> <c>trans time[1]</c>
+          <c>1647154827 (2022-03-13T07:00:27Z)</c>
+
+          <c>052</c> <c>62 be 39 00</c> <c>trans time[2]</c>
+          <c>1656633600 (2022-07-01T00:00:00Z)</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>056</c> <c>00</c> <c>trans type[0]</c> <c>0</c>
+
+          <c>057</c> <c>01</c> <c>trans type[1]</c> <c>1</c>
+
+          <c>058</c> <c>01</c> <c>trans type[2]</c> <c>1</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>localtimetype[0]</c> <c/>
+          <c>059</c> <c>ff ff b9 b0</c> <c>utoff</c> <c>-18000 (-05:00)</c>
+          <c>063</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
+          <c>064</c> <c>04</c> <c>desigidx</c> <c>4</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>localtimetype[1]</c> <c/>
+          <c>065</c> <c>ff ffc7 c0</c> <c>utoff</c> <c>-14400 (-04:00)</c>
+          <c>069</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
+          <c>070</c> <c>00</c> <c>desigidx</c> <c>0</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>071</c> <c>45 44 54 00</c> <c>designations[0]</c> <c>"EDT"</c>
+
+          <c>075</c> <c>45 53 54 00</c> <c>designations[1]</c> <c>"EST"</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>leapsecond[0]</c> <c/>
+          <c>079</c> <c>61 cf 99 80</c> <c>occurrence</c>
+          <c>1640995200 (2022-01-01T00:00:00Z)</c>
+          <c>083</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>leapsecond[1]</c> <c/>
+          <c>087</c> <c>62 ba 44 9b</c> <c>occurrence</c>
+          <c>1656374427 (2022-06-27T20:00:27Z)</c>
+          <c>091</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>095</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
+          <c>099</c> <c>34</c> <c>version</c> <c>'4' (4)</c>
+          <c>100</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
+          <c>115</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
+          <c>119</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
+          <c>123</c> <c>00 00 00 02</c> <c>leapcnt</c> <c>2</c>
+          <c>127</c> <c>00 00 00 03</c> <c>timecnt</c> <c>3</c>
+          <c>131</c> <c>00 00 00 04</c> <c>typecnt</c> <c>2</c>
+          <c>135</c> <c>00 00 00 08</c> <c>charcnt</c> <c>8</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>139</c> <c>00 00 00 00 61 cf 99 80</c> <c>trans time[0]</c>
+          <c>1640995200 (2022-01-01T00:00:00Z)</c>
+
+          <c>147</c> <c>00 00 00 00 62 2d 96 8b</c> <c>trans time[1]</c>
+          <c>1647154827 (2022-03-13T07:00:27Z)</c>
+
+          <c>155</c> <c>00 00 00 00 62 be 39 00</c> <c>trans time[2]</c>
+          <c>1656633600 (2022-07-01T00:00:00Z)</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>163</c> <c>00</c> <c>trans type[0]</c> <c>0</c>
+
+          <c>164</c> <c>01</c> <c>trans type[1]</c> <c>1</c>
+
+          <c>165</c> <c>01</c> <c>trans type[2]</c> <c>1</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>localtimetype[0]</c> <c/>
+          <c>166</c> <c>ff ff b9 b0</c> <c>utoff</c> <c>-18000 (-05:00)</c>
+          <c>170</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
+          <c>171</c> <c>04</c> <c>desigidx</c> <c>4</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>localtimetype[1]</c> <c/>
+          <c>172</c> <c>ff ffc7 c0</c> <c>utoff</c> <c>-14400 (-04:00)</c>
+          <c>176</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
+          <c>177</c> <c>00</c> <c>desigidx</c> <c>0</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>178</c> <c>45 44 54 00</c> <c>designations[0]</c> <c>"EDT"</c>
+
+          <c>182</c> <c>45 53 54 00</c> <c>designations[1]</c> <c>"EST"</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>leapsecond[0]</c> <c/>
+          <c>186</c> <c>00 00 00 00 61 cf 99 80</c> <c>occurrence</c>
+          <c>1640995200 (2022-01-01T00:00:00Z)</c>
+          <c>194</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+          <c/> <c/> <c/> <c/>
+
+          <c/> <c/> <c>leapsecond[1]</c> <c/>
+          <c>198</c> <c>00 00 00 00 62 ba 44 9b</c> <c>occurrence</c>
+          <c>1656374427 (2022-06-27T20:00:27Z)</c>
+          <c>206</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+        </texttable>
+      </section>
+
     </section>  
 
     <section title="Changes from RFC 8536" anchor="changes">
       <t>
       <list style='symbols'>
 	<t>Added specification of the version 4 format and the
-        optional leap second expiration time, along with relevant
-        interoperability considerations.</t> 
+        optional leap second expiration time, along with
+        an example and relevant interoperability considerations.</t> 
         <t>Applied erratum <xref target="Err6435"/>.</t>
         <t>Addressed erratum <xref target="Err6426"/>
         and several other errors in the examples.</t>
@@ -1944,8 +2088,8 @@ EST5EDT,M3.2.0,M11.1.0
         <t>
           <list style='symbols'>
 	    <t>Added specification of the version 4 format and the
-            optional leap second expiration time, along with relevant
-            interoperability considerations.</t> 
+            optional leap second expiration time, along with
+            an example and relevant interoperability considerations.</t> 
           </list>
         </t>
       </section>
