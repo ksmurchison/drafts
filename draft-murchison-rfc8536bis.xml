@@ -357,10 +357,13 @@
 	          <xref target="POSIX"/>
 		  and MUST encode the POSIX portable character set as
 		  ASCII.
+		  The leap second table MUST NOT be
+                  <xref target='truncation'>truncated at the start</xref>,
+		  and MUST NOT contain an expiration time.
 	        </t>
 	        <t hangText="'3' (0x33)">
 		  Version 3 - The file MUST conform to all version 2
-		  requirements, except that the TZ string in the
+		  requirements, except that any TZ string in the
 		  <xref target='footer'>footer</xref>
 		  MAY use the TZ string extensions
                   <xref target='tzstrext'>described below</xref>.
@@ -368,6 +371,7 @@
 	        <t hangText="'4' (0x34)">
 		  Version 4 - The file MUST conform to all version 3
 		  requirements, except that the leap second table
+		  MAY be truncated at the start, and
 		  MAY contain an expiration time.
 	        </t>
 	      </list>
@@ -574,32 +578,30 @@
 	      <list style='hanging'>
 	        <t hangText="occur(rence):">
 	          A four- or eight-octet UNIX leap time value specifying the
-                  time at which a leap-second correction occurs.
+		  time at which a leap-second correction occurs
+		  or at which the leap second table expires.
 		  The first value, if present, MUST be nonnegative,
-		  and each later value MUST be at least 2419199
-		  greater than the previous value.
-		  (This is 28 days' worth of seconds, minus a
-		  potential negative leap second.)
+		  and each leap second MUST occur at the end of a UTC
+		  calendar month.
                 </t>
 	        <t hangText="corr(ection):">
 	          A four-octet signed integer specifying the value
 		  of LEAPCORR on or after the occurrence.
 
-		  If "timecnt" and "leapcnt" are both nonzero and the first
-		  transition time equals the first leap-second occurrence,
-		  LEAPCORR is unspecified for timestamps before the first
-		  transition time (this indicates the TZif file was
+		  If "leapcnt" is zero, LEAPCORR is zero for all timestamps;
+		  otherwise, for timestamps before the first occurrence time,
+		  LEAPCORR is zero if the first correction is one (1)
+		  or minus one (-1),
+		  and is unspecified otherwise (which can happen only in files
 		  <xref target='truncation'>truncated at the start</xref>).
 
-		  Otherwise, the value of LEAPCORR is zero
-		  for timestamps that occur before the occurrence time
-		  in the first leap-second record (or for all
-		  timestamps if there are no leap-second records),
-		  and the correction value in the first leap-second record,
-		  if present, MUST be either one (1) or minus one (-1).
                   <vspace/><vspace/>
-		  The correction values in adjacent leap-second
-		  records MUST differ by exactly one (1),
+		  The first leap second is a positive leap second if and
+		  only if its correction is positive.
+		  Each correction after the first MUST differ from the
+		  previous correction by either
+		  one (1) for a positive leap second or
+		  minus one (-1) for a negative leap second,
 		  except that if there are two or more leap-second records
 		  the correction value of the last record MAY be the
 		  same as the second-to-last record, with the last record
@@ -788,23 +790,33 @@
         SHOULD NOT be generated, as they do not support transition
         times after the year 2038.</t>
 
-	<t>Implementations that only understand version 1 MUST ignore
+	<t>Readers that understand only version 1 MUST ignore
 	any data that extends beyond the calculated end of the version
 	1 data block.</t>
 
-	<t>When generating a nonempty TZif footer, implementations
-	SHOULD use TZ string extensions only if they are necessary to
-	accurately model transition times.</t>
+        <t>Other than version 1, writers should generate the lowest
+        version number needed by a file's data.  For example, a writer
+        should generate a version 4 file only if its leap second table
+        either expires or is truncated at the start.  Likewise, a
+        writer not generating a version 4 file should generate a
+        version 3 file only if TZ string extensions are necessary to
+        accurately model transition times.</t>
+        
+	<t>To save space, writers of version 2+ files MAY output a
+	placeholder version 1 data block with all counts zero except
+	that "typecnt" and "charcnt" are both one (1).
+	If this is done, obsolescent version-1-only readers MUST
+	interpret these files as lacking time changes and time zone
+	abbreviations.</t>
 
-	<t>The sequence of time changes defined by the version 1
+	<t>Unless the version 1 data block is a placeholder,
+	the sequence of timestamps defined by the version 1
         header and data block SHOULD be a contiguous sub-sequence
-	of the time changes defined by the version 2+ header and data
+	of the timestamps defined by the version 2+ header and data
 	block, and by the footer.
 	This guideline helps obsolescent version 1 readers
 	agree with current readers about timestamps within the
-	contiguous sub-sequence.  It also lets writers not
-	supporting obsolescent readers use a "timecnt" of zero
-	in the version 1 data block to save space.</t>
+	contiguous sub-sequence.</t>
 
 	<t>When a TZif file contains a leap second table expiration
 	time, TZif readers SHOULD either refuse to process
@@ -817,11 +829,11 @@
 	This is for compatibility with POSIX requirements for
 	time zone abbreviations.</t>
 
-        <t>When reading a version 2 or higher file, implementations
+	<t>When reading a version 2 or higher file, readers
 	SHOULD ignore the version 1 header and data block except for
         the purpose of skipping over them.</t>
 
-	<t>Implementations SHOULD calculate the total lengths of the
+	<t>Readers SHOULD calculate the total lengths of the
 	headers and data blocks and check that they all fit within
 	the actual file size, as part of a validity check for the file.</t>
 	
@@ -884,6 +896,15 @@
         As with untruncated TZif files, time type 0 indicates local
         time immediately before the start point, and the time type of
         the first transition indicates local time thereafter.</t>
+
+	<t>When truncating the start of a TZif file containing
+	leap-second records, the service MUST keep all leap-second
+	records governing timestamps within the truncation range,
+	even if the first such record precedes the start point of
+	the truncation range.
+	If the truncated leap second table is nonempty,
+	its first record MUST have a positive correction
+	if and only if it represents a positive leap second.</t>
 
         <t>When truncating the end of a TZif file, the service MUST
 	supply in the version 2+ data a last transition time that is
@@ -1132,7 +1153,7 @@ EST5EDT,M3.2.0,M11.1.0
       </reference>
 
       <reference anchor='POSIX'
-	         target="http://pubs.opengroup.org/onlinepubs/9699919799/">
+	         target="https://pubs.opengroup.org/onlinepubs/9699919799/">
         <front>
           <title>Standard for Information Technology--Portable Operating
           System Interface (POSIX(R)) Base Specifications, Issue 7</title>
@@ -1279,16 +1300,23 @@ EST5EDT,M3.2.0,M11.1.0
         mishandled by version 2 readers.</t>
 	
 	<t>Some readers designed for version 2 do not support
-        permanent daylight saving time -- e.g., a TZ string
+	permanent daylight saving time with transitions after 24:00
+	-- e.g., a TZ string
         "EST5EDT,0/0,J365/25" denoting permanent Eastern Daylight Time
         (-04).
-	As a partial workaround, a writer can substitute standard time
+	As a workaround, a writer can substitute standard time
+	for two time zones east, e.g.,
+	"XXX3EDT4,0/0,J365/23"
+	for a time zone with a never-used standard time (XXX, -03)
+	and negative daylight saving time (EDT, -04) all year.
+	Alternatively,
+	as a partial workaround a writer can substitute standard time
         for the next time zone east -- e.g., "AST4" for permanent
         Atlantic Standard Time (-04).</t>
 
 	<t>Some readers designed for version 2 or 3, and that require strict
 	conformance to RFC 8536, reject version 4 files whose leap second
-	tables end in expiration times.</t>
+	tables are truncated at the start or that end in expiration times.</t>
 
 	<t>Some readers ignore the footer and instead predict future
         timestamps from the time type of the last transition.
@@ -1344,6 +1372,19 @@ EST5EDT,M3.2.0,M11.1.0
 	Although this workaround misidentifies which part of the year
         uses daylight saving time, it records UT offsets and time zone
         abbreviations correctly.</t>
+
+	<t>Some readers generate ambiguous timestamps for positive
+        leap seconds that occur when the UTC offset is not a multiple
+        of 60 seconds.
+	For example, in a timezone with UTC offset +01:23:45 and with
+	a positive leap second 78796801 (1972-06-30 23:59:60 UTC),
+        some readers will map both 78796800 and 78796801 to 01:23:45
+        local time the next day instead of mapping the latter to
+        01:23:46, and they will map 78796815 to 01:23:59 instead of to
+        01:23:60.
+	This has not yet been a practical problem, since no civil
+        authority has observed such UTC offsets since leap seconds
+        were introduced in 1972.</t>
       </list></t>
 	
       <t>Some interoperability problems are reader bugs that
@@ -1911,7 +1952,8 @@ EST5EDT,M3.2.0,M11.1.0
           <c>114</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
           <c>115</c> <c>49 53 54 2d 32 49 44 54 2c
           4d 33 2e 34 2e 34 2f 32 36 2c 4d 31 30 2e 35 2e 30</c>
-          <c>TZ string</c> <c>"IST-2IDT,M3.4.4/26,M10.5.0"</c>
+          <c>TZ string</c> <c>"IST-2IDT,
+          M3.4.4/26,M10.5.0"</c>
           <c>141</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
         </texttable>
       </section>
@@ -1921,10 +1963,15 @@ EST5EDT,M3.2.0,M11.1.0
                       America/New_York (with Leap Seconds Expiration)'>
 
         <t>The following TZif file has been truncated to start on
-        2022-01-01T00:00:00Z and to end on 2022-07-01T00:00:00Z.</t>
+        2022-01-01T00:00:00Z.</t>
 
         <t>In this example:
         <list style='symbols'>
+          <t>The leap second table is truncated at the start and
+          contains an expiration time,
+          so the version 1 header contains only the required
+          minimum data, which will be ignored by readers.</t>
+
           <t>The version 4 header leverages the fact that by specifying
           'isutcnt' and 'isstdcnt' as zero, all transition times
           associated with local time types are assumed to be specified
@@ -1932,9 +1979,8 @@ EST5EDT,M3.2.0,M11.1.0
           (see the definitions of UT/local indicators
           and standard/wall indicators in <xref target="data"/>).</t>
 
-          <t>The first leap second occurrence matches the first
-          transition time, indicating that the file has been truncated
-          at the start.</t>
+          <t>The first leap second occurrence is the most recent one
+          prior to the truncation time.</t>
 
           <t>The last leap second correction matches the
           second-to-last leap second correction, indicating the
@@ -1950,113 +1996,65 @@ EST5EDT,M3.2.0,M11.1.0
           <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
           <c>020</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
           <c>024</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
-          <c>028</c> <c>00 00 00 02</c> <c>leapcnt</c> <c>2</c>
-          <c>032</c> <c>00 00 00 03</c> <c>timecnt</c> <c>3</c>
-          <c>036</c> <c>00 00 00 04</c> <c>typecnt</c> <c>2</c>
-          <c>040</c> <c>00 00 00 08</c> <c>charcnt</c> <c>8</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>044</c> <c>61 cf 99 80</c> <c>trans time[0]</c>
-          <c>1640995200 (2022-01-01T00:00:00Z)</c>
-
-          <c>048</c> <c>62 2d 96 8b</c> <c>trans time[1]</c>
-          <c>1647154827 (2022-03-13T07:00:27Z)</c>
-
-          <c>052</c> <c>62 be 39 00</c> <c>trans time[2]</c>
-          <c>1656633600 (2022-07-01T00:00:00Z)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>056</c> <c>00</c> <c>trans type[0]</c> <c>0</c>
-
-          <c>057</c> <c>01</c> <c>trans type[1]</c> <c>1</c>
-
-          <c>058</c> <c>01</c> <c>trans type[2]</c> <c>1</c>
+          <c>028</c> <c>00 00 00 00</c> <c>leapcnt</c> <c>0</c>
+          <c>032</c> <c>00 00 00 00</c> <c>timecnt</c> <c>0</c>
+          <c>036</c> <c>00 00 00 01</c> <c>typecnt</c> <c>1</c>
+          <c>040</c> <c>00 00 00 01</c> <c>charcnt</c> <c>1</c>
           <c/> <c/> <c/> <c/>
 
           <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>059</c> <c>ff ff b9 b0</c> <c>utoff</c> <c>-18000 (-05:00)</c>
-          <c>063</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>064</c> <c>04</c> <c>desigidx</c> <c>4</c>
+          <c>044</c> <c>00 00 00 00</c> <c>utoff</c> <c>0 (+00:00)</c>
+          <c>048</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
+          <c>049</c> <c>00</c> <c>desigidx</c> <c>0</c>
           <c/> <c/> <c/> <c/>
 
-          <c/> <c/> <c>localtimetype[1]</c> <c/>
-          <c>065</c> <c>ff ffc7 c0</c> <c>utoff</c> <c>-14400 (-04:00)</c>
-          <c>069</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>070</c> <c>00</c> <c>desigidx</c> <c>0</c>
+          <c>050</c> <c>00</c> <c>designations[0]</c> <c>""</c>
           <c/> <c/> <c/> <c/>
 
-          <c>071</c> <c>45 44 54 00</c> <c>designations[0]</c> <c>"EDT"</c>
-
-          <c>075</c> <c>45 53 54 00</c> <c>designations[1]</c> <c>"EST"</c>
+          <c>051</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
+          <c>055</c> <c>34</c> <c>version</c> <c>'4' (4)</c>
+          <c>056</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
+          <c>071</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
+          <c>075</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
+          <c>079</c> <c>00 00 00 02</c> <c>leapcnt</c> <c>2</c>
+          <c>083</c> <c>00 00 00 01</c> <c>timecnt</c> <c>1</c>
+          <c>087</c> <c>00 00 00 01</c> <c>typecnt</c> <c>1</c>
+          <c>091</c> <c>00 00 00 04</c> <c>charcnt</c> <c>4</c>
           <c/> <c/> <c/> <c/>
 
-          <c/> <c/> <c>leapsecond[0]</c> <c/>
-          <c>079</c> <c>61 cf 99 80</c> <c>occurrence</c>
-          <c>1640995200 (2022-01-01T00:00:00Z)</c>
-          <c>083</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+          <c>095</c> <c>00 00 00 00 61 cf 99 9b</c> <c>trans time[0]</c>
+          <c>1640995227 (2022-01-01T00:00:00Z)</c>
           <c/> <c/> <c/> <c/>
 
-          <c/> <c/> <c>leapsecond[1]</c> <c/>
-          <c>087</c> <c>62 ba 44 9b</c> <c>occurrence</c>
-          <c>1656374427 (2022-06-27T20:00:27Z)</c>
-          <c>091</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>095</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>099</c> <c>34</c> <c>version</c> <c>'4' (4)</c>
-          <c>100</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>115</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
-          <c>119</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
-          <c>123</c> <c>00 00 00 02</c> <c>leapcnt</c> <c>2</c>
-          <c>127</c> <c>00 00 00 03</c> <c>timecnt</c> <c>3</c>
-          <c>131</c> <c>00 00 00 04</c> <c>typecnt</c> <c>2</c>
-          <c>135</c> <c>00 00 00 08</c> <c>charcnt</c> <c>8</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>139</c> <c>00 00 00 00 61 cf 99 80</c> <c>trans time[0]</c>
-          <c>1640995200 (2022-01-01T00:00:00Z)</c>
-
-          <c>147</c> <c>00 00 00 00 62 2d 96 8b</c> <c>trans time[1]</c>
-          <c>1647154827 (2022-03-13T07:00:27Z)</c>
-
-          <c>155</c> <c>00 00 00 00 62 be 39 00</c> <c>trans time[2]</c>
-          <c>1656633600 (2022-07-01T00:00:00Z)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>163</c> <c>00</c> <c>trans type[0]</c> <c>0</c>
-
-          <c>164</c> <c>01</c> <c>trans type[1]</c> <c>1</c>
-
-          <c>165</c> <c>01</c> <c>trans type[2]</c> <c>1</c>
+          <c>103</c> <c>00</c> <c>trans type[0]</c> <c>0</c>
           <c/> <c/> <c/> <c/>
 
           <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>166</c> <c>ff ff b9 b0</c> <c>utoff</c> <c>-18000 (-05:00)</c>
-          <c>170</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>171</c> <c>04</c> <c>desigidx</c> <c>4</c>
+          <c>104</c> <c>ff ff b9 b0</c> <c>utoff</c> <c>-18000 (-05:00)</c>
+          <c>108</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
+          <c>109</c> <c>00</c> <c>desigidx</c> <c>0</c>
           <c/> <c/> <c/> <c/>
 
-          <c/> <c/> <c>localtimetype[1]</c> <c/>
-          <c>172</c> <c>ff ffc7 c0</c> <c>utoff</c> <c>-14400 (-04:00)</c>
-          <c>176</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>177</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>178</c> <c>45 44 54 00</c> <c>designations[0]</c> <c>"EDT"</c>
-
-          <c>182</c> <c>45 53 54 00</c> <c>designations[1]</c> <c>"EST"</c>
+          <c>110</c> <c>45 53 54 00</c> <c>designations[0]</c> <c>"EST"</c>
           <c/> <c/> <c/> <c/>
 
           <c/> <c/> <c>leapsecond[0]</c> <c/>
-          <c>186</c> <c>00 00 00 00 61 cf 99 80</c> <c>occurrence</c>
-          <c>1640995200 (2022-01-01T00:00:00Z)</c>
-          <c>194</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+          <c>114</c> <c>00 00 00 00 58 68 46 9a</c> <c>occurrence</c>
+          <c>1483228826 (2016-12-31T23:59:60Z)</c>
+          <c>122</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
           <c/> <c/> <c/> <c/>
 
           <c/> <c/> <c>leapsecond[1]</c> <c/>
-          <c>198</c> <c>00 00 00 00 62 ba 44 9b</c> <c>occurrence</c>
-          <c>1656374427 (2022-06-27T20:00:27Z)</c>
-          <c>206</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+          <c>126</c> <c>00 00 00 00 62 ba 44 9b</c> <c>occurrence</c>
+          <c>1656374427 (2022-06-28T00:00:00Z)</c>
+          <c>134</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
+          <c/> <c/> <c/> <c/>
+
+          <c>138</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
+          <c>139</c> <c>45 53 54 35 45 44 54 2c 4d 33 2e 32 2e 30 2c
+          4d 31 31 2e 31 2e 30</c>
+          <c>TZ string</c> <c>"EST5EDT,M3.2.0,M11.1.0"</c>
+          <c>161</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
         </texttable>
       </section>
 
@@ -2066,8 +2064,9 @@ EST5EDT,M3.2.0,M11.1.0
       <t>
       <list style='symbols'>
 	<t>Added specification of the version 4 format and the
-        optional leap second expiration time, along with
-        an example and relevant interoperability considerations.</t> 
+	optional leap second table truncation and expiration,
+	along with an example and relevant
+	interoperability considerations.</t> 
         <t>Applied erratum <xref target="Err6435"/>.</t>
         <t>Addressed erratum <xref target="Err6426"/>
         and several other errors in the examples.</t>
@@ -2088,8 +2087,9 @@ EST5EDT,M3.2.0,M11.1.0
         <t>
           <list style='symbols'>
 	    <t>Added specification of the version 4 format and the
-            optional leap second expiration time, along with
-            an example and relevant interoperability considerations.</t> 
+	    optional leap second table truncation and expiration,
+	    along with an example and relevant
+	    interoperability considerations.</t> 
           </list>
         </t>
       </section>
