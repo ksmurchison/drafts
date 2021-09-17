@@ -1430,8 +1430,10 @@ EST5EDT,M3.2.0,M11.1.0
       <section title='Version 1 File Representing UTC (with Leap Seconds)'>
 
         <texttable>
-          <ttcol>File Offset</ttcol> <ttcol>Hexadecimal Octets</ttcol>
-          <ttcol>Record Name / Field Name</ttcol> <ttcol>Field Value</ttcol>
+          <ttcol width="13%">File Offset</ttcol>
+          <ttcol width="23%">Hexadecimal Octets</ttcol>
+          <ttcol width="28%">Record Name / Field Name</ttcol>
+          <ttcol width="36%">Field Value</ttcol>
           <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
           <c>004</c> <c>00</c> <c>version</c> <c>0 (1)</c>
           <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
@@ -1635,8 +1637,10 @@ EST5EDT,M3.2.0,M11.1.0
 
       <section title='Version 2 File Representing Pacific/Honolulu'>
         <texttable>
-          <ttcol>File Offset</ttcol> <ttcol>Hexadecimal Octets</ttcol>
-          <ttcol>Record Name / Field Name</ttcol> <ttcol>Field Value</ttcol>
+          <ttcol width="13%">File Offset</ttcol>
+          <ttcol width="23%">Hexadecimal Octets</ttcol>
+          <ttcol width="28%">Record Name / Field Name</ttcol>
+          <ttcol width="36%">Field Value</ttcol>
           <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
           <c>004</c> <c>32</c> <c>version</c> <c>'2' (2)</c>
           <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
@@ -1896,12 +1900,17 @@ EST5EDT,M3.2.0,M11.1.0
           as local wall-clock time
           (see the definitions of UT/local indicators
           and standard/wall indicators in <xref target="data"/>).</t>
+
+          <t>The TZ string value has been line-wrapped for
+          presentation purposes only.</t>
         </list>
         </t>
 
         <texttable>
-          <ttcol>File Offset</ttcol> <ttcol>Hexadecimal Octets</ttcol>
-          <ttcol>Record Name / Field Name</ttcol> <ttcol>Field Value</ttcol>
+          <ttcol width="13%">File Offset</ttcol>
+          <ttcol width="23%">Hexadecimal Octets</ttcol>
+          <ttcol width="28%">Record Name / Field Name</ttcol>
+          <ttcol width="36%">Field Value</ttcol>
           <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
           <c>004</c> <c>33</c> <c>version</c> <c>'3' (3)</c>
           <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
@@ -1952,24 +1961,21 @@ EST5EDT,M3.2.0,M11.1.0
           <c>114</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
           <c>115</c> <c>49 53 54 2d 32 49 44 54 2c
           4d 33 2e 34 2e 34 2f 32 36 2c 4d 31 30 2e 35 2e 30</c>
-          <c>TZ string</c> <c>"IST-2IDT,
+          <c>TZ string</c> <c>"IST-2IDT,<!-- force text to be wrapped here -->
           M3.4.4/26,M10.5.0"</c>
           <c>141</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
         </texttable>
       </section>
 
       <section anchor='v4example'
-               title='Truncated Version 4 File Representing
-                      America/New_York (with Leap Seconds Expiration)'>
+               title='Truncated Version 4 File Representing America/New_York'>
 
         <t>The following TZif file has been truncated to start on
         2022-01-01T00:00:00Z.</t>
 
         <t>In this example:
         <list style='symbols'>
-          <t>The leap second table is truncated at the start and
-          contains an expiration time,
-          so the version 1 header contains only the required
+          <t>The version 1 header contains only the required
           minimum data, which will be ignored by readers.</t>
 
           <t>The version 4 header leverages the fact that by specifying
@@ -1985,12 +1991,17 @@ EST5EDT,M3.2.0,M11.1.0
           <t>The last leap second correction matches the
           second-to-last leap second correction, indicating the
           expiration time of the leap second table.</t>
+
+          <t>The TZ string value has been line-wrapped for
+          presentation purposes only.</t>
         </list>
         </t>
 
         <texttable>
-          <ttcol>File Offset</ttcol> <ttcol>Hexadecimal Octets</ttcol>
-          <ttcol>Record Name / Field Name</ttcol> <ttcol>Field Value</ttcol>
+          <ttcol width="13%">File Offset</ttcol>
+          <ttcol width="23%">Hexadecimal Octets</ttcol>
+          <ttcol width="28%">Record Name / Field Name</ttcol>
+          <ttcol width="36%">Field Value</ttcol>
           <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
           <c>004</c> <c>34</c> <c>version</c> <c>'4' (4)</c>
           <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
@@ -2053,7 +2064,8 @@ EST5EDT,M3.2.0,M11.1.0
           <c>138</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
           <c>139</c> <c>45 53 54 35 45 44 54 2c 4d 33 2e 32 2e 30 2c
           4d 31 31 2e 31 2e 30</c>
-          <c>TZ string</c> <c>"EST5EDT,M3.2.0,M11.1.0"</c>
+          <c>TZ string</c> <c>"EST5EDT,<!-- force text to be wrapped here -->
+          M3.2.0,M11.1.0"</c>
           <c>161</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
         </texttable>
       </section>
@@ -2089,7 +2101,10 @@ EST5EDT,M3.2.0,M11.1.0
 	    <t>Added specification of the version 4 format and the
 	    optional leap second table truncation and expiration,
 	    along with an example and relevant
-	    interoperability considerations.</t> 
+	    interoperability considerations.</t>
+            <t>Specified column widths in example tables.</t>
+            <t>Noted that long TZ string values in examples are
+            line-wrapped for presentation purposes only.</t>
           </list>
         </t>
       </section>
