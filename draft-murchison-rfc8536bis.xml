@@ -40,7 +40,6 @@
 <?rfc strict="yes"?>
 <rfc category="std" ipr='trust200902'
      obsoletes="8536"
-     submissionType="independent" consensus="no"
      docName='draft-murchison-rfc8536bis-01'>
 
   <front>
