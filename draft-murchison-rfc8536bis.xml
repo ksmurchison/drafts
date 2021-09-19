@@ -1,36 +1,12 @@
-<?xml version="1.0" encoding="US-ASCII"?>
-<?xml-stylesheet type="text/xsl" href="../../rfc2629.xslt"?>
-<!DOCTYPE rfc SYSTEM 'rfc2629.dtd'
-[
-<!ENTITY rfc0020 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.0020.xml'>
-<!ENTITY rfc2119 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'>
-<!ENTITY rfc2045 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml'>
-<!ENTITY rfc4833 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4833.xml'>
-<!ENTITY rfc5545 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5545.xml'>
-<!ENTITY rfc6557 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6557.xml'>
-<!ENTITY rfc6838 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml'>
-<!ENTITY rfc7231 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml'>
-<!ENTITY rfc7808 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7808.xml'>
-<!ENTITY rfc8174 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml'>
-<!ENTITY rfc8446 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml'>
-<!ENTITY rfc8536 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8536.xml'>
-<!ENTITY ieee1003 PUBLIC ''
-'http://xml2rfc.ietf.org/public/rfc/bibxml-ieee/reference.IEEE.1003.1_2013_EDITION.xml'>
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
 ]>
+<?xml-stylesheet type="text/xsl" href="../../rfc2629.xslt"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
@@ -38,21 +14,26 @@
 <?rfc subcompact="no"?>
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
-<rfc category="std" ipr='trust200902'
-     obsoletes="8536"
-     docName='draft-murchison-rfc8536bis-01'>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
+     docName="draft-murchison-rfc8536bis-02" updates=""
+     ipr="trust200902" obsoletes="8536"
+     submissionType="IETF" xml:lang="en" tocInclude="true"
+     symRefs="true" sortRefs="true" tocDepth="3" version="3">
+  <!-- xml2rfc v2v3 conversion 3.9.0 -->
 
   <front>
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <author initials="A.D." surname="Olson"
-            fullname="Arthur David Olson">
-      <organization />
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-02"/>
+
+    <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
+      <organization/>
       <address>
         <email>arthurdavidolson@gmail.com</email>
       </address>
     </author>
+
     <author initials="P." surname="Eggert" fullname="Paul Eggert">
       <organization abbrev="UCLA">
         University of California, Los Angeles
@@ -61,18 +42,17 @@
         <email>eggert@cs.ucla.edu</email>
       </address>
     </author>
-    <author initials="K." surname="Murchison"
-            fullname="Kenneth Murchison"> 
+
+    <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
         <email>murch@fastmailteam.com</email>
       </address>
     </author>
 
-    <date />
+    <date/>
     <area>General</area>
     <workgroup>Internet Engineering Task Force (IETF)</workgroup>
-
     <keyword>time zone</keyword>
     <keyword>tzdata</keyword>
     <keyword>tzif</keyword>
@@ -83,22 +63,22 @@
       independent of any particular service or protocol.
       Two media types for this format are also defined.
       </t>
-      <t>This document replaces and obsoletes RFC 8536.</t> 
+      <t>This document replaces and obsoletes RFC 8536.</t>
     </abstract>
-
   </front>
 
   <middle>
-    <section title='Introduction'>
+    <section numbered="true" toc="default">
+      <name>Introduction</name>
+
       <t>Time zone data typically consists of offsets from universal
       time (UT), daylight saving transition rules, one or
       more local time designations (acronyms or abbreviations), and
       optional leap-second adjustments.
-      One such format for conveying this information is <xref
-      target="RFC5545">iCalendar</xref>.  It is a text-based format
-      used by calendaring and scheduling systems.
+      One such format for conveying this information is
+      <xref target="RFC5545" format="default">iCalendar</xref>.
+      It is a text-based format used by calendaring and scheduling systems.
       </t>
-
       <t>This document specifies the widely deployed Time Zone
       Information Format (TZif).
       It is a binary format used by most UNIX systems to calculate
@@ -106,61 +86,67 @@
       This format was introduced in the 1980s and has evolved since
       then into multiple upward-compatible versions.
       There is a wide variety of interoperable software capable of
-      generating and reading files in this format <xref target="tz-link" />.
+      generating and reading files in this format
+      <xref target="tz-link" format="default"/>.
       </t>
-
       <t>This specification does not define the source of the data
       assembled into a TZif file.
-      One such source is the IANA-hosted time zone database <xref
-      target="RFC6557" />.</t>
-
+      One such source is the IANA-hosted time zone database
+      <xref target="RFC6557" format="default"/>.</t>
       <t>This document obsoletes RFC 8536, providing editorial improvements,
       new details, and errata fixes while keeping full compatibility with
       the interchange format of RFC 8536.
 <!--      It does not create a new version of the format.-->
       Additionally, a new version of the format is defined.
       The changes from RFC 8536 are summarized in
-      <xref target="changes"/>.</t>
-<!--
+      <xref target="changes" format="default"/>.</t>
+      <!--
       <t>This document obsoletes <xref target="RFC8536"/>, with the
       changes being summarized in <xref target="changes"/>.</t>
 -->
-    </section>  
+    </section>
 
-    <section title='Conventions Used in This Document'>
-        <t>
-    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-    NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-    "MAY", and "OPTIONAL" in this document are to be interpreted as
-    described in BCP&nbsp;14 <xref target="RFC2119"/> <xref target="RFC8174"/> 
-    when, and only when, they appear in all capitals, as shown here.
-        </t>
+    <section numbered="true" toc="default">
+      <name>Conventions Used in This Document</name>
 
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+      "MAY", and "OPTIONAL" in this document are to be interpreted as
+      described in BCP&nbsp;14 <xref target="RFC2119" format="default"/>
+      <xref target="RFC8174" format="default"/> 
+      when, and only when, they appear in all capitals, as shown here.
+      </t>
 
       <t>The following terms are used in this document
-      (see <xref target="tz-link">"Sources for Time Zone and Daylight
-      Saving Time Data"</xref> for more detailed information about
-      civil timekeeping data and practice):
+      (see <xref target="tz-link" format="default">
+      "Sources for Time Zone and Daylight Saving Time Data"</xref>
+      for more detailed information about civil timekeeping data and
+      practice):
 	
-      <list style="hanging">
-        <t hangText="Coordinated Universal Time (UTC):">
+      </t>
+      <dl newline="false" spacing="normal">
+        <dt>Coordinated Universal Time (UTC):</dt>
+        <dd>
           The basis for civil time since 1960.
           It is approximately equal to mean solar time at the prime
           meridian (0 degrees longitude).
-        </t>
-        <t hangText="Daylight Saving Time (DST):">
+        </dd>
+        <dt>Daylight Saving Time (DST):</dt>
+        <dd>
           The time according to a location's law or practice,
 	  when adjusted as necessary from standard time.  The
 	  adjustment may be positive or negative, and the amount of
 	  adjustment may vary depending on the date and time; the TZif
 	  format even allows the adjustment to be zero, although this
 	  is not common practice.
-        </t>
-        <t hangText="International Atomic Time (TAI):">
+        </dd>
+        <dt>International Atomic Time (TAI):</dt>
+        <dd>
           The time standard based on atomic clocks since 1972.
           It is equal to UTC but without leap-second adjustments.
-        </t>
-	<t hangText="Leap-Second Correction (LEAPCORR):">
+        </dd>
+        <dt>Leap-Second Correction (LEAPCORR):</dt>
+        <dd>
 	  The value of TAI - UTC - 10 for timestamps after the
 	  first leap second, and zero for timestamps before that.
 	  The expression "TAI - UTC - 10" comes from the fact
@@ -168,43 +154,54 @@
 	  the first leap second in 1972, so clocks with leap
 	  seconds have a zero LEAPCORR before the first leap
 	  second.
-	</t>
-        <t hangText="Local Time:">
+	</dd>
+        <dt>Local Time:</dt>
+        <dd>
 	  Civil time for a particular location.  Its offset
 	  from universal time can depend on the date and time of day.
-        </t>
-	<t hangText="POSIX Epoch:">
+        </dd>
+        <dt>POSIX Epoch:</dt>
+        <dd>
 	  1970-01-01 00:00:00 UTC, the basis for absolute timestamps
 	  in this document.
-	</t>
-        <t hangText="Standard Time:">
+	</dd>
+        <dt>Standard Time:</dt>
+        <dd>
           The time according to a location's law or practice,
           unadjusted for Daylight Saving Time.
-        </t>
-        <t hangText="Time Change:">
+        </dd>
+        <dt>Time Change:</dt>
+        <dd>
+          <t>
           A change to civil timekeeping practice. It occurs when one
           or more of the following happen simultaneously:
-          <list style="numbers">
-            <t>a change in UT offset</t>
-	    <t>a change in whether daylight saving time is in effect</t>
-            <t>a change in time zone abbreviation</t>
-	    <t>a leap second (i.e., a change in LEAPCORR)</t>
-          </list>
-        </t>
-        <t hangText="Time Zone Data:">
-          The <xref target="RFC7808">Time Zone Data Distribution
-          Service (TZDIST)</xref> defines "Time zone data" as "data
+          </t>
+          <ol spacing="normal" type="1"><li>a change in UT offset</li>
+            <li>a change in whether daylight saving time is in effect</li>
+
+            <li>a change in time zone abbreviation</li>
+
+            <li>a leap second (i.e., a change in LEAPCORR)</li>
+          </ol>
+        </dd>
+        <dt>Time Zone Data:</dt>
+        <dd>
+          The <xref target="RFC7808" format="default">
+          Time Zone Data Distribution Service (TZDIST)</xref>
+          defines "Time zone data" as "data
           that defines a single time zone, including an identifier,
           UTC offset values, DST rules, and other information such as
           time zone abbreviations."  The interchange format defined in
           this document is one such form of time zone data.
-        </t>
-	<t hangText="Transition Time:">
+        </dd>
+        <dt>Transition Time:</dt>
+        <dd>
 	  The moment of occurrence of a time change that is not a leap
 	  second.  It is identified with a signed integer count of
 	  UNIX leap time seconds since the POSIX epoch.
-	</t>
-        <t hangText="Universal Time (UT):">
+	</dd>
+        <dt>Universal Time (UT):</dt>
+        <dd>
           The basis of civil time.
           This is the principal form of the mean solar time at the
           prime meridian (0 degrees longitude) for timestamps before
@@ -213,17 +210,20 @@
           Although UT is sometimes called "UTC" or "GMT" in other
           sources, this specification uses the term "UT" to avoid
           confusion with UTC or with GMT.
-        </t>
-        <t hangText="UNIX Time:">
+        </dd>
+        <dt>UNIX Time:</dt>
+        <dd>
           The time as returned by the time() function provided by the C
 	  programming language
-          (see Section 3 of the "System Interfaces" volume of <xref
-          target="POSIX"/>).  This is an integer number of seconds
+          (see Section 3 of the "System Interfaces" volume of
+          <xref target="POSIX" format="default"/>).
+          This is an integer number of seconds
 	  since the POSIX epoch, not counting
           leap seconds.  As an extension to POSIX, negative values
           represent times before the POSIX epoch, using UT.
-        </t>
-	<t hangText="UNIX Leap Time:">
+        </dd>
+        <dt>UNIX Leap Time:</dt>
+        <dd>
           UNIX time plus all preceding leap-second corrections.
 	  For example, if the first leap-second record in a TZif file
           occurs at 1972-06-30 23:59:60 UTC, the UNIX leap time for
@@ -235,18 +235,19 @@
 	  and the UNIX leap time of 1973-01-01 00:00:00 UTC would be 94694402.
 	  If a TZif file specifies no leap-second records,
 	  UNIX leap time is equal to UNIX time.
-	</t>
-        <t hangText="Wall Time:">
+	</dd>
+        <dt>Wall Time:</dt>
+        <dd>
 	  Another name for local time; short for "wall-clock time".
-        </t>
-      </list>
-      </t>
-    </section>  
+        </dd>
+      </dl>
+    </section>
 
-    <section anchor='format'
-             title='The Time Zone Information Format (TZif)'>
+    <section anchor="format" numbered="true" toc="default">
+      <name>The Time Zone Information Format (TZif)</name>
+
       <t>The Time Zone Information Format begins with a fixed 44-octet
-      <xref target='header'>version 1 header</xref>
+      <xref target="header" format="default">version 1 header</xref>
       containing a field that specifies the version
       of the file's format.  Readers designed for version N can read
       version N+1 files without too much trouble; data specific to
@@ -257,20 +258,20 @@
       tolerate well.</t>
 
       <t>The version 1 header is followed by a variable-length
-      <xref target='data'>version 1 data block</xref> containing
-      four-octet (32-bit) transition times and leap-second
+      <xref target="data" format="default">version 1 data block</xref>
+      containing four-octet (32-bit) transition times and leap-second
       occurrences. These 32-bit values are limited to representing
       time changes from 1901-12-13 20:45:52 through 2038-01-19 03:14:07 UT,
       and the version 1 header and data block are present only for backward
       compatibility with obsolescent readers, as discussed in
-      <xref target='issues'>Common Interoperability Issues</xref>.</t>
-
+      <xref target="issues" format="default">
+      Common Interoperability Issues</xref>.</t>
       <t>Version 1 files terminate after the version 1 data block.
       Files from versions 2 and higher extend the format by appending a second
       44-octet version 2+ header, a variable-length version 2+ data block
       containing eight-octet (64-bit) transition times and leap-second
       occurrences, and a variable-length
-      <xref target='footer'>footer</xref>.  
+      <xref target="footer" format="default">footer</xref>.  
       These 64-bit values can represent times approximately 292
       billion years into the past or future.</t>
 
@@ -280,11 +281,11 @@
 	known as big-endian), with all bits significant. Signed
 	integer values MUST be represented using two's complement.
       </t>
-
       <t>A TZif file is structured as follows:</t>
 
-      <figure title='General Format of TZif Files'>
-        <artwork type='inline' align='center'><![CDATA[
+      <figure>
+        <name>General Format of TZif Files</name>
+        <artwork type="ascii-art" align="center" name="" alt=""><![CDATA[
    Version 1        Versions 2+
 +-------------+   +-------------+
 |  Version 1  |   |  Version 1  |
@@ -304,13 +305,15 @@
 ]]></artwork>
       </figure>
 
-      <section anchor='header' title='TZif Header'>
+      <section anchor="header" numbered="true" toc="default">
+        <name>TZif Header</name>
 
         <t>A TZif header is structured as follows
         (the lengths of multi-octet fields are shown in parentheses):</t>
 
-        <figure title='TZif Header'>
-          <artwork type='inline' align='center'><![CDATA[
+        <figure>
+          <name>TZif Header</name>
+          <artwork type="ascii-art" align="center" name="" alt=""><![CDATA[
 +---------------+---+
 |  magic    (4) |ver|
 +---------------+---+---------------------------------------+
@@ -324,76 +327,90 @@
         </figure>
 
         <t>The fields of the header are defined as follows:</t>
-        <t>
-	  <list style='hanging'>
-	    <t hangText="magic:">
-	      The four-octet <xref target="RFC20">ASCII</xref>
+        <dl newline="false" spacing="normal">
+          <dt>magic:</dt>
+          <dd>
+	      The four-octet <xref target="RFC20" format="default">ASCII</xref>
               sequence "TZif" (0x54 0x5A 0x69 0x66),
               which identifies the file as utilizing the Time Zone
               Information Format.
-	    </t>
-	    <t hangText="ver(sion):">
+	    </dd>
+          <dt>ver(sion):</dt>
+          <dd>
+            <t>
 	      An octet identifying the version of the
               file's format.  The value MUST be one of the following:
 
-	      <list style='hanging'>
-	        <t hangText='NUL (0x00)'>
+            </t>
+            <dl newline="false" spacing="normal">
+              <dt>NUL (0x00)</dt>
+              <dd>
 		  Version 1 - The file contains only the version 1
                   header and data block.
 	          Version 1 files MUST NOT contain a version 2+ header,
                   data block, or footer.
-	        </t>
-	        <t hangText="'2' (0x32)">
+	        </dd>
+              <dt>'2' (0x32)</dt>
+              <dd>
 		  Version 2 - The file MUST contain the version 1
 	          header and data block, a version 2+ header and data
                   block, and a footer.
                   The TZ string in the
-		  <xref target='footer'>footer</xref>, if
+		  <xref target="footer" format="default">footer</xref>, if
                   nonempty, MUST strictly adhere to the
 		  requirements for the TZ environment variable
                   as defined in
                   Section 8.3 of the "Base Definitions" volume of
-	          <xref target="POSIX"/>
+	          <xref target="POSIX" format="default"/>
 		  and MUST encode the POSIX portable character set as
 		  ASCII.
 		  The leap second table MUST NOT be
-                  <xref target='truncation'>truncated at the start</xref>,
+                  <xref target="truncation" format="default">
+                    truncated at the start</xref>,
 		  and MUST NOT contain an expiration time.
-	        </t>
-	        <t hangText="'3' (0x33)">
+	        </dd>
+              <dt>'3' (0x33)</dt>
+              <dd>
 		  Version 3 - The file MUST conform to all version 2
 		  requirements, except that any TZ string in the
-		  <xref target='footer'>footer</xref>
+		  <xref target="footer" format="default">footer</xref>
 		  MAY use the TZ string extensions
-                  <xref target='tzstrext'>described below</xref>.
-	        </t>
-	        <t hangText="'4' (0x34)">
+                  <xref target="tzstrext" format="default">
+                    described below</xref>.
+	        </dd>
+              <dt>'4' (0x34)</dt>
+              <dd>
 		  Version 4 - The file MUST conform to all version 3
 		  requirements, except that the leap second table
 		  MAY be truncated at the start, and
 		  MAY contain an expiration time.
-	        </t>
-	      </list>
-	    </t>
-	    <t hangText="isutcnt:">
+	        </dd>
+            </dl>
+          </dd>
+          <dt>isutcnt:</dt>
+          <dd>
               A four-octet unsigned integer specifying the number of
               UT/local indicators contained in the data block --
               MUST either be zero or equal to "typecnt".
-	    </t>
-	    <t hangText="isstdcnt:">
+	    </dd>
+          <dt>isstdcnt:</dt>
+          <dd>
               A four-octet unsigned integer specifying the number of
               standard/wall indicators contained in the data block --
               MUST either be zero or equal to "typecnt".
-	    </t>
-	    <t hangText="leapcnt:">
+	    </dd>
+          <dt>leapcnt:</dt>
+          <dd>
               A four-octet unsigned integer specifying the number of
               leap-second records contained in the data block.
-	    </t>
-	    <t hangText="timecnt:">
+	    </dd>
+          <dt>timecnt:</dt>
+          <dd>
               A four-octet unsigned integer specifying the number of
               transition times contained in the data block.
-	    </t>
-	    <t hangText="typecnt:">
+	    </dd>
+          <dt>typecnt:</dt>
+          <dd>
               A four-octet unsigned integer specifying the number of
               local time type records contained in the data block --
               MUST NOT be zero.
@@ -402,25 +419,25 @@
 	      no transitions, at least one such record is nevertheless
 	      required because many TZif readers reject files that
 	      have zero time types.)
-	    </t>
-	    <t hangText="charcnt:">
+	    </dd>
+          <dt>charcnt:</dt>
+          <dd>
               A four-octet unsigned integer specifying the total number
               of octets used by the set of time zone designations
               contained in the data block - MUST NOT be zero.
               The count includes the trailing NUL (0x00) octet at the
               end of the last time zone designation.
-	    </t>
-	  </list>
-        </t>
-	
-	<t>Although the version 1 and 2+ headers have the same format,
+	    </dd>
+        </dl>
+        <t>Although the version 1 and 2+ headers have the same format,
 	magic number, and version fields, their count
 	fields may differ, because the version 1 data can be a subset of
 	the version 2+ data.</t>
-      </section> 
+      </section>
 
-      <section anchor='data' title='TZif Data Block'>
-  
+      <section anchor="data" numbered="true" toc="default">
+        <name>TZif Data Block</name>
+
         <t>A TZif data block consists of seven variable-length
         elements, each of which is a series of items.  The
         number of items in each series is determined by the
@@ -430,7 +447,6 @@
         do not wish to parse or use the version 1 data block can
         calculate its total length and skip directly to the header of
         the version 2+ data block.</t>
-
         <t>In the version 1 data block, time values are 32 bits
         (TIME_SIZE = 4 octets).  In the version 2+ data block, present
         only in version 2 and higher files, time values are 64 bits
@@ -439,8 +455,9 @@
         <t>The data block is structured as follows
         (the lengths of multi-octet fields are shown in parentheses):</t>
 
-        <figure title='TZif Data Block'>
-          <artwork type='inline' align='center'><![CDATA[
+        <figure>
+          <name>TZif Data Block</name>
+          <artwork type="ascii-art" align="center" name="" alt=""><![CDATA[
 +---------------------------------------------------------+
 |  transition times          (timecnt x TIME_SIZE)        |
 +---------------------------------------------------------+
@@ -460,9 +477,9 @@
         </figure>
 
         <t>The elements of the data block are defined as follows:</t>
-        <t>
-	  <list style='hanging'>
-	    <t hangText="transition times:">
+        <dl newline="false" spacing="normal">
+          <dt>transition times:</dt>
+          <dd>
 	      A series of four- or eight-octet UNIX leap-time values sorted
               in strictly ascending order.
               Each value is used as a transition time at which the rules
@@ -474,8 +491,9 @@
 	      the Big Bang, and avoiding earlier timestamps works
 	      around known TZif reader bugs relating to outlandishly
 	      negative timestamps.)
-	    </t>
-	    <t hangText="transition types:">
+	    </dd>
+          <dt>transition types:</dt>
+          <dd>
 	      A series of one-octet unsigned integers specifying the
               type of local time of the corresponding transition time.
               These values serve as zero-based indices into the array
@@ -483,24 +501,25 @@
 	      The number of type indices is specified by the "timecnt"
               field in the header.
               Each type index MUST be in the range [0, "typecnt" - 1].
-	    </t>
-	    <t hangText="local time type records:">
+	    </dd>
+          <dt>local time type records:</dt>
+          <dd>
+            <t>
               A series of six-octet records specifying a local time
               type.
               The number of records is specified by the "typecnt"
               field in the header.
               Each record has the following format
               (the lengths of multi-octet fields are shown in parentheses):
-              <figure>
-                <artwork type='inline'><![CDATA[
-   +---------------+---+---+
-   |  utoff (4)    |dst|idx|
-   +---------------+---+---+
+            </t>
+            <artwork type="ascii-art" name="" align="left" alt=""><![CDATA[
++---------------+---+---+
+|  utoff (4)    |dst|idx|
++---------------+---+---+
 ]]></artwork>
-              </figure>
-
-	      <list style='hanging'>
-	        <t hangText="utoff:">
+            <dl newline="false" spacing="normal">
+              <dt>utoff:</dt>
+              <dd>
                   A four-octet signed integer specifying the number of
                   seconds to be added to UT in order to determine local
                   time. The value MUST NOT be -2**31 and SHOULD be in
@@ -511,40 +530,46 @@
 		  Restricting it to [-89999, 93599] allows easy support by
 		  implementations that already support the
 		  POSIX-required range [-24:59:59, 25:59:59].
-                </t>
-	        <t hangText="(is)dst:">
+                </dd>
+              <dt>(is)dst:</dt>
+              <dd>
                   A one-octet value indicating whether local
                   time should be considered Daylight Saving Time (DST).
 		  The value MUST be 0 or 1.
                   A value of one (1) indicates that this type of time is DST.
                   A value of zero (0) indicates that this time type
                   is standard time.
-                </t>
-	        <t hangText="(desig)idx:">
+                </dd>
+              <dt>(desig)idx:</dt>
+              <dd>
                   A one-octet unsigned integer specifying a zero-based
                   index into the series of time zone designation octets,
                   thereby selecting a particular designation string.
                   Each index MUST be in the range [0, "charcnt" - 1]; it
-		  designates the NUL&#8209;terminated string of octets
+		  designates the NUL&nbhy;terminated string of octets
 		  starting at position "idx" in the time zone
 		  designations.  (This string MAY be empty.)  A NUL
 		  octet MUST exist in the time zone designations at or
 		  after position "idx".
-                </t>
-              </list>
-            </t>
-	    <t hangText="time zone designations:">
+                </dd>
+            </dl>
+          </dd>
+          <dt>time zone designations:</dt>
+          <dd>
               A series of octets constituting an array of
-              NUL&#8209;terminated (0x00) time zone designation strings.
+              NUL&nbhy;terminated (0x00) time zone designation strings.
               The total number of octets is specified by the
               "charcnt" field in the header.
               Note that two designations MAY overlap if one is a
               suffix of the other.
 	      The character encoding of time zone designation strings
-	      is not specified; however, see <xref target='interop'/>
+	      is not specified; however,
+              see <xref target="interop" format="default"/>
 	      of this document.
-	    </t>
-	    <t hangText="leap-second records:">
+	    </dd>
+          <dt>leap-second records:</dt>
+          <dd>
+            <t>
               A series of eight- or twelve-octet records specifying
               the corrections that need to be applied to UTC in order to
               determine TAI.
@@ -554,36 +579,38 @@
               "leapcnt" field in the header.
               Each record has one of the following structures
               (the lengths of multi-octet fields are shown in parentheses):
-	      <list style='hanging'>
-		<t hangText="Version 1 Data Block:">
-                  <figure>
-                    <artwork type='inline'><![CDATA[
-   +---------------+---------------+
-   |  occur (4)    |  corr (4)     |               
-   +---------------+---------------+
+            </t>
+            <dl newline="false" spacing="normal">
+              <dt>Version 1 Data Block:</dt>
+              <dd>
+                <artwork type="ascii-art" name="" align="left" alt=""><![CDATA[
++---------------+---------------+
+|  occur (4)    |  corr (4)     |               
++---------------+---------------+
 ]]></artwork>
-                  </figure>
-                </t>
-		<t hangText="version 2+ Data Block:">
-                  <figure>
-                    <artwork type='inline'><![CDATA[
-   +---------------+---------------+---------------+
-   |  occur (8)                    |  corr (4)     |
-   +---------------+---------------+---------------+
+              </dd>
+              <dt>version 2+ Data Block:</dt>
+              <dd>
+                <artwork type="ascii-art" name="" align="left" alt=""><![CDATA[
++---------------+---------------+---------------+
+|  occur (8)                    |  corr (4)     |
++---------------+---------------+---------------+
 ]]></artwork>
-                  </figure>
-                </t>
-              </list>
-	      <list style='hanging'>
-	        <t hangText="occur(rence):">
+              </dd>
+            </dl>
+            <dl newline="false" spacing="normal">
+              <dt>occur(rence):</dt>
+              <dd>
 	          A four- or eight-octet UNIX leap time value specifying the
 		  time at which a leap-second correction occurs
 		  or at which the leap second table expires.
 		  The first value, if present, MUST be nonnegative,
 		  and each leap second MUST occur at the end of a UTC
 		  calendar month.
-                </t>
-	        <t hangText="corr(ection):">
+                </dd>
+              <dt>corr(ection):</dt>
+              <dd>
+                <t>
 	          A four-octet signed integer specifying the value
 		  of LEAPCORR on or after the occurrence.
 
@@ -592,9 +619,11 @@
 		  LEAPCORR is zero if the first correction is one (1)
 		  or minus one (-1),
 		  and is unspecified otherwise (which can happen only in files
-		  <xref target='truncation'>truncated at the start</xref>).
+		  <xref target="truncation" format="default">
+                    truncated at the start</xref>).
 
-                  <vspace/><vspace/>
+                </t>
+                <t>
 		  The first leap second is a positive leap second if and
 		  only if its correction is positive.
 		  Each correction after the first MUST differ from the
@@ -606,9 +635,11 @@
 		  same as the second-to-last record, with the last record
 		  indicating the expiration time of the leap-second table.
                 </t>
-              </list>
-	    </t>
-	    <t hangText="standard/wall indicators:" anchor="stdwall">
+              </dd>
+            </dl>
+          </dd>
+          <dt>standard/wall indicators:</dt>
+          <dd anchor="stdwall">
               A series of one-octet values indicating whether
               the transition times associated with local time types were
               specified as standard time or wall-clock time.
@@ -622,8 +653,9 @@
               If "isstdcnt" is zero (0), all transition times
               associated with local time types are assumed to be
               specified as wall time.
-	    </t>
-	    <t hangText="UT/local indicators:" anchor="utlocal">
+	    </dd>
+          <dt>UT/local indicators:</dt>
+          <dd anchor="utlocal">
               A series of one-octet values indicating whether
               the transition times associated with local time types were
               specified as UT or local time.
@@ -637,9 +669,8 @@
               If "isutcnt" is zero (0), all transition times
               associated with local time types are assumed to be
               specified as local time.
-	    </t>
-	  </list>
-        </t>
+	    </dd>
+        </dl>
 
         <t>The type corresponding to a transition time specifies local
         time for timestamps starting at the given transition time and
@@ -648,8 +679,8 @@
         specified by the first time type (time type 0).
         Local time for timestamps on or after the last transition is
         specified by the TZ string in the
-        <xref target='footer'>footer</xref> if present and nonempty; otherwise,
-        it is unspecified.
+        <xref target="footer" format="default">footer</xref>
+        if present and nonempty; otherwise, it is unspecified.
         If there are no transitions, local time for all timestamps is
         specified by the TZ string in the footer if present and
         nonempty; otherwise, it is specified by time type 0.
@@ -672,15 +703,17 @@
 	transition type array.
         Likewise, every octet in the time zone designations array
         SHOULD be used by at least one time type record.</t>
-      </section>  
+      </section>
 
-      <section anchor='footer' title='TZif Footer'>
-  
+      <section anchor="footer" numbered="true" toc="default">
+        <name>TZif Footer</name>
+
         <t>The TZif footer is structured as follows
         (the lengths of multi-octet fields are shown in parentheses):</t>
 
-        <figure title='TZif Footer'>
-          <artwork type='inline' align='center'><![CDATA[
+        <figure>
+          <name>TZif Footer</name>
+          <artwork type="ascii-art" align="center" name="" alt=""><![CDATA[
 +---+--------------------+---+
 | NL|  TZ string (0...)  |NL |
 +---+--------------------+---+
@@ -688,20 +721,22 @@
         </figure>
 
         <t>The elements of the footer are defined as follows:</t>
-        <t>
-	  <list style='hanging'>
-            <t hangText="NL:">
+        <dl newline="false" spacing="normal">
+          <dt>NL:</dt>
+          <dd>
               An ASCII new line character (0x0A).
-            </t>
-            <t hangText="TZ string:">
+            </dd>
+          <dt>TZ string:</dt>
+          <dd>
               A rule for computing local time changes after the last
 	      transition time stored in the version 2+ data block.
 	      The string is either empty or uses the expanded format
 	      of the "TZ" environment variable as defined in
               Section 8.3 of the "Base Definitions" volume of
-              <xref
-                  target="POSIX"/> with ASCII encoding, possibly utilizing
-              <xref target='tzstrext'>extensions described below</xref>
+              <xref target="POSIX" format="default"/> with ASCII
+              encoding, possibly utilizing
+              <xref target="tzstrext" format="default">
+              extensions described below</xref>
               in version 3 and higher files.
 	      If the string is empty, the corresponding information is
 	      not available.
@@ -712,154 +747,162 @@
               transition should yield the same time type as was specified in
 	      the last transition.
 	      The string MUST NOT contain NUL octets or be
-	      NUL&#8209;terminated, and it
+	      NUL&nbhy;terminated, and it
               SHOULD NOT begin with the ':' (colon) character.
-            </t>
-	  </list>
-        </t>
+            </dd>
+        </dl>
 
-	<t>The TZif footer is present only in version 2 and higher files,
+        <t>The TZif footer is present only in version 2 and higher files,
 	as the obsolescent version 1 format was designed before the
 	need for a footer was apparent.</t>
-	
-        <section anchor='tzstrext' title='TZ String Extensions'>
-	  <t>The TZ string in a version 3 or higher TZif file MAY use the
+
+        <section anchor="tzstrext" numbered="true" toc="default">
+          <name>TZ String Extensions</name>
+
+          <t>The TZ string in a version 3 or higher TZif file MAY use the
 	  following extensions to POSIX TZ strings.
 	  These extensions are described using the terminology of
             Section 8.3 of the "Base Definitions" volume of 
-	    <xref target="POSIX"/>.
+	    <xref target="POSIX" format="default"/>.
+          </t>
 
-          <list style='symbols'>
-            <t>The hours part of the transition times may be
+          <ul spacing="normal">
+            <li>
+              <t>The hours part of the transition times may be
             signed and range from -167 through 167
             (-167 &lt;= hh &lt;= 167) instead of 
             the POSIX-required unsigned values from 0 through 24.
-	    <list style='hanging'>
-              <t hangText="Example: &lt;-03&gt;3&lt;-02&gt;,M3.5.0/-2,M10.5.0/-1">
-                  <vspace/>
+              </t>
+              <dl newline="true" spacing="normal">
+                <dt>Example: &lt;-03&gt;3&lt;-02&gt;,M3.5.0/-2,M10.5.0/-1</dt>
+                <dd>
                   This represents a time zone that observes daylight
                   saving time from 22:00 on the day before March's last
                   Sunday until 23:00 on the day before October's last
                   Sunday. Standard time is 3 hours west of UT and is
                   abbreviated "-03"; daylight saving time is 2 hours
                   west of UT and is abbreviated "-02".
-              </t>
-            </list>
+              </dd>
+              </dl>
+            </li>
 
-            </t>
-            <t>DST is considered to be in effect all year if it
+            <li>
+              <t>DST is considered to be in effect all year if it
             starts January 1 at 00:00 and ends December 31 at
             24:00 plus the difference between daylight saving
             and standard time, leaving no room for standard time
             in the calendar.
-	    <list style='hanging'>
-              <t hangText="Example: EST5EDT,0/0,J365/25">
-                  <vspace/>
+              </t>
+              <dl newline="true" spacing="normal">
+                <dt>Example: EST5EDT,0/0,J365/25</dt>
+                <dd>
                   This represents a time zone that observes daylight
                   saving time all year. It is 4 hours west of UT and
                   is abbreviated "EDT".
                   The "EST" is ignored.
-              </t>
-
-              <t hangText="Example: XXX3EDT4,0/0,J365/23">
-                  <vspace/>
+              </dd>
+                <dt>Example: XXX3EDT4,0/0,J365/23</dt>
+                <dd>
                   This represents the same time zone as the previous
                   example.
                   It uses a DST further west of UTC than standard
                   time.
                   The "XXX" is ignored.
-              </t>
-            </list>
-            </t>
-          </list>
-          </t>
-        </section>  
+              </dd>
+              </dl>
+            </li>
+          </ul>
+        </section>
+      </section>
+    </section>
 
-      </section> 
-
-    </section> 
-
-    <section title='Interoperability Considerations' anchor='interop'>
+    <section anchor="interop" numbered="true" toc="default">
+      <name>Interoperability Considerations</name>
 
       <t>The following practices help ensure the interoperability of TZif
-      applications.
+      applications.</t>
 
-      <list style='symbols'>
-        <t>Version 1 files are considered a legacy format and
+      <ul spacing="normal">
+        <li>Version 1 files are considered a legacy format and
         SHOULD NOT be generated, as they do not support transition
-        times after the year 2038.</t>
+        times after the year 2038.</li>
 
-	<t>Readers that understand only version 1 MUST ignore
+        <li>Readers that understand only version 1 MUST ignore
 	any data that extends beyond the calculated end of the version
-	1 data block.</t>
+	1 data block.</li>
 
-        <t>Other than version 1, writers should generate the lowest
+        <li>Other than version 1, writers should generate the lowest
         version number needed by a file's data.  For example, a writer
         should generate a version 4 file only if its leap second table
         either expires or is truncated at the start.  Likewise, a
         writer not generating a version 4 file should generate a
         version 3 file only if TZ string extensions are necessary to
-        accurately model transition times.</t>
-        
-	<t>To save space, writers of version 2+ files MAY output a
+        accurately model transition times.</li>
+
+        <li>To save space, writers of version 2+ files MAY output a
 	placeholder version 1 data block with all counts zero except
 	that "typecnt" and "charcnt" are both one (1).
 	If this is done, obsolescent version-1-only readers MUST
 	interpret these files as lacking time changes and time zone
-	abbreviations.</t>
+	abbreviations.</li>
 
-	<t>Unless the version 1 data block is a placeholder,
+        <li>Unless the version 1 data block is a placeholder,
 	the sequence of timestamps defined by the version 1
         header and data block SHOULD be a contiguous sub-sequence
 	of the timestamps defined by the version 2+ header and data
 	block, and by the footer.
 	This guideline helps obsolescent version 1 readers
 	agree with current readers about timestamps within the
-	contiguous sub-sequence.</t>
+	contiguous sub-sequence.</li>
 
-	<t>When a TZif file contains a leap second table expiration
+        <li>When a TZif file contains a leap second table expiration
 	time, TZif readers SHOULD either refuse to process
 	post-expiration timestamps, or process them as if the expiration
-	time did not exist (possibly with an error indication).</t>
+	time did not exist (possibly with an error indication).</li>
 
-        <t>Time zone designations SHOULD consist of at least three (3)
+        <li>Time zone designations SHOULD consist of at least three (3)
         and no more than six (6) ASCII characters from the set of
 	alphanumerics, '-', and '+'.
 	This is for compatibility with POSIX requirements for
-	time zone abbreviations.</t>
+	time zone abbreviations.</li>
 
-	<t>When reading a version 2 or higher file, readers
+        <li>When reading a version 2 or higher file, readers
 	SHOULD ignore the version 1 header and data block except for
-        the purpose of skipping over them.</t>
+        the purpose of skipping over them.</li>
 
-	<t>Readers SHOULD calculate the total lengths of the
+        <li>Readers SHOULD calculate the total lengths of the
 	headers and data blocks and check that they all fit within
-	the actual file size, as part of a validity check for the file.</t>
-	
-        <t>When a TZif file is used in a MIME message entity, it SHOULD
-        be indicated by one of the following media types:
+	the actual file size, as part of a validity check for the file.</li>
 
-        <list style='symbols'>
-	  <t><xref target="tzif-leap">"application/tzif-leap"</xref>
-          to indicate that leap-second records are included in the
-	  TZif data as necessary (none are necessary if the file is truncated
-	  to a range that precedes the first leap second).</t>
+        <li>
+          <t>When a TZif file is used in a MIME message entity, it SHOULD
+          be indicated by one of the following media types:</t>
 
-          <t><xref target="tzif">"application/tzif"</xref>
+          <ul spacing="normal">
+            <li>
+              <xref target="tzif-leap" format="default">
+              "application/tzif-leap"</xref>
+              to indicate that leap-second records are included in the
+	      TZif data as necessary (none are necessary if the file
+              is truncated to a range that precedes the first leap
+            second).</li>
+
+          <li>
+              <xref target="tzif" format="default">"application/tzif"</xref>
           to indicate that leap-second records are not included in the
-          TZif data; "leapcnt" in the header(s) MUST be zero (0).</t>
-        </list></t>
+          TZif data; "leapcnt" in the header(s) MUST be zero (0).</li>
+          </ul>
+        </li>
 
-        <t>Common interoperability issues and possible workarounds
-        are described in <xref target='issues'/>.</t>
+        <li>Common interoperability issues and possible workarounds
+        are described in <xref target="issues" format="default"/>.</li>
+      </ul>
+    </section>
 
-      </list></t>
+    <section anchor="tzdist" numbered="true" toc="default">
+      <name>Use with the Time Zone Data Distribution Service</name>
 
-    </section>  
-
-    <section anchor='tzdist'
-             title='Use with the Time Zone Data Distribution Service'>
-      <t>The <xref target="RFC7808">Time Zone Data Distribution
+      <t>The <xref target="RFC7808" format="default">Time Zone Data Distribution
       Service (TZDIST)</xref> is a service that allows reliable,
       secure, and fast delivery of time zone data and leap-second
       rules to client systems such as calendaring and scheduling
@@ -868,23 +911,28 @@
       <t>A TZDIST service MAY supply time zone data to clients in
       the Time Zone Information Format.  Such a service MUST indicate
       that it supports this format by including the media type
-      <xref target="tzif">"application/tzif"</xref> in its
-      "capabilities" response (see Section 5.1 of <xref
-      target="RFC7808"/>).
+      <xref target="tzif" format="default">"application/tzif"</xref> in its
+      "capabilities" response (see Section 5.1 of
+      <xref target="RFC7808" format="default"/>).
       A TZDIST service MAY also include the media type 
-      <xref target="tzif-leap">"application/tzif-leap"</xref> in its
+      <xref target="tzif-leap" format="default">
+        "application/tzif-leap"</xref> in its
       "capabilities" response if it is able to generate TZif files
       containing leap-second records.
       A TZDIST service MUST NOT advertise the "application/tzif-leap"
       media type without also advertising "application/tzif".</t>
 
       <t>TZDIST clients MUST use the HTTP
-      <xref target="RFC7231">"Accept"</xref> header field to indicate
+      <xref target="RFC7231" format="default">"Accept"</xref>
+      header field to indicate
       their preference to receive data in the "application/tzif"
       and/or "application/tzif-leap" formats.</t>
 
-      <section title='Truncating TZif Files' anchor='truncation'>
-        <t>As described in Section 3.9 of <xref target="RFC7808"/>,
+      <section anchor="truncation" numbered="true" toc="default">
+        <name>Truncating TZif Files</name>
+
+        <t>As described in Section 3.9 of
+        <xref target="RFC7808" format="default"/>,
         a TZDIST service MAY truncate time zone transition data.
         A truncated TZif file is valid from its first and up to, but
 	not including, its last version 2+ transition time, if present.</t>
@@ -896,7 +944,7 @@
         time immediately before the start point, and the time type of
         the first transition indicates local time thereafter.</t>
 
-	<t>When truncating the start of a TZif file containing
+        <t>When truncating the start of a TZif file containing
 	leap-second records, the service MUST keep all leap-second
 	records governing timestamps within the truncation range,
 	even if the first such record precedes the start point of
@@ -920,21 +968,24 @@
         <t>TZDIST clients SHOULD NOT use a truncated TZif file (as
         described above) to interpret timestamps outside the
         truncation time range.</t>
+      </section>
 
-      </section> 
+      <section numbered="true" toc="default">
+        <name>Example TZDIST Request for TZif Data</name>
 
-      <section title='Example TZDIST Request for TZif Data'>
         <t>In this example, the client checks the server for the
           available formats and then requests that the time zone with a
           specific time zone identifier be returned in Time Zone
           Information Format.
         </t>
-        <figure>
-          <preamble>Note that this example presumes that the time zone
-          context path has been discovered
-          (see <xref target='RFC7808' />, Section 4.2.1) to be "/tzdist".
-          </preamble>
-          <artwork type='inline'><![CDATA[
+
+        <t keepWithNext="true">Note that this example presumes that
+        the time zone context path has been discovered
+        (see <xref target="RFC7808" format="default"/>,
+        Section 4.2.1) to be "/tzdist".
+
+        </t>
+        <artwork type="ascii-art" name="" align="left" alt=""><![CDATA[
 >> Request <<
 
 GET /tzdist/capabilities HTTP/1.1
@@ -980,11 +1031,12 @@ ETag: "123456789-000-111"
 TZif2...[binary data without leap-second records]...
 EST5EDT,M3.2.0,M11.1.0
 ]]></artwork>
-        </figure>
       </section>
-    </section> 
+    </section>
 
-    <section title='Security Considerations' anchor='security'>
+    <section anchor="security" numbered="true" toc="default">
+      <name>Security Considerations</name>
+
       <t>The Time Zone Information Format contains no executable
       code, and it does not define any extensible
       areas that could be used to store such code.</t>
@@ -1001,274 +1053,316 @@ EST5EDT,M3.2.0,M11.1.0
       externally.</t>
     </section>
 
-    <section title='Privacy Considerations' anchor='privacy'>
+    <section anchor="privacy" numbered="true" toc="default">
+      <name>Privacy Considerations</name>
+
       <t>The Time Zone Information Format contains publicly available
       data, and it does not define any extensible areas that
       could be used to store private data.</t>
 
-      <t>As discussed in Section 9 of <xref target='RFC7808'/>,
+      <t>As discussed in Section 9 of <xref target="RFC7808" format="default"/>,
       transmission of time zone data over an insecure communications
       channel could leak the past, current, or future location of a
       device or user.
       As such, TZif data transmitted over a public communications
       channel MUST be protected with a confidentiality layer such as
-      that provided by <xref target='RFC8446'>Transport Layer Security
-      (TLS)</xref>.</t>
+      that provided by <xref target="RFC8446" format="default">
+      Transport Layer Security (TLS)</xref>.</t>
     </section>
 
-    <section title='IANA Considerations' anchor='iana'>
+    <section anchor="iana" numbered="true" toc="default">
+      <name>IANA Considerations</name>
+
       <t>This document defines two 
-      media types <xref target='RFC6838' /> for the exchange of data utilizing the Time Zone
+      media types <xref target="RFC6838" format="default"/>
+      for the exchange of data utilizing the Time Zone
       Information Format.</t>
 
-      <section title='application/tzif' anchor='tzif'>
-      <t>
-	<list style='hanging'>
-          <t hangText="Type name:">application</t>
-          <t hangText="Subtype name:">tzif</t>
-          <t hangText="Required parameters:">none</t>
-          <t hangText="Optional parameters:">none</t>
-          <t hangText="Encoding considerations:">binary</t>
-          <t hangText="Security considerations:">
-            See <xref target='security'/> of RFC XXXX.
-          </t>
-          <t hangText="Interoperability considerations:">
-            See <xref target='interop'/> of RFC XXXX.
-          </t>
-          <t hangText="Published specification:">
+      <section anchor="tzif" numbered="true" toc="default">
+        <name>application/tzif</name>
+
+        <dl newline="true" spacing="normal">
+          <dt>Type name:</dt>
+          <dd>application</dd>
+          <dt>Subtype name:</dt>
+          <dd>tzif</dd>
+          <dt>Required parameters:</dt>
+          <dd>none</dd>
+          <dt>Optional parameters:</dt>
+          <dd>none</dd>
+          <dt>Encoding considerations:</dt>
+          <dd>binary</dd>
+          <dt>Security considerations:</dt>
+          <dd>
+            See <xref target="security" format="default"/> of RFC XXXX.
+          </dd>
+          <dt>Interoperability considerations:</dt>
+          <dd>
+            See <xref target="interop" format="default"/> of RFC XXXX.
+          </dd>
+          <dt>Published specification:</dt>
+          <dd>
             This specification.
-          </t>
-          <t hangText="Applications that use this media type:">
+          </dd>
+          <dt>Applications that use this media type:</dt>
+          <dd>
             This media type is designed for widespread use by
             applications that need to use or exchange time zone
             information, such as the
-            <xref target='ZIC'>Time Zone Information Compiler (zic)</xref>
+            <xref target="ZIC" format="default">
+            Time Zone Information Compiler (zic)</xref>
             and the
-            <xref target='GNU-C'>
+            <xref target="GNU-C" format="default">
               GNU C Library</xref>.
-            The <xref target='RFC7808'>Time Zone Distribution
+            The <xref target="RFC7808" format="default">Time Zone Distribution
             Service</xref> can directly use this media type.
-          </t>
-          <t hangText="Fragment identifier considerations:">N/A</t>
-          <t hangText="Additional information:">
-	    <list style='hanging'>
-              <t hangText="Magic number(s):">
-              The first 4 octets are 0x54, 0x5A, 0x69, 0x66</t>
-              <t hangText="File extensions(s):">N/A</t>
-              <t hangText="Macintosh file type code(s):">N/A</t>
-            </list>
-          </t>
-          <t hangText="Person &amp; email address to contact for further information:">
-            <vspace/>
+          </dd>
+          <dt>Fragment identifier considerations:</dt>
+          <dd>N/A</dd>
+          <dt>Additional information:</dt>
+          <dd>
+            <dl newline="false" spacing="normal">
+              <dt>Magic number(s):</dt>
+              <dd>
+              The first 4 octets are 0x54, 0x5A, 0x69, 0x66</dd>
+              <dt>File extensions(s):</dt>
+              <dd>N/A</dd>
+              <dt>Macintosh file type code(s):</dt>
+              <dd>N/A</dd>
+            </dl>
+          </dd>
+          <dt>Person &amp; email address to contact for further information:</dt>
+          <dd>
             Time Zone Database mailing list &lt;tz@iana.org&gt;
-          </t>
-          <t hangText="Intended usage:">COMMON</t>
-          <t hangText="Restrictions on usage:">N/A</t>
-          <t hangText="Author:">
+          </dd>
+          <dt>Intended usage:</dt>
+          <dd>COMMON</dd>
+          <dt>Restrictions on usage:</dt>
+          <dd>N/A</dd>
+          <dt>Author:</dt>
+          <dd>
             See the "Authors' Addresses" section of RFC XXXX.
-          </t>
-          <t hangText="Change controller:">IETF</t>
-        </list>
-      </t>
+          </dd>
+          <dt>Change controller:</dt>
+          <dd>IETF</dd>
+        </dl>
       </section>
 
-      <section title='application/tzif-leap' anchor='tzif-leap'>
-      <t>
-	<list style='hanging'>
-          <t hangText="Type name:">application</t>
-          <t hangText="Subtype name:">tzif-leap</t>
-          <t hangText="Required parameters:">none</t>
-          <t hangText="Optional parameters:">none</t>
-          <t hangText="Encoding considerations:">binary</t>
-          <t hangText="Security considerations:">
-            See <xref target='security'/> of RFC XXXX.
-          </t>
-          <t hangText="Interoperability considerations:">
-            See <xref target='interop'/> of RFC XXXX.
-          </t>
-          <t hangText="Published specification:">
+      <section anchor="tzif-leap" numbered="true" toc="default">
+        <name>application/tzif-leap</name>
+
+        <dl newline="true" spacing="normal">
+          <dt>Type name:</dt>
+          <dd>application</dd>
+          <dt>Subtype name:</dt>
+          <dd>tzif-leap</dd>
+          <dt>Required parameters:</dt>
+          <dd>none</dd>
+          <dt>Optional parameters:</dt>
+          <dd>none</dd>
+          <dt>Encoding considerations:</dt>
+          <dd>binary</dd>
+          <dt>Security considerations:</dt>
+          <dd>
+            See <xref target="security" format="default"/> of RFC XXXX.
+          </dd>
+          <dt>Interoperability considerations:</dt>
+          <dd>
+            See <xref target="interop" format="default"/> of RFC XXXX.
+          </dd>
+          <dt>Published specification:</dt>
+          <dd>
             This specification.
-          </t>
-          <t hangText="Applications that use this media type:">
+          </dd>
+          <dt>Applications that use this media type:</dt>
+          <dd>
             This media type is designed for widespread use by
             applications that need to use or exchange time zone
             information, such as the
-            <xref target='ZIC'>
+            <xref target="ZIC" format="default">
               Time Zone Information Compiler (zic)
             </xref>
             and the
-            <xref target='GNU-C'>
+            <xref target="GNU-C" format="default">
               GNU C Library</xref>.
-            The <xref target='RFC7808'>Time Zone Distribution
+            The <xref target="RFC7808" format="default">Time Zone Distribution
             Service</xref> can directly use this media type.
-          </t>
-          <t hangText="Fragment identifier considerations:">N/A</t>
-          <t hangText="Additional information:">
-	    <list style='hanging'>
-              <t hangText="Magic number(s):">
-              The first 4 octets are 0x54, 0x5A, 0x69, 0x66</t>
-              <t hangText="File extensions(s):">N/A</t>
-              <t hangText="Macintosh file type code(s):">N/A</t>
-            </list>
-          </t>
-          <t hangText="Person &amp; email address to contact for further information:">
-            <vspace/>
+          </dd>
+          <dt>Fragment identifier considerations:</dt>
+          <dd>N/A</dd>
+          <dt>Additional information:</dt>
+          <dd>
+            <dl newline="false" spacing="normal">
+              <dt>Magic number(s):</dt>
+              <dd>
+              The first 4 octets are 0x54, 0x5A, 0x69, 0x66</dd>
+              <dt>File extensions(s):</dt>
+              <dd>N/A</dd>
+              <dt>Macintosh file type code(s):</dt>
+              <dd>N/A</dd>
+            </dl>
+          </dd>
+          <dt>Person &amp; email address to contact for further information:</dt>
+          <dd>
             Time Zone Database mailing list &lt;tz@iana.org&gt;
-          </t>
-          <t hangText="Intended usage:">COMMON</t>
-          <t hangText="Restrictions on usage:">N/A</t>
-          <t hangText="Author:">
+          </dd>
+          <dt>Intended usage:</dt>
+          <dd>COMMON</dd>
+          <dt>Restrictions on usage:</dt>
+          <dd>N/A</dd>
+          <dt>Author:</dt>
+          <dd>
             See the "Authors' Addresses" section of RFC XXXX.
-          </t>
-          <t hangText="Change controller:">IETF</t>
-        </list>
-      </t>
+          </dd>
+          <dt>Change controller:</dt>
+          <dd>IETF</dd>
+        </dl>
       </section>
-
-    </section> 
-
-
+    </section>
   </middle>
 
   <back>
-    <references title='Normative References'>
-      &rfc2119;
-      &rfc6838;
-      &rfc7231;
-      &rfc7808;
-      &rfc8174;
+    <references>
+      <name>References</name>
 
-      <reference anchor="RFC20" target="https://www.rfc-editor.org/info/rfc20">
-        <front>
-          <title>ASCII format for network interchange</title>
-          <author initials="V.G." surname="Cerf" fullname="V.G. Cerf">
-            <organization/>
-          </author>
-          <date year="1969" month="October"/>
-        </front>
-        <seriesInfo name="STD" value="80"/>
-        <seriesInfo name="RFC" value="20"/>
-        <seriesInfo name="DOI" value="10.17487/RFC0020"/>
-      </reference>
+      <references>
+        <name>Normative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7808.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+<!--        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.0020.xml"/>-->
 
-      <reference anchor='POSIX'
-	         target="https://pubs.opengroup.org/onlinepubs/9699919799/">
-        <front>
-          <title>Standard for Information Technology--Portable Operating
+        <reference anchor="RFC20" target="https://www.rfc-editor.org/info/rfc20">
+          <front>
+            <title>ASCII format for network interchange</title>
+            <author initials="V.G." surname="Cerf" fullname="V.G. Cerf">
+              <organization/>
+            </author>
+            <date year="1969" month="October"/>
+          </front>
+          <seriesInfo name="STD" value="80"/>
+          <seriesInfo name="RFC" value="20"/>
+          <seriesInfo name="DOI" value="10.17487/RFC0020"/>
+        </reference>
+
+        <reference anchor="POSIX"
+                   target="https://pubs.opengroup.org/onlinepubs/9699919799/">
+          <front>
+            <title>Standard for Information Technology--Portable Operating
           System Interface (POSIX(R)) Base Specifications, Issue 7</title>
-          <author>
-            <organization>IEEE</organization>
-          </author>
-          <date day="31" month="January" year="2018"/>          
-        </front>
-        <seriesInfo name="IEEE" value="1003.1-2017"/>
-        <seriesInfo name="DOI" value="10.1109/IEEESTD.2018.8277153"/>
-      </reference>
+            <author>
+              <organization>IEEE</organization>
+            </author>
+            <date day="31" month="January" year="2018"/>
+          </front>
+          <seriesInfo name="IEEE" value="1003.1-2017"/>
+          <seriesInfo name="DOI" value="10.1109/IEEESTD.2018.8277153"/>
+        </reference>
 
-      <reference anchor="ZIC"
-                 target="http://man7.org/linux/man-pages/man8/zic.8.html">
-        <front>
-          <title>ZIC(8)</title>
-          <author initials='M' surname='Kerrisk' fullname='Michael Kerrisk'>
-            <organization/>
-          </author>
-          <date month='February' day="25" year='2010'/>
-        </front>
-        <seriesInfo name="man-pages" value="release 4.16"/>
-      </reference>
+        <reference anchor="ZIC"
+                   target="http://man7.org/linux/man-pages/man8/zic.8.html">
+          <front>
+            <title>ZIC(8)</title>
+            <author initials="M" surname="Kerrisk" fullname="Michael Kerrisk">
+              <organization/>
+            </author>
+            <date month="February" day="25" year="2010"/>
+          </front>
+          <seriesInfo name="man-pages" value="release 4.16"/>
+        </reference>
 
-      <reference anchor="GNU-C" target="https://www.gnu.org/software/libc/">
-        <front>
-          <title>The GNU C Library (glibc)</title>
-          <author initials='' surname='' fullname=''>
-            <organization/>
-          </author>
-          <date month='' year=''/>
-        </front>
-      </reference>
+        <reference anchor="GNU-C" target="https://www.gnu.org/software/libc/">
+          <front>
+            <title>The GNU C Library (glibc)</title>
+            <author initials="" surname="" fullname="">
+              <organization/>
+            </author>
+            <date month="" year=""/>
+          </front>
+        </reference>
+      </references>
 
+      <references>
+        <name>Informative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5545.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6557.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8536.xml"/>
 
-    </references>
-
-    <references title='Informative References'>
-      &rfc5545;
-      &rfc6557;
-      &rfc8446;
-      &rfc8536;
-
-      <reference anchor='tz-link'
-                 target="https://www.iana.org/time-zones/repository/tz-link.html">
-        <front>
-          <title>
+        <reference anchor="tz-link"
+                   target="https://www.iana.org/time-zones/repository/tz-link.html">
+          <front>
+            <title>
             Sources for Time Zone and Daylight Saving Time Data
-          </title>
-          <author initials="P." surname="Eggert"
-                  fullname="Paul Eggert"/>
-          <author initials="A.D." surname="Olson"
-                  fullname="Arthur David Olson"/>
-          <date year='2018'/>
-        </front>
-      </reference>
+            </title>
+            <author initials="P." surname="Eggert" fullname="Paul Eggert"/>
+            <author initials="A.D." surname="Olson" fullname="Arthur David Olson"/>
+            <date year="2018"/>
+          </front>
+        </reference>
 
-      <reference anchor="EGGERT-TZ"
-                 target="https://github.com/eggert/tz/commits/main/tzfile.5">
-        <front>
-          <title>History for tz</title>
-          <author initials='' surname='' fullname=''>
-            <organization/>
-          </author>
-          <date month='March' year='2021'/>
-        </front>
-      </reference>
+        <reference anchor="EGGERT-TZ"
+                   target="https://github.com/eggert/tz/commits/main/tzfile.5">
+          <front>
+            <title>History for tz</title>
+            <author initials="" surname="" fullname="">
+              <organization/>
+            </author>
+            <date month="March" year="2021"/>
+          </front>
+        </reference>
 
-      <reference anchor="Err6426"
-                 target="https://www.rfc-editor.org/errata/eid6426">
-        <front>
-          <title>Erratum ID 6426</title>
-          <author initials='' surname='' fullname=''>
-            <organization>RFC Errata</organization>
-          </author>
-          <date month='' year=''/>
-        </front>
-        <seriesInfo name="RFC" value="8536"/>
-      </reference>
+        <reference anchor="Err6426"
+                   target="https://www.rfc-editor.org/errata/eid6426">
+          <front>
+            <title>Erratum ID 6426</title>
+            <author initials='' surname='' fullname=''>
+              <organization>RFC Errata</organization>
+            </author>
+            <date month='' year=''/>
+          </front>
+          <seriesInfo name="RFC" value="8536"/>
+        </reference>
 
-      <reference anchor="Err6435"
-                 target="https://www.rfc-editor.org/errata/eid6435">
-        <front>
-          <title>Erratum ID 6435</title>
-          <author initials='' surname='' fullname=''>
-            <organization>RFC Errata</organization>
-          </author>
-          <date month='' year=''/>
-        </front>
-        <seriesInfo name="RFC" value="8536"/>
-      </reference>
-
-
+        <reference anchor="Err6435"
+                   target="https://www.rfc-editor.org/errata/eid6435">
+          <front>
+            <title>Erratum ID 6435</title>
+            <author initials='' surname='' fullname=''>
+              <organization>RFC Errata</organization>
+            </author>
+            <date month='' year=''/>
+          </front>
+          <seriesInfo name="RFC" value="8536"/>
+        </reference>
+      </references>
     </references>
 
-    <section title='Common Interoperability Issues' anchor='issues'>
-	
+    <section anchor="issues" numbered="true" toc="default">
+      <name>Common Interoperability Issues</name>
+
       <t>This section documents common problems in implementing this
       specification.
       Most of these are problems in generating TZif files for use by
       readers conforming to
-      <xref target='EGGERT-TZ'>
+      <xref target="EGGERT-TZ" format="default">
 	predecessors of this specification</xref>.
-      The goals of this section are:
+      The goals of this section are:</t>
 
-      <list style='numbers'>
-        <t>to help TZif writers output files that avoid common
-        pitfalls in older or buggy TZif readers,</t>
+      <ol spacing="normal" type="1">
+        <li>to help TZif writers output
+        files that avoid common 
+        pitfalls in older or buggy TZif readers,</li>
 
-        <t>to help TZif readers avoid common pitfalls when reading
-        files generated by future TZif writers, and</t>
+        <li>to help TZif readers avoid common pitfalls when reading
+        files generated by future TZif writers, and</li>
 
-        <t>to help any future specification authors see what sort of
-        problems arise when the TZif format is changed.</t>
-      </list></t>
-	
+        <li>to help any future specification authors see what sort of
+        problems arise when the TZif format is changed.</li>
+      </ol>
+
       <t>When new versions of the TZif format have been defined, a
       design goal has been that a reader can successfully use a TZif
       file even if the file is of a later TZif version than what the
@@ -1279,26 +1373,25 @@ EST5EDT,M3.2.0,M11.1.0
       new-version data useful even for older-version readers.
       This section attempts to document these compatibility issues and
       workarounds, as well as documenting other common bugs in
-      readers.</t>	
+      readers.</t>
+      <t>Interoperability problems with TZif include the following:</t>
 
-      <t>Interoperability problems with TZif include the following:
-
-      <list style='symbols'>
-	<t>Some readers examine only version 1 data.
+      <ul spacing="normal">
+        <li>Some readers examine only version 1 data.
 	As a partial workaround, a writer can output as much version 1
         data as possible.
 	However, a reader should ignore version 1 data and use
 	version 2+ data, even if the reader's native timestamps have only
-        32 bits.</t>
-	
-	<t>Some readers designed for version 2 might mishandle
+        32 bits.</li>
+
+        <li>Some readers designed for version 2 might mishandle
         timestamps after a version 3 or higher file's last transition, because
         they cannot parse extensions to POSIX in the TZ-like string.
 	As a partial workaround, a writer can output more transitions
         than necessary, so that only far-future timestamps are
-        mishandled by version 2 readers.</t>
-	
-	<t>Some readers designed for version 2 do not support
+        mishandled by version 2 readers.</li>
+
+        <li>Some readers designed for version 2 do not support
 	permanent daylight saving time with transitions after 24:00
 	-- e.g., a TZ string
         "EST5EDT,0/0,J365/25" denoting permanent Eastern Daylight Time
@@ -1311,53 +1404,53 @@ EST5EDT,M3.2.0,M11.1.0
 	Alternatively,
 	as a partial workaround a writer can substitute standard time
         for the next time zone east -- e.g., "AST4" for permanent
-        Atlantic Standard Time (-04).</t>
+        Atlantic Standard Time (-04).</li>
 
-	<t>Some readers designed for version 2 or 3, and that require strict
+        <li>Some readers designed for version 2 or 3, and that require strict
 	conformance to RFC 8536, reject version 4 files whose leap second
-	tables are truncated at the start or that end in expiration times.</t>
+	tables are truncated at the start or that end in expiration times.</li>
 
-	<t>Some readers ignore the footer and instead predict future
+        <li>Some readers ignore the footer and instead predict future
         timestamps from the time type of the last transition.
 	As a partial workaround, a writer can output more transitions
-        than necessary.</t>
+        than necessary.</li>
 
-	<t>Some readers do not use time type 0 for timestamps before
+        <li>Some readers do not use time type 0 for timestamps before
         the first transition, in that they infer a time type using a
         heuristic that does not always select time type 0.
 	As a partial workaround, a writer can output a dummy (no-op)
-	first transition at an early time.</t>
+	first transition at an early time.</li>
 
-	<t>Some readers mishandle timestamps before the first
+        <li>Some readers mishandle timestamps before the first
         transition that has a timestamp not less than -2**31.
 	Readers that support only 32-bit timestamps are likely to be
         more prone to this problem, for example, when they process
         64-bit transitions, only some of which are representable in 32
         bits.
 	As a partial workaround, a writer can output a dummy
-        transition at timestamp -2**31.</t>
+        transition at timestamp -2**31.</li>
 
-	<t>Some readers mishandle a transition if its timestamp has
+        <li>Some readers mishandle a transition if its timestamp has
         the minimum possible signed 64-bit value.
-	Timestamps less than -2**59 are not recommended.</t>
-	
-	<t>Some readers mishandle POSIX-style TZ strings that
+	Timestamps less than -2**59 are not recommended.</li>
+
+        <li>Some readers mishandle POSIX-style TZ strings that
 	contain "&lt;" or "&gt;".
 	As a partial workaround, a writer can avoid using '&lt;' or '&gt;'
 	for time zone abbreviations containing only alphabetic
-        characters.</t>
-	
-	<t>Many readers mishandle time zone abbreviations that contain
+        characters.</li>
+
+        <li>Many readers mishandle time zone abbreviations that contain
         non-ASCII characters.
-	These characters are not recommended.</t>
-	
-	<t>Some readers may mishandle time zone abbreviations that
+	These characters are not recommended.</li>
+
+        <li>Some readers may mishandle time zone abbreviations that
         contain fewer than 3 or more than 6 characters, or that
         contain ASCII characters other than alphanumerics, '-', and
         '+'.
-	These abbreviations are not recommended.</t>
-	
-	<t>Some readers mishandle TZif files that specify
+	These abbreviations are not recommended.</li>
+
+        <li>Some readers mishandle TZif files that specify
         daylight saving time UT offsets that are less than the UT
         offsets for the corresponding standard time.
         These readers do not support locations like Ireland, which
@@ -1370,9 +1463,9 @@ EST5EDT,M3.2.0,M11.1.0
 	thus swapping standard and daylight saving time.
 	Although this workaround misidentifies which part of the year
         uses daylight saving time, it records UT offsets and time zone
-        abbreviations correctly.</t>
+        abbreviations correctly.</li>
 
-	<t>Some readers generate ambiguous timestamps for positive
+        <li>Some readers generate ambiguous timestamps for positive
         leap seconds that occur when the UTC offset is not a multiple
         of 60 seconds.
 	For example, in a timezone with UTC offset +01:23:45 and with
@@ -1383,40 +1476,41 @@ EST5EDT,M3.2.0,M11.1.0
         01:23:60.
 	This has not yet been a practical problem, since no civil
         authority has observed such UTC offsets since leap seconds
-        were introduced in 1972.</t>
-      </list></t>
-	
-      <t>Some interoperability problems are reader bugs that
-      are listed here mostly as warnings to developers of readers.
+        were introduced in 1972.</li>
+      </ul>
 
-      <list style='symbols'>
-        <t>Some readers do not support negative timestamps.
+      <t>Some interoperability problems are reader bugs that
+      are listed here mostly as warnings to developers of readers.</t>
+
+      <ul spacing="normal">
+        <li>Some readers do not support negative timestamps.
         Developers of distributed applications should keep this
-        in mind if they need to deal with pre-1970 data.</t>
-	
-        <t>Some readers mishandle timestamps before the first
+        in mind if they need to deal with pre-1970 data.</li>
+
+        <li>Some readers mishandle timestamps before the first
         transition that has a nonnegative timestamp.
         Readers that do not support negative timestamps are likely to
-        be more prone to this problem.</t>
-	
-        <t>Some readers mishandle time zone abbreviations like "-08"
-        that contain '+', '-', or digits.</t>
-	
-        <t>Some readers mishandle UT offsets that are out of the
+        be more prone to this problem.</li>
+
+        <li>Some readers mishandle time zone abbreviations like "-08"
+        that contain '+', '-', or digits.</li>
+
+        <li>Some readers mishandle UT offsets that are out of the
         traditional range of -12 through +12 hours and so do not
         support locations like Kiritimati that are outside this
-        range.</t>
-	
-        <t>Some readers mishandle UT offsets in the range [-3599, -1]
-        seconds from UT, because they integer-divide the offset by
-        3600 to get 0 and then display the hour part as "+00".</t>
-	
-        <t>Some readers mishandle UT offsets that are not a multiple
-        of one hour, 15 minutes, or 1 minute.</t>
-      </list></t>
-    </section>  
+        range.</li>
 
-    <section title='Example TZif Files' anchor='examples'>
+        <li>Some readers mishandle UT offsets in the range [-3599, -1]
+        seconds from UT, because they integer-divide the offset by
+        3600 to get 0 and then display the hour part as "+00".</li>
+        <li>Some readers mishandle UT offsets that are not a multiple
+        of one hour, 15 minutes, or 1 minute.</li>
+      </ul>
+    </section>
+
+    <section anchor="examples" numbered="true" toc="default">
+      <name>Example TZif Files</name>
+
       <t>The following sections contain annotated hexadecimal dumps of
       example TZif files.</t>
 
@@ -1426,713 +1520,2292 @@ EST5EDT,M3.2.0,M11.1.0
       in the future as leap seconds are added and changes are made to
       civil time.</t>
 
-      <section title='Version 1 File Representing UTC (with Leap Seconds)'>
+      <section numbered="true" toc="default">
+        <name>Version 1 File Representing UTC (with Leap Seconds)</name>
 
-        <texttable>
-          <ttcol width="13%">File Offset</ttcol>
-          <ttcol width="23%">Hexadecimal Octets</ttcol>
-          <ttcol width="28%">Record Name / Field Name</ttcol>
-          <ttcol width="36%">Field Value</ttcol>
-          <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>004</c> <c>00</c> <c>version</c> <c>0 (1)</c>
-          <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>020</c> <c>00 00 00 01</c> <c>isutcnt</c> <c>1</c>
-          <c>024</c> <c>00 00 00 01</c> <c>isstdcnt</c> <c>1</c>
-          <c>028</c> <c>00 00 00 1b</c> <c>leapcnt</c> <c>27</c>
-          <c>032</c> <c>00 00 00 00</c> <c>timecnt</c> <c>0</c>
-          <c>036</c> <c>00 00 00 01</c> <c>typecnt</c> <c>1</c>
-          <c>040</c> <c>00 00 00 04</c> <c>charcnt</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>044</c> <c>00 00 00 00</c> <c>utoff</c> <c>0 (+00:00)</c>
-          <c>048</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>049</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>050</c> <c>55 54 43 00</c> <c>designations[0]</c> <c>"UTC"</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[0]</c> <c/>
-          <c>054</c> <c>04 b2 58 00</c> <c>occurrence</c>
-          <c>78796800 (1972-06-30T23:59:60Z)</c>
-          <c>058</c> <c>00 00 00 01</c> <c>correction</c> <c>1</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[1]</c> <c/>
-          <c>062</c> <c>05 a4 ec 01</c> <c>occurrence</c>
-          <c>94694401 (1972-12-31T23:59:60Z)</c>
-          <c>066</c> <c>00 00 00 02</c> <c>correction</c> <c>2</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[2]</c> <c/>
-          <c>070</c> <c>07 86 1f 82</c> <c>occurrence</c>
-          <c>126230402 (1973-12-31T23:59:60Z)</c>
-          <c>074</c> <c>00 00 00 03</c> <c>correction</c> <c>3</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[3]</c> <c/>
-          <c>078</c> <c>09 67 53 03</c> <c>occurrence</c>
-          <c>157766403 (1974-12-31T23:59:60Z)</c>
-          <c>082</c> <c>00 00 00 04</c> <c>correction</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[4]</c> <c/>
-          <c>086</c> <c>0b 48 86 84</c> <c>occurrence</c>
-          <c>189302404 (1975-12-31T23:59:60Z)</c>
-          <c>090</c> <c>00 00 00 05</c> <c>correction</c> <c>5</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[5]</c> <c/>
-          <c>094</c> <c>0d 2b 0b 85</c> <c>occurrence</c>
-          <c>220924805 (1976-12-31T23:59:60Z)</c>
-          <c>098</c> <c>00 00 00 06</c> <c>correction</c> <c>6</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[6]</c> <c/>
-          <c>102</c> <c>0f 0c 3f 06</c> <c>occurrence</c>
-          <c>252460806 (1977-12-31T23:59:60Z)</c>
-          <c>106</c> <c>00 00 00 07</c> <c>correction</c> <c>7</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[7]</c> <c/>
-          <c>110</c> <c>10 ed 72 87</c> <c>occurrence</c>
-          <c>283996807 (1978-12-31T23:59:60Z)</c>
-          <c>114</c> <c>00 00 00 08</c> <c>correction</c> <c>8</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[8]</c> <c/>
-          <c>118</c> <c>12 ce a6 08</c> <c>occurrence</c>
-          <c>315532808 (1979-12-31T23:59:60Z)</c>
-          <c>122</c> <c>00 00 00 09</c> <c>correction</c> <c>9</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[9]</c> <c/>
-          <c>126</c> <c>15 9f ca 89</c> <c>occurrence</c>
-          <c>362793609 (1981-06-30T23:59:60Z)</c>
-          <c>130</c> <c>00 00 00 0a</c> <c>correction</c> <c>10</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[10]</c> <c/>
-          <c>134</c> <c>17 80 fe 0a</c> <c>occurrence</c>
-          <c>394329610 (1982-06-30T23:59:60Z)</c>
-          <c>138</c> <c>00 00 00 0b</c> <c>correction</c> <c>11</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[11]</c> <c/>
-          <c>142</c> <c>19 62 31 8b</c> <c>occurrence</c>
-          <c>425865611 (1983-06-30T23:59:60Z)</c>
-          <c>146</c> <c>00 00 00 0c</c> <c>correction</c> <c>12</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[12]</c> <c/>
-          <c>150</c> <c>1d 25 ea 0c</c> <c>occurrence</c>
-          <c>489024012 (1985-06-30T23:59:60Z)</c>
-          <c>154</c> <c>00 00 00 0d</c> <c>correction</c> <c>13</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[13]</c> <c/>
-          <c>158</c> <c>21 da e5 0d</c> <c>occurrence</c>
-          <c>567993613 (1987-12-31T23:59:60Z)</c>
-          <c>162</c> <c>00 00 00 0e</c> <c>correction</c> <c>14</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[14]</c> <c/>
-          <c>166</c> <c>25 9e 9d 8e</c> <c>occurrence</c>
-          <c>631152014 (1989-12-31T23:59:60Z)</c>
-          <c>170</c> <c>00 00 00 0f</c> <c>correction</c> <c>15</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[15]</c> <c/>
-          <c>174</c> <c>27 7f d1 0f</c> <c>occurrence</c>
-          <c>662688015 (1990-12-31T23:59:60Z)</c>
-          <c>178</c> <c>00 00 00 10</c> <c>correction</c> <c>16</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[16]</c> <c/>
-          <c>182</c> <c>2a 50 f5 90</c> <c>occurrence</c>
-          <c>709948816 (1992-06-30T23:59:60Z)</c>
-          <c>186</c> <c>00 00 00 11</c> <c>correction</c> <c>17</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[17]</c> <c/>
-          <c>190</c> <c>2c 32 29 11</c> <c>occurrence</c>
-          <c>741484817 (1993-06-30T23:59:60Z)</c>
-          <c>194</c> <c>00 00 00 12</c> <c>correction</c> <c>18</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[18]</c> <c/>
-          <c>198</c> <c>2e 13 5c 92</c> <c>occurrence</c>
-          <c>773020818 (1994-06-30T23:59:60Z)</c>
-          <c>202</c> <c>00 00 00 13</c> <c>correction</c> <c>19</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[19]</c> <c/>
-          <c>206</c> <c>30 e7 24 13</c> <c>occurrence</c>
-          <c>820454419 (1995-12-31T23:59:60Z)</c>
-          <c>210</c> <c>00 00 00 14</c> <c>correction</c> <c>20</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[20]</c> <c/>
-          <c>214</c> <c>33 b8 48 94</c> <c>occurrence</c>
-          <c>867715220 (1997-06-30T23:59:60Z)</c>
-          <c>218</c> <c>00 00 00 15</c> <c>correction</c> <c>21</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[21]</c> <c/>
-          <c>222</c> <c>36 8c 10 15</c> <c>occurrence</c>
-          <c>915148821 (1998-12-31T23:59:60Z)</c>
-          <c>226</c> <c>00 00 00 16</c> <c>correction</c> <c>22</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[22]</c> <c/>
-          <c>230</c> <c>43 b7 1b 96</c> <c>occurrence</c>
-          <c>1136073622 (2005-12-31T23:59:60Z)</c>
-          <c>234</c> <c>00 00 00 17</c> <c>correction</c> <c>23</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[23]</c> <c/>
-          <c>238</c> <c>49 5c 07 97</c> <c>occurrence</c>
-          <c>1230768023 (2008-12-31T23:59:60Z)</c>
-          <c>242</c> <c>00 00 00 18</c> <c>correction</c> <c>24</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[24]</c> <c/>
-          <c>246</c> <c>4f ef 93 18</c> <c>occurrence</c>
-          <c>1341100824 (2012-06-30T23:59:60Z)</c>
-          <c>250</c> <c>00 00 00 19</c> <c>correction</c> <c>25</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[25]</c> <c/>
-          <c>254</c> <c>55 93 2d 99</c> <c>occurrence</c>
-          <c>1435708825 (2015-06-30T23:59:60Z)</c>
-          <c>258</c> <c>00 00 00 1a</c> <c>correction</c> <c>26</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[26]</c> <c/>
-          <c>262</c> <c>58 68 46 9a</c> <c>occurrence</c>
-          <c>1483228826 (2016-12-31T23:59:60Z)</c>
-          <c>266</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>270</c> <c>00</c> <c>standard/wall[0]</c> <c>0 (wall)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>271</c> <c>00</c> <c>UT/local[0]</c> <c>0 (local)</c>
-        </texttable>
+        <table align="center">
+          <thead>
+            <tr>
+              <th align="left">File Offset</th>
+              <th align="left">Hexadecimal Octets</th>
+              <th align="left">Record Name / Field Name</th>
+              <th align="left">Field Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">000</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">004</td>
+              <td align="left">00</td>
+              <td align="left">version</td>
+              <td align="left">0 (1)</td>
+            </tr>
+            <tr>
+              <td align="left">005</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"/>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">020</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">isutcnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">024</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">028</td>
+              <td align="left">00 00 00 1b</td>
+              <td align="left">leapcnt</td>
+              <td align="left">27</td>
+            </tr>
+            <tr>
+              <td align="left">032</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">timecnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">036</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">typecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">040</td>
+              <td align="left">00 00 00 04</td>
+              <td align="left">charcnt</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">044</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">utoff</td>
+              <td align="left">0 (+00:00)</td>
+            </tr>
+            <tr>
+              <td align="left">048</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">049</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">050</td>
+              <td align="left">55 54 43 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"UTC"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">054</td>
+              <td align="left">04 b2 58 00</td>
+              <td align="left">occurrence</td>
+              <td align="left">78796800 (1972-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">058</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">correction</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[1]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">062</td>
+              <td align="left">05 a4 ec 01</td>
+              <td align="left">occurrence</td>
+              <td align="left">94694401 (1972-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">066</td>
+              <td align="left">00 00 00 02</td>
+              <td align="left">correction</td>
+              <td align="left">2</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[2]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">070</td>
+              <td align="left">07 86 1f 82</td>
+              <td align="left">occurrence</td>
+              <td align="left">126230402 (1973-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">074</td>
+              <td align="left">00 00 00 03</td>
+              <td align="left">correction</td>
+              <td align="left">3</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[3]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">078</td>
+              <td align="left">09 67 53 03</td>
+              <td align="left">occurrence</td>
+              <td align="left">157766403 (1974-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">082</td>
+              <td align="left">00 00 00 04</td>
+              <td align="left">correction</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[4]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">086</td>
+              <td align="left">0b 48 86 84</td>
+              <td align="left">occurrence</td>
+              <td align="left">189302404 (1975-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">090</td>
+              <td align="left">00 00 00 05</td>
+              <td align="left">correction</td>
+              <td align="left">5</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[5]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">094</td>
+              <td align="left">0d 2b 0b 85</td>
+              <td align="left">occurrence</td>
+              <td align="left">220924805 (1976-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">098</td>
+              <td align="left">00 00 00 06</td>
+              <td align="left">correction</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[6]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">102</td>
+              <td align="left">0f 0c 3f 06</td>
+              <td align="left">occurrence</td>
+              <td align="left">252460806 (1977-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">106</td>
+              <td align="left">00 00 00 07</td>
+              <td align="left">correction</td>
+              <td align="left">7</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[7]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">110</td>
+              <td align="left">10 ed 72 87</td>
+              <td align="left">occurrence</td>
+              <td align="left">283996807 (1978-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">114</td>
+              <td align="left">00 00 00 08</td>
+              <td align="left">correction</td>
+              <td align="left">8</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[8]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">118</td>
+              <td align="left">12 ce a6 08</td>
+              <td align="left">occurrence</td>
+              <td align="left">315532808 (1979-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">122</td>
+              <td align="left">00 00 00 09</td>
+              <td align="left">correction</td>
+              <td align="left">9</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[9]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">126</td>
+              <td align="left">15 9f ca 89</td>
+              <td align="left">occurrence</td>
+              <td align="left">362793609 (1981-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">130</td>
+              <td align="left">00 00 00 0a</td>
+              <td align="left">correction</td>
+              <td align="left">10</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[10]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">134</td>
+              <td align="left">17 80 fe 0a</td>
+              <td align="left">occurrence</td>
+              <td align="left">394329610 (1982-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">138</td>
+              <td align="left">00 00 00 0b</td>
+              <td align="left">correction</td>
+              <td align="left">11</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[11]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">142</td>
+              <td align="left">19 62 31 8b</td>
+              <td align="left">occurrence</td>
+              <td align="left">425865611 (1983-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">146</td>
+              <td align="left">00 00 00 0c</td>
+              <td align="left">correction</td>
+              <td align="left">12</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[12]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">150</td>
+              <td align="left">1d 25 ea 0c</td>
+              <td align="left">occurrence</td>
+              <td align="left">489024012 (1985-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">154</td>
+              <td align="left">00 00 00 0d</td>
+              <td align="left">correction</td>
+              <td align="left">13</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[13]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">158</td>
+              <td align="left">21 da e5 0d</td>
+              <td align="left">occurrence</td>
+              <td align="left">567993613 (1987-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">162</td>
+              <td align="left">00 00 00 0e</td>
+              <td align="left">correction</td>
+              <td align="left">14</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[14]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">166</td>
+              <td align="left">25 9e 9d 8e</td>
+              <td align="left">occurrence</td>
+              <td align="left">631152014 (1989-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">170</td>
+              <td align="left">00 00 00 0f</td>
+              <td align="left">correction</td>
+              <td align="left">15</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[15]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">174</td>
+              <td align="left">27 7f d1 0f</td>
+              <td align="left">occurrence</td>
+              <td align="left">662688015 (1990-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">178</td>
+              <td align="left">00 00 00 10</td>
+              <td align="left">correction</td>
+              <td align="left">16</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[16]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">182</td>
+              <td align="left">2a 50 f5 90</td>
+              <td align="left">occurrence</td>
+              <td align="left">709948816 (1992-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">186</td>
+              <td align="left">00 00 00 11</td>
+              <td align="left">correction</td>
+              <td align="left">17</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[17]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">190</td>
+              <td align="left">2c 32 29 11</td>
+              <td align="left">occurrence</td>
+              <td align="left">741484817 (1993-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">194</td>
+              <td align="left">00 00 00 12</td>
+              <td align="left">correction</td>
+              <td align="left">18</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[18]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">198</td>
+              <td align="left">2e 13 5c 92</td>
+              <td align="left">occurrence</td>
+              <td align="left">773020818 (1994-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">202</td>
+              <td align="left">00 00 00 13</td>
+              <td align="left">correction</td>
+              <td align="left">19</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[19]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">206</td>
+              <td align="left">30 e7 24 13</td>
+              <td align="left">occurrence</td>
+              <td align="left">820454419 (1995-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">210</td>
+              <td align="left">00 00 00 14</td>
+              <td align="left">correction</td>
+              <td align="left">20</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[20]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">214</td>
+              <td align="left">33 b8 48 94</td>
+              <td align="left">occurrence</td>
+              <td align="left">867715220 (1997-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">218</td>
+              <td align="left">00 00 00 15</td>
+              <td align="left">correction</td>
+              <td align="left">21</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[21]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">222</td>
+              <td align="left">36 8c 10 15</td>
+              <td align="left">occurrence</td>
+              <td align="left">915148821 (1998-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">226</td>
+              <td align="left">00 00 00 16</td>
+              <td align="left">correction</td>
+              <td align="left">22</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[22]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">230</td>
+              <td align="left">43 b7 1b 96</td>
+              <td align="left">occurrence</td>
+              <td align="left">1136073622 (2005-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">234</td>
+              <td align="left">00 00 00 17</td>
+              <td align="left">correction</td>
+              <td align="left">23</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[23]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">238</td>
+              <td align="left">49 5c 07 97</td>
+              <td align="left">occurrence</td>
+              <td align="left">1230768023 (2008-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">242</td>
+              <td align="left">00 00 00 18</td>
+              <td align="left">correction</td>
+              <td align="left">24</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[24]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">246</td>
+              <td align="left">4f ef 93 18</td>
+              <td align="left">occurrence</td>
+              <td align="left">1341100824 (2012-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">250</td>
+              <td align="left">00 00 00 19</td>
+              <td align="left">correction</td>
+              <td align="left">25</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[25]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">254</td>
+              <td align="left">55 93 2d 99</td>
+              <td align="left">occurrence</td>
+              <td align="left">1435708825 (2015-06-30T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">258</td>
+              <td align="left">00 00 00 1a</td>
+              <td align="left">correction</td>
+              <td align="left">26</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[26]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">262</td>
+              <td align="left">58 68 46 9a</td>
+              <td align="left">occurrence</td>
+              <td align="left">1483228826 (2016-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">266</td>
+              <td align="left">00 00 00 1b</td>
+              <td align="left">correction</td>
+              <td align="left">27</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">270</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[0]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">271</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[0]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+          </tbody>
+        </table>
 
         <t>To determine TAI corresponding
         to 2000-01-01T00:00:00Z (UNIX&nbsp;time&nbsp;=&nbsp;946684800),
-        the following procedure would be followed:
+        the following procedure would be followed:</t>
 
-        <list style='numbers'>
-          <t>Find the latest leap-second occurrence  prior to the
+        <ol spacing="normal" type="1">
+          <li>Find the latest leap-second occurrence  prior to the
           time of interest (leapsecond[21]) and note the correction
-          value (LEAPCORR&nbsp;=&nbsp;22).</t>
-          <t>Add LEAPCORR + 10 to the time of interest to
-          yield TAI of 2000-01-01T00:00:32.</t>
-        </list></t>
+          value (LEAPCORR&nbsp;=&nbsp;22).</li>
+
+          <li>Add LEAPCORR + 10 to the time of interest to
+          yield TAI of 2000-01-01T00:00:32.</li>
+        </ol>
       </section>
 
-      <section title='Version 2 File Representing Pacific/Honolulu'>
-        <texttable>
-          <ttcol width="13%">File Offset</ttcol>
-          <ttcol width="23%">Hexadecimal Octets</ttcol>
-          <ttcol width="28%">Record Name / Field Name</ttcol>
-          <ttcol width="36%">Field Value</ttcol>
-          <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>004</c> <c>32</c> <c>version</c> <c>'2' (2)</c>
-          <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>020</c> <c>00 00 00 06</c> <c>isutcnt</c> <c>6</c>
-          <c>024</c> <c>00 00 00 06</c> <c>isstdcnt</c> <c>6</c>
-          <c>028</c> <c>00 00 00 00</c> <c>leapcnt</c> <c>0</c>
-          <c>032</c> <c>00 00 00 07</c> <c>timecnt</c> <c>7</c>
-          <c>036</c> <c>00 00 00 06</c> <c>typecnt</c> <c>6</c>
-          <c>040</c> <c>00 00 00 14</c> <c>charcnt</c> <c>20</c>
-          <c/> <c/> <c/> <c/>
+      <section numbered="true" toc="default">
+        <name>Version 2 File Representing Pacific/Honolulu</name>
 
-          <c>044</c> <c>80 00 00 00</c> <c>trans time[0]</c>
-          <c>-2147483648 (1901-12-13T20:45:52Z)</c>
-
-          <c>048</c> <c>bb 05 43 48</c> <c>trans time[1]</c>
-          <c>-1157283000 (1933-04-30T12:30:00Z)</c>
-
-          <c>052</c> <c>bb 21 71 58</c> <c>trans time[2]</c>
-          <c>-1155436200 (1933-05-21T21:30:00Z)</c>
-
-          <c>056</c> <c>cb 89 3d c8</c> <c>trans time[3]</c>
-          <c>-880198200 (1942-02-09T12:30:00Z)</c>
-
-          <c>060</c> <c>d2 23 f4 70</c> <c>trans time[4]</c>
-          <c>-769395600 (1945-08-14T23:00:00Z)</c>
-
-          <c>064</c> <c>d2 61 49 38</c> <c>trans time[5]</c>
-          <c>-765376200 (1945-09-30T11:30:00Z)</c>
-
-          <c>068</c> <c>d5 8d 73 48</c> <c>trans time[6]</c>
-          <c>-712150200 (1947-06-08T12:30:00Z)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>072</c> <c>01</c> <c>trans type[0]</c> <c>1</c>
-          <c>073</c> <c>02</c> <c>trans type[1]</c> <c>2</c>
-          <c>074</c> <c>01</c> <c>trans type[2]</c> <c>1</c>
-          <c>075</c> <c>03</c> <c>trans type[3]</c> <c>3</c>
-          <c>076</c> <c>04</c> <c>trans type[4]</c> <c>4</c>
-          <c>077</c> <c>01</c> <c>trans type[5]</c> <c>1</c>
-          <c>078</c> <c>05</c> <c>trans type[6]</c> <c>5</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>079</c> <c>ff ff 6c 02</c> <c>utoff</c> <c>-37886 (-10:21:26)</c>
-          <c>083</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>084</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[1]</c> <c/>
-          <c>085</c> <c>ff ff 6c 58</c> <c>utoff</c> <c>-37800 (-10:30)</c>
-          <c>089</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>090</c> <c>04</c> <c>desigidx</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[2]</c> <c/>
-          <c>091</c> <c>ff ff 7a 68</c> <c>utoff</c> <c>-34200 (-09:30)</c>
-          <c>095</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>096</c> <c>08</c> <c>desigidx</c> <c>8</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[3]</c> <c/>
-          <c>097</c> <c>ff ff 7a 68</c> <c>utoff</c> <c>-34200 (-09:30)</c>
-          <c>101</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>102</c> <c>0c</c> <c>desigidx</c> <c>12</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[4]</c> <c/>
-          <c>103</c> <c>ff ff 7a 68</c> <c>utoff</c> <c>-34200 (-09:30)</c>
-          <c>107</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>108</c> <c>10</c> <c>desigidx</c> <c>16</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[5]</c> <c/>
-          <c>109</c> <c>ff ff 73 60</c> <c>utoff</c> <c>-36000 (-10:00)</c>
-          <c>113</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>114</c> <c>04</c> <c>desigidx</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>115</c> <c>4c 4d 54 00</c> <c>designations[0]</c> <c>"LMT"</c>
-          <c>119</c> <c>48 53 54 00</c> <c>designations[4]</c> <c>"HST"</c>
-          <c>123</c> <c>48 44 54 00</c> <c>designations[8]</c> <c>"HDT"</c>
-          <c>127</c> <c>48 57 54 00</c> <c>designations[12]</c> <c>"HWT"</c>
-          <c>131</c> <c>48 50 54 00</c> <c>designations[16]</c> <c>"HPT"</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>135</c> <c>00</c> <c>standard/wall[0]</c> <c>0 (wall)</c>
-          <c>136</c> <c>00</c> <c>standard/wall[1]</c> <c>0 (wall)</c>
-          <c>137</c> <c>00</c> <c>standard/wall[2]</c> <c>0 (wall)</c>
-          <c>138</c> <c>00</c> <c>standard/wall[3]</c> <c>0 (wall)</c>
-          <c>139</c> <c>01</c> <c>standard/wall[4]</c> <c>1 (standard)</c>
-          <c>140</c> <c>00</c> <c>standard/wall[5]</c> <c>0 (wall)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>141</c> <c>00</c> <c>UT/local[0]</c> <c>0 (local)</c>
-          <c>142</c> <c>00</c> <c>UT/local[1]</c> <c>0 (local)</c>
-          <c>143</c> <c>00</c> <c>UT/local[2]</c> <c>0 (local)</c>
-          <c>144</c> <c>00</c> <c>UT/local[3]</c> <c>0 (local)</c>
-          <c>145</c> <c>01</c> <c>UT/local[4]</c> <c>1 (UT)</c>
-          <c>146</c> <c>00</c> <c>UT/local[5]</c> <c>0 (local)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>147</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>151</c> <c>32</c> <c>version</c> <c>'2' (2)</c>
-          <c>152</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>167</c> <c>00 00 00 06</c> <c>isutcnt</c> <c>6</c>
-          <c>171</c> <c>00 00 00 06</c> <c>isstdcnt</c> <c>6</c>
-          <c>175</c> <c>00 00 00 00</c> <c>leapcnt</c> <c>0</c>
-          <c>179</c> <c>00 00 00 07</c> <c>timecnt</c> <c>7</c>
-          <c>183</c> <c>00 00 00 06</c> <c>typecnt</c> <c>6</c>
-          <c>187</c> <c>00 00 00 14</c> <c>charcnt</c> <c>20</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>191</c> <c>ff ff ff ff 74 e0 70 be</c> <c>trans time[0]</c>
-          <c>-2334101314 (1896-01-13T22:31:26Z)</c>
-
-          <c>199</c> <c>ff ff ff ff bb 05 43 48</c> <c>trans time[1]</c>
-          <c>-1157283000 (1933-04-30T12:30:00Z)</c>
-
-          <c>207</c> <c>ff ff ff ff bb 21 71 58</c> <c>trans time[2]</c>
-          <c>-1155436200 (1933-05-21T21:30:00Z)</c>
-
-          <c>215</c> <c>ff ff ff ff cb 89 3d c8</c> <c>trans time[3]</c>
-          <c>-880198200 (1942-02-09T12:30:00Z)</c>
-
-          <c>223</c> <c>ff ff ff ff d2 23 f4 70</c> <c>trans time[4]</c>
-          <c>-769395600 (1945-08-14T23:00:00Z)</c>
-
-          <c>231</c> <c>ff ff ff ff d2 61 49 38</c> <c>trans time[5]</c>
-          <c>-765376200 (1945-09-30T11:30:00Z)</c>
-
-          <c>239</c> <c>ff ff ff ff d5 8d 73 48</c> <c>trans time[6]</c>
-          <c>-712150200 (1947-06-08T12:30:00Z)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>247</c> <c>01</c> <c>trans type[0]</c> <c>1</c>
-          <c>248</c> <c>02</c> <c>trans type[1]</c> <c>2</c>
-          <c>249</c> <c>01</c> <c>trans type[2]</c> <c>1</c>
-          <c>250</c> <c>03</c> <c>trans type[3]</c> <c>3</c>
-          <c>251</c> <c>04</c> <c>trans type[4]</c> <c>4</c>
-          <c>252</c> <c>01</c> <c>trans type[5]</c> <c>1</c>
-          <c>253</c> <c>05</c> <c>trans type[6]</c> <c>5</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>254</c> <c>ff ff 6c 02</c> <c>utoff</c> <c>-37886 (-10:21:26)</c>
-          <c>258</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>259</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[1]</c> <c/>
-          <c>260</c> <c>ff ff 6c 58</c> <c>utoff</c> <c>-37800 (-10:30)</c>
-          <c>264</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>265</c> <c>04</c> <c>desigidx</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[2]</c> <c/>
-          <c>266</c> <c>ff ff 7a 68</c> <c>utoff</c> <c>-34200 (-09:30)</c>
-          <c>270</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>271</c> <c>08</c> <c>desigidx</c> <c>8</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[3]</c> <c/>
-          <c>272</c> <c>ff ff 7a 68</c> <c>utoff</c> <c>-34200 (-09:30)</c>
-          <c>276</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>277</c> <c>0c</c> <c>desigidx</c> <c>12</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[4]</c> <c/>
-          <c>278</c> <c>ff ff 7a 68</c> <c>utoff</c> <c>-34200 (-09:30)</c>
-          <c>282</c> <c>01</c> <c>isdst</c> <c>1 (yes)</c>
-          <c>283</c> <c>10</c> <c>desigidx</c> <c>16</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[5]</c> <c/>
-          <c>284</c> <c>ff ff 73 60</c> <c>utoff</c> <c>-36000 (-10:00)</c>
-          <c>288</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>289</c> <c>04</c> <c>desigidx</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>290</c> <c>4c 4d 54 00</c> <c>designations[0]</c> <c>"LMT"</c>
-          <c>294</c> <c>48 53 54 00</c> <c>designations[4]</c> <c>"HST"</c>
-          <c>298</c> <c>48 44 54 00</c> <c>designations[8]</c> <c>"HDT"</c>
-          <c>302</c> <c>48 57 54 00</c> <c>designations[12]</c> <c>"HWT"</c>
-          <c>306</c> <c>48 50 54 00</c> <c>designations[16]</c> <c>"HPT"</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>310</c> <c>00</c> <c>standard/wall[0]</c> <c>0 (wall)</c>
-          <c>311</c> <c>00</c> <c>standard/wall[1]</c> <c>0 (wall)</c>
-          <c>312</c> <c>00</c> <c>standard/wall[2]</c> <c>0 (wall)</c>
-          <c>313</c> <c>00</c> <c>standard/wall[3]</c> <c>0 (wall)</c>
-          <c>314</c> <c>01</c> <c>standard/wall[4]</c> <c>1 (standard)</c>
-          <c>315</c> <c>00</c> <c>standard/wall[5]</c> <c>0 (wall)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>316</c> <c>00</c> <c>UT/local[0]</c> <c>0 (local)</c>
-          <c>317</c> <c>00</c> <c>UT/local[1]</c> <c>0 (local)</c>
-          <c>318</c> <c>00</c> <c>UT/local[2]</c> <c>0 (local)</c>
-          <c>319</c> <c>00</c> <c>UT/local[3]</c> <c>0 (local)</c>
-          <c>320</c> <c>01</c> <c>UT/local[4]</c> <c>1 (UT)</c>
-          <c>321</c> <c>00</c> <c>UT/local[5]</c> <c>0 (local)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>322</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
-          <c>323</c> <c>48 53 54 31 30</c> <c>TZ string</c> <c>"HST10"</c>
-          <c>328</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
-        </texttable>
+        <table align="center">
+          <thead>
+            <tr>
+              <th align="left">File Offset</th>
+              <th align="left">Hexadecimal Octets</th>
+              <th align="left">Record Name / Field Name</th>
+              <th align="left">Field Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">000</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">004</td>
+              <td align="left">32</td>
+              <td align="left">version</td>
+              <td align="left">'2' (2)</td>
+            </tr>
+            <tr>
+              <td align="left">005</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"/>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">020</td>
+              <td align="left">00 00 00 06</td>
+              <td align="left">isutcnt</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td align="left">024</td>
+              <td align="left">00 00 00 06</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td align="left">028</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">leapcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">032</td>
+              <td align="left">00 00 00 07</td>
+              <td align="left">timecnt</td>
+              <td align="left">7</td>
+            </tr>
+            <tr>
+              <td align="left">036</td>
+              <td align="left">00 00 00 06</td>
+              <td align="left">typecnt</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td align="left">040</td>
+              <td align="left">00 00 00 14</td>
+              <td align="left">charcnt</td>
+              <td align="left">20</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">044</td>
+              <td align="left">80 00 00 00</td>
+              <td align="left">trans time[0]</td>
+              <td align="left">-2147483648 (1901-12-13T20:45:52Z)</td>
+            </tr>
+            <tr>
+              <td align="left">048</td>
+              <td align="left">bb 05 43 48</td>
+              <td align="left">trans time[1]</td>
+              <td align="left">-1157283000 (1933-04-30T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">052</td>
+              <td align="left">bb 21 71 58</td>
+              <td align="left">trans time[2]</td>
+              <td align="left">-1155436200 (1933-05-21T21:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">056</td>
+              <td align="left">cb 89 3d c8</td>
+              <td align="left">trans time[3]</td>
+              <td align="left">-880198200 (1942-02-09T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">060</td>
+              <td align="left">d2 23 f4 70</td>
+              <td align="left">trans time[4]</td>
+              <td align="left">-769395600 (1945-08-14T23:00:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">064</td>
+              <td align="left">d2 61 49 38</td>
+              <td align="left">trans time[5]</td>
+              <td align="left">-765376200 (1945-09-30T11:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">068</td>
+              <td align="left">d5 8d 73 48</td>
+              <td align="left">trans time[6]</td>
+              <td align="left">-712150200 (1947-06-08T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">072</td>
+              <td align="left">01</td>
+              <td align="left">trans type[0]</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">073</td>
+              <td align="left">02</td>
+              <td align="left">trans type[1]</td>
+              <td align="left">2</td>
+            </tr>
+            <tr>
+              <td align="left">074</td>
+              <td align="left">01</td>
+              <td align="left">trans type[2]</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">075</td>
+              <td align="left">03</td>
+              <td align="left">trans type[3]</td>
+              <td align="left">3</td>
+            </tr>
+            <tr>
+              <td align="left">076</td>
+              <td align="left">04</td>
+              <td align="left">trans type[4]</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td align="left">077</td>
+              <td align="left">01</td>
+              <td align="left">trans type[5]</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">078</td>
+              <td align="left">05</td>
+              <td align="left">trans type[6]</td>
+              <td align="left">5</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">079</td>
+              <td align="left">ff ff 6c 02</td>
+              <td align="left">utoff</td>
+              <td align="left">-37886 (-10:21:26)</td>
+            </tr>
+            <tr>
+              <td align="left">083</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">084</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[1]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">085</td>
+              <td align="left">ff ff 6c 58</td>
+              <td align="left">utoff</td>
+              <td align="left">-37800 (-10:30)</td>
+            </tr>
+            <tr>
+              <td align="left">089</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">090</td>
+              <td align="left">04</td>
+              <td align="left">desigidx</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[2]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">091</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">095</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">096</td>
+              <td align="left">08</td>
+              <td align="left">desigidx</td>
+              <td align="left">8</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[3]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">097</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">101</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">102</td>
+              <td align="left">0c</td>
+              <td align="left">desigidx</td>
+              <td align="left">12</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[4]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">103</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">107</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">108</td>
+              <td align="left">10</td>
+              <td align="left">desigidx</td>
+              <td align="left">16</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[5]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">109</td>
+              <td align="left">ff ff 73 60</td>
+              <td align="left">utoff</td>
+              <td align="left">-36000 (-10:00)</td>
+            </tr>
+            <tr>
+              <td align="left">113</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">114</td>
+              <td align="left">04</td>
+              <td align="left">desigidx</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">115</td>
+              <td align="left">4c 4d 54 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"LMT"</td>
+            </tr>
+            <tr>
+              <td align="left">119</td>
+              <td align="left">48 53 54 00</td>
+              <td align="left">designations[4]</td>
+              <td align="left">"HST"</td>
+            </tr>
+            <tr>
+              <td align="left">123</td>
+              <td align="left">48 44 54 00</td>
+              <td align="left">designations[8]</td>
+              <td align="left">"HDT"</td>
+            </tr>
+            <tr>
+              <td align="left">127</td>
+              <td align="left">48 57 54 00</td>
+              <td align="left">designations[12]</td>
+              <td align="left">"HWT"</td>
+            </tr>
+            <tr>
+              <td align="left">131</td>
+              <td align="left">48 50 54 00</td>
+              <td align="left">designations[16]</td>
+              <td align="left">"HPT"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">135</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[0]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">136</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[1]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">137</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[2]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">138</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[3]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">139</td>
+              <td align="left">01</td>
+              <td align="left">standard/wall[4]</td>
+              <td align="left">1 (standard)</td>
+            </tr>
+            <tr>
+              <td align="left">140</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[5]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">141</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[0]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">142</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[1]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">143</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[2]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">144</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[3]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">145</td>
+              <td align="left">01</td>
+              <td align="left">UT/local[4]</td>
+              <td align="left">1 (UT)</td>
+            </tr>
+            <tr>
+              <td align="left">146</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[5]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">147</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">151</td>
+              <td align="left">32</td>
+              <td align="left">version</td>
+              <td align="left">'2' (2)</td>
+            </tr>
+            <tr>
+              <td align="left">152</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"/>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">167</td>
+              <td align="left">00 00 00 06</td>
+              <td align="left">isutcnt</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td align="left">171</td>
+              <td align="left">00 00 00 06</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td align="left">175</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">leapcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">179</td>
+              <td align="left">00 00 00 07</td>
+              <td align="left">timecnt</td>
+              <td align="left">7</td>
+            </tr>
+            <tr>
+              <td align="left">183</td>
+              <td align="left">00 00 00 06</td>
+              <td align="left">typecnt</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td align="left">187</td>
+              <td align="left">00 00 00 14</td>
+              <td align="left">charcnt</td>
+              <td align="left">20</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">191</td>
+              <td align="left">ff ff ff ff 74 e0 70 be</td>
+              <td align="left">trans time[0]</td>
+              <td align="left">-2334101314 (1896-01-13T22:31:26Z)</td>
+            </tr>
+            <tr>
+              <td align="left">199</td>
+              <td align="left">ff ff ff ff bb 05 43 48</td>
+              <td align="left">trans time[1]</td>
+              <td align="left">-1157283000 (1933-04-30T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">207</td>
+              <td align="left">ff ff ff ff bb 21 71 58</td>
+              <td align="left">trans time[2]</td>
+              <td align="left">-1155436200 (1933-05-21T21:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">215</td>
+              <td align="left">ff ff ff ff cb 89 3d c8</td>
+              <td align="left">trans time[3]</td>
+              <td align="left">-880198200 (1942-02-09T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">223</td>
+              <td align="left">ff ff ff ff d2 23 f4 70</td>
+              <td align="left">trans time[4]</td>
+              <td align="left">-769395600 (1945-08-14T23:00:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">231</td>
+              <td align="left">ff ff ff ff d2 61 49 38</td>
+              <td align="left">trans time[5]</td>
+              <td align="left">-765376200 (1945-09-30T11:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">239</td>
+              <td align="left">ff ff ff ff d5 8d 73 48</td>
+              <td align="left">trans time[6]</td>
+              <td align="left">-712150200 (1947-06-08T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">247</td>
+              <td align="left">01</td>
+              <td align="left">trans type[0]</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">248</td>
+              <td align="left">02</td>
+              <td align="left">trans type[1]</td>
+              <td align="left">2</td>
+            </tr>
+            <tr>
+              <td align="left">249</td>
+              <td align="left">01</td>
+              <td align="left">trans type[2]</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">250</td>
+              <td align="left">03</td>
+              <td align="left">trans type[3]</td>
+              <td align="left">3</td>
+            </tr>
+            <tr>
+              <td align="left">251</td>
+              <td align="left">04</td>
+              <td align="left">trans type[4]</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td align="left">252</td>
+              <td align="left">01</td>
+              <td align="left">trans type[5]</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">253</td>
+              <td align="left">05</td>
+              <td align="left">trans type[6]</td>
+              <td align="left">5</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">254</td>
+              <td align="left">ff ff 6c 02</td>
+              <td align="left">utoff</td>
+              <td align="left">-37886 (-10:21:26)</td>
+            </tr>
+            <tr>
+              <td align="left">258</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">259</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[1]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">260</td>
+              <td align="left">ff ff 6c 58</td>
+              <td align="left">utoff</td>
+              <td align="left">-37800 (-10:30)</td>
+            </tr>
+            <tr>
+              <td align="left">264</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">265</td>
+              <td align="left">04</td>
+              <td align="left">desigidx</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[2]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">266</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">270</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">271</td>
+              <td align="left">08</td>
+              <td align="left">desigidx</td>
+              <td align="left">8</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[3]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">272</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">276</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">277</td>
+              <td align="left">0c</td>
+              <td align="left">desigidx</td>
+              <td align="left">12</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[4]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">278</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">282</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">283</td>
+              <td align="left">10</td>
+              <td align="left">desigidx</td>
+              <td align="left">16</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[5]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">284</td>
+              <td align="left">ff ff 73 60</td>
+              <td align="left">utoff</td>
+              <td align="left">-36000 (-10:00)</td>
+            </tr>
+            <tr>
+              <td align="left">288</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">289</td>
+              <td align="left">04</td>
+              <td align="left">desigidx</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">290</td>
+              <td align="left">4c 4d 54 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"LMT"</td>
+            </tr>
+            <tr>
+              <td align="left">294</td>
+              <td align="left">48 53 54 00</td>
+              <td align="left">designations[4]</td>
+              <td align="left">"HST"</td>
+            </tr>
+            <tr>
+              <td align="left">298</td>
+              <td align="left">48 44 54 00</td>
+              <td align="left">designations[8]</td>
+              <td align="left">"HDT"</td>
+            </tr>
+            <tr>
+              <td align="left">302</td>
+              <td align="left">48 57 54 00</td>
+              <td align="left">designations[12]</td>
+              <td align="left">"HWT"</td>
+            </tr>
+            <tr>
+              <td align="left">306</td>
+              <td align="left">48 50 54 00</td>
+              <td align="left">designations[16]</td>
+              <td align="left">"HPT"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">310</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[0]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">311</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[1]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">312</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[2]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">313</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[3]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td align="left">314</td>
+              <td align="left">01</td>
+              <td align="left">standard/wall[4]</td>
+              <td align="left">1 (standard)</td>
+            </tr>
+            <tr>
+              <td align="left">315</td>
+              <td align="left">00</td>
+              <td align="left">standard/wall[5]</td>
+              <td align="left">0 (wall)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">316</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[0]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">317</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[1]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">318</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[2]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">319</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[3]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td align="left">320</td>
+              <td align="left">01</td>
+              <td align="left">UT/local[4]</td>
+              <td align="left">1 (UT)</td>
+            </tr>
+            <tr>
+              <td align="left">321</td>
+              <td align="left">00</td>
+              <td align="left">UT/local[5]</td>
+              <td align="left">0 (local)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">322</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+            <tr>
+              <td align="left">323</td>
+              <td align="left">48 53 54 31 30</td>
+              <td align="left">TZ string</td>
+              <td align="left">"HST10"</td>
+            </tr>
+            <tr>
+              <td align="left">328</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+          </tbody>
+        </table>
 
         <t>To determine the local time in this time zone corresponding
         to 1933-05-04T12:00:00Z (UNIX time = -1156939200), the
-        following procedure would be followed:
+        following procedure would be followed:</t>
 
-        <list style='numbers'>
-          <t>Find the latest time transition prior to the time of
-          interest (trans time[1]).</t>
-          <t>Reference the corresponding transition type (trans
-          type[1]) to determine the local time type index (2).</t>
-          <t>Reference the corresponding local time type
+        <ol spacing="normal" type="1">
+          <li>Find the latest time transition prior to the time of
+          interest (trans time[1]).</li>
+
+          <li>Reference the corresponding transition type (trans
+          type[1]) to determine the local time type index (2).</li>
+
+          <li>Reference the corresponding local time type
           (localtimetype[2]) to determine the offset from UTC
           (-09:30), the daylight saving indicator (1 = yes), and the
-          index into the time zone designation strings (8).</t>
-          <t>Look up the corresponding time zone designation string
-          (designations[8] = "HDT").</t>
-          <t>Add the UTC offset to the time of interest to yield a
-          local daylight saving time of 1933-05-04T02:30:00-09:30 (HDT).</t>
-        </list></t>
+          index into the time zone designation strings (8).</li>
+
+          <li>Look up the corresponding time zone designation string
+          (designations[8] = "HDT").</li>
+
+          <li>Add the UTC offset to the time of interest to yield a
+          local daylight saving time of 1933-05-04T02:30:00-09:30 (HDT).</li>
+        </ol>
 
         <t>To determine the local time in this time zone corresponding
         to 2019-01-01T00:00:00Z (UNIX time = 1546300800), the following
-        procedure would be followed:
+        procedure would be followed:</t>
 
-        <list style='numbers'>
-          <t>Find the latest time transition prior to the time of
-          interest (there is no such transition).</t>
-          <t>Look up the TZ string in the footer ("HST10"), which
+        <ol spacing="normal" type="1">
+          <li>Find the latest time transition prior to the time of
+          interest (there is no such transition).</li>
+
+          <li>Look up the TZ string in the footer ("HST10"), which
           indicates that the time zone designation is "HST" year-round, and
-	  the offset to UTC is 10:00.</t>
-          <t>Subtract the UTC offset from the time of interest to
-          yield a standard local time of 2018-12-31T14:00:00-10:00 (HST).</t>
-        </list></t>
+	  the offset to UTC is 10:00.</li>
+
+          <li>Subtract the UTC offset from the time of interest to
+          yield a standard local time of 2018-12-31T14:00:00-10:00 (HST).</li>
+        </ol>
       </section>
 
-      <section anchor='v3example'
-               title='Truncated Version 3 File Representing Asia/Jerusalem'>
+      <section anchor="v3example" numbered="true" toc="default">
+        <name>Truncated Version 3 File Representing Asia/Jerusalem</name>
 
         <t>The following TZif file has been truncated to start on
         2038-01-01T00:00:00Z.</t>
 
-        <t>In this example:
-        <list style='symbols'>
-          <t>The start time value can not be represented using 32
-          bits, so the version 1 header contains only the required
-          minimum data, which will be ignored by readers.</t>
+        <t>In this example:</t>
 
-          <t>The version 3 header leverages the fact that by specifying
+        <ul spacing="normal">
+          <li>The start time value can not be represented using 32
+          bits, so the version 1 header contains only the required
+          minimum data, which will be ignored by readers.</li>
+
+          <li>The version 3 header leverages the fact that by specifying
           'isutcnt' and 'isstdcnt' as zero, all transition times
           associated with local time types are assumed to be specified
           as local wall-clock time
           (see the definitions of UT/local indicators
-          and standard/wall indicators in <xref target="data"/>).</t>
+          and standard/wall indicators in
+          <xref target="data" format="default"/>).</li>
 
-          <t>The TZ string value has been line-wrapped for
-          presentation purposes only.</t>
-        </list>
-        </t>
+          <li>The TZ string value has been line-wrapped for
+          presentation purposes only.</li>
+        </ul>
 
-        <texttable>
-          <ttcol width="13%">File Offset</ttcol>
-          <ttcol width="23%">Hexadecimal Octets</ttcol>
-          <ttcol width="28%">Record Name / Field Name</ttcol>
-          <ttcol width="36%">Field Value</ttcol>
-          <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>004</c> <c>33</c> <c>version</c> <c>'3' (3)</c>
-          <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>020</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
-          <c>024</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
-          <c>028</c> <c>00 00 00 00</c> <c>leapcnt</c> <c>0</c>
-          <c>032</c> <c>00 00 00 00</c> <c>timecnt</c> <c>0</c>
-          <c>036</c> <c>00 00 00 01</c> <c>typecnt</c> <c>1</c>
-          <c>040</c> <c>00 00 00 01</c> <c>charcnt</c> <c>1</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>044</c> <c>00 00 00 00</c> <c>utoff</c> <c>0 (+00:00)</c>
-          <c>048</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>049</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>050</c> <c>00</c> <c>designations[0]</c> <c>""</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>051</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>055</c> <c>33</c> <c>version</c> <c>'3' (3)</c>
-          <c>056</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>071</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
-          <c>075</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
-          <c>079</c> <c>00 00 00 00</c> <c>leapcnt</c> <c>0</c>
-          <c>083</c> <c>00 00 00 01</c> <c>timecnt</c> <c>1</c>
-          <c>087</c> <c>00 00 00 01</c> <c>typecnt</c> <c>1</c>
-          <c>091</c> <c>00 00 00 04</c> <c>charcnt</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>095</c> <c>00 00 00 00 7f e8 17 80</c> <c>trans time[0]</c>
-          <c>2145916800 (2038-01-01T00:00:00Z)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>103</c> <c>00</c> <c>trans type[0]</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>104</c> <c>00 00 1c 20</c> <c>utoff</c> <c>7200 (+02:00)</c>
-          <c>108</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>109</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>110</c> <c>49 53 54 00</c> <c>designations[0]</c> <c>"IST"</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>114</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
-          <c>115</c> <c>49 53 54 2d 32 49 44 54 2c
-          4d 33 2e 34 2e 34 2f 32 36 2c 4d 31 30 2e 35 2e 30</c>
-          <c>TZ string</c> <c>"IST-2IDT,<!-- force text to be wrapped here -->
-          M3.4.4/26,M10.5.0"</c>
-          <c>141</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
-        </texttable>
+        <table align="center">
+          <thead>
+            <tr>
+              <th align="left">File Offset</th>
+              <th align="left">Hexadecimal Octets</th>
+              <th align="left">Record Name / Field Name</th>
+              <th align="left">Field Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">000</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">004</td>
+              <td align="left">33</td>
+              <td align="left">version</td>
+              <td align="left">'3' (3)</td>
+            </tr>
+            <tr>
+              <td align="left">005</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"/>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">020</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isutcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">024</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">028</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">leapcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">032</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">timecnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">036</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">typecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">040</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">charcnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">044</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">utoff</td>
+              <td align="left">0 (+00:00)</td>
+            </tr>
+            <tr>
+              <td align="left">048</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">049</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">050</td>
+              <td align="left">00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">""</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">051</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">055</td>
+              <td align="left">33</td>
+              <td align="left">version</td>
+              <td align="left">'3' (3)</td>
+            </tr>
+            <tr>
+              <td align="left">056</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"/>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">071</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isutcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">075</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">079</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">leapcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">083</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">timecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">087</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">typecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">091</td>
+              <td align="left">00 00 00 04</td>
+              <td align="left">charcnt</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">095</td>
+              <td align="left">00 00 00 00 7f e8 17 80</td>
+              <td align="left">trans time[0]</td>
+              <td align="left">2145916800 (2038-01-01T00:00:00Z)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">103</td>
+              <td align="left">00</td>
+              <td align="left">trans type[0]</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">104</td>
+              <td align="left">00 00 1c 20</td>
+              <td align="left">utoff</td>
+              <td align="left">7200 (+02:00)</td>
+            </tr>
+            <tr>
+              <td align="left">108</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">109</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">110</td>
+              <td align="left">49 53 54 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"IST"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">114</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+            <tr>
+              <td align="left">115</td>
+              <td align="left">49 53 54 2d 32 49 44 54 2c
+              4d 33 2e 34 2e 34 2f 32 36 2c 4d 31 30 2e 35 2e 30</td>
+              <td align="left">TZ string</td>
+              <td align="left">"IST-2IDT,<br/>M3.4.4/26,M10.5.0"</td>
+            </tr>
+            <tr>
+              <td align="left">141</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
 
-      <section anchor='v4example'
-               title='Truncated Version 4 File Representing America/New_York'>
+      <section anchor="v4example" numbered="true" toc="default">
+        <name>Truncated Version 4 File Representing America/New_York</name>
 
         <t>The following TZif file has been truncated to start on
         2022-01-01T00:00:00Z.</t>
 
-        <t>In this example:
-        <list style='symbols'>
-          <t>The version 1 header contains only the required
-          minimum data, which will be ignored by readers.</t>
+        <t>In this example:</t>
 
-          <t>The version 4 header leverages the fact that by specifying
+        <ul spacing="normal">
+          <li>The version 1 header contains only the required
+          minimum data, which will be ignored by readers.</li>
+          <li>The version 4 header leverages the fact that by specifying
           'isutcnt' and 'isstdcnt' as zero, all transition times
           associated with local time types are assumed to be specified
           as local wall-clock time
           (see the definitions of UT/local indicators
-          and standard/wall indicators in <xref target="data"/>).</t>
+          and standard/wall indicators in
+          <xref target="data" format="default"/>).</li>
 
-          <t>The first leap second occurrence is the most recent one
-          prior to the truncation time.</t>
+          <li>The first leap second occurrence is the most recent one
+          prior to the truncation time.</li>
 
-          <t>The last leap second correction matches the
+          <li>The last leap second correction matches the
           second-to-last leap second correction, indicating the
-          expiration time of the leap second table.</t>
+          expiration time of the leap second table.</li>
 
-          <t>The TZ string value has been line-wrapped for
-          presentation purposes only.</t>
-        </list>
-        </t>
+          <li>The TZ string value has been line-wrapped for
+          presentation purposes only.</li>
+        </ul>
 
-        <texttable>
-          <ttcol width="13%">File Offset</ttcol>
-          <ttcol width="23%">Hexadecimal Octets</ttcol>
-          <ttcol width="28%">Record Name / Field Name</ttcol>
-          <ttcol width="36%">Field Value</ttcol>
-          <c>000</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>004</c> <c>34</c> <c>version</c> <c>'4' (4)</c>
-          <c>005</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>020</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
-          <c>024</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
-          <c>028</c> <c>00 00 00 00</c> <c>leapcnt</c> <c>0</c>
-          <c>032</c> <c>00 00 00 00</c> <c>timecnt</c> <c>0</c>
-          <c>036</c> <c>00 00 00 01</c> <c>typecnt</c> <c>1</c>
-          <c>040</c> <c>00 00 00 01</c> <c>charcnt</c> <c>1</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>044</c> <c>00 00 00 00</c> <c>utoff</c> <c>0 (+00:00)</c>
-          <c>048</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>049</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>050</c> <c>00</c> <c>designations[0]</c> <c>""</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>051</c> <c>54 5a 69 66</c> <c>magic</c> <c>"TZif"</c>
-          <c>055</c> <c>34</c> <c>version</c> <c>'4' (4)</c>
-          <c>056</c> <c>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</c> <c/> <c/>
-          <c>071</c> <c>00 00 00 00</c> <c>isutcnt</c> <c>0</c>
-          <c>075</c> <c>00 00 00 00</c> <c>isstdcnt</c> <c>0</c>
-          <c>079</c> <c>00 00 00 02</c> <c>leapcnt</c> <c>2</c>
-          <c>083</c> <c>00 00 00 01</c> <c>timecnt</c> <c>1</c>
-          <c>087</c> <c>00 00 00 01</c> <c>typecnt</c> <c>1</c>
-          <c>091</c> <c>00 00 00 04</c> <c>charcnt</c> <c>4</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>095</c> <c>00 00 00 00 61 cf 99 9b</c> <c>trans time[0]</c>
-          <c>1640995227 (2022-01-01T00:00:00Z)</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>103</c> <c>00</c> <c>trans type[0]</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>localtimetype[0]</c> <c/>
-          <c>104</c> <c>ff ff b9 b0</c> <c>utoff</c> <c>-18000 (-05:00)</c>
-          <c>108</c> <c>00</c> <c>isdst</c> <c>0 (no)</c>
-          <c>109</c> <c>00</c> <c>desigidx</c> <c>0</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>110</c> <c>45 53 54 00</c> <c>designations[0]</c> <c>"EST"</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[0]</c> <c/>
-          <c>114</c> <c>00 00 00 00 58 68 46 9a</c> <c>occurrence</c>
-          <c>1483228826 (2016-12-31T23:59:60Z)</c>
-          <c>122</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
-          <c/> <c/> <c/> <c/>
-
-          <c/> <c/> <c>leapsecond[1]</c> <c/>
-          <c>126</c> <c>00 00 00 00 62 ba 44 9b</c> <c>occurrence</c>
-          <c>1656374427 (2022-06-28T00:00:00Z)</c>
-          <c>134</c> <c>00 00 00 1b</c> <c>correction</c> <c>27</c>
-          <c/> <c/> <c/> <c/>
-
-          <c>138</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
-          <c>139</c> <c>45 53 54 35 45 44 54 2c 4d 33 2e 32 2e 30 2c
-          4d 31 31 2e 31 2e 30</c>
-          <c>TZ string</c> <c>"EST5EDT,<!-- force text to be wrapped here -->
-          M3.2.0,M11.1.0"</c>
-          <c>161</c> <c>0a</c> <c>NL</c> <c>'\n'</c>
-        </texttable>
+        <table align="center">
+          <thead>
+            <tr>
+              <th align="left">File Offset</th>
+              <th align="left">Hexadecimal Octets</th>
+              <th align="left">Record Name / Field Name</th>
+              <th align="left">Field Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">000</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">004</td>
+              <td align="left">34</td>
+              <td align="left">version</td>
+              <td align="left">'4' (4)</td>
+            </tr>
+            <tr>
+              <td align="left">005</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"/>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">020</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isutcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">024</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">028</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">leapcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">032</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">timecnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">036</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">typecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">040</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">charcnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">044</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">utoff</td>
+              <td align="left">0 (+00:00)</td>
+            </tr>
+            <tr>
+              <td align="left">048</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">049</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">050</td>
+              <td align="left">00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">""</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">051</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">055</td>
+              <td align="left">34</td>
+              <td align="left">version</td>
+              <td align="left">'4' (4)</td>
+            </tr>
+            <tr>
+              <td align="left">056</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"/>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">071</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isutcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">075</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">079</td>
+              <td align="left">00 00 00 02</td>
+              <td align="left">leapcnt</td>
+              <td align="left">2</td>
+            </tr>
+            <tr>
+              <td align="left">083</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">timecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">087</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">typecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">091</td>
+              <td align="left">00 00 00 04</td>
+              <td align="left">charcnt</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">095</td>
+              <td align="left">00 00 00 00 61 cf 99 9b</td>
+              <td align="left">trans time[0]</td>
+              <td align="left">1640995227 (2022-01-01T00:00:00Z)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">103</td>
+              <td align="left">00</td>
+              <td align="left">trans type[0]</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">104</td>
+              <td align="left">ff ff b9 b0</td>
+              <td align="left">utoff</td>
+              <td align="left">-18000 (-05:00)</td>
+            </tr>
+            <tr>
+              <td align="left">108</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">109</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">110</td>
+              <td align="left">45 53 54 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"EST"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[0]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">114</td>
+              <td align="left">00 00 00 00 58 68 46 9a</td>
+              <td align="left">occurrence</td>
+              <td align="left">1483228826 (2016-12-31T23:59:60Z)</td>
+            </tr>
+            <tr>
+              <td align="left">122</td>
+              <td align="left">00 00 00 1b</td>
+              <td align="left">correction</td>
+              <td align="left">27</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"/>
+              <td align="left"/>
+              <td align="left">leapsecond[1]</td>
+              <td align="left"/>
+            </tr>
+            <tr>
+              <td align="left">126</td>
+              <td align="left">00 00 00 00 62 ba 44 9b</td>
+              <td align="left">occurrence</td>
+              <td align="left">1656374427 (2022-06-28T00:00:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">134</td>
+              <td align="left">00 00 00 1b</td>
+              <td align="left">correction</td>
+              <td align="left">27</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">138</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+            <tr>
+              <td align="left">139</td>
+              <td align="left">45 53 54 35 45 44 54 2c 4d 33 2e 32 2e 30 2c
+              4d 31 31 2e 31 2e 30</td>
+              <td align="left">TZ string</td>
+              <td align="left">"EST5EDT,<br/>M3.2.0,M11.1.0"</td>
+            </tr>
+            <tr>
+              <td align="left">161</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
+    </section>
 
-    </section>  
+    <section anchor="changes" numbered="true" toc="default">
+      <name>Changes from RFC 8536</name>
 
-    <section title="Changes from RFC 8536" anchor="changes">
-      <t>
-      <list style='symbols'>
-	<t>Added specification of the version 4 format and the
+      <ul spacing="normal">
+        <li>Added specification of the version 4 format and the
 	optional leap second table truncation and expiration,
 	along with an example and relevant
-	interoperability considerations.</t> 
-        <t>Applied erratum <xref target="Err6435"/>.</t>
-        <t>Addressed erratum <xref target="Err6426"/>
-        and several other errors in the examples.</t>
-        <t>Clarified the all-year daylight saving time
-        <xref target="tzstrext">TZ string</xref>
-        example and added a similar example with negative DST.</t>
-        <t>Added informational notes to <xref
-        target="v3example"/>.</t>
-        <t>Miscellaneous editorial changes.</t>
-      </list>
-      </t>
+	interoperability considerations.</li>
+
+        <li>Applied erratum <xref target="Err6435" format="default"/>.</li>
+
+        <li>Addressed erratum <xref target="Err6426" format="default"/>
+        and several other errors in the examples.</li>
+
+        <li>Clarified the all-year daylight saving time
+        <xref target="tzstrext" format="default">TZ string</xref>
+        example and added a similar example with negative DST.</li>
+
+        <li>Added informational notes to
+        <xref target="v3example" format="default"/>.</li>
+
+        <li>Miscellaneous editorial changes.</li>
+      </ul>
     </section>
 
-    <section title="Change Log">
+    <section numbered="true" toc="default">
+      <name>Change Log</name>
+
       <t>This section is to be removed by RFC Editor before publication.</t>
 
-      <section title="Since rfc8536bis-00">
-        <t>
-          <list style='symbols'>
-	    <t>Added specification of the version 4 format and the
-	    optional leap second table truncation and expiration,
-	    along with an example and relevant
-	    interoperability considerations.</t>
-            <t>Specified column widths in example tables.</t>
-            <t>Noted that long TZ string values in examples are
-            line-wrapped for presentation purposes only.</t>
-          </list>
-        </t>
+      <section numbered="true" toc="default">
+        <name>Since rfc8536bis-01</name>
+
+        <ul spacing="normal">
+          <li>Converted source from xml2rfc v2 to v3.</li>
+
+          <li>Properly line-wrapped long TZ string values in examples
+          (with no added space).</li>
+
+          <li>No other substantive changes.</li>
+        </ul>
       </section>
 
-      <section title="Since RFC 8536">
-        <t>
-          <list style='symbols'>
-            <t>Applied erratum <xref target="Err6435"/>.</t>
-            <t>Addressed erratum <xref target="Err6426"/>
-            and several other errors in the examples.</t>
-            <t>Clarified the all-year daylight saving time
-            <xref target="tzstrext">TZ string</xref>
-            example and added a similar example with negative DST.</t>
-            <t>Added informational notes to <xref target="v3example"/>.</t>
-            <t>Miscellaneous editorial changes.</t>
-            <t>Added text obsoleting <xref target="RFC8536"/>.</t>
-            <t>Added <xref target="changes"> Changes from RFC 8536</xref>.</t>
-            <t>Added Tim Parenti as a contributor.</t>
-          </list>
-        </t>
+      <section numbered="true" toc="default">
+        <name>Since rfc8536bis-00</name>
+
+        <ul spacing="normal">
+          <li>Added specification of the version 4 format and the
+	    optional leap second table truncation and expiration,
+	    along with an example and relevant
+	    interoperability considerations.</li>
+
+            <li>Specified column widths in example tables.</li>
+
+            <li>Noted that long TZ string values in examples are
+            line-wrapped for presentation purposes only.</li>
+        </ul>
+      </section>
+
+      <section numbered="true" toc="default">
+        <name>Since RFC 8536</name>
+
+        <ul spacing="normal">
+          <li>Applied erratum <xref target="Err6435" format="default"/>.</li>
+
+          <li>Addressed erratum <xref target="Err6426" format="default"/>
+            and several other errors in the examples.</li>
+
+            <li>Clarified the all-year daylight saving time
+            <xref target="tzstrext" format="default">TZ string</xref>
+            example and added a similar example with negative DST.</li>
+
+            <li>Added informational notes to
+            <xref target="v3example" format="default"/>.</li>
+
+            <li>Miscellaneous editorial changes.</li>
+
+            <li>Added text obsoleting
+            <xref target="RFC8536" format="default"/>.</li>
+
+            <li>Added <xref target="changes" format="default">
+            Changes from RFC 8536</xref>.</li>
+
+            <li>Added Tim Parenti as a contributor.</li>
+        </ul>
       </section>
     </section>
-	
-    <section title='Acknowledgments' numbered="no">
+
+    <section numbered="false" toc="default">
+      <name>Acknowledgments</name>
+
       <t>The authors would like to thank the following individuals for
       contributing their ideas and support for writing this
       specification: Michael Douglass, Ned Freed, Guy Harris,
-      Eliot Lear, Alexey Melnikov, and Tim Parenti.</t> 
+      Eliot Lear, Alexey Melnikov, and Tim Parenti.</t>
     </section>
-
   </back>
 </rfc>
