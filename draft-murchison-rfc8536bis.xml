@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-02" updates=""
+     docName="draft-murchison-rfc8536bis-03" updates=""
      ipr="trust200902" obsoletes="8536"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-02"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-03"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -547,6 +547,8 @@
 		  designations.  (This string MAY be empty.)  A NUL
 		  octet MUST exist in the time zone designations at or
 		  after position "idx".
+		  If the designation string is "-00", the time type is a
+                  placeholder indicating that local time is unspecified.
                 </dd>
             </dl>
           </dd>
@@ -680,6 +682,8 @@
         If there are no transitions, local time for all timestamps is
         specified by the TZ string in the footer if present and
         nonempty; otherwise, it is specified by time type 0.
+	A time type with a designation string of "-00" represents an
+        unspecified local time.
         </t>
 
         <t>A given pair of standard/wall and UT/local indicators is
@@ -938,7 +942,9 @@
         the start point of the truncation range.
         As with untruncated TZif files, time type 0 indicates local
         time immediately before the start point, and the time type of
-        the first transition indicates local time thereafter.</t>
+        the first transition indicates local time thereafter.
+	Time type 0 SHOULD be a placeholder indicating that local time
+        is unspecified.</t>
 
         <t>When truncating the start of a TZif file containing
 	leap-second records, the service MUST keep all leap-second
@@ -955,7 +961,9 @@
         empty TZ string.
         As with untruncated TZif files with empty TZ strings, a
         truncated TZif file does not indicate local time after the
-        last transition.</t>
+        last transition.
+        To this end, the time type of the last transition SHOULD be a
+	placeholder indicating that local time is unspecified.</t>
 
         <t>All represented information that falls inside the
         truncation range MUST be the same as that represented by a
@@ -1445,6 +1453,12 @@ EST5EDT,M3.2.0,M11.1.0
         contain ASCII characters other than alphanumerics, '-', and
         '+'.
 	These abbreviations are not recommended.</li>
+
+	<li>This specification does not dictate how readers should deal
+	with timestamps when local time is unspecified.
+	Common practice is for readers to report UT with designation
+        string "-00".
+	A reader could return an error indication instead.</li>
 
         <li>Some readers mishandle TZif files that specify
         daylight saving time UT offsets that are less than the UT
@@ -3716,6 +3730,11 @@ EST5EDT,M3.2.0,M11.1.0
 	along with an example and relevant
 	interoperability considerations.</li>
 
+	<li>Documented the longstanding practice that UT with
+	designation string "-00" denotes unspecified local time.
+	Added recommendation that this designation string should be
+        used for timestamps excluded by TZif file truncation.</li>
+
         <li>Applied erratum <xref target="Err6435" format="default"/>.</li>
 
         <li>Addressed erratum <xref target="Err6426" format="default"/>
@@ -3736,6 +3755,15 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+	<name>Since rfc8536bis-02</name>
+	<ul spacing="normal">
+	  <li>Documented "-00" as meaning unspecified local time.</li>
+	  <li>Recommended that "-00" be used for timestamps that
+	    are unspecified due to TZif file truncation.</li>
+	</ul>
+      </section>
 
       <section numbered="true" toc="default">
         <name>Since rfc8536bis-01</name>
