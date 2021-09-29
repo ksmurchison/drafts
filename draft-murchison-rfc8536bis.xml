@@ -96,14 +96,10 @@
       <t>This document obsoletes RFC 8536, providing editorial improvements,
       new details, and errata fixes while keeping full compatibility with
       the interchange format of RFC 8536.
-<!--      It does not create a new version of the format.-->
+
       Additionally, a new version of the format is defined.
       The changes from RFC 8536 are summarized in
       <xref target="changes" format="default"/>.</t>
-      <!--
-      <t>This document obsoletes <xref target="RFC8536"/>, with the
-      changes being summarized in <xref target="changes"/>.</t>
--->
     </section>
 
     <section numbered="true" toc="default">
