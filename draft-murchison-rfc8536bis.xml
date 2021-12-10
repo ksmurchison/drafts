@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-03" updates=""
+     docName="draft-murchison-rfc8536bis-04" updates=""
      ipr="trust200902" obsoletes="8536"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-03"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-04"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -141,6 +141,15 @@
           The time standard based on atomic clocks since 1972.
           It is equal to UTC but without leap-second adjustments.
         </dd>
+        <dt>Leap-Second:</dt>
+        <dd>
+          A one second adjustment to keep UTC close to mean solar time
+          at the prime meridian
+          (see <xref target="ITU-R-TF.460" format="default"/>).
+          Each inserted or deleted leap-second occurs at the end of a
+          UTC month, that is, a month using the Gregorian calendar and
+          the UTC timescale.
+	</dd>
         <dt>Leap-Second Correction (LEAPCORR):</dt>
         <dd>
 	  The value of TAI - UTC - 10 for timestamps after the
@@ -604,7 +613,7 @@
 		  or at which the leap second table expires.
 		  The first value, if present, MUST be nonnegative,
 		  and each leap second MUST occur at the end of a UTC
-		  calendar month.
+		  month.
                 </dd>
               <dt>corr(ection):</dt>
               <dd>
@@ -1286,6 +1295,18 @@ EST5EDT,M3.2.0,M11.1.0
             <date month="" year=""/>
           </front>
         </reference>
+
+        <reference anchor="ITU-R-TF.460"
+                   target="https://www.itu.int/rec/R-REC-TF.460/en">
+	  <front>
+            <title>Standard-frequency and time-signal emissions</title>
+	    <author>
+              <organization>International Telecommunications Union</organization>
+	    </author>
+	    <date month="February" year="2002" />
+	  </front>
+          <seriesInfo name="ITU-R" value="Recommendation TF.460" />
+        </reference>
       </references>
 
       <references>
@@ -1334,6 +1355,18 @@ EST5EDT,M3.2.0,M11.1.0
                    target="https://www.rfc-editor.org/errata/eid6435">
           <front>
             <title>Erratum ID 6435</title>
+            <author initials='' surname='' fullname=''>
+              <organization>RFC Errata</organization>
+            </author>
+            <date month='' year=''/>
+          </front>
+          <seriesInfo name="RFC" value="8536"/>
+        </reference>
+
+        <reference anchor="Err6757"
+                   target="https://www.rfc-editor.org/errata/eid6757">
+          <front>
+            <title>Erratum ID 6757</title>
             <author initials='' surname='' fullname=''>
               <organization>RFC Errata</organization>
             </author>
@@ -3737,8 +3770,9 @@ EST5EDT,M3.2.0,M11.1.0
 
         <li>Applied erratum <xref target="Err6435" format="default"/>.</li>
 
-        <li>Addressed erratum <xref target="Err6426" format="default"/>
-        and several other errors in the examples.</li>
+        <li>Addressed errata <xref target="Err6426" format="default"/>
+        and <xref target="Err6757" format="default"/>
+        as well as several other errors in the examples.</li>
 
         <li>Clarified the all-year daylight saving time
         <xref target="tzstrext" format="default">TZ string</xref>
@@ -3755,6 +3789,15 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+	<name>Since rfc8536bis-03</name>
+	<ul spacing="normal">
+          <li>Noted that erratum <xref target="Err6757" format="default"/>
+          has been addressed.</li>
+          <li>Added a definition of Leap-Second, including UTC month.</li>
+	</ul>
+      </section>
 
       <section numbered="true" toc="default">
 	<name>Since rfc8536bis-02</name>
