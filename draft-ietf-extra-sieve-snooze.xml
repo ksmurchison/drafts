@@ -9,7 +9,7 @@
 <?rfc strict="yes"?>
 <rfc category="std" ipr='trust200902'
      updates="5232"
-     docName='draft-ietf-extra-sieve-snooze-02'>
+     docName='draft-ietf-extra-sieve-snooze-03'>
   <front>
     <title abbrev="Sieve Snooze">Sieve Email Filtering: Snooze Extension</title>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
@@ -351,18 +351,18 @@ REMOVEFLAGS = ":removeflags" string-list
 ]]></artwork>
           </figure>
 
-          <t>If the "setflag" and/or "addflag" actions have been used to
-          store IMAP flags in the imap4flags internal variable,
-          the Sieve interpreter MUST use the current value of the
-          internal variable as the set of flags to associate with the
-          message when storing it into the "snoozed" mailbox.</t>
-
           <t>The optional :addflags and :removeflags arguments are used
           to specify which <xref target='RFC3501'>IMAP</xref> flags
           should be added to and/or removed from the set of IMAP flags
           present on the snoozed message at the time of awakening.
           Note the set of IMAP flags present at the time of awakening may
           be the empty set.</t>
+
+          <t>If the "setflag" and/or "addflag" actions have been used to
+          store IMAP flags in the imap4flags internal variable,
+          the Sieve interpreter MUST use the current value of the
+          internal variable as the set of flags to associate with the
+          message when storing it into the "snoozed" mailbox.</t>
 
           <t>This document doesn&apos;t dictate how the Sieve interpreter
           will set the IMAP flags.
@@ -670,10 +670,16 @@ MAILBOXID = ":mailboxid" string
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
-      <t>Changes since draft-ietf-extra-sieve-snooze-01:
+      <t>Changes since draft-ietf-extra-sieve-snooze-02:
       <list style='symbols'>
         <t>Updated :mailboxid reference to RFC9042.</t>
         <t>Added an informative reference to RFC8621.</t>
+        <t>Miscellaneous editorial changes.</t>
+      </list>
+      </t>
+
+      <t>Changes since draft-ietf-extra-sieve-snooze-01:
+      <list style='symbols'>
         <t>Miscellaneous editorial changes.</t>
       </list>
       </t>
