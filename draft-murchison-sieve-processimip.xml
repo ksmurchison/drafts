@@ -1,0 +1,390 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc strict="yes"?>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     category="std" ipr="trust200902"
+     docName="draft-murchison-sieve-processimip-00"
+     obsoletes="" updates="" submissionType="IETF" xml:lang="en"
+     tocInclude="true" symRefs="true" sortRefs="true" version="3">
+  <!-- xml2rfc v2v3 conversion 3.12.2 -->
+  <front>
+    <title abbrev="Sieve Process iMIP">Sieve Email Filtering:
+    Extension for Processing iMIP Messages</title>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-sieve-processimip-00"/>
+    <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city>
+          <region>PA</region>
+          <code>19102</code>
+          <country>USA</country>
+        </postal>
+        <email>murch@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <author initials="R." surname="Signes" fullname="Ricardo Signes">
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city>
+          <region>PA</region>
+          <code>19102</code>
+          <country>USA</country>
+        </postal>
+        <email>rjbs@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <author initials="M." surname="Horsfall" fullname="Matthew Horsfall">
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city>
+          <region>PA</region>
+          <code>19102</code>
+          <country>USA</country>
+        </postal>
+        <email>alh@fastmailteam.com</email>
+      </address>
+    </author>
+    <date/>
+    <area>ART</area>
+    <!--    <workgroup>EXTRA</workgroup>-->
+
+    <keyword>Sieve</keyword>
+    <abstract>
+      <t>This document describes the "processimip" extension to the
+      Sieve email filtering language.
+      The "processimip" extension gives Sieve the ability to process
+      messages using the iCalendar Message-Based Interoperability
+      Protocol (iMIP).</t>
+    </abstract>
+    <!--
+    <note title="Open Issues">
+      <t>
+        <list style="symbols">
+          <t>The Cyrus implementation used at Fastmail also adds an
+          :invitesonly option to the processimip action in order to
+          emulate existing functionality elsewhere within our stack.
+          Is there any interest in formalizing this option?</t>
+        </list>
+      </t>
+    </note>
+-->
+  </front>
+
+  <middle>
+    <section numbered="true" toc="default">
+      <name>Introduction</name>
+      <t>Users typically receive invites, replies, and cancellations
+      for events, tasks, etc. via Internet mail messages.
+      It is sometimes desirable to have such messages automatically
+      parsed and the attached
+      <xref target="RFC5545" format="default">iCalendar</xref> objects
+      added to, updated on, or deleted from the user's calendars.</t>
+      <t>This document defines an extension to the
+      <xref target="RFC5228" format="default">Sieve language</xref>
+      that enables scripts to process messages using the
+      <xref target="RFC6047" format="default">iCalendar Message-Based
+      Interoperability Protocol (iMIP)</xref>.
+      Specifically, this extension provides the ability to alter
+      iCalendar objects on a user's calendars referenced in iMIP
+      messages.</t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Conventions Used in This Document</name>
+      <t>Conventions for notations are as in
+      <xref target="RFC5228" section="1.1" format="default"/>,
+      including use of the "Usage:" label for the definition of action
+      and tagged arguments syntax.</t>
+
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+      "MAY", and "OPTIONAL" in this document are to be interpreted as
+      described in BCP 14
+      <xref target="RFC2119" format="default"/>
+      <xref target="RFC8174" format="default"/> 
+      when, and only when, they appear in all capitals, as shown
+      here.</t>
+    </section>
+
+    <section anchor="capability" numbered="true" toc="default">
+      <name>Capability Identifier</name>
+      <t>Sieve interpreters that implement this extension have an
+      identifier of "processimip" for use with the capability
+      mechanism.</t>
+
+    </section>
+
+    <section anchor="processimip" numbered="true" toc="default">
+      <name>Process iMIP Action</name>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+Usage: processimip [ :addresses <string-list> ]
+                   [ :updatesonly | :calendarid <string> ]
+                   [ :deletecanceled ]
+                   [ :outcome <variablename: string> ]
+                   [ :errstr <variablename: string> ]
+]]></artwork>
+
+      <t>The "processimip" action can be used with or without the
+      <xref target="RFC5229">"variables"</xref> extension.
+      When the "variables" extension is enabled in a script using
+      &lt;require "variables"&gt;, the script can use the
+      <xref target="outcome">":outcome"</xref> and 
+      <xref target="errstr">":errstr"</xref> arguments to the
+      "processimip" action described below.
+      When the "variables" extension is not enabled, the ":outcome"
+      and ":errstr" arguments MUST NOT be used and MUST cause an error
+      according to <xref target="RFC5228" />.</t>
+
+      <t>"Processimip" MUST NOT process a message unless it is a
+      well-formed iMIP message and one of the recipient user's email
+      addresses matches the Calendar User Address
+      (see <xref target="RFC5545" section="3.3.3" format="default" />)
+      of the intended target of the message, as determined by the
+      iTIP method (see <xref target="RFC5546" section="1.4" />)
+      of the message:</t>
+
+      <ul empty="true" spacing="normal">
+        <li>"REPLY": Value of the "Organizer" property
+        (see <xref target="RFC5545" section="3.8.4.1" />)</li>
+        <li>"REQUEST", "CANCEL", "ADD":
+        Value of one of the "Attendee" properties
+        (see <xref target="RFC5545" section="3.8.4.3" />)</li>  
+      </ul>
+
+      <t>The recipient user's email address matches the Calender User
+      Address of the target if the Calendar User Address is in the
+      form of a mailto URI and the email address matches the
+      "addr-spec" of the URI.</t>
+
+      <t>An email address is considered to belong to the recipient if
+      it is one of:</t>
+
+      <ol>
+        <li>an email address known by the implementation to be
+        associated with the recipient,</li>
+
+        <li>the final envelope recipient address if it's available to
+        the implementation, or</li>
+
+        <li>an address specified by the script writer via the
+        <xref target="addresses">:addresses</xref> argument.</li>
+      </ol>
+
+
+      <t>The "processimip" action does not cancel the implicit keep.</t>
+      <!--
+      <t>A Sieve interpreter MUST implement the snooze action by
+      delivering the message to a special "snoozed" mailbox within its
+      mailstore.</t>
+-->
+      <section anchor="addresses" numbered="true" toc="default">
+        <name>Addresses Argument</name>
+        <t>The optional :addresses argument is used to specify
+        email addresses that belong to the recipient in addition to
+        the addresses known to the implementation.</t>
+      </section>
+
+      <section anchor="updatesonly" numbered="true" toc="default">
+        <name>Updates Only Argument</name>
+        <t>The optional :updatesonly argument is used to limit the
+        messages processed to those targeting existing iCalendar
+        objects only.
+        If the message contains a new iCalendar object (initial
+        invitation), the implementation MUST NOT add the object to a
+        calendar.</t>
+
+        <t>If :updatesonly is omitted, new iCalendar objects (initial
+        invitations) may be added to one of the user's calendars.</t>
+      </section>
+
+      <section anchor="calendarid" numbered="true" toc="default">
+        <name>Calendar ID Argument</name>
+        <t>The optional :calendarid argument specifies the identifier
+        of the calendar onto which new iCalendar objects (initial
+        invitations) should placed.</t>
+
+        <t>If :calendarid is omitted, new iCalendar objects will be
+        placed on the user's "default" calendar as determined by the
+        implementation.</t>
+      </section>
+
+      <section anchor="deletecanceled" numbered="true" toc="default">
+        <name>Delete Canceled Argument</name>
+        <t>The optional :deletecanceled argument is used to tell the
+        implementation that if it receives a cancellation message,
+        that it should remove the associated iCalendar object from the
+        calendar.</t>
+
+        <t>If :deletecanceled is omitted, the associated iCalendar
+        object will be marked as canceled and will remain on the
+        calendar.</t>
+      </section>
+
+      <section anchor="outcome" numbered="true" toc="default">
+        <name>Outcome Argument</name>
+        <t>The optional :outcome argument specifies the name of a
+        variable into which one of the following strings specifying
+        the outcome of the action will be stored:</t>
+
+        <ul>
+          <li>"no_action": No action was performed
+          (E.g., the message contained a new iCalendar object but the
+          ":updatesonly" argument was used)</li>        
+          <li>"added": A new iCalendar object was added to a calendar</li>
+          <li>"update": An iCalendar resource was updated or canceled</li>
+          <li>"error": An error processing the iMIP message occurred</li>
+        </ul>
+      </section>
+
+      <section anchor="errstr" numbered="true" toc="default">
+        <name>Error String Argument</name>
+        <t>The optional :errstr argument specifies the name of a
+        variable into which a string describing the reason for the
+        outcome wil be stored.</t>
+      </section>
+
+    </section> <!-- processimip -->
+
+    <section anchor="impl" numbered="true" toc="default">
+      <name>Implementation Status</name>
+      <t>&lt; RFC Editor: before publication please remove this section
+	and the reference to <xref target="RFC7942" format="default"/> &gt;</t>
+      <t>This section records the status of known implementations of
+	the protocol defined by this specification at the time of
+	posting of this Internet-Draft, and is based on a proposal
+	described in <xref target="RFC7942" format="default"/>.  The
+	description of implementations in this section is intended to
+	assist the IETF in its decision processes in progressing
+	drafts to RFCs.  Please note that the listing of any
+	individual implementation here does not imply endorsement by
+	the IETF.  Furthermore, no effort has been spent to verify the
+	information presented here that was supplied by IETF
+	contributors.  This is not intended as, and must not be
+	construed to be, a catalog of available implementations or
+	their features.  Readers are advised to note that other
+	implementations may exist.</t>
+      <t>According to <xref target="RFC7942" format="default"/>,
+	"this will allow reviewers and working groups to assign due
+	consideration to documents that have the benefit of running
+	code, which may serve as evidence of valuable
+	experimentation and feedback that have made the implemented
+	protocols more mature.  It is up to the individual working
+	groups to use this information as they see fit".</t>
+
+        <section anchor="cyrus" toc="exclude" numbered="true">
+        <name>Cyrus Server</name>
+        <t>The open source <eref target="http://www.cyrusimap.org/">Cyrus Server</eref> project
+        is a highly scalable enterprise mail system which supports
+	Sieve email filtering at the point of final delivery.  This
+        production level Sieve implementation supports all of the
+        requirements described in this document.  This implementation
+        is freely distributable under a BSD style license from
+	<eref target="http://www.cmu.edu/computing/">
+          Computing Services at Carnegie Mellon University</eref>.</t>
+      </section>
+
+    </section> <!-- Implementations -->
+ 
+    <section anchor="security" numbered="true" toc="default">
+      <name>Security Considerations</name>
+      <t>Security considerations are discussed in <xref target="RFC5228" format="default"/>.
+      </t>
+      <t>TODO: Discuss calendar SPAM.</t>
+    </section>
+
+    <section anchor="privacy" numbered="true" toc="default">
+      <name>Privacy Considerations</name>
+      <t>It is believed that this extension doesn't introduce any
+      privacy considerations beyond those in <xref target="RFC5228" format="default"/>.</t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>IANA Considerations</name>
+      <section numbered="true" toc="default">
+        <name>Registration of Sieve Extension</name>
+        <t>This document defines the following new Sieve extension
+        to be added to the registry defined in
+        Section 6.2 of <xref target="RFC5228" format="default"/> and located here:
+        <eref target="https://www.iana.org/assignments/sieve-extensions/sieve-extensions.xhtml#sieve-extensions"/>
+        </t>
+        <t>IANA are requested to add a capability to the Sieve
+        Extensions registry:
+        </t>
+        <ul empty="true" spacing="normal">
+          <li>To: iana@iana.org</li>
+          <li>Subject: Registration of new Sieve extension</li>
+          <li>Capability name: processimip</li>
+          <li>Description: Adds the "processimip" action command to
+            add and update iCalendar objects on a user's calendars.</li>
+          <li>RFC number: RFC XXXX</li>
+          <li>Contact address: The Sieve discussion list
+            &lt;sieve@ietf.org&gt;</li>
+        </ul>
+      </section>
+    </section> <!-- IANA -->
+
+    <section numbered="true" toc="default">
+      <name>Acknowledgments</name>
+      <t>The authors would like to thank the following individuals for
+      contributing their ideas and support for writing this
+      specification: Ned Freed and Alexey Melnikov.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4234.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5228.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5229.xml"/>
+        <!--
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5232.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5490.xml"?>
+-->
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6047.xml"/>
+      </references>
+      <references>
+        <name>Informative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5545.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5546.xml"/>
+        <!--
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5231.xml"?>
+-->
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
+      </references>
+    </references>
+    <!--
+    <section title="Change History (To be removed by RFC Editor before
+                    publication)">
+      <t>Changes since draft-murchison-sieve-processimip-00:
+      <list style='symbols'>
+        <t>Miscellaneous editorial changes.</t>
+      </list>
+      </t>
+    </section>
+-->
+  </back>
+</rfc>
