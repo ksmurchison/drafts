@@ -12,9 +12,9 @@
 <?rfc compact="yes"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     category="std" ipr="trust200902"
+     category="exp" ipr="trust200902"
      docName="draft-murchison-sieve-processimip-00"
-     obsoletes="" updates="" submissionType="IETF" xml:lang="en"
+     obsoletes="" updates="" submissionType="independent" xml:lang="en"
      tocInclude="true" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.12.2 -->
   <front>
@@ -74,24 +74,25 @@
       messages using the iCalendar Message-Based Interoperability
       Protocol (iMIP).</t>
     </abstract>
-    <!--
+
     <note title="Open Issues">
-      <t>
-        <list style="symbols">
-          <t>The Cyrus implementation used at Fastmail also adds an
-          :invitesonly option to the processimip action in order to
-          emulate existing functionality elsewhere within our stack.
-          Is there any interest in formalizing this option?</t>
-        </list>
-      </t>
+      <ol>
+        <li>The Cyrus implementation used at Fastmail also adds an
+        :invitesonly option to the processimip action in order to
+        emulate existing functionality elsewhere within our stack.
+        Is there any interest in formalizing this option?
+        This may be superfluous as it might not make sense to
+        auto-process an initial invitation but then NOT auto-process
+        future updates to an event.</li>
+      </ol>
     </note>
--->
+
   </front>
 
   <middle>
     <section numbered="true" toc="default">
       <name>Introduction</name>
-      <t>Users typically receive invites, replies, and cancellations
+      <t>Users typically receive invites, replies, and cancelations
       for events, tasks, etc. via Internet mail messages.
       It is sometimes desirable to have such messages automatically
       parsed and the attached
@@ -153,7 +154,7 @@ Usage: processimip [ :addresses <string-list> ]
       and ":errstr" arguments MUST NOT be used and MUST cause an error
       according to <xref target="RFC5228" />.</t>
 
-      <t>"Processimip" MUST NOT process a message unless it is a
+      <t>"processimip" MUST NOT process a message unless it is a
       well-formed iMIP message and one of the recipient user's email
       addresses matches the Calendar User Address
       (see <xref target="RFC5545" section="3.3.3" format="default" />)
@@ -229,8 +230,8 @@ Usage: processimip [ :addresses <string-list> ]
       <section anchor="deletecanceled" numbered="true" toc="default">
         <name>Delete Canceled Argument</name>
         <t>The optional :deletecanceled argument is used to tell the
-        implementation that if it receives a cancellation message,
-        that it should remove the associated iCalendar object from the
+        implementation that if it receives a cancelation message,
+        it should remove the associated iCalendar object from the
         calendar.</t>
 
         <t>If :deletecanceled is omitted, the associated iCalendar
@@ -246,7 +247,8 @@ Usage: processimip [ :addresses <string-list> ]
 
         <ul>
           <li>"no_action": No action was performed
-          (E.g., the message contained a new iCalendar object but the
+          (E.g., the message wasn't an iMIP message, or
+          the message contained a new iCalendar object but the
           ":updatesonly" argument was used)</li>        
           <li>"added": A new iCalendar object was added to a calendar</li>
           <li>"update": An iCalendar resource was updated or canceled</li>
@@ -258,7 +260,12 @@ Usage: processimip [ :addresses <string-list> ]
         <name>Error String Argument</name>
         <t>The optional :errstr argument specifies the name of a
         variable into which a string describing the reason for the
-        outcome wil be stored.</t>
+        outcome will be stored.</t>
+      </section>
+
+      <section anchor="examples" numbered="true" toc="default">
+        <name>Examples</name>
+        <t>TODO: Actually add examples.</t>
       </section>
 
     </section> <!-- processimip -->
@@ -355,10 +362,12 @@ Usage: processimip [ :addresses <string-list> ]
       <references>
         <name>Normative References</name>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+<!--
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4234.xml"/>
+-->
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5228.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5229.xml"/>
-        <!--
+<!--
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5232.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5490.xml"?>
 -->
@@ -376,14 +385,13 @@ Usage: processimip [ :addresses <string-list> ]
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
       </references>
     </references>
-    <!--
+<!--
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
-      <t>Changes since draft-murchison-sieve-processimip-00:
-      <list style='symbols'>
-        <t>Miscellaneous editorial changes.</t>
-      </list>
-      </t>
+      <t>Changes since draft-murchison-sieve-processimip-00:</t>
+      <ol>
+        <li>Miscellaneous editorial changes.</li>
+      </ol>
     </section>
 -->
   </back>
