@@ -9,7 +9,7 @@
 <?rfc strict="yes"?>
 <rfc category="std" ipr='trust200902'
      updates="5232"
-     docName='draft-ietf-extra-sieve-snooze-03'>
+     docName='draft-ietf-extra-sieve-snooze-04'>
   <front>
     <title abbrev="Sieve Snooze">Sieve Email Filtering: Snooze Extension</title>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
@@ -603,6 +603,33 @@ MAILBOXID = ":mailboxid" string
 	</t>
       </section>
 
+      <section title="Registration of Sieve Action">
+        <t>This document defines the following new Sieve action
+        to be added to the registry defined in
+        Section 3.1 of <xref target="I-D.ietf-extra-sieve-action-registry"/>.
+        </t>
+
+	<t>IANA are requested to add an action to the Sieve Action
+        registry:
+	  <list style='empty'>
+	    <t>Name: snooze</t>
+	    <t>Description: Postpone delivery of a message into a
+            target mailbox until a later point in time.</t>
+	    <t>References: RFC XXXX, <xref target="RFC5232" />,
+            <xref target="RFC5490" />, <xref target="RFC8579" />,
+            <xref target="RFC9042" /></t>
+	    <t>Capabilities: "snooze", "imap4flags", "mailbox",
+            "special-use", "mailboxid".</t> 
+	    <t>Interactions: Is not compatible with the reject or
+            ereject actions.</t>
+	    <t>Cancels Implicit Keep?: Y</t>
+	    <t>Use with IMAP Events?: Y</t>
+	    <t>Comments: Requires a special "snoozed" mailbox in the
+            mailstore.</t>
+	  </list>
+	</t>
+      </section>
+
       <section title="Registration of IMAP Mailbox Name Attribute"
                anchor="snoozed">
         <t>This document defines the following new IMAP mailbox name
@@ -647,6 +674,7 @@ MAILBOXID = ":mailboxid" string
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8457.xml"?>
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9042.xml"?>
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-action-registry.xml"?>
 
       <reference anchor='tzdb'
                  target="https://www.iana.org/time-zones">
@@ -670,6 +698,12 @@ MAILBOXID = ":mailboxid" string
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
+      <t>Changes since draft-ietf-extra-sieve-snooze-03:
+      <list style='symbols'>
+        <t>Added "snooze" to the Sieve Actions Registry.</t>
+      </list>
+      </t>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-02:
       <list style='symbols'>
         <t>Updated :mailboxid reference to RFC9042.</t>
