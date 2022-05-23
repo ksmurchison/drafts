@@ -3,6 +3,7 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!-- Getting references from the online citation library.
      There has to be one entity for each item to be referenced. -->
+<!ENTITY rfc2034 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2034.xml">
 <!ENTITY rfc2119 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc8174 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 
@@ -18,10 +19,23 @@
 <!ENTITY rfc2822 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2822.xml">
 <!ENTITY rfc7085 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7085.xml">
 <!ENTITY rfc3461 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3461.xml">
+<!ENTITY rfc3463 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3463.xml">
 <!ENTITY rfc5248 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5248.xml">
 <!ENTITY rfc6152 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6152.xml">
 <!ENTITY rfc2920 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2920.xml">
 <!ENTITY rfc6531 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6531.xml">
+
+<!ENTITY rfc6376 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6376.xml">
+<!ENTITY rfc7489 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7489.xml">
+<!ENTITY rfc8617 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8617.xml">
+<!ENTITY rfc8461 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8461.xml">
+<!ENTITY rfc8446 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml">
+<!ENTITY rfc8551 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8551.xml">
+<!ENTITY rfc7208 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7208.xml">
+<!ENTITY rfc7672 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7672.xml">
+<!ENTITY rfc4880 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4880.xml">
+<!ENTITY rfc4954 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4954.xml">
+
 <!ENTITY ID.RFC5321bis PUBLIC ''
  "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml">
 <!ENTITY ID.RFC5322bis PUBLIC ''
@@ -98,7 +112,7 @@
         comma-separated lists of RFC numbers (just the numbers) -->
 
 <!-- This is -00b, the posting draft -->
-<rfc  docName="draft-ietf-emailcore-as-04"
+<rfc  docName="draft-ietf-emailcore-as-05"
      ipr="trust200902"  category="std">
      <!-- obsoletes='2821, 821' updates='1123'
         category='std' (bcp, info, exp, historic)  -->   
@@ -298,7 +312,6 @@
 
           <list style="symbols">
             <t><xref target="RFC6152">8-bit MIME</xref></t>
-            <t><xref target="RFC5248">Enhanced Mail System Status Codes</xref></t>
             <t><xref target="RFC3461">Deliver Status Notifications</xref></t>
           </list>
           </t>
@@ -310,6 +323,21 @@
             <t><xref target="RFC2920">Command Pipelining</xref></t>
             <t><xref target="RFC6531">Internationalized Email</xref></t>
           </list>
+          </t>
+
+          <t>Furthermore, while Enhanced Mail System Status Codes
+          (<xref target="RFC3463" />, <xref target="RFC5248" />)
+          are widely supported, they are not ubiquitous.
+          Nevertheless, they have been found to be useful to SMTP
+          senders in determining the exact reason for a transmission
+          failure in a machine-readable, language-independent manner,
+          thus allowing them to present more detailed and
+          language-specific error messages to users. 
+
+          Given the usefulness of these enhanced codes, SMTP receivers
+          are RECOMMENDED to implement the <xref target="RFC2034">SMTP
+          Service Extension for Returning Enhanced Error Codes</xref>
+          utilizing the codes registered in <xref target="RFC5248" />.
           </t>
         </section>
       </section>
@@ -366,6 +394,157 @@
         the applicability of MIME and its features.</t> 
       </section>
 
+      <section anchor="conf-auth"
+          title="Confidentiality and Authentication with SMTP">
+        <t>SMTP is specified without embedded mechanisms for
+        authentication or confidentiality; its traffic is therefore
+        "in the clear". Years of operational experience have shown
+        that such transmission exposes the message to easy compromise,
+        including wiretapping and spoofing. To mitigate these risks,
+        operation of SMTP has evolved over the years so that it is
+        used with the benefit of
+        <xref target="RFC8446">Transport Layer Security (TLS)</xref>
+        to provide both confidentiality and authentication in the
+        transmission of messages. This section discusses those topics
+        and their most common uses.</t>
+
+        <t>It is important that the reader understand what is meant by
+        the terms "Authentication" and "Confidentiality", and for that
+        we will borrow directly from RFC8446.
+
+        <list style="symbols">
+          <t>Authentication is the process of establishing the
+          identity of one or more of the endpoints of a communication
+          channel. TLS only requires authentication of the server side
+          of the communication channel; authentication of the client
+          side is optional.</t>
+
+          <t>The term "confidentiality" describes a state where the
+          data (i.e., the message) is transmitted in a way that it is
+          only visible to the endpoints of a communication
+          channel.</t>
+        </list></t>
+
+        <t>It is not uncommon for implementers to use the term
+        "encryption" to mean "confidentiality", but this is not quite
+        correct. Rather, encryption using TLS is the current method by
+        which confidentiality is achieved with SMTP, but that does not
+        mean that future methods might not be developed.</t>
+
+        <t>Note: With typical email use of TLS, authentication only is
+        performed for the target receiving server and is not done for
+        the sending client. That is, it serves to validate that the
+        connection has been made to the intended server, but does not
+        validate who initiated it.</t>
+
+        <section title="Optional Confidentiality">
+          <t>The most common implementation of message confidentiality
+          is what's known as "opportunistic TLS", which is frequently
+          referred to as "opportunistic encryption". With this method,
+          a receiving server announces in its greeting that it is
+          capable of supporting TLS encryption through the presence of
+          the "STARTTLS" keyword. The sending client then attempts to
+          negotiate an encrypted connection, and if successful,
+          transmits the message in encrypted form; if negotiation
+          fails, the client falls back to sending the message in clear
+          text.</t>
+
+          <t>Opportunistic TLS is confidentiality without
+          authentication, because no effort is made to authenticate
+          the receiving server, and it is optional confidentiality due
+          to the ability to fall back to transmission in the clear if
+          a secure connection cannot be established. That said, most
+          modern implementations of SMTP support this method,
+          especially at the largest mailbox providers, and so the vast
+          majority of email traffic is encrypted during its time
+          transiting from the client to the server.</t>
+
+          <t>Note: While TLS provides protection while the message is
+          in transit, there is no guarantee that the message will be
+          stored in encrypted fashion at its destination. In fact,
+          storage in plain text should be expected!</t>
+        </section>
+
+        <section title="Required Confidentiality,
+                        with Receiving Server Authentication">
+
+          <t>Two protocols exist that move message confidentiality
+          from optional to required (with conditions as noted below) -
+          <xref target="RFC8461">MTA-STS</xref> and
+          <xref target="RFC7672">DANE for SMTP</xref>.
+          While they differ in their implementation details, receiving
+          servers relying on either protocol are stating that they
+          only accept mail if the transmission can be encrypted with
+          TLS, and a failure to negotiate a secure connection MUST
+          result in the sending client refusing to transmit the
+          message. Support for both protocols is increasing, but is
+          not yet mandatory.</t>
+
+          <t>These two protocols differ from Opportunistic TLS in that
+          they require receiving server authentication and there is no
+          fallback to sending in the clear if negotiation of an
+          encrypted connection fails.</t>
+
+          <t>Note: Both protocols mentioned in this section rely not
+          only on the receiving server but also the sending client
+          supporting the protocol intended to be used. If the sending
+          client does not implement or understand the protocol
+          requested by the receiving server, the sending client will
+          use Opportunistic TLS or clear-text to transmit the
+          message.</t>
+        </section>
+
+        <section title="Message-Level Authentication">
+          <t>Protocols exist to allow for authentication of different
+          identities associated with an email message -
+          <xref target="RFC7208">SPF</xref> and
+          <xref target="RFC6376">DKIM</xref>.
+          A third protocol, <xref target="RFC7489">DMARC</xref>,
+          relies on SPF and DKIM to allow for validation of the domain
+          in the visible From header, and a fourth,
+          <xref target="RFC8617">ARC</xref>, provides a way for each
+          hop to record results of authentication checks performed at
+          that hop.</t>
+
+          <t>All of these are outside the scope of this document, as
+          they are outside the scope of SMTP. They deal with
+          validating the authorized usage of one or more domains in an
+          email message, and not with establishing the identity of the
+          receiving server.</t>
+        </section>
+
+        <section title="SMTP Authentication">
+          <t><xref target="RFC4954">SMTP Authentication</xref>,
+          which is often abbreviated as SMTP AUTH,
+          is an extension to SMTP. While its name might suggest
+          that it would be within scope for this section of the
+          Applicability Statement, nothing could be further from the
+          truth.</t>
+
+          <t>SMTP AUTH defines a method for a client to identify
+          itself to a Message Submission Agent (MSA) when presenting a
+          message for transmission, usually using port 587 rather than
+          the traditional port 25. The most common implementation of
+          SMTP AUTH is for a person to present a username and password
+          to their mailbox provider's outbound SMTP server when
+          configuring their MUA for sending mail.</t>
+        </section>
+
+        <section title="Message-Level Confidentiality">
+          <t>Protocols such as <xref target="RFC8551">S/MIME</xref>
+          and <xref target="RFC4880">OpenPGP</xref> exist to allow for
+          message confidentiality outside of the operation of
+          SMTP. That is to say, using these protocols results in
+          encryption of the message prior to its being submitted to
+          the SMTP communications channel, and decryption of the
+          message is the responsibility of the message
+          recipient. There are numerous implementations of these
+          protocols, too many to list here. As they operate fully
+          independent of SMTP, they are out of scope for this
+          document.</t>
+        </section>
+      </section>
+<!--
       <section title="Other Stuff">
 	<t> It is fairly clear that there will be things that do not
 	fit into the sections outlined above.  As one example, if
@@ -374,8 +553,7 @@
 	altered in transit, that may be more appropriate to other
         sections than to any of the three suggested above.</t>
       </section>
-	   
-
+-->
       <section anchor="Acknowledgments" title="Acknowledgments">
         <t>The Emailcore group arose out of discussions on the
         ietf-smtp group over changes and additions that should be made
@@ -429,10 +607,12 @@
 
       &rfc1341;  <!-- MIME -->
       &rfc0822;
+      &rfc2034;
       &rfc2822;
       &rfc2821;
 
       &rfc3461;
+      &rfc3463;
       &rfc5248;
       &rfc6152;
       &rfc2920;
@@ -442,6 +622,17 @@
       &rfc5322;
 
       &rfc7085;
+
+      &rfc6376;
+      &rfc7489;
+      &rfc8617;
+      &rfc8461;
+      &rfc8446;
+      &rfc8551;
+      &rfc7208;
+      &rfc7672;
+      &rfc4880;
+      &rfc4954;
 
       &ID.RFC5321bis;
       &ID.RFC5322bis;
@@ -546,6 +737,15 @@
           title="Changes from draft-ietf-emailcore-as-03 (2022-01-31) to -04">
         <t><list style="symbols">
           <t>Added requirements for SMTP extensions (issue #40).</t>
+        </list></t>
+      </section>
+
+      <section
+          title="Changes from draft-ietf-emailcore-as-04 (2022-05-21) to -05">
+        <t><list style="symbols">
+          <t>Added text addressing use ofx enhanced status codes.</t>
+          <t>Added text addressing confidentiality and authentication
+          (issue #54).</t>
         </list></t>
       </section>
 	
