@@ -1,0 +1,293 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc strict="yes"?>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     category="std"
+     ipr="trust200902"
+     docName="draft-murchison-imap-list-metadata-00"
+     obsoletes=""
+     updates=""
+     submissionType="IETF"
+     xml:lang="en"
+     tocInclude="true"
+     symRefs="true"
+     sortRefs="true"
+     version="3">
+  <!-- xml2rfc v2v3 conversion 3.14.2 -->
+  <front>
+    <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
+    Mailbox METADATA in Extended LIST</title>
+    <seriesInfo name="Internet-Draft"
+                value="draft-murchison-imap-list-metadata-00"/>
+
+    <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city> <region>PA</region>
+          <code>19102</code> <country>USA</country>
+        </postal>
+        <email>murch@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <author initials="B." surname="Gondwana" fullname="Bron Gondwana">
+      <organization abbrev="Fastmail">Fastmail Pty Ltd</organization>
+      <address>
+        <postal>
+          <street>Level 2, 114 William Street</street>
+          <city>Melbourne</city>
+          <region>VIC</region>
+          <code>3000</code>
+          <country>Australia</country>
+        </postal>
+        <email>brong@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <date/>
+
+    <area>ART</area>
+    <workgroup>EXTRA</workgroup>
+    <keyword>IMAP4</keyword>
+    <keyword>LIST</keyword>
+    <keyword>METADATA</keyword>
+
+    <abstract>
+      <t>This document defines an extension to the to IMAP LIST
+      command that allows the client to request mailbox annotations
+      (metadata), along with other information typically returned by
+      the LIST command.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section numbered="true" toc="default">
+      <name>Introduction</name>
+      <t>IMAP clients sometimes fetch mailbox metadata (e.g. color) to
+      augment the display of mailboxes to the logged-in user.
+      In order to do that, the client is 
+      forced to issue a LIST or LSUB command to list all available
+      mailboxes, followed by a GETMETADATA command for each mailbox
+      found.  This document defines an extension to the to IMAP LIST
+      command that is identified by the capability string
+      "LIST-METADATA".  The LIST-METADATA extension allows the client
+      to request annotations on available mailboxes, along with other
+      information typically returned by the LIST command.</t>
+    </section>
+    <section numbered="true" toc="default">
+      <name>Conventions Used in This Document</name>
+      <t>In examples, "C:" indicates lines sent by a client that is connected
+      to a server.  "S:" indicates lines sent by the server to the
+      client.</t>
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+      "MAY", and "OPTIONAL" in this document are to be interpreted as
+      described in <xref target="RFC2119" format="default"/>.</t>
+    </section>
+    <!-- Intro -->
+    
+    <section anchor="metadata" numbered="true" toc="default">
+      <name>METADATA Return Option to LIST Command</name>
+      <t><xref target="RFC5464" format="default"/> defines the
+      GETMETADATA command which is 
+      used by an IMAP client to retrieve mailbox annotations.
+      Sometimes,
+      a client will have to look up the metadata for some or all of
+      the mailboxes returned by the LIST command.  Doing so in
+      multiple GETMETADATA commands wastes bandwidth and can degrade
+      performance if the client does not pipeline the requests.</t>
+      <t>This document extends the LIST command with a new return option,
+      "METADATA", which allows the client to request all of the
+      desired information in a single command.  For each listable
+      mailbox matching the list pattern and selection options, the
+      server MUST return an untagged LIST response followed by an
+      untagged METADATA response containing the mailbox annotations
+      requested by the client.</t>
+      <t>If the server is unable to look up the annotations for
+      given mailbox, it MAY drop the corresponding METADATA reply.  In
+      such a situation, the LIST command would still return a tagged
+      OK reply.</t>
+    </section>
+    <!-- MYRIGHTS -->
+
+    <section numbered="true" toc="default">
+      <name>Examples</name>
+      <t>Note that the line wrapping of the LIST commands below is for
+      editorial purposes only.</t>
+
+      <t keepWithNext="true">
+	  In this example the "bar" mailbox doesn't exist, so it has
+          no METADATA reply.
+      </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+C: A01 LIST "" %
+         RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
+S: * LIST () "." "INBOX"
+S: * METADATA INBOX ("/shared/vendor/cmu/cyrus-imapd/color" "#b71c1c")
+S: * LIST () "." "foo"
+S: * METADATA "foo" ("/shared/vendor/cmu/cyrus-imapd/color" NIL)
+S: * LIST (\NonExistent) "." "bar"
+S: A01 OK List completed.
+]]></artwork>
+      <t keepWithNext="true">
+	  In this example the LIST reply for the "foo" mailbox is
+          returned because it has matching children, but no METADATA
+          reply is returned because "foo" itself doesn't match the
+          selection criteria.
+      </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+C: A02 LIST (SUBSCRIBED RECURSIVEMATCH) "" %
+         RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
+S: * LIST (\Subscribed) "." "INBOX"
+S: * METADATA INBOX ("/shared/vendor/cmu/cyrus-imapd/color" "#b71c1c")
+S: * LIST () "." "foo" (CHILDINFO ("SUBSCRIBED"))
+S: A02 OK List completed.
+]]></artwork>
+    </section>
+    <section numbered="true" toc="default">
+      <name>Formal Syntax</name>
+      <t>The following syntax specification uses the augmented Backus-Naur
+      Form (BNF) as described in <xref target="RFC5234" format="default"/>.
+      Terms not defined here are taken from
+      <xref target="RFC5258" format="default"/> and
+      <xref target="RFC5464" format="default"/>. </t> 
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+return-option =/ "METADATA" "(" entry *(SP entry) ")"
+]]></artwork>
+    </section>
+    <section anchor="security" numbered="true" toc="default">
+      <name>Security Considerations</name>
+      <t>This specification does not introduce any additional security
+      concerns beyond those described in <xref target="RFC5258" format="default"/>.</t>
+    </section>
+    <section anchor="privacy" numbered="true" toc="default">
+      <name>Privacy Considerations</name>
+      <t>This specification does not introduce any additional privacy
+      concerns beyond those described in
+      <xref target="RFC5464" format="default"/>.</t>
+    </section>
+    <section numbered="true" toc="default">
+      <name>IANA Considerations</name>
+      <section numbered="true" toc="default">
+        <name>Registration of IMAP capability LIST-METADATA</name>
+        <t>This document defines the "LIST-METADATA" IMAP capability
+        to be added to the registry defined in Section 12 of
+        <xref target="RFC3501" format="default"/>.</t>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Registration of LIST-EXTENDED option METADATA</name>
+        <t>This section registers the "METADATA" option to be added to the
+        registry defined in Section 9 of
+        <xref target="RFC5258" format="default"/>.
+        </t>
+        <dl newline="true" spacing="normal">
+          <dt>LIST-EXTENDED option name:</dt>
+          <dd>
+	    METADATA
+	  </dd>
+          <dt>LIST-EXTENDED option type:</dt>
+          <dd>
+	    RETURN
+	  </dd>
+          <dt>LIST-EXTENDED option description:</dt>
+          <dd>
+	    Causes the LIST command to return METADATA responses in
+            addition to LIST responses.
+	  </dd>
+          <dt>Published specification:</dt>
+          <dd>
+	    RFC XXXX, <xref target="metadata" format="default"/>
+          </dd>
+          <dt>Security considerations:</dt>
+          <dd>
+	    RFC XXXX, <xref target="security" format="default"/>
+          </dd>
+          <dt>Intended usage:</dt>
+          <dd>
+	    COMMON
+	  </dd>
+          <dt>Person and email address to contact for further information:</dt>
+          <dd>
+	    Kenneth Murchison &lt;murch@fastmailteam.com&gt;,
+	    Bron Gondwana &lt;brong@fastmailteam.com&gt;
+	  </dd>
+          <dt>Owner/Change controller:</dt>
+          <dd>
+	    IESG &lt;iesg@ietf.org&gt;
+	  </dd>
+        </dl>
+      </section>
+    </section>
+    <!-- IANA -->
+<!--
+    <section numbered="true" toc="default">
+      <name>Acknowledgments</name>
+      <t>This document is based largely on
+      <xref target="RFC5819" format="default"/>.
+      The author would like to thank the authors of that document for
+      providing both inspiration and some borrowed text for this
+      document.</t>
+
+      <t>The author would also like to thank the following individuals for
+      contributing their ideas and support for writing this
+      specification: Cyrus Daboo.</t>
+    </section>
+-->
+  </middle>
+
+  <back>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5258.xml"?>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml"?>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5464.xml"?>
+      </references>
+<!--
+      <references>
+        <name>Informative References</name>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5819.xml"?>
+        </references>
+-->
+    </references>
+<!--
+    <section numbered="true" toc="default">
+      <name>Change History (To be removed by RFC Editor before     publication)</name>
+      <t>Changes from draft-ietf-extra-imap-list-myrights-00:
+      </t>
+      <ul spacing="normal">
+        <li>Corrected contact email address in IANA registration.</li>
+        <li>Fixed typos (extra SP) in examples.</li>
+      </ul>
+      <t>Changes from draft-murchison-imap-list-myrights-01:
+      </t>
+      <ul spacing="normal">
+        <li>Renamed document to be a work product of the EXTRA WG.</li>
+        <li>Updated authors' addresses.</li>
+      </ul>
+      <t>Changes from draft-murchison-imap-list-myrights-00:
+      </t>
+      <ul spacing="normal">
+        <li>Augmented Introduction with mention of "LIST-MYRIGHTS"
+        capability string.</li>
+        <li>Minor editorial changes.</li>
+      </ul>
+    </section>
+-->
+  </back>
+</rfc>
