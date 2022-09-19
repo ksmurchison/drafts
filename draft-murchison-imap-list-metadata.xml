@@ -108,29 +108,45 @@
       the mailboxes returned by the LIST command.  Doing so in
       multiple GETMETADATA commands wastes bandwidth and can degrade
       performance if the client does not pipeline the requests.</t>
+
       <t>This document extends the LIST command with a new return option,
       "METADATA", which allows the client to request all of the
       desired information in a single command.  For each listable
       mailbox matching the list pattern and selection options, the
-      server MUST return an untagged LIST response followed by an
-      untagged METADATA response containing the mailbox annotations
-      requested by the client.</t>
+      server MUST return an untagged LIST response followed by one or more
+      untagged METADATA responses containing the mailbox annotations
+      requested by the client.
+      The untagged METADATA responses to an extended LIST command have
+      the same syntax and semantics as those that would be returned by
+      GETMETADATA commands on the same set of listable mailboxes.
+      As per <xref target="RFC5464" format="default"/>, the server may
+      return all requested annotations in a single METADATA response
+      for each mailbox, or it may split the requested annotations into
+      multiple METADATA responses for each mailbox, if it desires.</t>
+
       <t>If the server is unable to look up the annotations for
-      given mailbox, it MAY drop the corresponding METADATA reply.  In
-      such a situation, the LIST command would still return a tagged
+      given mailbox, it MAY drop the corresponding METADATA response.
+      In such a situation, the LIST command would still return a tagged
       OK reply.</t>
     </section>
     <!-- MYRIGHTS -->
 
     <section numbered="true" toc="default">
       <name>Examples</name>
-      <t>Note that the line wrapping of the LIST commands below is for
-      editorial purposes only.</t>
+      <t>Note that the line wrapping of the extended LIST commands
+      below is for editorial purposes only.</t>
 
       <t keepWithNext="true">
-	  In this example the "bar" mailbox doesn't exist, so it has
-          no METADATA reply.
+	In this example:
       </t>
+      <ul spacing="normal">
+        <li>The "color" annotation for the "foo" mailbox has not been
+        set, so the METADATA response has a value of "NIL" (has no
+        value).</li>
+        <li>The "bar" mailbox doesn't exist, so it has no METADATA
+        response.</li>
+      </ul>
+
       <artwork name="" type="" align="left" alt=""><![CDATA[
 C: A01 LIST "" %
          RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
@@ -141,12 +157,14 @@ S: * METADATA "foo" ("/shared/vendor/cmu/cyrus-imapd/color" NIL)
 S: * LIST (\NonExistent) "." "bar"
 S: A01 OK List completed.
 ]]></artwork>
+
       <t keepWithNext="true">
-	  In this example the LIST reply for the "foo" mailbox is
+	  In this example the LIST response for the "foo" mailbox is
           returned because it has matching children, but no METADATA
-          reply is returned because "foo" itself doesn't match the
+          response is returned because "foo" itself doesn't match the
           selection criteria.
       </t>
+
       <artwork name="" type="" align="left" alt=""><![CDATA[
 C: A02 LIST (SUBSCRIBED RECURSIVEMATCH) "" %
          RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
@@ -156,21 +174,27 @@ S: * LIST () "." "foo" (CHILDINFO ("SUBSCRIBED"))
 S: A02 OK List completed.
 ]]></artwork>
     </section>
+
     <section numbered="true" toc="default">
       <name>Formal Syntax</name>
       <t>The following syntax specification uses the augmented Backus-Naur
       Form (BNF) as described in <xref target="RFC5234" format="default"/>.
-      Terms not defined here are taken from
-      <xref target="RFC5258" format="default"/> and
-      <xref target="RFC5464" format="default"/>. </t> 
+
+      Note that "return-option" is defined in
+      <xref target="RFC5258" format="default"/>
+      and "entry" is defined in
+      <xref target="RFC5464" format="default"/>.</t>
+
       <artwork name="" type="" align="left" alt=""><![CDATA[
 return-option =/ "METADATA" "(" entry *(SP entry) ")"
 ]]></artwork>
+
     </section>
     <section anchor="security" numbered="true" toc="default">
       <name>Security Considerations</name>
       <t>This specification does not introduce any additional security
-      concerns beyond those described in <xref target="RFC5258" format="default"/>.</t>
+      concerns beyond those described in
+      <xref target="RFC5258" format="default"/>.</t>
     </section>
     <section anchor="privacy" numbered="true" toc="default">
       <name>Privacy Considerations</name>
@@ -178,6 +202,7 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
       concerns beyond those described in
       <xref target="RFC5464" format="default"/>.</t>
     </section>
+
     <section numbered="true" toc="default">
       <name>IANA Considerations</name>
       <section numbered="true" toc="default">
