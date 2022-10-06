@@ -40,12 +40,6 @@
  "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml">
 <!ENTITY ID.RFC5322bis PUBLIC ''
  "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml">
-<!--
- &lt;!ENTITY rfc1425 PUBLIC ''
-  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1425.xml"&gt;
-     ... does not work.  See
-     ... https://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/502
-     ... 2020-03-20 -->
 
 
 <!-- Fudge for XMLmind which doesn't have this built in -->
@@ -112,7 +106,7 @@
         comma-separated lists of RFC numbers (just the numbers) -->
 
 <!-- This is -00b, the posting draft -->
-<rfc  docName="draft-ietf-emailcore-as-05"
+<rfc  docName="draft-ietf-emailcore-as-06"
      ipr="trust200902"  category="std">
      <!-- obsoletes='2821, 821' updates='1123'
         category='std' (bcp, info, exp, historic)  -->   
@@ -165,7 +159,11 @@
 
     <!-- Meta-data Declarations -->
     <area>ART</area>
-    <workgroup> EMAILCORE </workgroup>	
+    <workgroup>EMAILCORE</workgroup>
+    <keyword>SMTP</keyword>
+    <keyword>MIME</keyword>
+    <keyword>TLS</keyword>
+    <keyword>DMARC</keyword>
 
     <!-- WG name at the upper left corner of the doc,
          IETF fine for individual submissions.  You can also
@@ -195,40 +193,40 @@
 
   <middle>
     <section title="Introduction">
-      <t> In its current form, this draft is a placeholder and
-      beginning of an outline for the Applicability Statement that has
-      been discussed as a complement for proposed revisions of the
-      base protocol specifications for SMTP <xref target="RFC5321"/>
-      (being revised as <xref target="I-D.ietf-emailcore-rfc5321bis"/>)
-      and Internet Message Format <xref target="RFC5322"/>
-      (being revised as <xref target="I-D.ietf-emailcore-rfc5322bis"/>).
-      Among other things, it is expected to capture topics that a
-      potential WG concludes are important but that should not become
-      part of those core documents.</t>
-	  
-      <t> As discussed in <xref target="RFC2026"/>,
-      <!-- Section 3.2 and maybe 7 if we can settle how to reference those -->
-      <list hangIndent="5" style="empty">
-	<t>"An Applicability Statement specifies how, and under what
-	circumstances, one or more TSs may be applied to support
-	a particular Internet capability."</t></list>
-	That form of a standards track document is appropriate
-	because one of the roles of such a document is to explain the
-	relationship among technical specifications, describe how they
-	are used together, and make statements about what is
-	"required, recommended, or elective".</t>
-	  
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in
-	<xref target="RFC2119"/> and
-	<xref target="RFC8174"/>.</t>
+      <t>This document is an
+      <xref target="RFC2026" section="3.2" sectionFormat="comma">
+        Applicability Statement</xref> that provides guidance in the
+        use of the Internet's core email specifications, the
+      <xref target="I-D.ietf-emailcore-rfc5321bis">Simple Mail
+      Transfer Protocol (SMTP)</xref> and the
+      <xref target="I-D.ietf-emailcore-rfc5322bis">Internet Message
+      Format (IMF)</xref>, and some extensions that have been built on
+      them.
+      In order to promote interoperability amongst senders, receivers,
+      and intermediaries, it includes discussions and recommendations
+      about selected features of SMTP, IMF, and certain extensions to
+      them that are required, recommended, or to be avoided execpt in
+      special cases.
+      Furthermore, this document discusses mechanisms for
+      confidentiality and authentication in electronic mail.
+      </t>
 
+      <section numbered="true" toc="default">
+        <name>Conventions Used in This Document</name>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+        NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+        "MAY", and "OPTIONAL" in this document are to be interpreted as
+        described in BCP 14
+        <xref target="RFC2119" format="default"/>
+        <xref target="RFC8174" format="default"/>
+        when, and only when, they appear in all capitals, as shown
+        here.</t>
       </section>
+    </section>
 
       <section title="Applicability of Some SMTP Provisions">
-	<t> Over the years since RFC 5321 was published in October
-	2008, usage of SMTP has evolved, machines and 
+	<t> Over the years since <xref target="RFC5321"/> was
+        published in October 2008, usage of SMTP has evolved, machines and 
 	network speeds have increased, and the frequency with which
 	SMTP senders and receivers have to be prepared to deal with
 	systems that are disconnected from the Internet for long
@@ -349,7 +347,8 @@
         <section title="Use of Empty Quoted Strings">
           <t>
             The <spanx style='verb'>quoted-string</spanx> ABNF
-            non-terminal is used in various places in rfc5322bis
+            non-terminal is used in various places in
+            <xref target="I-D.ietf-emailcore-rfc5322bis"/>
             grammar.
             While it allows for empty quoted string, such construct is
             going to cause interoperability issues when used in certain
@@ -368,30 +367,44 @@
           <t>""@example.com</t>
           <t>Use of empty quoted strings is fine in "display-name".</t>
         </section>
+
+        <section title="Use of Email Addresses in HTML Forms">
+          <t>Email addresses are frequently used as input in HyperText
+          Markup Language (HTML) forms but the allowed grammar
+          of these email addresses is more restrictive than the
+          grammar in Section 3.4.1 of
+          <xref target="I-D.ietf-emailcore-rfc5322bis"/>
+          (limited characters allowed in domains and the lack of
+          comments and quoted strings).
+          Implementations that intend to use email addresses in HTML
+          forms SHOULD consult the valid email address grammar in
+          Section 4.10.5.1.5 of <xref target="HTML"/>.</t>
+        </section>
+
+        <section title="Use of Time Zones in Date and Receiver Header
+                        Fields">
+          <t>Recommendations on time zones to (not) use (Issue #55)...</t>
+        </section>
+
+        <section title="Line Length Limits">
+          <t>Clarify 78 octet limit versus 998 line length limit
+          (Issue #38)...</t>
+        </section>
       </section>
 
-      <section title="MIME and Its Implications">
-	<t>When the work leading to the original version of the
-	MIME specification was 
-	completed in 1992 <xref target="RFC1341"/>, the intention
-	was that it be kept separate from the specification for
-	basic mail headers in <xref target="RFC0822">RFC 822</xref>.
-	That plan was carried forward into RFC 822's successors,
-	<xref target="RFC2822"/> and
-	<xref target="RFC5322"/> and the successors of
-	that original MIME specification including
-	<xref target="RFC2045"/>. The decision to do
-	so was different from the one made for SMTP, for which the
-	core specification was changed to allow for the extension
-	mechanism <xref target="RFC1425"/> which was then
-	incorporated into RFC 5321 and its predecessor <xref
-        target="RFC2821"/>.</t>
-
-        <t>Various uses of MIME have become nearly ubiquitous in
-	contemporary email while others may have fallen into disuse
-	or been repurposed from the intent of their original design.</t>
-        <t> It may be appropriate to make some clear statements about
-        the applicability of MIME and its features.</t> 
+      <section title="Use of Multipurpose Internet Mail Extensions (MIME)">
+        <t>Although the <xref target="RFC2045">Multipurpose Internet
+        Mail Extensions (MIME)</xref> specification and its
+        predecessors have remained separate from the
+        <xref target="I-D.ietf-emailcore-rfc5322bis">Internet Message
+        Format (IMF)</xref> 
+        specification and its predecessors, MIME features such as
+        non-textual message bodies, multi-part message bodies, and the
+        use of character sets other than US-ASCII in message bodies and
+        header fields have become nearly ubiquitous in contemporary
+        email.
+        As a result, IMF generators and parsers are expected to support MIME.
+        </t>
       </section>
 
       <section anchor="conf-auth"
@@ -605,11 +618,7 @@
 
     <references title="Informative References">
 
-      &rfc1341;  <!-- MIME -->
-      &rfc0822;
       &rfc2034;
-      &rfc2822;
-      &rfc2821;
 
       &rfc3461;
       &rfc3463;
@@ -619,7 +628,6 @@
       &rfc6531;
 
       &rfc5321;
-      &rfc5322;
 
       &rfc7085;
 
@@ -637,30 +645,18 @@
       &ID.RFC5321bis;
       &ID.RFC5322bis;
 
-      <reference anchor="RFC1425"
-		 target="https://www.rfc-editor.org/info/rfc1425">
-	<!-- as of 2020-03-20 bibxml entry does not work - see Entity above -->
-        <front>
-          <title>SMTP Service Extensions</title>
-          <author initials="J." surname="Klensin" fullname="J. Klensin">
-            <organization> WG Chair </organization> <!-- faked -->
-          </author>
-	  <author initials="N." surname="Freed" fullname="N. Freed" role="editor">
-	    <organization/>
-          </author>
-          <author initials="M." surname="Rose" fullname="M. Rose">
-            <organization/>
-          </author>
-          <author initials="E." surname="Stefferud" fullname="E. Stefferud">
-	    <organization/>
-	  </author>
-	  <author initials="D." surname="Crocker" fullname="D. Crocker">
-	    <organization/>
-          </author>
-          <date year="1993" month="February"/>
-        </front>
-      </reference>
-	  
+      <reference anchor="HTML"
+                 target="https://html.spec.whatwg.org/">
+          <front>
+            <title>HTML Living Standard</title>
+            <author>
+              <organization>Web Mypertext Application Technology
+              Working Group</organization>
+            </author>
+            <date day="4" month="October" year="2022"/>
+          </front>
+        </reference>
+      
       <!-- Right back at the beginning we defined an entity which (we asserted) would contain
              XML needed for a reference... this is where we use it. -->
 
@@ -746,6 +742,17 @@
           <t>Added text addressing use ofx enhanced status codes.</t>
           <t>Added text addressing confidentiality and authentication
           (issue #54).</t>
+        </list></t>
+      </section>
+
+      <section
+          title="Changes from draft-ietf-emailcore-as-05 (2022-10-) to -06">
+        <t><list style="symbols">
+          <t>Replaced placeholder Introduction with new text,</t>
+          <t>Added text on use of email addresses in HTML forms
+          (issue #51).</t>
+          <t>Added text stating that implementations are expected to
+          support MIME (issue #65).</t>
         </list></t>
       </section>
 	
