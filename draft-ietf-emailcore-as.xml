@@ -1,50 +1,9 @@
-<?xml version="1.0" encoding="US-ASCII"?>
-
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!-- Getting references from the online citation library.
-     There has to be one entity for each item to be referenced. -->
-<!ENTITY rfc2034 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2034.xml">
-<!ENTITY rfc2119 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY rfc8174 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
-
-<!ENTITY rfc2026 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2026.xml">
-<!ENTITY rfc5321 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml">
-<!ENTITY rfc5322 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5322.xml">
-<!ENTITY rfc6648 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6648.xml">
-
-<!ENTITY rfc0822 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.0822.xml">
-<!ENTITY rfc1341 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1341.xml">
-<!ENTITY rfc2045 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml">
-<!ENTITY rfc2821 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2821.xml">
-<!ENTITY rfc2822 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2822.xml">
-<!ENTITY rfc7085 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7085.xml">
-<!ENTITY rfc3461 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3461.xml">
-<!ENTITY rfc3463 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3463.xml">
-<!ENTITY rfc5248 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5248.xml">
-<!ENTITY rfc6152 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6152.xml">
-<!ENTITY rfc2920 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2920.xml">
-<!ENTITY rfc6531 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6531.xml">
-
-<!ENTITY rfc6376 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6376.xml">
-<!ENTITY rfc7489 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7489.xml">
-<!ENTITY rfc8617 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8617.xml">
-<!ENTITY rfc8461 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8461.xml">
-<!ENTITY rfc8446 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml">
-<!ENTITY rfc8551 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8551.xml">
-<!ENTITY rfc7208 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7208.xml">
-<!ENTITY rfc7672 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7672.xml">
-<!ENTITY rfc4880 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4880.xml">
-<!ENTITY rfc4954 PUBLIC '' "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4954.xml">
-
-<!ENTITY ID.RFC5321bis PUBLIC ''
- "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml">
-<!ENTITY ID.RFC5322bis PUBLIC ''
- "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml">
-
-
-<!-- Fudge for XMLmind which doesn't have this built in -->
-<!ENTITY nbsp "&#160;">
-
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
 ]>
 <!-- Extra statement used by XSLT processors to control the output style. -->
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -83,14 +42,13 @@
 <?rfc sortrefs="yes" ?>
 <!-- If "yes", causes the references to be sorted in order of tags.
 			 This doesn't have any effect unless symrefs is "yes"
-          also. --> 
+          also. -->
 <!-- These two save paper: Just setting compact to "yes" makes savings by not starting each 
      main section on a new page but does not omit the blank lines between list items. 
      If subcompact is also "yes" the blank lines between list items are also omitted. -->
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <!-- end of list of popular I-D processing instructions -->
-
 <!-- Information about the document.
      category values: std, bcp, info, exp, and historic
      For Internet-Drafts, specify attribute "ipr".
@@ -106,27 +64,40 @@
         comma-separated lists of RFC numbers (just the numbers) -->
 
 <!-- This is -00b, the posting draft -->
-<rfc  docName="draft-ietf-emailcore-as-06"
-     ipr="trust200902"  category="std">
-     <!-- obsoletes='2821, 821' updates='1123'
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     docName="draft-ietf-emailcore-as-06"
+     ipr="trust200902"
+     category="std"
+     obsoletes=""
+     updates=""
+     submissionType="IETF"
+     xml:lang="en"
+     tocInclude="true"
+     tocDepth="3"
+     symRefs="true"
+     sortRefs="true"
+     consensus="true"
+     version="3">
+  <!-- xml2rfc v2v3 conversion 3.15.0 -->
+  <!-- obsoletes='2821, 821' updates='1123'
         category='std' (bcp, info, exp, historic)  -->   
 
 
   <!-- ***** FRONT MATTER ***** -->
 
   <front>
-
     <title abbrev="Core Email A/S">Applicability Statement for IETF
 	   Core Email Protocols</title>
-
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-06"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
-			 surname="Klensin" role="editor">
+            surname="Klensin" role="editor">
       <organization/>
       <address>
         <postal>
           <street>1770 Massachusetts Ave, Ste 322</street>
-          <city>Cambridge</city> <region>MA</region>
+          <city>Cambridge</city>
+          <region>MA</region>
           <code>02140</code>
           <country>USA</country>
         </postal>
@@ -134,29 +105,27 @@
         <email>john-ietf@jck.com</email>
       </address>
     </author>
-
     <author initials="K." surname="Murchison"
-	    fullname="Kenneth Murchison" role="editor"> 
+            fullname="Kenneth Murchison" role="editor">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
-	<postal>
-	  <street>1429 Walnut Street - Suite 1201</street>
-	  <city>Philadelphia</city> <region>PA</region>
-	  <code>19102</code> <country>USA</country>
-	</postal>
-	<email>murch@fastmailteam.com</email>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city>
+          <region>PA</region>
+          <code>19102</code>
+          <country>USA</country>
+        </postal>
+        <email>murch@fastmailteam.com</email>
       </address>
     </author>
-	
     <author initials="E." surname="Sam" fullname="E Sam" role="editor">
       <organization/>
       <address>
-	<email>winshell64@gmail.com </email>
+        <email>winshell64@gmail.com </email>
       </address>
     </author>
-
-    <date />
-
+    <date/>
     <!-- Meta-data Declarations -->
     <area>ART</area>
     <workgroup>EMAILCORE</workgroup>
@@ -164,7 +133,6 @@
     <keyword>MIME</keyword>
     <keyword>TLS</keyword>
     <keyword>DMARC</keyword>
-
     <!-- WG name at the upper left corner of the doc,
          IETF fine for individual submissions.  You can also
          omit this element in which case it defaults to "Network Working Group" -
@@ -190,9 +158,9 @@
       protocols.</t>
     </abstract>
   </front>
-
   <middle>
-    <section title="Introduction">
+    <section numbered="true" toc="default">
+      <name>Introduction</name>
       <t>This document is an
       <xref target="RFC2026" section="3.2" sectionFormat="comma">
         Applicability Statement</xref> that provides guidance in the
@@ -210,22 +178,21 @@
       Furthermore, this document discusses mechanisms for
       confidentiality and authentication in electronic mail.
       </t>
-
       <section numbered="true" toc="default">
         <name>Conventions Used in This Document</name>
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
         NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
         "MAY", and "OPTIONAL" in this document are to be interpreted as
         described in BCP 14
-        <xref target="RFC2119" format="default"/>
-        <xref target="RFC8174" format="default"/>
+        <xref target="RFC2119"/>
+          <xref target="RFC8174"/>
         when, and only when, they appear in all capitals, as shown
         here.</t>
       </section>
     </section>
-
-      <section title="Applicability of Some SMTP Provisions">
-	<t> Over the years since <xref target="RFC5321"/> was
+    <section numbered="true" toc="default">
+      <name>Applicability of Some SMTP Provisions</name>
+      <t> Over the years since <xref target="RFC5321"/> was
         published in October 2008, usage of SMTP has evolved, machines and 
 	network speeds have increased, and the frequency with which
 	SMTP senders and receivers have to be prepared to deal with
@@ -242,16 +209,14 @@
 	evolve the Internet's mail system to better accommodate
 	environments in which Basic Latin Script is not the
 	norm.</t>
-
-	<t> This section describes adjustments
+      <t> This section describes adjustments
 	that may be appropriate for SMTP under various circumstances
 	and discusses the applicability of other protocols that
 	represent newer work or that are intended to deal with
 	relatively newer issues.</t>
-
-        <section
-            title="Handling of the Domain Argument to the EHLO Command">
-          <t> If the <spanx style='verb'>Domain</spanx> argument to
+      <section numbered="true" toc="default">
+        <name>Handling of the Domain Argument to the EHLO Command</name>
+        <t> If the <tt>Domain</tt> argument to
           the EHLO command does not have an address record in the
           DNS that matches the IP address of the client, the SMTP
           server may refuse any mail from the client as part of
@@ -260,36 +225,35 @@
           a matching address record for the the domain name
           argument is at best an indication of a poorly-configured
           MTA, and at worst that of an abusive host. </t>
-        </section>
-
-        <section title="Use of Address Literals">
-          <t> The <spanx style='verb'>address-literal</spanx> ABNF
+      </section>
+      <section numbered="true" toc="default">
+        <name>Use of Address Literals</name>
+        <t> The <tt>address-literal</tt> ABNF
           non-terminal is used in various places in
-          <xref target="I-D.ietf-emailcore-rfc5321bis" /> grammar
+          <xref target="I-D.ietf-emailcore-rfc5321bis"/> grammar
           however, for SMTP connections over the public internet,
-          an <spanx style='verb'>address-literal</spanx>
+          an <tt>address-literal</tt>
           as the argument to EHLO command or the
-          <spanx style='verb'>Domain</spanx> part of the
-          <spanx style='verb'>Mailbox</spanx> argument to the MAIL
+          <tt>Domain</tt> part of the
+          <tt>Mailbox</tt> argument to the MAIL
           FROM command is quite likely to result in the message
           being rejected as a matter of policy at many sites, since
           they are deemed to be signs of at best a misconfigured
           server, and at worst either a compromised host or a
           server that's intentionally configured to hide its
           identity. </t>
-        </section>
-
-        <section title="Use of Addresses in Top-Level Domains">
-          <t> While addresses in top-level domains (TLDs) are
+      </section>
+      <section numbered="true" toc="default">
+        <name>Use of Addresses in Top-Level Domains</name>
+        <t> While addresses in top-level domains (TLDs) are
           syntactically valid, mail to these addresses has never
           worked reliably.
           A handful of country code TLDs have top level MX records but
           they have never been widely used nor 
-          well supported. In 2013 <xref target="RFC7085" /> found 18
+          well supported. In 2013 <xref target="RFC7085"/> found 18
           TLDs with MX records, which dropped to 17 in 2021 despite
           many new TLDs having been added. </t>
-
-          <t> Mail sent to addresses with single label domains has
+        <t> Mail sent to addresses with single label domains has
           typically expected the address to be an abbreviation to be
           completed by a search list, so mail to bob@sales would be
           completed to bob@sales.example.com.
@@ -300,31 +264,33 @@
           Czechoslovakia.
           Hence, for reliable service, mail SHOULD NOT use addreses
           that contain single label domains. </t>
-        </section>
-
-        <section title="Use of SMTP Extensions">
-          <t>As SMTP has evolved over the years, several extensions
+      </section>
+      <section numbered="true" toc="default">
+        <name>Use of SMTP Extensions</name>
+        <t>As SMTP has evolved over the years, several extensions
           have become ubiquitous.
           As a result, the following extensions MUST be supported by SMTP
           senders and receivers:
 
-          <list style="symbols">
-            <t><xref target="RFC6152">8-bit MIME</xref></t>
-            <t><xref target="RFC3461">Deliver Status Notifications</xref></t>
-          </list>
-          </t>
-
-          <t>Similarly, the following extensions SHOULD be supported by SMTP
+        </t>
+        <ul spacing="normal">
+          <li>
+            <xref target="RFC6152">8-bit MIME</xref></li>
+          <li>
+            <xref target="RFC3461">Deliver Status Notifications</xref></li>
+        </ul>
+        <t>Similarly, the following extensions SHOULD be supported by SMTP
           senders and receivers:
 
-          <list style="symbols">
-            <t><xref target="RFC2920">Command Pipelining</xref></t>
-            <t><xref target="RFC6531">Internationalized Email</xref></t>
-          </list>
-          </t>
-
-          <t>Furthermore, while Enhanced Mail System Status Codes
-          (<xref target="RFC3463" />, <xref target="RFC5248" />)
+        </t>
+        <ul spacing="normal">
+          <li>
+            <xref target="RFC2920">Command Pipelining</xref></li>
+          <li>
+            <xref target="RFC6531">Internationalized Email</xref></li>
+        </ul>
+        <t>Furthermore, while Enhanced Mail System Status Codes
+          (<xref target="RFC3463"/>, <xref target="RFC5248"/>)
           are widely supported, they are not ubiquitous.
           Nevertheless, they have been found to be useful to SMTP
           senders in determining the exact reason for a transmission
@@ -335,18 +301,18 @@
           Given the usefulness of these enhanced codes, SMTP receivers
           are RECOMMENDED to implement the <xref target="RFC2034">SMTP
           Service Extension for Returning Enhanced Error Codes</xref>
-          utilizing the codes registered in <xref target="RFC5248" />.
-          </t>
-        </section>
+          utilizing the codes registered in <xref target="RFC5248"/>.
+        </t>
       </section>
-
-      <section title="Applicability of Message Format Provisions">
-        <t> This section describes adjustments to the Internet Message
+    </section>
+    <section numbered="true" toc="default">
+      <name>Applicability of Message Format Provisions</name>
+      <t> This section describes adjustments to the Internet Message
         Format that may be appropriate under various circumstances. </t>
-
-        <section title="Use of Empty Quoted Strings">
-          <t>
-            The <spanx style='verb'>quoted-string</spanx> ABNF
+      <section numbered="true" toc="default">
+        <name>Use of Empty Quoted Strings</name>
+        <t>
+            The <tt>quoted-string</tt> ABNF
             non-terminal is used in various places in
             <xref target="I-D.ietf-emailcore-rfc5322bis"/>
             grammar.
@@ -361,15 +327,15 @@
             the "local-part".
             For example, all of the following email addresses are non
             interoperable: 
-          </t>
-          <t>"".bar@example.com </t>
-          <t>foo.""@example.net</t>
-          <t>""@example.com</t>
-          <t>Use of empty quoted strings is fine in "display-name".</t>
-        </section>
-
-        <section title="Use of Email Addresses in HTML Forms">
-          <t>Email addresses are frequently used as input in HyperText
+        </t>
+        <t>"".bar@example.com </t>
+        <t>foo.""@example.net</t>
+        <t>""@example.com</t>
+        <t>Use of empty quoted strings is fine in "display-name".</t>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Use of Email Addresses in HTML Forms</name>
+        <t>Email addresses are frequently used as input in HyperText
           Markup Language (HTML) forms but the allowed grammar
           of these email addresses is more restrictive than the
           grammar in Section 3.4.1 of
@@ -379,21 +345,20 @@
           Implementations that intend to use email addresses in HTML
           forms SHOULD consult the valid email address grammar in
           Section 4.10.5.1.5 of <xref target="HTML"/>.</t>
-        </section>
-
-        <section title="Use of Time Zones in Date and Receiver Header
-                        Fields">
-          <t>Recommendations on time zones to (not) use (Issue #55)...</t>
-        </section>
-
-        <section title="Line Length Limits">
-          <t>Clarify 78 octet limit versus 998 line length limit
-          (Issue #38)...</t>
-        </section>
       </section>
-
-      <section title="Use of Multipurpose Internet Mail Extensions (MIME)">
-        <t>Although the <xref target="RFC2045">Multipurpose Internet
+      <section numbered="true" toc="default">
+        <name>Use of Time Zones in Date and Receiver Header Fields</name>
+        <t>Recommendations on time zones to (not) use (Issue #55)...</t>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Line Length Limits</name>
+        <t>Clarify 78 octet limit versus 998 line length limit
+          (Issue #38)...</t>
+      </section>
+    </section>
+    <section numbered="true" toc="default">
+      <name>Use of Multipurpose Internet Mail Extensions (MIME)</name>
+      <t>Although the <xref target="RFC2045">Multipurpose Internet
         Mail Extensions (MIME)</xref> specification and its
         predecessors have remained separate from the
         <xref target="I-D.ietf-emailcore-rfc5322bis">Internet Message
@@ -404,12 +369,11 @@
         header fields have become nearly ubiquitous in contemporary
         email.
         As a result, IMF generators and parsers are expected to support MIME.
-        </t>
-      </section>
-
-      <section anchor="conf-auth"
-          title="Confidentiality and Authentication with SMTP">
-        <t>SMTP is specified without embedded mechanisms for
+      </t>
+    </section>
+    <section anchor="conf-auth" numbered="true" toc="default">
+      <name>Confidentiality and Authentication with SMTP</name>
+      <t>SMTP is specified without embedded mechanisms for
         authentication or confidentiality; its traffic is therefore
         "in the clear". Years of operational experience have shown
         that such transmission exposes the message to easy compromise,
@@ -420,38 +384,35 @@
         to provide both confidentiality and authentication in the
         transmission of messages. This section discusses those topics
         and their most common uses.</t>
-
-        <t>It is important that the reader understand what is meant by
+      <t>It is important that the reader understand what is meant by
         the terms "Authentication" and "Confidentiality", and for that
         we will borrow directly from RFC8446.
 
-        <list style="symbols">
-          <t>Authentication is the process of establishing the
+      </t>
+      <ul spacing="normal">
+        <li>Authentication is the process of establishing the
           identity of one or more of the endpoints of a communication
           channel. TLS only requires authentication of the server side
           of the communication channel; authentication of the client
-          side is optional.</t>
-
-          <t>The term "confidentiality" describes a state where the
+          side is optional.</li>
+        <li>The term "confidentiality" describes a state where the
           data (i.e., the message) is transmitted in a way that it is
           only visible to the endpoints of a communication
-          channel.</t>
-        </list></t>
-
-        <t>It is not uncommon for implementers to use the term
+          channel.</li>
+      </ul>
+      <t>It is not uncommon for implementers to use the term
         "encryption" to mean "confidentiality", but this is not quite
         correct. Rather, encryption using TLS is the current method by
         which confidentiality is achieved with SMTP, but that does not
         mean that future methods might not be developed.</t>
-
-        <t>Note: With typical email use of TLS, authentication only is
+      <t>Note: With typical email use of TLS, authentication only is
         performed for the target receiving server and is not done for
         the sending client. That is, it serves to validate that the
         connection has been made to the intended server, but does not
         validate who initiated it.</t>
-
-        <section title="Optional Confidentiality">
-          <t>The most common implementation of message confidentiality
+      <section numbered="true" toc="default">
+        <name>Optional Confidentiality</name>
+        <t>The most common implementation of message confidentiality
           is what's known as "opportunistic TLS", which is frequently
           referred to as "opportunistic encryption". With this method,
           a receiving server announces in its greeting that it is
@@ -461,8 +422,7 @@
           transmits the message in encrypted form; if negotiation
           fails, the client falls back to sending the message in clear
           text.</t>
-
-          <t>Opportunistic TLS is confidentiality without
+        <t>Opportunistic TLS is confidentiality without
           authentication, because no effort is made to authenticate
           the receiving server, and it is optional confidentiality due
           to the ability to fall back to transmission in the clear if
@@ -471,17 +431,14 @@
           especially at the largest mailbox providers, and so the vast
           majority of email traffic is encrypted during its time
           transiting from the client to the server.</t>
-
-          <t>Note: While TLS provides protection while the message is
+        <t>Note: While TLS provides protection while the message is
           in transit, there is no guarantee that the message will be
           stored in encrypted fashion at its destination. In fact,
           storage in plain text should be expected!</t>
-        </section>
-
-        <section title="Required Confidentiality,
-                        with Receiving Server Authentication">
-
-          <t>Two protocols exist that move message confidentiality
+      </section>
+      <section numbered="true" toc="default">
+        <name>Required Confidentiality, with Receiving Server Authentication</name>
+        <t>Two protocols exist that move message confidentiality
           from optional to required (with conditions as noted below) -
           <xref target="RFC8461">MTA-STS</xref> and
           <xref target="RFC7672">DANE for SMTP</xref>.
@@ -492,23 +449,21 @@
           result in the sending client refusing to transmit the
           message. Support for both protocols is increasing, but is
           not yet mandatory.</t>
-
-          <t>These two protocols differ from Opportunistic TLS in that
+        <t>These two protocols differ from Opportunistic TLS in that
           they require receiving server authentication and there is no
           fallback to sending in the clear if negotiation of an
           encrypted connection fails.</t>
-
-          <t>Note: Both protocols mentioned in this section rely not
+        <t>Note: Both protocols mentioned in this section rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
           client does not implement or understand the protocol
           requested by the receiving server, the sending client will
           use Opportunistic TLS or clear-text to transmit the
           message.</t>
-        </section>
-
-        <section title="Message-Level Authentication">
-          <t>Protocols exist to allow for authentication of different
+      </section>
+      <section numbered="true" toc="default">
+        <name>Message-Level Authentication</name>
+        <t>Protocols exist to allow for authentication of different
           identities associated with an email message -
           <xref target="RFC7208">SPF</xref> and
           <xref target="RFC6376">DKIM</xref>.
@@ -518,33 +473,31 @@
           <xref target="RFC8617">ARC</xref>, provides a way for each
           hop to record results of authentication checks performed at
           that hop.</t>
-
-          <t>All of these are outside the scope of this document, as
+        <t>All of these are outside the scope of this document, as
           they are outside the scope of SMTP. They deal with
           validating the authorized usage of one or more domains in an
           email message, and not with establishing the identity of the
           receiving server.</t>
-        </section>
-
-        <section title="SMTP Authentication">
-          <t><xref target="RFC4954">SMTP Authentication</xref>,
+      </section>
+      <section numbered="true" toc="default">
+        <name>SMTP Authentication</name>
+        <t><xref target="RFC4954">SMTP Authentication</xref>,
           which is often abbreviated as SMTP AUTH,
           is an extension to SMTP. While its name might suggest
           that it would be within scope for this section of the
           Applicability Statement, nothing could be further from the
           truth.</t>
-
-          <t>SMTP AUTH defines a method for a client to identify
+        <t>SMTP AUTH defines a method for a client to identify
           itself to a Message Submission Agent (MSA) when presenting a
           message for transmission, usually using port 587 rather than
           the traditional port 25. The most common implementation of
           SMTP AUTH is for a person to present a username and password
           to their mailbox provider's outbound SMTP server when
           configuring their MUA for sending mail.</t>
-        </section>
-
-        <section title="Message-Level Confidentiality">
-          <t>Protocols such as <xref target="RFC8551">S/MIME</xref>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Message-Level Confidentiality</name>
+        <t>Protocols such as <xref target="RFC8551">S/MIME</xref>
           and <xref target="RFC4880">OpenPGP</xref> exist to allow for
           message confidentiality outside of the operation of
           SMTP. That is to say, using these protocols results in
@@ -555,9 +508,9 @@
           protocols, too many to list here. As they operate fully
           independent of SMTP, they are out of scope for this
           document.</t>
-        </section>
       </section>
-<!--
+    </section>
+    <!--
       <section title="Other Stuff">
 	<t> It is fairly clear that there will be things that do not
 	fit into the sections outlined above.  As one example, if
@@ -567,40 +520,41 @@
         sections than to any of the three suggested above.</t>
       </section>
 -->
-      <section anchor="Acknowledgments" title="Acknowledgments">
-        <t>The Emailcore group arose out of discussions on the
+      <section anchor="Acknowledgments" numbered="true" toc="default">
+      <name>Acknowledgments</name>
+      <t>The Emailcore group arose out of discussions on the
         ietf-smtp group over changes and additions that should be made
         to the core email protocols.
         It was agreed upon that it was time to create a working group
         that would fix many potential errors and opportunities for
         misunderstandings within the RFCs.</t>
-      </section>
-
+    </section>
     <!-- Possibly a 'Contributors' section ... -->
 
-    <section anchor="IANA" title="IANA Considerations">
+    <section anchor="IANA" numbered="true" toc="default">
+      <name>IANA Considerations</name>
       <t>This memo includes no requests to or actions for IANA.  The
       IANA registries associated with the protocol specifications
       it references are specified in their respective documents.</t>
     </section>
-
-    <section anchor="Security" title="Security Considerations">
+    <section anchor="Security" numbered="true" toc="default">
+      <name>Security Considerations</name>
       <t>All drafts are required to have a security considerations
       section and this one eventually will.</t>
       <t> ... To be supplied ... </t>
     </section>
   </middle>
-
   <!--  *****BACK MATTER ***** -->
 
   <back>
-
-    <references title="Normative References">
-
-	  &rfc2119;
-	  &rfc8174;
-	  &rfc2026;
-	  &rfc2045;  <!-- MIME -->
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2026.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
 
 <!-- the following is the minimum to make xml2rfc happy -->	  
    <!--   <reference anchor="min_ref">
@@ -615,49 +569,41 @@
         </front>
       </reference>  -->
     </references>
+      <references>
+        <name>Informative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2034.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3461.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3463.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5248.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6152.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2920.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7085.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7489.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8617.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8461.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8551.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7208.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7672.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4880.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
 
-    <references title="Informative References">
-
-      &rfc2034;
-
-      &rfc3461;
-      &rfc3463;
-      &rfc5248;
-      &rfc6152;
-      &rfc2920;
-      &rfc6531;
-
-      &rfc5321;
-
-      &rfc7085;
-
-      &rfc6376;
-      &rfc7489;
-      &rfc8617;
-      &rfc8461;
-      &rfc8446;
-      &rfc8551;
-      &rfc7208;
-      &rfc7672;
-      &rfc4880;
-      &rfc4954;
-
-      &ID.RFC5321bis;
-      &ID.RFC5322bis;
-
-      <reference anchor="HTML"
-                 target="https://html.spec.whatwg.org/">
+        <reference anchor="HTML" target="https://html.spec.whatwg.org/">
           <front>
             <title>HTML Living Standard</title>
             <author>
-              <organization>Web Mypertext Application Technology
+              <organization>Web Hypertext Application Technology
               Working Group</organization>
             </author>
             <date day="4" month="October" year="2022"/>
           </front>
         </reference>
-      
-      <!-- Right back at the beginning we defined an entity which (we asserted) would contain
+        <!-- Right back at the beginning we defined an entity which (we asserted) would contain
              XML needed for a reference... this is where we use it. -->
 
       <!-- A reference written by by an organization not a person. 
@@ -676,87 +622,80 @@
       </reference>  -->
 	   
     </references>
-
-
-<!--   Sections below here become  Appendices.  -->
+    </references>
+    <!--   Sections below here become  Appendices.  -->
 	
-    <section title="Change Log" anchor="ChangeLog">
+    <section anchor="ChangeLog" numbered="true" toc="default">
+      <name>Change Log</name>
       <t>RFC Editor: Please remove this appendix before publication.</t>
-
-      <section title="Changes from draft-klensin-email-core-as-00
-                      (2020-03-30) to draft-ietf-emailcore-as-00">
-        <t><list style="symbols">
-	  <t> Change of filename, metadata, and date to reflect
+      <section numbered="true" toc="default">
+        <name>Changes from draft-klensin-email-core-as-00 (2020-03-30)
+        to draft-ietf-emailcore-as-00</name>
+        <ul spacing="normal">
+          <li> Change of filename, metadata, and date to reflect
 	  transition to WG document for new emailcore WG.  No
-	  other substantive changes </t>
-	</list></t>
+	  other substantive changes </li>
+        </ul>
       </section>
-	
-      <section
-          title="Changes from draft-ietf-emailcore-as-00 (2020-10-06) to -01">
-        <t><list style="symbols">
-	  <t>Added co-authors (list is in alphabetical order for
-	  the present). </t>
-	  <t> Updated references to 5321bis and 5322bis. </t>
-	  <t> Added note at top, "This version is provided as a
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-00 (2020-10-06) to -01</name>
+        <ul spacing="normal">
+          <li>Added co-authors (list is in alphabetical order for
+	  the present). </li>
+          <li> Updated references to 5321bis and 5322bis. </li>
+          <li> Added note at top, "This version is provided as a
 	  document management convenience to update the author
 	  list and make an un-expired version available to the
 	  WG.  There are no substantive changes from the prior
-	  version", which should be removed for version -02.</t>
-	</list></t>
+	  version", which should be removed for version -02.</li>
+        </ul>
       </section>
-
-      <section
-          title="Changes from draft-ietf-emailcore-as-01 (2021-04-09) to -02">
-        <t><list style="symbols">
-          <t> Added new editors and also added some issues the
-          emailcore group will be dealing with. </t>
-          <t> Added reference to RFC 6648.</t>
-        </list></t>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-01 (2021-04-09) to -02</name>
+        <ul spacing="normal">
+          <li> Added new editors and also added some issues the
+          emailcore group will be dealing with. </li>
+          <li> Added reference to RFC 6648.</li>
+        </ul>
       </section>
-
-      <section
-          title="Changes from draft-ietf-emailcore-as-02 (2021-08-06) to -03">
-        <t><list style="symbols">
-          <t> Moved discussion of address-literals (issue #1) and
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-02 (2021-08-06) to -03</name>
+        <ul spacing="normal">
+          <li> Moved discussion of address-literals (issue #1) and
           domain names in EHLO (issue #19) under SMTP Provisions
-          section</t>
-          <t> Moved discussion of empty quoted-strings under
-          Message Format Provisions section</t>
-          <t> Added text on use of addresses in TLDs (issue #50) </t>
-          <t> Marked all authors as editors. </t>
-          <t> Miscellaneous editorial changes. </t>
-        </list></t>
+          section</li>
+          <li> Moved discussion of empty quoted-strings under
+          Message Format Provisions section</li>
+          <li> Added text on use of addresses in TLDs (issue #50) </li>
+          <li> Marked all authors as editors. </li>
+          <li> Miscellaneous editorial changes. </li>
+        </ul>
       </section>
-
-      <section
-          title="Changes from draft-ietf-emailcore-as-03 (2022-01-31) to -04">
-        <t><list style="symbols">
-          <t>Added requirements for SMTP extensions (issue #40).</t>
-        </list></t>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-03 (2022-01-31) to -04</name>
+        <ul spacing="normal">
+          <li>Added requirements for SMTP extensions (issue #40).</li>
+        </ul>
       </section>
-
-      <section
-          title="Changes from draft-ietf-emailcore-as-04 (2022-05-21) to -05">
-        <t><list style="symbols">
-          <t>Added text addressing use ofx enhanced status codes.</t>
-          <t>Added text addressing confidentiality and authentication
-          (issue #54).</t>
-        </list></t>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-04 (2022-05-21) to -05</name>
+        <ul spacing="normal">
+          <li>Added text addressing use ofx enhanced status codes.</li>
+          <li>Added text addressing confidentiality and authentication
+          (issue #54).</li>
+        </ul>
       </section>
-
-      <section
-          title="Changes from draft-ietf-emailcore-as-05 (2022-10-) to -06">
-        <t><list style="symbols">
-          <t>Replaced placeholder Introduction with new text,</t>
-          <t>Added text on use of email addresses in HTML forms
-          (issue #51).</t>
-          <t>Added text stating that implementations are expected to
-          support MIME (issue #65).</t>
-        </list></t>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-05 (2022-10-) to -06</name>
+        <ul spacing="normal">
+          <li>Replaced placeholder Introduction with new text.</li>
+          <li>Added text on use of email addresses in HTML forms
+          (issue #51).</li>
+          <li>Added text stating that implementations are expected to
+          support MIME (issue #65).</li>
+          <li>Converted source to xml2rfc v3.</li>
+        </ul>
       </section>
-	
     </section>
-
   </back>
 </rfc>
