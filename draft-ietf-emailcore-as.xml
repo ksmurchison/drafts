@@ -338,13 +338,14 @@
         <t>Email addresses are frequently used as input in HyperText
           Markup Language (HTML) forms but the allowed grammar
           of these email addresses is more restrictive than the
-          grammar in Section 3.4.1 of
-          <xref target="I-D.ietf-emailcore-rfc5322bis"/>
+          grammar in
+          <xref target="I-D.ietf-emailcore-rfc5322bis" section="3.4.1"/>
           (limited characters allowed in domains and the lack of
           comments and quoted strings).
           Implementations that intend to use email addresses in HTML
           forms SHOULD consult the valid email address grammar in
-          Section 4.10.5.1.5 of <xref target="HTML"/>.</t>
+          <xref target="HTML" section="4.10.5.1.5"
+                relative="#valid-e-mail-address"/>.</t>
       </section>
       <section numbered="true" toc="default">
         <name>Use of Time Zones in Date and Receiver Header Fields</name>
@@ -537,11 +538,11 @@
       IANA registries associated with the protocol specifications
       it references are specified in their respective documents.</t>
     </section>
+
     <section anchor="Security" numbered="true" toc="default">
       <name>Security Considerations</name>
-      <t>All drafts are required to have a security considerations
-      section and this one eventually will.</t>
-      <t> ... To be supplied ... </t>
+      <t>Security and privacy considerations are discussed throughout
+      this document as they pertain to the referenced specifications.</t>
     </section>
   </middle>
   <!--  *****BACK MATTER ***** -->
@@ -686,13 +687,14 @@
         </ul>
       </section>
       <section numbered="true" toc="default">
-        <name>Changes from draft-ietf-emailcore-as-05 (2022-10-) to -06</name>
+        <name>Changes from draft-ietf-emailcore-as-05 (2022-10-DD) to -06</name>
         <ul spacing="normal">
           <li>Replaced placeholder Introduction with new text.</li>
           <li>Added text on use of email addresses in HTML forms
           (issue #51).</li>
           <li>Added text stating that implementations are expected to
           support MIME (issue #65).</li>
+          <li>Added minimal Security Considerations section.</li>
           <li>Converted source to xml2rfc v3.</li>
         </ul>
       </section>
