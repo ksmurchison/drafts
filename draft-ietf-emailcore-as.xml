@@ -175,7 +175,7 @@
       about selected features of SMTP, IMF, and certain extensions to
       them that are required, recommended, or to be avoided execpt in
       special cases.
-      Furthermore, this document discusses mechanisms for
+      Furthermore, this document discusses some common mechanisms for
       confidentiality and authentication in electronic mail.
       </t>
       <section numbered="true" toc="default">
@@ -348,8 +348,9 @@
                 relative="#valid-e-mail-address"/>.</t>
       </section>
       <section numbered="true" toc="default">
-        <name>Use of Time Zones in Date and Receiver Header Fields</name>
-        <t>Recommendations on time zones to (not) use (Issue #55)...</t>
+        <name>Use of Time Zones in Date and Received Header Fields</name>
+        <t>Recommendations on the use of "-0000" as a time zone
+        offset, etc (Issue #55)...</t>
       </section>
       <section numbered="true" toc="default">
         <name>Line Length Limits</name>
@@ -529,7 +530,11 @@
         It was agreed upon that it was time to create a working group
         that would fix many potential errors and opportunities for
         misunderstandings within the RFCs.</t>
-    </section>
+
+        <t>Special thanks to the following for providing significant
+        portions of text for this document: Todd Herr, John Levine,
+        Alexey Melnikov.</t>
+      </section>
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" numbered="true" toc="default">
@@ -689,13 +694,16 @@
       <section numbered="true" toc="default">
         <name>Changes from draft-ietf-emailcore-as-05 (2022-10-DD) to -06</name>
         <ul spacing="normal">
+          <li>Converted source to xml2rfc v3.</li>
           <li>Replaced placeholder Introduction with new text.</li>
+          <li>Updated keywords boilerplate.</li>
           <li>Added text on use of email addresses in HTML forms
           (issue #51).</li>
           <li>Added text stating that implementations are expected to
           support MIME (issue #65).</li>
+          <li>Added placeholders for issues #38 and #55.</li>
+          <li>Add list of contributors in Acknowledgments.</li>
           <li>Added minimal Security Considerations section.</li>
-          <li>Converted source to xml2rfc v3.</li>
         </ul>
       </section>
     </section>
