@@ -346,6 +346,36 @@
           forms SHOULD consult the valid email address grammar in
           <xref target="HTML" section="4.10.5.1.5"
                 relative="#valid-e-mail-address"/>.</t>
+
+          <t>Additionally, the following implementation guidance is
+          provided:</t>
+<!--
+          <t>Additionally, implementators of HTML forms SHOULD note
+          the following:</t>
+-->
+          <ul spacing="normal">
+            <li>The vast majority of email systems compare the
+            local-parts of email addresses case-insensitively,
+            therefore implementations SHOULD assume that addresses
+            such as abc@domain.com, Abc@domain.com, and ABC@domain.com
+            will deliver to the same entity.</li>
+
+            <li>Email systems vary as to whether an address such as
+            aaa+bbb@example.com will deliver to the same entity as
+            aaa@example.com, aaabbb@example.com,
+            or "aaa bbb"@example.com, therefore such equivalency
+            SHOULD NOT be assumed.</li>
+<!--
+            <li>At least one large mail system allows optional single
+            dots anywhere within the local part.</li>
+-->
+            <li>Few mail systems allow leading, trailing, or
+            consecutive unquoted dots (ASCII '.') in the local-part of
+            email addresses even though the HTML grammar allows them.
+            Therefore, such addresses SHOULD NOT be accepted by HTML
+            forms.</li>
+          </ul>
+
       </section>
       <section numbered="true" toc="default">
         <name>Use of Time Zones in Date and Received Header Fields</name>
