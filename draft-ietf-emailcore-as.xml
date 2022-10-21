@@ -334,8 +334,58 @@
         <t>Use of empty quoted strings is fine in "display-name".</t>
       </section>
       <section numbered="true" toc="default">
-        <name>Use of Email Addresses in HTML Forms</name>
-        <t>Email addresses are frequently used as input in HyperText
+        <name>Use of Email Addresses</name>
+
+        <t>SMTP specifies that the local-part of an email address is
+        case-sensitive (see
+        <xref target="I-D.ietf-emailcore-rfc5321bis" 
+        section="2.4" sectionFormat="of"/>):</t>
+
+        <sourcecode>
+          The local-part of a mailbox MUST BE treated as case
+          sensitive.  Therefore, SMTP implementations MUST take
+          care to preserve the case of mailbox local-parts.
+          In particular, for some hosts, the user "smith" is
+          different from the user "Smith".  However, exploiting
+          the case sensitivity of mailbox local-parts impedes
+          interoperability and is discouraged.
+        </sourcecode>
+
+        <t>While case-sensitivity is specified as an absolute
+        requirement, it is important to stress that most
+        implementations do not make case distinctions in local parts
+        (most treat “smith”, “Smith”, and “SMITH” as the same), and
+        most implementations do preserve the case that is received
+        (from SMTP or HTTP, from address books, or from user input).
+        Maximum interoperability will be achieved by keeping
+        local-parts unchanged (and especially making no attempt to
+        change their case in any way) and by assuming that local-parts
+        that differ only in their case probably refer to the same
+        mailbox.
+        This is particularly important for software that validates
+        user-input fields, where case changes are tempting, but must
+        be avoided.</t>
+
+        <t>It is also important to note, as we encounter non-ASCII
+        local-parts over time, that case changes are both
+        character-set dependent and language dependent, and attempts
+        to change case without having the full context necessary are
+        likely to be wrong often enough to matter.</t>
+
+        <t>Additionally, implementations vary in how they interpret
+        the use of delimiters such as '+' and '.' in local-parts.
+        Some implementations make distinctions between local-parts
+        such as "smith" and "smith+foo", or "jane.doe" and "janedoe",
+        while others treat them as referring to the same mailboxes
+        respectively.
+        Since only the recipient mail server can properly interpret
+        the local-part of an address, implementations are
+        discouraged from making any changes to local-parts containing
+        such delimiters.</t>
+
+        <section numbered="true" toc="default">
+          <name>HTML Forms</name>
+          <t>Email addresses are frequently used as input in HyperText
           Markup Language (HTML) forms but the allowed grammar
           of these email addresses is more restrictive than the
           grammar in
@@ -349,34 +399,26 @@
 
           <t>Additionally, the following implementation guidance is
           provided:</t>
-<!--
-          <t>Additionally, implementators of HTML forms SHOULD note
-          the following:</t>
--->
-          <ul spacing="normal">
-            <li>The vast majority of email systems compare the
-            local-parts of email addresses case-insensitively,
-            therefore implementations SHOULD assume that addresses
-            such as abc@domain.com, Abc@domain.com, and ABC@domain.com
-            will deliver to the same entity.</li>
 
-            <li>Email systems vary as to whether an address such as
-            aaa+bbb@example.com will deliver to the same entity as
-            aaa@example.com, aaabbb@example.com,
-            or "aaa bbb"@example.com, therefore such equivalency
-            SHOULD NOT be assumed.</li>
-<!--
-            <li>At least one large mail system allows optional single
-            dots anywhere within the local part.</li>
--->
+          <ul spacing="normal">
             <li>Few mail systems allow leading, trailing, or
-            consecutive unquoted dots (ASCII '.') in the local-part of
+            consecutive unquoted dots ('.') in the local-part of
             email addresses even though the HTML grammar allows them.
-            Therefore, such addresses SHOULD NOT be accepted by HTML
-            forms.</li>
+            Therefore, implementations are discouraged from accepting
+            such addresses in HTML forms.</li>
+
+            <li>Some mail systems allow a trailing dot ('.') in the
+            domain part of email addresses (as allowed by
+            <xref target="RFC1035">Domain Names</xref>), but this is
+            not interoperable with all systems.
+            As such, implementations of HTML forms are encouraged to
+            allow a trailing dot in the domain and then strip it prior
+            to using the address.</li>
           </ul>
 
+        </section>
       </section>
+
       <section numbered="true" toc="default">
         <name>Use of Time Zones in Date and Received Header Fields</name>
         <t>Recommendations on the use of "-0000" as a time zone
@@ -562,8 +604,8 @@
         misunderstandings within the RFCs.</t>
 
         <t>Special thanks to the following for providing significant
-        portions of text for this document: Todd Herr, John Levine,
-        Alexey Melnikov.</t>
+        portions of text for this document: Todd Herr, Barry Leiba,
+        John Levine, Alexey Melnikov.</t>
       </section>
     <!-- Possibly a 'Contributors' section ... -->
 
@@ -607,6 +649,7 @@
     </references>
       <references>
         <name>Informative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2034.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3461.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3463.xml"/>
@@ -727,8 +770,8 @@
           <li>Converted source to xml2rfc v3.</li>
           <li>Replaced placeholder Introduction with new text.</li>
           <li>Updated keywords boilerplate.</li>
-          <li>Added text on use of email addresses in HTML forms
-          (issue #51).</li>
+          <li>Added text on interoperability of email addresses in
+          general and use in HTML forms (issue #51).</li>
           <li>Added text stating that implementations are expected to
           support MIME (issue #65).</li>
           <li>Added placeholders for issues #38 and #55.</li>
