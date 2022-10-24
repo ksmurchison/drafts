@@ -333,91 +333,6 @@
         <t>""@example.com</t>
         <t>Use of empty quoted strings is fine in "display-name".</t>
       </section>
-      <section numbered="true" toc="default">
-        <name>Use of Email Addresses</name>
-
-        <t>SMTP specifies that the local-part of an email address is
-        case-sensitive (see
-        <xref target="I-D.ietf-emailcore-rfc5321bis" 
-        section="2.4" sectionFormat="of"/>):</t>
-
-        <sourcecode>
-          The local-part of a mailbox MUST BE treated as case
-          sensitive.  Therefore, SMTP implementations MUST take
-          care to preserve the case of mailbox local-parts.
-          In particular, for some hosts, the user "smith" is
-          different from the user "Smith".  However, exploiting
-          the case sensitivity of mailbox local-parts impedes
-          interoperability and is discouraged.
-        </sourcecode>
-
-        <t>While case-sensitivity is specified as an absolute
-        requirement, it is important to stress that most
-        implementations do not make case distinctions in local parts
-        (most treat “smith”, “Smith”, and “SMITH” as the same), and
-        most implementations do preserve the case that is received
-        (from SMTP or HTTP, from address books, or from user input).
-        Maximum interoperability will be achieved by keeping
-        local-parts unchanged (and especially making no attempt to
-        change their case in any way) and by assuming that local-parts
-        that differ only in their case probably refer to the same
-        mailbox.
-        This is particularly important for software that validates
-        user-input fields, where case changes are tempting, but must
-        be avoided.</t>
-
-        <t>It is also important to note, as we encounter non-ASCII
-        local-parts over time, that case changes are both
-        character-set dependent and language dependent, and attempts
-        to change case without having the full context necessary are
-        likely to be wrong often enough to matter.</t>
-
-        <t>Additionally, implementations vary in how they interpret
-        the use of delimiters such as '+' and '.' in local-parts.
-        Some implementations make distinctions between local-parts
-        such as "smith" and "smith+foo", or "jane.doe" and "janedoe",
-        while others treat them as referring to the same mailboxes
-        respectively.
-        Since only the recipient mail server can properly interpret
-        the local-part of an address, implementations are
-        discouraged from making any changes to local-parts containing
-        such delimiters.</t>
-
-        <section numbered="true" toc="default">
-          <name>HTML Forms</name>
-          <t>Email addresses are frequently used as input in HyperText
-          Markup Language (HTML) forms but the allowed grammar
-          of these email addresses is more restrictive than the
-          grammar in
-          <xref target="I-D.ietf-emailcore-rfc5322bis" section="3.4.1"/>
-          (limited characters allowed in domains and the lack of
-          comments and quoted strings).
-          Implementations that intend to use email addresses in HTML
-          forms SHOULD consult the valid email address grammar in
-          <xref target="HTML" section="4.10.5.1.5"
-                relative="#valid-e-mail-address"/>.</t>
-
-          <t>Additionally, the following implementation guidance is
-          provided:</t>
-
-          <ul spacing="normal">
-            <li>Few mail systems allow leading, trailing, or
-            consecutive unquoted dots ('.') in the local-part of
-            email addresses even though the HTML grammar allows them.
-            Therefore, implementations are discouraged from accepting
-            such addresses in HTML forms.</li>
-
-            <li>Some mail systems allow a trailing dot ('.') in the
-            domain part of email addresses (as allowed by
-            <xref target="RFC1035">Domain Names</xref>), but this is
-            not interoperable with all systems.
-            As such, implementations of HTML forms are encouraged to
-            allow a trailing dot in the domain and then strip it prior
-            to using the address.</li>
-          </ul>
-
-        </section>
-      </section>
 
       <section numbered="true" toc="default">
         <name>Use of Time Zones in Date and Received Header Fields</name>
@@ -430,7 +345,99 @@
           (Issue #38)...</t>
       </section>
     </section>
+
     <section numbered="true" toc="default">
+      <name>Use of Email Addresses</name>
+
+      <section numbered="true" toc="default">
+        <name>Case-Sensitivity, Delimiters, and Mailbox Equivalency</name>
+
+        <t>SMTP specifies that the local-part of an email address is
+      case-sensitive (see
+      <xref target="I-D.ietf-emailcore-rfc5321bis" 
+            section="2.4" sectionFormat="of"/>):</t>
+
+      <sourcecode>
+        The local-part of a mailbox MUST BE treated as case
+        sensitive.  Therefore, SMTP implementations MUST take
+        care to preserve the case of mailbox local-parts.
+        In particular, for some hosts, the user "smith" is
+        different from the user "Smith".  However, exploiting
+        the case sensitivity of mailbox local-parts impedes
+        interoperability and is discouraged.
+      </sourcecode>
+
+      <t>While case-sensitivity is specified as an absolute
+      requirement, it is important to stress that most
+      implementations do not make case distinctions in local parts
+      (most treat “smith”, “Smith”, and “SMITH” as the same), and
+      most implementations do preserve the case that is received
+      (from SMTP or HTTP, from address books, or from user
+      input).
+      Maximum interoperability will be achieved by keeping local-parts
+      unchanged (and especially making no attempt to change their case
+      in any way) and by assuming that local-parts that differ only in
+      their case probably refer to the same mailbox.
+      This is particularly important for software that validates
+      user-input fields, where case changes are tempting, but must
+      be avoided.</t>
+
+      <t>It is also important to note, as we encounter non-ASCII
+      local-parts over time, that case changes are both
+      character-set dependent and language dependent, and attempts
+      to change case without having the full context necessary are
+      likely to be wrong often enough to matter.</t>
+
+      <t>Additionally, final delivery systems vary in how they interpret
+        the use of delimiters such as '+' and '.' in local-parts.
+        Some systems make distinctions between local-parts
+        such as "smith" and "smith+foo", or "jane.doe" and "janedoe",
+        while others treat them as referring to the same mailboxes
+        respectively.
+        Since only the final delivery system can properly interpret
+        the local-part of an address, originating and transit/relay
+        mail systems are discouraged from making any assumptions as to
+        address equivalency or from making any changes to local-parts
+        containing such delimiters.</t>
+      </section>
+
+      <section numbered="true" toc="default">
+        <name>Use and Validation in HTML and Other Contexts</name>
+
+        <t>Email addresses are frequently used as input in HyperText
+        Markup Language (HTML) forms but the allowed grammar
+        of these email addresses is more restrictive than the
+        grammar for a 'Mailbox' in
+        <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>
+        (the lack of quoted strings and limited characters allowed in
+        domains).
+        Implementations that intend to accept email addresses in HTML
+        forms are encouraged to consult the valid email address
+        grammar in
+        <xref target="HTML" section="4.10.5.1.5"
+              relative="#valid-e-mail-address"/>.</t>
+
+        <t>Additionally, the following general guidance is provided:</t>
+
+        <ul spacing="normal">
+          <li>Few mail systems allow leading, trailing, or
+          consecutive unquoted dots ('.') in the local-part of
+          email addresses even though the HTML grammar referenced
+          above currently allows them.
+          Consequently, implementations are discouraged from accepting
+          such addresses.</li>
+
+          <li>Some mail systems allow a trailing dot ('.') in the
+          domain part of email addresses (as allowed by
+          <xref target="RFC1035">Domain Names</xref>), but this is
+          not interoperable with all systems.
+          Consequently, implementations are encouraged to strip trailing
+          dots from the domain part of email addresses.</li>
+        </ul>
+      </section>
+    </section>
+
+      <section numbered="true" toc="default">
       <name>Use of Multipurpose Internet Mail Extensions (MIME)</name>
       <t>Although the <xref target="RFC2045">Multipurpose Internet
         Mail Extensions (MIME)</xref> specification and its
@@ -445,6 +452,7 @@
         As a result, IMF generators and parsers are expected to support MIME.
       </t>
     </section>
+
     <section anchor="conf-auth" numbered="true" toc="default">
       <name>Confidentiality and Authentication with SMTP</name>
       <t>SMTP is specified without embedded mechanisms for
