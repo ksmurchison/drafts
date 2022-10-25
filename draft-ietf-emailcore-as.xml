@@ -173,7 +173,7 @@
       In order to promote interoperability amongst senders, receivers,
       and intermediaries, it includes discussions and recommendations
       about selected features of SMTP, IMF, and certain extensions to
-      them that are required, recommended, or to be avoided execpt in
+      them that are required, recommended, or to be avoided except in
       special cases.
       Furthermore, this document discusses some common mechanisms for
       confidentiality and authentication in electronic mail.
