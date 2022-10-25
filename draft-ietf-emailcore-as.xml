@@ -65,7 +65,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-06"
+     docName="draft-ietf-emailcore-as-07"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -88,7 +88,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
 	   Core Email Protocols</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-06"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-07"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -773,7 +773,7 @@
         </ul>
       </section>
       <section numbered="true" toc="default">
-        <name>Changes from draft-ietf-emailcore-as-05 (2022-10-DD) to -06</name>
+        <name>Changes from draft-ietf-emailcore-as-05 (2022-10-24) to -06</name>
         <ul spacing="normal">
           <li>Converted source to xml2rfc v3.</li>
           <li>Replaced placeholder Introduction with new text.</li>
@@ -785,6 +785,12 @@
           <li>Added placeholders for issues #38 and #55.</li>
           <li>Add list of contributors in Acknowledgments.</li>
           <li>Added minimal Security Considerations section.</li>
+        </ul>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-06 (2021-MM-DD) to -07</name>
+        <ul spacing="normal">
+          <li> Miscellaneous editorial changes. </li>
         </ul>
       </section>
     </section>
