@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
+<?rfc toc="yes"?>
+<?rfc rfcedstyle="yes"?>
+<?rfc subcompact="no"?>
+<?rfc symrefs="yes"?>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     ipr="trust200902"
+     category="info"
+     docName="draft-murchison-imap-esearch-return-opt-registry-00"
+     obsoletes=""
+     updates=""
+     submissionType="IETF"
+     xml:lang="en"
+     tocInclude="true"
+     symRefs="true"
+     version="3">
+  <!-- xml2rfc v2v3 conversion 3.15.3 -->
+
+  <front>
+    <title abbrev="ESEARCH Return Opt &amp; Data Tag Registry">
+      IANA Registry for IMAP Extended SEARCH Return Options and Data Tags
+    </title>
+
+    <seriesInfo name="Internet-Draft"
+                value="draft-murchison-imap-esearch-return-opt-registry-00"/>
+
+    <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
+      <organization abbrev="Fastmail">Fastmail US LLC</organization>
+      <address>
+        <postal>
+          <street>1429 Walnut Street - Suite 1201</street>
+          <city>Philadelphia</city>
+          <region>PA</region>
+          <code>19102</code>
+          <country>USA</country>
+        </postal>
+        <email>murch@fastmailteam.com</email>
+      </address>
+    </author>
+
+    <date year="2022"/>
+
+    <area>ART</area>
+    <workgroup>EXTRA</workgroup>
+    <keyword>IMAP</keyword>
+    <keyword>ESEARCH</keyword>
+
+    <abstract>
+      <t>
+      This document creates a registry of IMAP Extended Search Return
+      Options and Data Tags (RFC 4466) in order to help developers and
+      IMAP extension writers track interactions between different extensions.
+      </t>
+    </abstract>
+
+    <note>
+      <name>Open Issues</name>
+      <ul>
+        <li>Is Expert Review the correct registration policy?</li>
+        <li>Should we also add a registry of SEARCH criteria?</li>
+      </ul>
+    </note>
+  </front>
+
+  <middle>
+    <section numbered="true" toc="default">
+      <name>Introduction</name>
+
+      <t>
+        The Internet Message Access Protocol (IMAP) <xref target="RFC3501"/>,
+        <xref target="RFC9051"/> is used for accessing
+        and manipulating email messages on a server.  Over the years,
+        the syntax of the IMAP SEARCH command has been extended to
+        include return options and corresponding return data in the
+        response <xref target="RFC4466"/>. 
+        There is currently no easy way to find out all of the return
+        options and data tags defined by IMAP extensions
+        published in RFCs, which makes it quite difficult for IMAP
+        extension writers and IMAP implementation developers to forsee
+        interactions between such extensions.
+      </t>
+      <t>
+      This document creates a registry of IMAP Extended Search Return
+      Options and Data Tags in order to help developers and
+      IMAP extension writers track interactions between different
+      extensions.
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>IANA Considerations</name>
+
+      <section numbered="true" toc="default">
+
+        <name>IMAP ESEARCH Return Option and Data Tag
+        Registration Template and Procedure</name>
+
+        <t>
+          IANA is requested to create a new registry for IMAP ESEARCH
+          Return Options and Data Tags.
+          Registration of both options/tags specified in IETF Stream
+          RFCs and vendor specific actions is allowed and encouraged.
+          The registration template contains:
+        </t>
+        <ol spacing="normal" type="1">
+          <li>name of the return option;</li>
+          <li>any implied return data tags;</li>
+          <li>short description;</li>
+          <li>references: one or more documents describing the
+          option/tag and any significant updates to its definition
+          (this field is required for option/tag described in RFCs and
+          is optional otherwise);</li>
+        </ol>
+        <t>
+          The registration procedure for this registry is Expert Review, per
+          <xref target="RFC8126" section="4.5" sectionFormat="comma"/>.
+          The Designated Expert only checks that the name of the
+          return option or return data tag being registered matches
+          the documentation, that the description field is accurate,
+          that the correct documents are referenced and that the list
+          of relevant documents is as complete as possible.
+          The Designated Expert can't reject a registration based on
+          personal dislike of the document defining a return option or
+          return data tag and should always err on the side of registering, 
+          even if documentation is not complete.
+        </t>
+        <t>
+          Addition of a new reference to an existing registration or
+          change to the description field goes through the same
+          registration procedure as a new registration.
+        </t>
+      </section>
+
+      <section numbered="true" toc="default">
+        <name>Initial IMAP ESEARCH Return Option and Data Tag
+        Registry</name>
+
+        <t>The following table is used to initialize the return
+        option and data tag registry.</t>
+
+        <table align="center">
+          <thead>
+            <tr>
+              <th>Return Option Name</th>
+              <th>Implied Return Data Tags</th>
+              <th>Description</th>
+              <th>References</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ALL</td>
+              <td>ALL</td>
+              <td>Return all message numbers/UIDs that
+              satisfy the SEARCH criteria.</td>
+              <td>
+                <xref target="RFC4731"
+                      section="3.1" sectionFormat="parens"/>,
+                <xref target="RFC9051"
+                      section="6.4.4" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>CONTEXT</td>
+              <td></td>
+              <td>Indicate that subsequent use of the
+              SEARCH criteria are likely.</td>
+              <td>
+                <xref target="RFC5267"
+                      section="4.2" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>COUNT</td>
+              <td>COUNT</td>
+              <td>Return number of the messages that
+              satisfy the SEARCH criteria.</td>
+              <td>
+                <xref target="RFC4731"
+                      section="3.1" sectionFormat="parens"/>,
+                <xref target="RFC9051"
+                      section="6.4.4" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>MAX</td>
+              <td>MAX</td>
+              <td>Return the highest message number/UID
+              that satisfies the SEARCH criteria</td>
+              <td>
+                <xref target="RFC4731"
+                      section="3.1" sectionFormat="parens"/>,
+                <xref target="RFC9051"
+                      section="6.4.4" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>MIN</td>
+              <td>MIN</td>
+              <td>Return the lowest message number/UID
+              that satisfies the SEARCH criteria.</td>
+              <td>
+                <xref target="RFC4731"
+                      section="3.1" sectionFormat="parens"/>,
+                <xref target="RFC9051"
+                      section="6.4.4" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>*</td>
+              <td>MODSEQ</td>
+              <td>The highest mod-sequence of all
+              messages in the set that satisfy the SEARCH criteria and
+              result options.</td>
+              <td>
+                <xref target="RFC4731"
+                      section="3.2" sectionFormat="parens"/>,
+                <xref target="RFC7162"
+                      section="3.1.5" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>PARTIAL</td>
+              <td>PARTIAL</td>
+              <td>Return a subset of the message
+              numbers/UIDs that satisfy the SEARCH criteria.</td>
+              <td>
+                <xref target="RFC5267"
+                      section="4.4" sectionFormat="parens"/>,
+                <xref target="I-D.ietf-extra-imap-partial"
+                      section="3.1" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>RELEVANCY</td>
+              <td>RELEVANCY</td>
+              <td>Return a relevancy score for each
+              message that satisfies the SEARCH criteria.</td>
+              <td>
+                <xref target="RFC6203"
+                      section="4" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>SAVE</td>
+              <td></td>
+              <td>Set the value of the search result
+              variable to the set of message numbers/UIDs that
+              satisfy the SEARCH criteria.</td>
+              <td>
+                <xref target="RFC5182"
+                      section="2" sectionFormat="parens"/>,
+                <xref target="RFC9051"
+                      section="6.4.4" sectionFormat="parens"/></td>
+            </tr>
+            <tr>
+              <td>UPDATE</td>
+              <td>ADDTO, REMOVEFROM</td>
+              <td>Request unsolicited notifications of updates to the
+              set of messages that satisfy the SEARCH criteria.</td>
+              <td>
+                <xref target="RFC5267"
+                      section="4.3" sectionFormat="parens"/></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan='4'>* Any set of return options (including
+              the empty set) plus the MODSEQ SEARCH criteria.
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </section>
+    </section>
+    <section anchor="seccons" numbered="true" toc="default">
+      <name>Security Considerations</name>
+      <t>
+      The sole purpose of this document is to create a new IANA
+      registry, so it doesn't create new security considerations for
+      IMAP implementations.
+      </t>
+      <t>
+      The new registry should help IMAP extension writers and IMAP
+      implementors track interactions between different IMAP
+      extensions, so it might improve quality of specifications and
+      implementations, including security aspects.
+      </t>
+    </section>
+  </middle>
+
+  <back>
+    <references>
+      <name>References</name>
+
+      <references>
+        <name>Normative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml"/>
+      </references>
+
+      <references>
+        <name>Informative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4466.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4731.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5182.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5267.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6203.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7162.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9051.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-imap-partial.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-action-registry.xml"/>
+      </references>
+
+    </references>
+
+    <section numbered="true" toc="default">
+      <name>Acknowledgements</name>
+      <t>
+        Portions of the text in the document have been borrowed from
+        <xref target="I-D.ietf-extra-sieve-action-registry"/>.
+      </t>
+    </section>
+  </back>
+</rfc>
