@@ -15,8 +15,8 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-05" updates=""
-     ipr="trust200902" obsoletes="8536"
+     docName="draft-murchison-rfc8536bis-06" updates=""
+     ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
   <!-- xml2rfc v2v3 conversion 3.9.0 -->
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-05"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-06"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -796,28 +796,23 @@
             </li>
 
             <li>
-              <t>DST is considered to be in effect all year if it
-            starts January 1 at 00:00 and ends December 31 at
-            24:00 plus the difference between daylight saving
-            and standard time, leaving no room for standard time
-            in the calendar.
+              <t>DST is considered to be in effect all year if its UT
+              offset is less than (i.e., west of) that of standard time,
+              and it starts January 1 at 00:00 and ends December 31 at
+              24:00 minus the difference between standard and daylight
+              saving time, leaving no room for standard time
+              in the calendar.
+              (POSIX implies but does not explicitly state this,
+              so it is spelled out here for clarity.)
               </t>
               <dl newline="true" spacing="normal">
-                <dt>Example: EST5EDT,0/0,J365/25</dt>
-                <dd>
-                  This represents a time zone that observes daylight
-                  saving time all year. It is 4 hours west of UT and
-                  is abbreviated "EDT".
-                  The "EST" is ignored.
-              </dd>
                 <dt>Example: XXX3EDT4,0/0,J365/23</dt>
                 <dd>
-                  This represents the same time zone as the previous
-                  example.
-                  It uses a DST further west of UTC than standard
-                  time.
+                  This represents a time zone that observes daylight
+                  saving time all year.  It is 4 hours west of UT and
+                  is abbreviated "EDT".
                   The "XXX" is ignored.
-              </dd>
+                </dd>
               </dl>
             </li>
           </ul>
@@ -3791,6 +3786,15 @@ EST5EDT,M3.2.0,M11.1.0
       <t>This section is to be removed by RFC Editor before publication.</t>
 
       <section numbered="true" toc="default">
+	<name>Since rfc8536bis-05</name>
+	<ul spacing="normal">
+          <li>Clarified the specification of an all-year daylight saving time
+          <xref target="tzstrext" format="default">TZ string</xref>,
+          and removed the EST5EDT example.</li>
+	</ul>
+      </section>
+
+      <section numbered="true" toc="default">
 	<name>Since rfc8536bis-04</name>
 	<ul spacing="normal">
           <li>None.</li>
@@ -3853,9 +3857,9 @@ EST5EDT,M3.2.0,M11.1.0
           <li>Addressed erratum <xref target="Err6426" format="default"/>
             and several other errors in the examples.</li>
 
-            <li>Clarified the all-year daylight saving time
-            <xref target="tzstrext" format="default">TZ string</xref>
-            example and added a similar example with negative DST.</li>
+            <li>Clarified the specification of an all-year daylight saving time
+            <xref target="tzstrext" format="default">TZ string</xref>,
+            and changed the example to use negative DST.</li>
 
             <li>Added informational notes to
             <xref target="v3example" format="default"/>.</li>
