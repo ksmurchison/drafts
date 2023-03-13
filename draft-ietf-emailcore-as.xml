@@ -265,6 +265,26 @@
           Hence, for reliable service, mail SHOULD NOT use addreses
           that contain single label domains. </t>
       </section>
+
+      <section numbered="true" toc="default">
+        <name>Use of the FOR clause in Received header fields</name>
+        <t>Email addresses are commonly classified as Personally
+        Identifiable Information (PII). Improper application of the
+        FOR clause in Received header fields can result in disclosure
+        of PII.  As such, the FOR clause MUST NOT be generated if the
+        message copy is associated with multiple recipients from
+        mutliple SMTP RCPT commands. Otherwise, the value of the FOR
+        clause MUST contain the RCPT address that caused the message
+        to be routed to the recipient of the given copy of the message.</t>
+
+        <t>Note however, that if a mail system generates a FOR clause
+        when there is only a single recipient, and doesn't generate
+        one when there are multiple recipients, the absence of the
+        field is an indication that there is another recipient, which
+        may allow someone to infer that a "blind" copy is
+        involved.</t>
+      </section>
+
       <section numbered="true" toc="default">
         <name>Use of SMTP Extensions</name>
         <t>As SMTP has evolved over the years, several extensions
@@ -788,9 +808,11 @@
         </ul>
       </section>
       <section numbered="true" toc="default">
-        <name>Changes from draft-ietf-emailcore-as-06 (2021-MM-DD) to -07</name>
+        <name>Changes from draft-ietf-emailcore-as-06 (2021-11-07) to -07</name>
         <ul spacing="normal">
-          <li> Miscellaneous editorial changes. </li>
+          <li>Added text addressing use of FOR clause in Received
+          hdeader fields (issue #55).</li>
+          <li>Miscellaneous editorial changes.</li>
         </ul>
       </section>
     </section>
