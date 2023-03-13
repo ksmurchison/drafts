@@ -65,7 +65,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-07"
+     docName="draft-ietf-emailcore-as-08"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -88,7 +88,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
 	   Core Email Protocols</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-07"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-08"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -267,25 +267,6 @@
       </section>
 
       <section numbered="true" toc="default">
-        <name>Use of the FOR clause in Received header fields</name>
-        <t>Email addresses are commonly classified as Personally
-        Identifiable Information (PII). Improper application of the
-        FOR clause in Received header fields can result in disclosure
-        of PII.  As such, the FOR clause MUST NOT be generated if the
-        message copy is associated with multiple recipients from
-        mutliple SMTP RCPT commands. Otherwise, the value of the FOR
-        clause MUST contain the RCPT address that caused the message
-        to be routed to the recipient of the given copy of the message.</t>
-
-        <t>Note however, that if a mail system generates a FOR clause
-        when there is only a single recipient, and doesn't generate
-        one when there are multiple recipients, the absence of the
-        field is an indication that there is another recipient, which
-        may allow someone to infer that a "blind" copy is
-        involved.</t>
-      </section>
-
-      <section numbered="true" toc="default">
         <name>Use of SMTP Extensions</name>
         <t>As SMTP has evolved over the years, several extensions
           have become ubiquitous.
@@ -355,6 +336,46 @@
       </section>
 
       <section numbered="true" toc="default">
+        <name>Use of Received Header Fields</name>
+
+        <section numbered="true" toc="default">
+          <name>Generation</name>
+          <t>Email addresses are commonly classified as Personally
+          Identifiable Information (PII). Improper application of the
+          FOR clause in Received header fields can result in disclosure
+          of PII.  As such, the FOR clause MUST NOT be generated if the
+          message copy is associated with multiple recipients from
+          mutliple SMTP RCPT commands. Otherwise, the value of the FOR
+          clause MUST contain the RCPT address that caused the message
+          to be routed to the recipient of the given copy of the message.</t>
+
+          <t>Note however, that if a mail system generates a FOR clause
+          when there is only a single recipient, and doesn't generate
+          one when there are multiple recipients, the absence of the
+          field is an indication that there is another recipient, which
+          may allow someone to infer that a "blind" copy is
+          involved.</t>
+        </section>
+
+        <section numbered="true" toc="default">
+          <name>Consumption</name>
+          <t>Received header fields are primarily for use when there are
+          concerns about a message, such as to analyze handling or
+          delivery problems, or to aid evaluation of a message with
+          suspicious content or attributes. Received header fields are
+          easily created and have no direct security or privacy
+          protections.</t>
+
+          <t>Therefore, the fields do not warrant automatic trust. They
+          should be used with care, for whatever information is deemed
+          valuable, and especially when syntax or values occur that are
+          not defined by the specifications
+          <xref target="I-D.ietf-emailcore-rfc5321bis"/>
+          <xref target="I-D.ietf-emailcore-rfc5322bis"/>.</t>
+        </section>
+      </section>
+
+      <section numbered="true" toc="default">
         <name>Use of Time Zones in Date and Received Header Fields</name>
         <t>Recommendations on the use of "-0000" as a time zone
         offset, etc (Issue #55)...</t>
@@ -419,6 +440,20 @@
         mail systems are discouraged from making any assumptions as to
         address equivalency or from making any changes to local-parts
         containing such delimiters.</t>
+      </section>
+
+      <section numbered="true" toc="default">
+        <name>Use of non-ASCII Characters</name>
+
+        <t>Proper generation and transmission of email addresses
+        containing non-ASCII characters is discussed in
+        <xref target="RFC6530"/>.
+        SMTP clients and servers that attempt to use the popular web
+        convention of Percent-Encoding non-ASCII characters
+        (see <xref target="RFC3986" section="2.1"/>)
+        SHALL NOT assume that a downstream system
+        will interpret the email address accordingly without prior
+        knowledge.</t>
       </section>
 
       <section numbered="true" toc="default">
@@ -697,8 +732,26 @@
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7672.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4880.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
+
+<!--        <xi:include
+     href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/> -->
+        <reference anchor="RFC6530" target="https://www.rfc-editor.org/info/rfc6530">
+          <front>
+            <title>Overview and Framework for Internationalized Email</title>
+            <author initials="J." surname="Klensin" fullname="John C. Klensin">
+              <organization/>
+            </author>
+            <author initials="Y." surname="Ko" fullname="YangWoo Ko">
+              <organization/>
+            </author>
+            <date year="2010" month="February"/>
+          </front>
+          <seriesInfo name="RFC" value="6530"/>
+          <seriesInfo name="DOI" value="10.17487/RFC6530"/>
+        </reference>
 
         <reference anchor="HTML" target="https://html.spec.whatwg.org/">
           <front>
@@ -808,10 +861,20 @@
         </ul>
       </section>
       <section numbered="true" toc="default">
-        <name>Changes from draft-ietf-emailcore-as-06 (2021-11-07) to -07</name>
+        <name>Changes from draft-ietf-emailcore-as-06 (2022-11-07) to -07</name>
         <ul spacing="normal">
           <li>Added text addressing use of FOR clause in Received
-          hdeader fields (issue #55).</li>
+          header fields (issue #55).</li>
+          <li>Miscellaneous editorial changes.</li>
+        </ul>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-07 (2022-03-13) to -08</name>
+        <ul spacing="normal">
+          <li>Added text addressing use of Received
+          header fields by MUAs (issue #85).</li>
+          <li>Added advice against use of Percent-Encoding non-ASCII
+          characters in email addresses (issue #78).</li>
           <li>Miscellaneous editorial changes.</li>
         </ul>
       </section>
