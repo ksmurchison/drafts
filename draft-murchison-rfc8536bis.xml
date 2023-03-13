@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-06" updates=""
+     docName="draft-murchison-rfc8536bis-07" updates=""
      ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-06"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-07"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -115,7 +115,7 @@
 
       <t>The following terms are used in this document
       (see <xref target="tz-link" format="default">
-      "Sources for Time Zone and Daylight Saving Time Data"</xref>
+      "Time zone and daylight saving time data"</xref>
       for more detailed information about civil timekeeping data and
       practice):
 	
@@ -141,12 +141,12 @@
           The time standard based on atomic clocks since 1972.
           It is equal to UTC but without leap-second adjustments.
         </dd>
-        <dt>Leap-Second:</dt>
+        <dt>Leap Second:</dt>
         <dd>
           A one second adjustment to keep UTC close to mean solar time
           at the prime meridian
           (see <xref target="ITU-R-TF.460" format="default"/>).
-          Each inserted or deleted leap-second occurs at the end of a
+          Each inserted or deleted leap second occurs at the end of a
           UTC month, that is, a month using the Gregorian calendar and
           the UTC timescale.
 	</dd>
@@ -369,7 +369,7 @@
 	          <xref target="POSIX" format="default"/>
 		  and MUST encode the POSIX portable character set as
 		  ASCII.
-		  The leap second table MUST NOT be
+		  The leap-second records MUST NOT be
                   <xref target="truncation" format="default">
                     truncated at the start</xref>,
 		  and MUST NOT contain an expiration time.
@@ -379,14 +379,14 @@
 		  Version 3 - The file MUST conform to all version 2
 		  requirements, except that any TZ string in the
 		  <xref target="footer" format="default">footer</xref>
-		  MAY use the TZ string extensions
+		  MAY use the TZ string extension
                   <xref target="tzstrext" format="default">
                     described below</xref>.
 	        </dd>
               <dt>'4' (0x34)</dt>
               <dd>
 		  Version 4 - The file MUST conform to all version 3
-		  requirements, except that the leap second table
+		  requirements, except that the leap-second records
 		  MAY be truncated at the start, and
 		  MAY contain an expiration time.
 	        </dd>
@@ -485,7 +485,7 @@
         <dl newline="false" spacing="normal">
           <dt>transition times:</dt>
           <dd>
-	      A series of four- or eight-octet UNIX leap-time values sorted
+	      A series of four- or eight-octet UNIX leap time values sorted
               in strictly ascending order.
               Each value is used as a transition time at which the rules
               for computing local time may change.
@@ -567,7 +567,7 @@
               NUL&nbhy;terminated (0x00) time zone designation strings.
               The total number of octets is specified by the
               "charcnt" field in the header.
-              Note that two designations MAY overlap if one is a
+              Two designations MAY overlap if one is a
               suffix of the other.
 	      The character encoding of time zone designation strings
 	      is not specified; however,
@@ -579,7 +579,7 @@
             <t>
               A series of eight- or twelve-octet records specifying
               the corrections that need to be applied to UTC in order to
-              determine TAI.
+              determine TAI, also known as the leap-second table.
               The records are sorted by the occurrence time in
               strictly ascending order.
               The number of records is specified by the
@@ -610,7 +610,7 @@
               <dd>
 	          A four- or eight-octet UNIX leap time value specifying the
 		  time at which a leap-second correction occurs
-		  or at which the leap second table expires.
+		  or at which the leap-second table expires.
 		  The first value, if present, MUST be nonnegative,
 		  and each leap second MUST occur at the end of a UTC
 		  month.
@@ -637,10 +637,32 @@
 		  previous correction by either
 		  one (1) for a positive leap second or
 		  minus one (-1) for a negative leap second,
-		  except that if there are two or more leap-second records
-		  the correction value of the last record MAY be the
-		  same as the second-to-last record, with the last record
+		  except that in version 4 files with two or more leap-second
+                  records, the correction value of the last two records
+                  MAY be the same, with the occurrence of last record
 		  indicating the expiration time of the leap-second table.
+                </t>
+
+                <t>
+                  The leap-second table expiration time is the time at
+                  which the table no longer records the presence or
+                  absence of future leap-second corrections, and
+                  post-expiration timestamps can not be accurately calculated.
+                  For example, a leap-second table published in
+                  January, which predicts the presence or absence of a
+                  leap second at June's end, might expire in
+                  mid-December because it is not known whether a leap
+                  second will occur at December's end.
+                </t>
+
+                <t>
+                  If leap seconds become permanently
+                  discontinued, as requested by the
+                  <xref target="CGPM-2022-R4">General Conference
+                  on Weights and Measures</xref>, leap-second tables
+                  published after the discontinuation time
+                  SHOULD NOT expire, since they will not be updated in
+                  the foreseeable future. 
                 </t>
               </dd>
             </dl>
@@ -698,7 +720,7 @@
         <t>A given pair of standard/wall and UT/local indicators is
         used to designate whether the corresponding transition time
         was specified as UT, standard time, or wall-clock time.
-        Note that there are only three combinations of the two
+        There are only three combinations of the two
         indicators, given that the standard/wall value MUST be one
         (1) if the UT/local value is one (1).
         This information can be useful if the transition times in a
@@ -745,7 +767,7 @@
               <xref target="POSIX" format="default"/> with ASCII
               encoding, possibly utilizing
               <xref target="tzstrext" format="default">
-              extensions described below</xref>
+              extension described below</xref>
               in version 3 and higher files.
 	      If the string is empty, the corresponding information is
 	      not available.
@@ -765,12 +787,36 @@
 	as the obsolescent version 1 format was designed before the
 	need for a footer was apparent.</t>
 
+        <section anchor="permdst" numbered="true" toc="default">
+          <name>All-Year Daylight Saving Time</name>
+
+          <t>DST is considered to be in effect all year if its UT
+          offset is less than (i.e., west of) that of standard time,
+          and it starts January 1 at 00:00 and ends December 31 at
+          24:00 minus the difference between standard and daylight
+          saving time, leaving no room for standard time
+          in the calendar.
+          <xref target="POSIX" format="default"/> implies, but does not
+          explicitly state this, so it is spelled out here for clarity.
+          </t>
+
+          <dl newline="true" spacing="normal">
+            <dt>Example: XXX3EDT4,0/0,J365/23</dt>
+            <dd>
+              This represents a time zone that is perpetually 4 hours
+              west of UT and is abbreviated "EDT".
+              The "XXX" is ignored.
+            </dd>
+          </dl>
+
+        </section>
+
         <section anchor="tzstrext" numbered="true" toc="default">
-          <name>TZ String Extensions</name>
+          <name>TZ String Extension</name>
 
           <t>The TZ string in a version 3 or higher TZif file MAY use the
-	  following extensions to POSIX TZ strings.
-	  These extensions are described using the terminology of
+	  following extension to POSIX TZ strings.
+	  This extension is described using the terminology of
             Section 8.3 of the "Base Definitions" volume of 
 	    <xref target="POSIX" format="default"/>.
           </t>
@@ -794,28 +840,11 @@
               </dd>
               </dl>
             </li>
-
-            <li>
-              <t>DST is considered to be in effect all year if its UT
-              offset is less than (i.e., west of) that of standard time,
-              and it starts January 1 at 00:00 and ends December 31 at
-              24:00 minus the difference between standard and daylight
-              saving time, leaving no room for standard time
-              in the calendar.
-              (POSIX implies but does not explicitly state this,
-              so it is spelled out here for clarity.)
-              </t>
-              <dl newline="true" spacing="normal">
-                <dt>Example: XXX3EDT4,0/0,J365/23</dt>
-                <dd>
-                  This represents a time zone that observes daylight
-                  saving time all year.  It is 4 hours west of UT and
-                  is abbreviated "EDT".
-                  The "XXX" is ignored.
-                </dd>
-              </dl>
-            </li>
           </ul>
+
+          <t>A TZif file that uses the above extensions
+          MUST be designated as version 3 (or higher),
+          even if a future version of POSIX adopts this extension.</t>
         </section>
       </section>
     </section>
@@ -837,7 +866,7 @@
 
         <li>Other than version 1, writers should generate the lowest
         version number needed by a file's data.  For example, a writer
-        should generate a version 4 file only if its leap second table
+        should generate a version 4 file only if its leap-second table
         either expires or is truncated at the start.  Likewise, a
         writer not generating a version 4 file should generate a
         version 3 file only if TZ string extensions are necessary to
@@ -859,7 +888,7 @@
 	agree with current readers about timestamps within the
 	contiguous sub-sequence.</li>
 
-        <li>When a TZif file contains a leap second table expiration
+        <li>When a TZif file contains a leap-second table expiration
 	time, TZif readers SHOULD either refuse to process
 	post-expiration timestamps, or process them as if the expiration
 	time did not exist (possibly with an error indication).</li>
@@ -916,8 +945,8 @@
       the Time Zone Information Format.  Such a service MUST indicate
       that it supports this format by including the media type
       <xref target="tzif" format="default">"application/tzif"</xref> in its
-      "capabilities" response (see Section 5.1 of
-      <xref target="RFC7808" format="default"/>).
+      "capabilities" response
+      (<xref target="RFC7808" section="5.1" format="default"/>).
       A TZDIST service MAY also include the media type 
       <xref target="tzif-leap" format="default">
         "application/tzif-leap"</xref> in its
@@ -926,17 +955,18 @@
       A TZDIST service MUST NOT advertise the "application/tzif-leap"
       media type without also advertising "application/tzif".</t>
 
-      <t>TZDIST clients MUST use the HTTP
-      <xref target="RFC7231" format="default">"Accept"</xref>
-      header field to indicate
+      <t>TZDIST clients MUST use the
+      <xref target="RFC9110" section="12.5.1" sectionFormat="comma"
+            format="default">HTTP "Accept" header field</xref>
+      to indicate
       their preference to receive data in the "application/tzif"
       and/or "application/tzif-leap" formats.</t>
 
       <section anchor="truncation" numbered="true" toc="default">
         <name>Truncating TZif Files</name>
 
-        <t>As described in Section 3.9 of
-        <xref target="RFC7808" format="default"/>,
+        <t>As described in
+        <xref target="RFC7808" section="3.9" format="default"/>,
         a TZDIST service MAY truncate time zone transition data.
         A truncated TZif file is valid from its first and up to, but
 	not including, its last version 2+ transition time, if present.</t>
@@ -955,7 +985,7 @@
 	records governing timestamps within the truncation range,
 	even if the first such record precedes the start point of
 	the truncation range.
-	If the truncated leap second table is nonempty,
+	If the truncated leap-second table is nonempty,
 	its first record MUST have a positive correction
 	if and only if it represents a positive leap second.</t>
 
@@ -987,10 +1017,11 @@
           Information Format.
         </t>
 
-        <t keepWithNext="true">Note that this example presumes that
+        <t keepWithNext="true">This example presumes that
         the time zone context path has been discovered
-        (see <xref target="RFC7808" format="default"/>,
-        Section 4.2.1) to be "/tzdist".
+        (see <xref target="RFC7808" section="4.2.1"
+        sectionFormat="comma" format="default"/>)
+        to be "/tzdist".
 
         </t>
         <artwork type="ascii-art" name="" align="left" alt=""><![CDATA[
@@ -1068,7 +1099,7 @@ EST5EDT,M3.2.0,M11.1.0
       data, and it does not define any extensible areas that
       could be used to store private data.</t>
 
-      <t>As discussed in Section 9 of <xref target="RFC7808" format="default"/>,
+      <t>As discussed in <xref target="RFC7808" section="9" format="default"/>,
       transmission of time zone data over an insecure communications
       channel could leak the past, current, or future location of a
       device or user.
@@ -1237,9 +1268,9 @@ EST5EDT,M3.2.0,M11.1.0
         <name>Normative References</name>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7808.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9110.xml"/>
 <!--        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.0020.xml"/>-->
 
         <reference anchor="RFC20" target="https://www.rfc-editor.org/info/rfc20">
@@ -1312,14 +1343,14 @@ EST5EDT,M3.2.0,M11.1.0
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8536.xml"/>
 
         <reference anchor="tz-link"
-                   target="https://www.iana.org/time-zones/repository/tz-link.html">
+                   target="https://www.iana.org/time-zones/tz-link.html">
           <front>
             <title>
-            Sources for Time Zone and Daylight Saving Time Data
+              Time zone and daylight saving time data
             </title>
             <author initials="P." surname="Eggert" fullname="Paul Eggert"/>
             <author initials="A.D." surname="Olson" fullname="Arthur David Olson"/>
-            <date year="2018"/>
+            <date year="2022"/>
           </front>
         </reference>
 
@@ -1331,6 +1362,17 @@ EST5EDT,M3.2.0,M11.1.0
               <organization/>
             </author>
             <date month="March" year="2021"/>
+          </front>
+        </reference>
+
+        <reference anchor="CGPM-2022-R4"
+                   target="https://www.bipm.org/en/cgpm-2022/resolution-4">
+          <front>
+            <title>Resolution 4 of the 27th CGPM (2022)</title>
+            <author initials='' surname='' fullname=''>
+              <organization>General Conference on Weights and Measures</organization>
+            </author>
+            <date month='November' year='2022'/>
           </front>
         </reference>
 
@@ -1439,7 +1481,7 @@ EST5EDT,M3.2.0,M11.1.0
         Atlantic Standard Time (-04).</li>
 
         <li>Some readers designed for version 2 or 3, and that require strict
-	conformance to RFC 8536, reject version 4 files whose leap second
+	conformance to RFC 8536, reject version 4 files whose leap-second
 	tables are truncated at the start or that end in expiration times.</li>
 
         <li>Some readers ignore the footer and instead predict future
@@ -1552,7 +1594,7 @@ EST5EDT,M3.2.0,M11.1.0
       <t>The following sections contain annotated hexadecimal dumps of
       example TZif files.</t>
 
-      <t>Note that these examples should only be considered informative.
+      <t>These examples should only be considered informative.
       Although the example data entries are current as of the
       publication date of this document, the data will likely change
       in the future as leap seconds are added and changes are made to
@@ -3458,12 +3500,12 @@ EST5EDT,M3.2.0,M11.1.0
           and standard/wall indicators in
           <xref target="data" format="default"/>).</li>
 
-          <li>The first leap second occurrence is the most recent one
+          <li>The first leap-second occurrence is the most recent one
           prior to the truncation time.</li>
 
-          <li>The last leap second correction matches the
-          second-to-last leap second correction, indicating the
-          expiration time of the leap second table.</li>
+          <li>The last leap-second correction matches the
+          second-to-last leap-second correction, indicating the
+          expiration time of the leap-second table.</li>
 
           <li>The TZ string value has been line-wrapped for
           presentation purposes only.</li>
@@ -3753,8 +3795,10 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Changes from RFC 8536</name>
 
       <ul spacing="normal">
+        <li>Added definition of Leap Second.</li>
+
         <li>Added specification of the version 4 format and the
-	optional leap second table truncation and expiration,
+	optional leap-second table truncation and expiration,
 	along with an example and relevant
 	interoperability considerations.</li>
 
@@ -3763,15 +3807,15 @@ EST5EDT,M3.2.0,M11.1.0
 	Added recommendation that this designation string should be
         used for timestamps excluded by TZif file truncation.</li>
 
+        <li>Required support in version 2 files for all-year daylight
+        saving time, using POSIX TZ strings with negative DST, as this
+        is not an extension to POSIX (<xref target="permdst"/>).</li>
+
         <li>Applied erratum <xref target="Err6435" format="default"/>.</li>
 
         <li>Addressed errata <xref target="Err6426" format="default"/>
         and <xref target="Err6757" format="default"/>
         as well as several other errors in the examples.</li>
-
-        <li>Clarified the all-year daylight saving time
-        <xref target="tzstrext" format="default">TZ string</xref>
-        example and added a similar example with negative DST.</li>
 
         <li>Added informational notes to
         <xref target="v3example" format="default"/>.</li>
@@ -3786,11 +3830,25 @@ EST5EDT,M3.2.0,M11.1.0
       <t>This section is to be removed by RFC Editor before publication.</t>
 
       <section numbered="true" toc="default">
+	<name>Since rfc8536bis-06</name>
+	<ul spacing="normal">
+          <li>Moved the specification of an all-year daylight saving time
+          <xref target="permdst" format="default">TZ string</xref>,
+          to its own section as it is NOT an extension.</li>
+          <li>Noted that should leap seconds to become discontinued
+          that leap-second tables SHOULD NOT expire.</li>
+          <li>Updated "tz-link" title and reference.</li>
+          <li>Updated reference to RFC 7231 to RFC 9110.</li>
+          <li>Miscellaneous editorial changes.</li>
+	</ul>
+      </section>
+
+      <section numbered="true" toc="default">
 	<name>Since rfc8536bis-05</name>
 	<ul spacing="normal">
           <li>Clarified the specification of an all-year daylight saving time
-          <xref target="tzstrext" format="default">TZ string</xref>,
-          and removed the EST5EDT example.</li>
+          <xref target="permdst" format="default">TZ string</xref>,
+          and changed the example to use negative DST.</li>
 	</ul>
       </section>
 
@@ -3806,7 +3864,7 @@ EST5EDT,M3.2.0,M11.1.0
 	<ul spacing="normal">
           <li>Noted that erratum <xref target="Err6757" format="default"/>
           has been addressed.</li>
-          <li>Added a definition of Leap-Second, including UTC month.</li>
+          <li>Added a definition of Leap Second, including UTC month.</li>
 	</ul>
       </section>
 
@@ -3837,7 +3895,7 @@ EST5EDT,M3.2.0,M11.1.0
 
         <ul spacing="normal">
           <li>Added specification of the version 4 format and the
-	    optional leap second table truncation and expiration,
+	    optional leap-second table truncation and expiration,
 	    along with an example and relevant
 	    interoperability considerations.</li>
 
@@ -3858,7 +3916,7 @@ EST5EDT,M3.2.0,M11.1.0
             and several other errors in the examples.</li>
 
             <li>Clarified the specification of an all-year daylight saving time
-            <xref target="tzstrext" format="default">TZ string</xref>,
+            <xref target="permdst" format="default">TZ string</xref>,
             and changed the example to use negative DST.</li>
 
             <li>Added informational notes to
