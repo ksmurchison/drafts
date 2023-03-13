@@ -14,7 +14,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
      ipr="trust200902"
-     docName="draft-murchison-imap-list-metadata-00"
+     docName="draft-murchison-imap-list-metadata-01"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -22,13 +22,14 @@
      tocInclude="true"
      symRefs="true"
      sortRefs="true"
+     consensus="true"
      version="3">
   <!-- xml2rfc v2v3 conversion 3.14.2 -->
   <front>
     <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
     Mailbox METADATA in Extended LIST</title>
     <seriesInfo name="Internet-Draft"
-                value="draft-murchison-imap-list-metadata-00"/>
+                value="draft-murchison-imap-list-metadata-01"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -91,16 +92,20 @@
       <t>In examples, "C:" indicates lines sent by a client that is connected
       to a server.  "S:" indicates lines sent by the server to the
       client.</t>
+
       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
       NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
       "MAY", and "OPTIONAL" in this document are to be interpreted as
-      described in <xref target="RFC2119" format="default"/>.</t>
+      described in BCP&nbsp;14 <xref target="RFC2119"/>
+      <xref target="RFC8174"/> 
+      when, and only when, they appear in all capitals, as shown here.
+      </t>
     </section>
     <!-- Intro -->
     
     <section anchor="metadata" numbered="true" toc="default">
       <name>METADATA Return Option to LIST Command</name>
-      <t><xref target="RFC5464" format="default"/> defines the
+      <t><xref target="RFC5464"/> defines the
       GETMETADATA command which is 
       used by an IMAP client to retrieve mailbox annotations.
       Sometimes,
@@ -119,7 +124,7 @@
       The untagged METADATA responses to an extended LIST command have
       the same syntax and semantics as those that would be returned by
       GETMETADATA commands on the same set of listable mailboxes.
-      As per <xref target="RFC5464" format="default"/>, the server may
+      As per <xref target="RFC5464"/>, the server may
       return all requested annotations in a single METADATA response
       for each mailbox, or it may split the requested annotations into
       multiple METADATA responses for each mailbox, if it desires.</t>
@@ -178,12 +183,12 @@ S: A02 OK List completed.
     <section numbered="true" toc="default">
       <name>Formal Syntax</name>
       <t>The following syntax specification uses the augmented Backus-Naur
-      Form (BNF) as described in <xref target="RFC5234" format="default"/>.
+      Form (BNF) as described in <xref target="RFC5234"/>.
 
       Note that "return-option" is defined in
-      <xref target="RFC5258" format="default"/>
+      <xref target="RFC5258"/>
       and "entry" is defined in
-      <xref target="RFC5464" format="default"/>.</t>
+      <xref target="RFC5464"/>.</t>
 
       <artwork name="" type="" align="left" alt=""><![CDATA[
 return-option =/ "METADATA" "(" entry *(SP entry) ")"
@@ -194,13 +199,13 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
       <name>Security Considerations</name>
       <t>This specification does not introduce any additional security
       concerns beyond those described in
-      <xref target="RFC5258" format="default"/>.</t>
+      <xref target="RFC5258"/>.</t>
     </section>
     <section anchor="privacy" numbered="true" toc="default">
       <name>Privacy Considerations</name>
       <t>This specification does not introduce any additional privacy
       concerns beyond those described in
-      <xref target="RFC5464" format="default"/>.</t>
+      <xref target="RFC5464"/>.</t>
     </section>
 
     <section numbered="true" toc="default">
@@ -208,14 +213,14 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
       <section numbered="true" toc="default">
         <name>Registration of IMAP capability LIST-METADATA</name>
         <t>This document defines the "LIST-METADATA" IMAP capability
-        to be added to the registry defined in Section 12 of
-        <xref target="RFC3501" format="default"/>.</t>
+        to be added to the registry defined in
+        <xref target="RFC9051" section="12.1"/>.</t>
       </section>
       <section numbered="true" toc="default">
         <name>Registration of LIST-EXTENDED option METADATA</name>
         <t>This section registers the "METADATA" option to be added to the
-        registry defined in Section 9 of
-        <xref target="RFC5258" format="default"/>.
+        registry defined in
+        <xref target="RFC5258" section="9"/>.
         </t>
         <dl newline="true" spacing="normal">
           <dt>LIST-EXTENDED option name:</dt>
@@ -233,11 +238,11 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
 	  </dd>
           <dt>Published specification:</dt>
           <dd>
-	    RFC XXXX, <xref target="metadata" format="default"/>
+	    RFC XXXX, <xref target="metadata"/>
           </dd>
           <dt>Security considerations:</dt>
           <dd>
-	    RFC XXXX, <xref target="security" format="default"/>
+	    RFC XXXX, <xref target="security"/>
           </dd>
           <dt>Intended usage:</dt>
           <dd>
@@ -260,7 +265,7 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
     <section numbered="true" toc="default">
       <name>Acknowledgments</name>
       <t>This document is based largely on
-      <xref target="RFC5819" format="default"/>.
+      <xref target="RFC5819"/>.
       The author would like to thank the authors of that document for
       providing both inspiration and some borrowed text for this
       document.</t>
@@ -278,10 +283,11 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
       <references>
         <name>Normative References</name>
         <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
         <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5258.xml"?>
         <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml"?>
         <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5464.xml"?>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
+        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9051.xml"?>
       </references>
 <!--
       <references>
@@ -290,29 +296,16 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
         </references>
 -->
     </references>
-<!--
+
     <section numbered="true" toc="default">
       <name>Change History (To be removed by RFC Editor before     publication)</name>
-      <t>Changes from draft-ietf-extra-imap-list-myrights-00:
+      <t>Changes from draft-murchison-imap-list-metadata-00:
       </t>
       <ul spacing="normal">
-        <li>Corrected contact email address in IANA registration.</li>
-        <li>Fixed typos (extra SP) in examples.</li>
-      </ul>
-      <t>Changes from draft-murchison-imap-list-myrights-01:
-      </t>
-      <ul spacing="normal">
-        <li>Renamed document to be a work product of the EXTRA WG.</li>
-        <li>Updated authors' addresses.</li>
-      </ul>
-      <t>Changes from draft-murchison-imap-list-myrights-00:
-      </t>
-      <ul spacing="normal">
-        <li>Augmented Introduction with mention of "LIST-MYRIGHTS"
-        capability string.</li>
-        <li>Minor editorial changes.</li>
+        <li>Updated Keywords boilerplate.</li>
+        <li>Changed RFC 3501 reference to RFC 9051.</li>
       </ul>
     </section>
--->
+
   </back>
 </rfc>
