@@ -12,15 +12,15 @@
 <?rfc compact="yes"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     ipr="trust200902" updates="5232"
-     docName="draft-ietf-extra-sieve-snooze-06" obsoletes=""
+     ipr="trust200902"
+     docName="draft-ietf-extra-sieve-snooze-07" obsoletes=""
      submissionType="IETF" consensus="true" xml:lang="en"
      tocInclude="true" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.16.0 -->
 
   <front>
     <title abbrev="Sieve Snooze">Sieve Email Filtering: Snooze Extension</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-extra-sieve-snooze-06"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-extra-sieve-snooze-07"/>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
@@ -71,7 +71,7 @@
       delivery of an incoming email message into a target mailbox
       until a later point in time.</t>
     </abstract>
-    <!--
+<!--
     <note title="Open Issues">
       <t>
         <list style="symbols">
@@ -80,6 +80,7 @@
     </note>
 -->
   </front>
+
   <middle>
     <section numbered="true" toc="default">
       <name>Introduction</name>
@@ -87,29 +88,20 @@
       respond to email messages at the time of their arrival.
       Sometimes it is desirable to have messages appear in a mailbox
       at a more convenient time for the user to act upon them.</t>
-      <!--
-      <t>This document defines a new Sieve action command "snooze"
-      that postpones filing a message into a target mailbox until a
-      later point in time.
-      The capability string associated with this extension is
-      "snooze".</t>
 
-      <t>This document defines a new Sieve action command that enables
-      sieve scripts to postpone the filing a message into a target
-      mailbox until a later point in time.
-      The capability string associated with this extension is
-      "snooze".</t>
--->
       <t>This document defines an extension to the
       <xref target="RFC5228" format="default">Sieve language</xref> that enables
       scripts to postpone the delivery of a message into a target
       mailbox until a later point in time.</t>
     </section>
+
     <section numbered="true" toc="default">
       <name>Conventions Used in This Document</name>
-      <t>Conventions for notations are as in <xref target="RFC5228" section="1.1"/>,
+      <t>Conventions for notations are as in
+      <xref target="RFC5228" section="1.1"/>,
       including use of the "Usage:" label for the
       definition of action and tagged arguments syntax.</t>
+
       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
       NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
       "MAY", and "OPTIONAL" in this document are to be interpreted as
@@ -117,22 +109,22 @@
       <xref target="RFC2119"/> <xref target="RFC8174"/> 
       when, and only when, they appear in all capitals, as shown
       here.</t>
-    </section>
-    <!-- Intro -->
+    </section> <!-- Intro -->
 
     <section anchor="capability" numbered="true" toc="default">
       <name>Capability Identifier</name>
       <t>Sieve implementations that support this extension have
       an identifier of "snooze" for use with the capability mechanism.</t>
     </section>
+
     <section anchor="snooze" numbered="true" toc="default">
       <name>Snooze Action</name>
       <artwork name="" type="" align="left" alt=""><![CDATA[
 Usage: snooze *AWAKEN-OPTIONS <times: string-list>
 ]]></artwork>
       <t keepWithNext="true">The AWAKEN-OPTIONS argument is defined here
-        in <xref target="RFC4234" format="default">ABNF</xref> syntax so that it can be
-        modified by other extensions.</t>
+        in <xref target="RFC5234" format="default">ABNF</xref> syntax
+        so that it can be modified by other extensions.</t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
 AWAKEN-OPTIONS = MAILBOX / WEEKDAYS / TZID
                   ; each option MUST NOT appear more than once
@@ -151,27 +143,22 @@ TZID     = ":tzid" string
       fileinto action (see <xref target="RFC5228" section="4.1"/>).
       The arguments of the snooze action specify when, where, and
       how the awakened message will be filed.</t>
-      <!--
-      <t>The process of actually snoozing and awakening (delaying the
-      filing of) the message is implementation specific and outside
-      the scope of this document.
-      However, <xref target='snoozing'/> discusses possible
-      methods for implementing the snooze action.</t>
--->
 
       <t>The process of actually snoozing the message is
       implementation specific and outside the scope of this document.
       However, implementations MUST ensure that the intended recipient
       has access to the message while snoozed.</t>
-      <t>To that end, a Sieve interpreter MAY implement the snooze action by
+
+      <t>To that end, a Sieve interpreter could implement the snooze action by
       delivering the message to a special "snoozed" mailbox within its
       mailstore.
-      <xref target="RFC3501">IMAP</xref> and <xref target="RFC8621">JMAP</xref>
-      servers MUST apply the <xref target="snoozed">"Snoozed"</xref>
-      attribute to this mailbox.
+      <xref target="RFC9051">IMAP</xref> and <xref target="RFC8621">JMAP</xref>
+      servers utilizing such a mailbox MUST apply the
+      <xref target="snoozed">"Snoozed"</xref> attribute to it.
       The message will reside in this special mailbox until the
       prescribed awaken time at which it will be moved into the
       specified target mailbox.</t>
+
       <section anchor="mailboxarg" numbered="true" toc="default">
         <name>Mailbox Argument</name>
         <t>The optional :mailbox argument is used to specify the target
@@ -186,6 +173,7 @@ TZID     = ":tzid" string
         the user's "INBOX" would be the implicit target for
         awakening messages.</t>
       </section>
+
       <section anchor="weekdays" numbered="true" toc="default">
         <name>Weekdays Argument</name>
         <t>The optional :weekdays argument specifies the set of days
@@ -198,6 +186,7 @@ TZID     = ":tzid" string
         <t>If :weekdays is omitted, the set of awakening times applies
         to every day of the week.</t>
       </section>
+
       <section anchor="times" numbered="true" toc="default">
         <name>Times and TZID Arguments</name>
         <t>The required times argument, along with the optional :tzid
@@ -212,6 +201,7 @@ TZID     = ":tzid" string
         If :tzid is omitted, the time zone of the Sieve
         interpreter is used.
         </t>
+
         <t>The combination of the weekdays and times form a
         chronological list of awaken times.  When a message is
         snoozed, it is assigned the next future awaken time in the
@@ -219,6 +209,7 @@ TZID     = ":tzid" string
         or after the last awaken time on a given day,
         the first awaken time on the next available day is used.
         </t>
+
         <t>If the local time in the specified time zone occurs more
         than once (daylight saving to standard time transition), the
         first occurrence of the specified time value is used.
@@ -226,6 +217,7 @@ TZID     = ":tzid" string
         (standard to daylight saving time transition), the specified
         time value is interpreted using the UTC offset prior to the
         transition.</t>
+
         <section numbered="true" toc="default">
           <name>Awaken Times Examples</name>
           <t>The following examples show, given the specified snooze
@@ -348,6 +340,7 @@ snooze :tzid "America/New_York" "02:30:00";
           </table>
         </section>
       </section>
+
       <section anchor="extensions" numbered="true" toc="default">
         <name>Interaction with Extensions to the Fileinto Action</name>
         <t>Some tagged arguments defined in extensions to the fileinto
@@ -356,10 +349,12 @@ snooze :tzid "America/New_York" "02:30:00";
         Tagged arguments in future extensions to the fileinto action
         need to describe their interaction with the snooze extension,
         if any.</t>
+
         <t>When any fileinto extension arguments are used with the
         snooze extension, the corresponding extension MUST be enabled,
         and the arguments are defined to have the same syntax,
         semantics, and treatment as they do with the fileinto action.</t>
+
         <section anchor="imap4flags" numbered="true" toc="default">
           <name>Imap4flags Extension</name>
           <t>When the <xref target="RFC5232">"imap4flags"</xref>
@@ -373,20 +368,23 @@ ADDFLAGS    = ":addflags" string-list
 REMOVEFLAGS = ":removeflags" string-list
 ]]></artwork>
           <t>The optional :addflags and :removeflags arguments are used
-          to specify which <xref target="RFC3501">IMAP</xref> flags
+          to specify which <xref target="RFC9051">IMAP</xref> flags
           should be added to and/or removed from the set of IMAP flags
           present on the snoozed message at the time of awakening.
           Note the set of IMAP flags present at the time of awakening may
           be the empty set.</t>
+
           <t>If the "setflag" and/or "addflag" actions have been used to
           store IMAP flags in the imap4flags internal variable,
           the Sieve interpreter MUST use the current value of the
           internal variable as the set of flags to associate with the
           message when storing it into the "snoozed" mailbox.</t>
+
           <t>This document doesn't dictate how the Sieve interpreter
           will set the IMAP flags.
           In particular, the Sieve interpreter may work as an IMAP
           client or may have direct access to the mailstore.</t>
+
           <t>The general requirements for flag handling specified in
           <xref target="RFC5232" section="2"/> MUST be followed.</t>
           <section numbered="true" toc="default">
@@ -414,6 +412,7 @@ if anyof(header :is "from" "boss@example.com",
 ]]></artwork>
           </section>
         </section>
+
         <section anchor="mailboxext" numbered="true" toc="default">
           <name>Mailbox Extension</name>
           <t>This document extends the definition of the
@@ -430,6 +429,7 @@ CREATE = ":create"
           target mailbox, if needed, before attempting to file the
           awakened message into the target mailbox.</t>
         </section>
+
         <section anchor="specialuse" numbered="true" toc="default">
           <name>Special-Use Extension</name>
           <t>This document extends the definition of the
@@ -451,6 +451,7 @@ SPECIAL-USE = ":specialuse" string
           is instructed to create the target mailbox per
           <xref target="RFC8579" section="4.1"/>, if needed.</t>
         </section>
+
         <section anchor="mailboxid" numbered="true" toc="default">
           <name>MailboxID Extension</name>
           <t>This document extends the definition of the
@@ -472,53 +473,10 @@ MAILBOXID = ":mailboxid" string
           <t>It is an error to specify both ":mailboxid" and
           ":specialuse" in the same snooze action.</t>
         </section>
-      </section>
-      <!-- extensions -->
+      </section> <!-- extensions -->
 
-    </section>
-    <!-- snooze -->
-<!--
-    <section title='Mechanics of Snoozing Messages' anchor='snoozing'>
-      <t>The process of snoozing is implementation specific and
-      outside the scope of this document.
-      However, the sections below outline possible methods of snoozing
-      and awakening a message to be filed.</t>
+    </section> <!-- snooze -->
 
-      <section title='SMTP Future Message Release' anchor='futurerelease'>
-        <t>A Sieve interpreter may implement the snooze action by
-        leveraging the
-        <xref target='RFC4865'>SMTP Future Message Release</xref>
-        submission extension.
-        The message would be snoozed by queuing it for redelivery with
-        a release time that corresponds to the calculated awaken time.
-        The target mailbox for the awakened message would need to be
-        encoded into the recipient address or into a message header
-        field. Care MUST be taken to prevent the awakened
-        message from being re-snoozed by the Sieve script and causing
-        a message loop.</t>
-      </section>
-
-      <section title='"Snoozed" Mailbox' anchor='snoozedmbox'>
-        <t>A Sieve interpreter may implement the snooze action by
-        leveraging the user&apos;s existing mail store.
-        The message would be snoozed by storing the message in a
-        special "snoozed" mailbox and then moved into the target
-        mailbox at the calculated awaken time.</t>
-
-        <t>If a user&apos;s Sieve script enables the
-        <xref target='RFC5232'>"imap4flags"</xref> extension,
-        and if the "setflag" and/or "addflag" actions have been used to
-        store IMAP flags in the imap4flags internal variable,
-        the Sieve interpreter MAY use the current value of the
-        internal variable as the set of flags to associate with the
-        message when storing it into the "snoozed" mailbox.
-        Note that in this case, the ":addflag" and ":removeflag"
-        tagged arguments to the snooze action operate on this set of
-        flags, but MUST NOT do so until the message is awakened.</t>
-      </section>
-
-    </section>
--->
     <section anchor="impl" numbered="true" toc="default">
       <name>Implementation Status</name>
       <t>&lt; RFC Editor: before publication please remove this section
@@ -544,9 +502,11 @@ MAILBOXID = ":mailboxid" string
 	experimentation and feedback that have made the implemented
 	protocols more mature.  It is up to the individual working
 	groups to use this information as they see fit".</t>
+
       <section anchor="cyrus" toc="exclude" numbered="true">
         <name>Cyrus Server</name>
-        <t>The open source <eref target="http://www.cyrusimap.org/">Cyrus Server</eref> project
+        <t>The open source
+        <eref target="http://www.cyrusimap.org/">Cyrus Server</eref> project
         is a highly scalable enterprise mail system which supports
 	Sieve email filtering at the point of final delivery.  This
         production level Sieve implementation supports all of the
@@ -555,8 +515,7 @@ MAILBOXID = ":mailboxid" string
 	<eref target="http://www.cmu.edu/computing/">
           Computing Services at Carnegie Mellon University</eref>.</t>
       </section>
-    </section>
-    <!-- Implementations -->
+    </section> <!-- Implementations -->
  
     <section anchor="security" numbered="true" toc="default">
       <name>Security Considerations</name>
@@ -647,7 +606,8 @@ MAILBOXID = ":mailboxid" string
       <name>Acknowledgments</name>
       <t>The authors would like to thank the following individuals for
       contributing their ideas and support for writing this
-      specification: Ned Freed, Barry Leiba, and Alexey Melnikov.</t>
+      specification: Ned Freed, Barry Leiba, Alexey Melnikov, and Pete
+      Resnick.</t>
     </section>
   </middle>
   <back>
@@ -655,173 +615,21 @@ MAILBOXID = ":mailboxid" string
       <name>References</name>
       <references>
         <name>Normative References</name>
-        <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
-          <front>
-            <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-            <author fullname="S. Bradner" initials="S." surname="Bradner"/>
-            <date month="March" year="1997"/>
-            <abstract>
-              <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized.  This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="BCP" value="14"/>
-          <seriesInfo name="RFC" value="2119"/>
-          <seriesInfo name="DOI" value="10.17487/RFC2119"/>
-        </reference>
-        <reference anchor="RFC2342" target="https://www.rfc-editor.org/info/rfc2342" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2342.xml">
-          <front>
-            <title>IMAP4 Namespace</title>
-            <author fullname="M. Gahrns" initials="M." surname="Gahrns"/>
-            <author fullname="C. Newman" initials="C." surname="Newman"/>
-            <date month="May" year="1998"/>
-            <abstract>
-              <t>This document defines a NAMESPACE command that allows a client to discover the prefixes of namespaces used by a server for personal mailboxes, other users' mailboxes, and shared mailboxes. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="2342"/>
-          <seriesInfo name="DOI" value="10.17487/RFC2342"/>
-        </reference>
-        <reference anchor="RFC3501" target="https://www.rfc-editor.org/info/rfc3501" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml">
-          <front>
-            <title>INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1</title>
-            <author fullname="M. Crispin" initials="M." surname="Crispin"/>
-            <date month="March" year="2003"/>
-            <abstract>
-              <t>The Internet Message Access Protocol, Version 4rev1 (IMAP4rev1) allows a client to access and manipulate electronic mail messages on a server.  IMAP4rev1 permits manipulation of mailboxes (remote message folders) in a way that is functionally equivalent to local folders.  IMAP4rev1 also provides the capability for an offline client to resynchronize with the server.  IMAP4rev1 includes operations for creating, deleting, and renaming mailboxes, checking for new messages, permanently removing messages, setting and clearing flags, RFC 2822 and RFC 2045 parsing, searching, and selective fetching of message attributes, texts, and portions thereof.  Messages in IMAP4rev1 are accessed by the use of numbers.  These numbers are either message sequence numbers or unique identifiers.  IMAP4rev1 supports a single server.  A mechanism for accessing configuration information to support multiple IMAP4rev1 servers is discussed in RFC 2244.  IMAP4rev1 does not specify a means of posting mail; this function is handled by a mail transfer protocol such as RFC 2821. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="3501"/>
-          <seriesInfo name="DOI" value="10.17487/RFC3501"/>
-        </reference>
-        <reference anchor="RFC4234" target="https://www.rfc-editor.org/info/rfc4234" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4234.xml">
-          <front>
-            <title>Augmented BNF for Syntax Specifications: ABNF</title>
-            <author fullname="D. Crocker" initials="D." role="editor" surname="Crocker"/>
-            <author fullname="P. Overell" initials="P." surname="Overell"/>
-            <date month="October" year="2005"/>
-            <abstract>
-              <t>Internet technical specifications often need to define a formal syntax.  Over the years, a modified version of Backus-Naur Form (BNF), called Augmented BNF (ABNF), has been popular among many Internet specifications.  The current specification documents ABNF.  It balances compactness and simplicity, with reasonable representational power.  The differences between standard BNF and ABNF involve naming rules, repetition, alternatives, order-independence, and value ranges.  This specification also supplies additional rule definitions and encoding for a core lexical analyzer of the type common to several Internet specifications. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="4234"/>
-          <seriesInfo name="DOI" value="10.17487/RFC4234"/>
-        </reference>
-        <reference anchor="RFC5228" target="https://www.rfc-editor.org/info/rfc5228" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5228.xml">
-          <front>
-            <title>Sieve: An Email Filtering Language</title>
-            <author fullname="P. Guenther" initials="P." role="editor" surname="Guenther"/>
-            <author fullname="T. Showalter" initials="T." role="editor" surname="Showalter"/>
-            <date month="January" year="2008"/>
-            <abstract>
-              <t>This document describes a language for filtering email messages at time of final delivery.  It is designed to be implementable on either a mail client or mail server.  It is meant to be extensible, simple, and independent of access protocol, mail architecture, and operating system.  It is suitable for running on a mail server where users may not be allowed to execute arbitrary programs, such as on black box Internet Message Access Protocol (IMAP) servers, as the base language has no variables, loops, or ability to shell out to external programs. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="5228"/>
-          <seriesInfo name="DOI" value="10.17487/RFC5228"/>
-        </reference>
-        <reference anchor="RFC5232" target="https://www.rfc-editor.org/info/rfc5232" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5232.xml">
-          <front>
-            <title>Sieve Email Filtering: Imap4flags Extension</title>
-            <author fullname="A. Melnikov" initials="A." surname="Melnikov"/>
-            <date month="January" year="2008"/>
-            <abstract>
-              <t>Recent discussions have shown that it is desirable to set different IMAP (RFC 3501) flags on message delivery. This can be done, for example, by a Sieve interpreter that works as a part of a Mail Delivery Agent.</t>
-              <t>This document describes an extension to the Sieve mail filtering language for setting IMAP flags. The extension allows setting of both IMAP system flags and IMAP keywords. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="5232"/>
-          <seriesInfo name="DOI" value="10.17487/RFC5232"/>
-        </reference>
-        <reference anchor="RFC5490" target="https://www.rfc-editor.org/info/rfc5490" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5490.xml">
-          <front>
-            <title>The Sieve Mail-Filtering Language -- Extensions for Checking Mailbox Status and Accessing Mailbox Metadata</title>
-            <author fullname="A. Melnikov" initials="A." surname="Melnikov"/>
-            <date month="March" year="2009"/>
-            <abstract>
-              <t>This memo defines an extension to the Sieve mail filtering language (RFC 5228) for accessing mailbox and server annotations, checking for mailbox existence, and controlling mailbox creation on "fileinto" action. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="5490"/>
-          <seriesInfo name="DOI" value="10.17487/RFC5490"/>
-        </reference>
-        <reference anchor="RFC8174" target="https://www.rfc-editor.org/info/rfc8174" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
-          <front>
-            <title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
-            <author fullname="B. Leiba" initials="B." surname="Leiba"/>
-            <date month="May" year="2017"/>
-            <abstract>
-              <t>RFC 2119 specifies common key words that may be used in protocol specifications.  This document aims to reduce the ambiguity by clarifying that only UPPERCASE usage of the key words have the defined special meanings.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="BCP" value="14"/>
-          <seriesInfo name="RFC" value="8174"/>
-          <seriesInfo name="DOI" value="10.17487/RFC8174"/>
-        </reference>
-        <reference anchor="RFC8474" target="https://www.rfc-editor.org/info/rfc8474" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml">
-          <front>
-            <title>IMAP Extension for Object Identifiers</title>
-            <author fullname="B. Gondwana" initials="B." role="editor" surname="Gondwana"/>
-            <date month="September" year="2018"/>
-            <abstract>
-              <t>This document updates RFC 3501 (IMAP4rev1) with persistent identifiers on mailboxes and messages to allow clients to more efficiently reuse cached data when resources have changed location on the server.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="8474"/>
-          <seriesInfo name="DOI" value="10.17487/RFC8474"/>
-        </reference>
-        <reference anchor="RFC8579" target="https://www.rfc-editor.org/info/rfc8579" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml">
-          <front>
-            <title>Sieve Email Filtering: Delivering to Special-Use Mailboxes</title>
-            <author fullname="S. Bosch" initials="S." surname="Bosch"/>
-            <date month="May" year="2019"/>
-            <abstract>
-              <t>The SPECIAL-USE capability of the IMAP protocol (RFC 6154) allows clients to identify special-use mailboxes, e.g., where draft or sent messages should be put.  This simplifies client configuration.  In contrast, the Sieve mail filtering language (RFC 5228) currently has no such capability.  This memo defines a Sieve extension that fills this gap: it adds a test for checking whether a special-use attribute is assigned for a particular mailbox or any mailbox, and it adds the ability to file messages into a mailbox identified solely by a special-use attribute.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="8579"/>
-          <seriesInfo name="DOI" value="10.17487/RFC8579"/>
-        </reference>
-        <reference anchor="RFC8457" target="https://www.rfc-editor.org/info/rfc8457" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8457.xml">
-          <front>
-            <title>IMAP "$Important" Keyword and "\Important" Special-Use Attribute</title>
-            <author fullname="B. Leiba" initials="B." role="editor" surname="Leiba"/>
-            <date month="September" year="2018"/>
-            <abstract>
-              <t>RFC 6154 created an IMAP special-use LIST extension and defined an initial set of attributes.  This document defines a new attribute, "\Important", and establishes a new IANA registry for IMAP folder attributes, which include the attributes defined in RFCs 5258, 3501, and 6154.  This document also defines a new IMAP keyword, "$Important", and registers it in the registry defined in RFC 5788.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="8457"/>
-          <seriesInfo name="DOI" value="10.17487/RFC8457"/>
-        </reference>
-        <reference anchor="RFC9042" target="https://www.rfc-editor.org/info/rfc9042" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9042.xml">
-          <front>
-            <title>Sieve Email Filtering: Delivery by MAILBOXID</title>
-            <author fullname="B. Gondwana" initials="B." role="editor" surname="Gondwana"/>
-            <date month="June" year="2021"/>
-            <abstract>
-              <t>The OBJECTID capability of IMAP (RFC 8474) allows clients to identify mailboxes by a unique identifier that survives renaming.</t>
-              <t>This document extends the Sieve email filtering language (RFC 5228) to allow using that same unique identifier as a target for fileinto rules and for testing the existence of mailboxes.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="9042"/>
-          <seriesInfo name="DOI" value="10.17487/RFC9042"/>
-        </reference>
-        <reference anchor="I-D.ietf-extra-sieve-action-registry" target="https://datatracker.ietf.org/doc/html/draft-ietf-extra-sieve-action-registry-05" xml:base="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-action-registry.xml">
-          <front>
-            <title>IANA registry for Sieve actions</title>
-            <author fullname="Alexey Melnikov" initials="A." surname="Melnikov">
-              <organization>Isode Ltd</organization>
-            </author>
-            <author fullname="Kenneth Murchison" initials="K." surname="Murchison">
-              <organization>Fastmail US LLC</organization>
-            </author>
-            <date day="21" month="December" year="2022"/>
-            <abstract>
-              <t>Sieve Email Filtering Language (RFC 5228) is a popular email filtering language used upon final mail delivery. This document creates a registry of Sieve (RFC 5228) actions in order to help developers and Sieve extension writers track interactions between different extensions.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="Internet-Draft" value="draft-ietf-extra-sieve-action-registry-05"/>
-        </reference>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2342.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9051.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5228.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5232.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5490.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8474.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8579.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8457.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9042.xml"/>
+
+        <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-extra-sieve-action-registry.xml"/>
+
         <reference anchor="tzdb" target="https://www.iana.org/time-zones">
           <front>
             <title>Time Zone Database</title>
@@ -832,82 +640,45 @@ MAILBOXID = ":mailboxid" string
           </front>
         </reference>
       </references>
+
       <references>
         <name>Informative References</name>
-        <!--      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4865.xml"?>-->
-      <reference anchor="RFC5260" target="https://www.rfc-editor.org/info/rfc5260" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml">
-          <front>
-            <title>Sieve Email Filtering: Date and Index Extensions</title>
-            <author fullname="N. Freed" initials="N." surname="Freed"/>
-            <date month="July" year="2008"/>
-            <abstract>
-              <t>This document describes the "date" and "index" extensions to the Sieve email filtering language.  The "date" extension gives Sieve the ability to test date and time values in various ways.  The "index" extension provides a means to limit header and address tests to specific instances of header fields when header fields are repeated. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="5260"/>
-          <seriesInfo name="DOI" value="10.17487/RFC5260"/>
-        </reference>
-        <reference anchor="RFC5231" target="https://www.rfc-editor.org/info/rfc5231" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5231.xml">
-          <front>
-            <title>Sieve Email Filtering: Relational Extension</title>
-            <author fullname="W. Segmuller" initials="W." surname="Segmuller"/>
-            <author fullname="B. Leiba" initials="B." surname="Leiba"/>
-            <date month="January" year="2008"/>
-            <abstract>
-              <t>This document describes the RELATIONAL extension to the Sieve mail filtering language defined in RFC 3028. This extension extends existing conditional tests in Sieve to allow relational operators. In addition to testing their content, it also allows for testing of the number of entities in header and envelope fields.</t>
-              <t>This document obsoletes RFC 3431. [STANDARDS-TRACK]</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="5231"/>
-          <seriesInfo name="DOI" value="10.17487/RFC5231"/>
-        </reference>
-        <reference anchor="RFC7942" target="https://www.rfc-editor.org/info/rfc7942" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml">
-          <front>
-            <title>Improving Awareness of Running Code: The Implementation Status Section</title>
-            <author fullname="Y. Sheffer" initials="Y." surname="Sheffer"/>
-            <author fullname="A. Farrel" initials="A." surname="Farrel"/>
-            <date month="July" year="2016"/>
-            <abstract>
-              <t>This document describes a simple process that allows authors of Internet-Drafts to record the status of known implementations by including an Implementation Status section. This will allow reviewers and working groups to assign due consideration to documents that have the benefit of running code, which may serve as evidence of valuable experimentation and feedback that have made the implemented protocols more mature.</t>
-              <t>This process is not mandatory. Authors of Internet-Drafts are encouraged to consider using the process for their documents, and working groups are invited to think about applying the process to all of their protocol specifications. This document obsoletes RFC 6982, advancing it to a Best Current Practice.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="BCP" value="205"/>
-          <seriesInfo name="RFC" value="7942"/>
-          <seriesInfo name="DOI" value="10.17487/RFC7942"/>
-        </reference>
-        <reference anchor="RFC8621" target="https://www.rfc-editor.org/info/rfc8621" xml:base="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8621.xml">
-          <front>
-            <title>The JSON Meta Application Protocol (JMAP) for Mail</title>
-            <author fullname="N. Jenkins" initials="N." surname="Jenkins"/>
-            <author fullname="C. Newman" initials="C." surname="Newman"/>
-            <date month="August" year="2019"/>
-            <abstract>
-              <t>This document specifies a data model for synchronising email data with a server using the JSON Meta Application Protocol (JMAP).  Clients can use this to efficiently search, access, organise, and send messages, and to get push notifications for fast resynchronisation when new messages are delivered or a change is made in another client.</t>
-            </abstract>
-          </front>
-          <seriesInfo name="RFC" value="8621"/>
-          <seriesInfo name="DOI" value="10.17487/RFC8621"/>
-        </reference>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5260.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5231.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8621.xml"/>
+
       </references>
     </references>
+
     <section numbered="true" toc="default">
-      <name>Change History (To be removed by RFC Editor before                     publication)</name>
+      <name>Change History (To be removed by RFC Editor before publication)</name>
+      <t>Changes since draft-ietf-extra-sieve-snooze-06:
+      </t>
+      <ul spacing="normal">
+        <li>Don't use normative language when describing possible
+        "snoozed" mailbox implementation.</li>
+        <li>Miscellaneous editorial changes.</li>
+      </ul>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-05:
       </t>
       <ul spacing="normal">
         <li>Don't require implementations to use a "snoozed" mailbox.</li>
       </ul>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-04:
       </t>
       <ul spacing="normal">
         <li>Miscellaneous editorial changes.</li>
       </ul>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-03:
       </t>
       <ul spacing="normal">
         <li>Added "snooze" to the Sieve Actions Registry.</li>
       </ul>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-02:
       </t>
       <ul spacing="normal">
@@ -915,11 +686,13 @@ MAILBOXID = ":mailboxid" string
         <li>Added an informative reference to RFC8621.</li>
         <li>Miscellaneous editorial changes.</li>
       </ul>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-01:
       </t>
       <ul spacing="normal">
         <li>Miscellaneous editorial changes.</li>
       </ul>
+
       <t>Changes since draft-ietf-extra-sieve-snooze-00:
       </t>
       <ul spacing="normal">
