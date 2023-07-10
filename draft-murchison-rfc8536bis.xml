@@ -143,7 +143,7 @@
         </dd>
         <dt>Leap Second:</dt>
         <dd>
-          A one second adjustment to keep UTC close to mean solar time
+          A one-second adjustment to keep UTC close to mean solar time
           at the prime meridian
           (see <xref target="ITU-R-TF.460" format="default"/>).
           Each inserted or deleted leap second occurs at the end of a
