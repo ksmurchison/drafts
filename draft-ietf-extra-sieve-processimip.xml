@@ -13,14 +13,14 @@
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std" consensus="yes" ipr="trust200902"
-     docName="draft-ietf-extra-processimip-01"
+     docName="draft-ietf-extra-processimip-02"
      obsoletes="" updates="" submissionType="IETF" xml:lang="en"
      tocInclude="true" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.12.2 -->
   <front>
     <title abbrev="Sieve Process iMIP">Sieve Email Filtering:
-    Extension for Processing iMIP Messages</title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-sieve-processimip-01"/>
+    Extension for Processing Calendar Attachments</title>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-sieve-processimip-02"/>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
@@ -68,17 +68,17 @@
 
     <keyword>Sieve</keyword>
     <abstract>
-      <t>This document describes the "processimip" extension to the
+      <t>This document describes the "processcalendar" extension to the
       Sieve email filtering language.
-      The "processimip" extension gives Sieve the ability to process
-      messages using the iCalendar Message-Based Interoperability
-      Protocol (iMIP).</t>
+      The "processcalendar" extension gives Sieve the ability to process
+      machine-readable calendar data that is encapsulated in an
+      email message using Multipurpose Internet Mail Extensions (MIME).</t>
     </abstract>
-
+<!--
     <note title="Open Issues">
       <ol>
         <li>The Cyrus implementation used at Fastmail also adds an
-        :invitesonly option to the processimip action in order to
+        :invitesonly option to the processcalendar action in order to
         emulate existing functionality elsewhere within our stack.
         Is there any interest in formalizing this option?
         This may be superfluous as it might not make sense to
@@ -86,26 +86,38 @@
         future updates to an event.</li>
       </ol>
     </note>
-
+-->
   </front>
 
   <middle>
     <section numbered="true" toc="default">
       <name>Introduction</name>
-      <t>Users typically receive invites, replies, and cancelations
+      <t>Users frequently receive invites, replies, and cancellations
       for events, tasks, etc. via Internet mail messages.
       It is sometimes desirable to have such messages automatically
-      parsed and the attached
-      <xref target="RFC5545" format="default">iCalendar</xref> objects
+      parsed and the enclosed calendar data
       added to, updated on, or deleted from the user's calendars.</t>
-      <t>This document defines an extension to the
-      <xref target="RFC5228" format="default">Sieve language</xref>
-      that enables scripts to process messages using the
+
+      <t>Typically such messages are based on the
       <xref target="RFC6047" format="default">iCalendar Message-Based
       Interoperability Protocol (iMIP)</xref>.
+      However, sometimes the enclosed
+      <xref target="RFC5545">iCalendar</xref> data does not include an
+      iTIP method property
+      (see <xref target="RFC5546" section="1.4" sectionFormat="comma"/>),
+      such as a travel itinerary or public event, or the enclosed data
+      may be in some other machine-readable format
+      (E.g. <xref target="I-D.ietf-calext-jscalendarbis">JSCalendar</xref>).
+      </t>
+
+      <t>This document defines an extension to the
+      <xref target="RFC5228" format="default">Sieve language</xref>
+      that enables scripts to process machine-readable calendar data
+      that is encapsulated in an email message using
+      <xref target="RFC2045">MIME</xref>.
       Specifically, this extension provides the ability to alter
-      iCalendar objects on a user's calendars referenced in iMIP
-      messages.</t>
+      items on a user's calendars referenced in the encapsulated
+      calendar data.</t>
     </section>
 
     <section numbered="true" toc="default">
@@ -114,6 +126,13 @@
       <xref target="RFC5228" section="1.1" format="default"/>,
       including use of the "Usage:" label for the definition of action
       and tagged arguments syntax.</t>
+
+      <t>This document uses terminology and concepts from
+      <xref target="RFC5545">iCalendar</xref> and 
+      <xref target="RFC5546">iTIP</xref> to describe the processing of
+      calendar data, but this extension can be used with any
+      machine-readable calendar data format that can express similar
+      concepts.</t>
 
       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
       NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
@@ -127,34 +146,36 @@
 
     <section anchor="capability" numbered="true" toc="default">
       <name>Capability Identifier</name>
-      <t>Sieve interpreters that implement this extension have an
-      identifier of "processimip" for use with the capability
+      <t>Sieve interpreters that implement this extension MUST have an
+      identifier of "processcalendar" for use with the capability
       mechanism.</t>
 
     </section>
 
-    <section anchor="processimip" numbered="true" toc="default">
-      <name>Process iMIP Action</name>
+    <section anchor="processcalendar" numbered="true" toc="default">
+      <name>Process Calendar Action</name>
       <artwork name="" type="" align="left" alt=""><![CDATA[
-Usage: processimip [ :addresses <string-list> ]
-                   [ :updatesonly | :calendarid <string> ]
-                   [ :deletecanceled ]
-                   [ :outcome <variablename: string> ]
-                   [ :errstr <variablename: string> ]
+Usage: processcalendar [ :addresses <string-list> ]
+                       [ :nonitip ]
+                       [ :updatesonly / :calendarid <string> ]
+                       [ :deletecanceled ]
+                       [ :outcome <variablename: string> ]
+                       [ :errstr <variablename: string> ]
 ]]></artwork>
 
-      <t>The "processimip" action can be used with or without the
+      <t>The "processcalendar" action can be used with or without the
       <xref target="RFC5229">"variables"</xref> extension.
       When the "variables" extension is enabled in a script using
       &lt;require "variables"&gt;, the script can use the
       <xref target="outcome">":outcome"</xref> and 
       <xref target="errstr">":errstr"</xref> arguments to the
-      "processimip" action described below.
+      "processcalendar" action described below.
       When the "variables" extension is not enabled, the ":outcome"
       and ":errstr" arguments MUST NOT be used and MUST cause an error
       according to <xref target="RFC5228" />.</t>
 
-      <t>"processimip" MUST NOT process a message unless it is a
+      <t>Unless the <xref target="nonitip">":nonitip"</xref> argument is used,
+      "processcalendar" MUST NOT process a message unless it is a
       well-formed iMIP message and one of the recipient user's email
       addresses matches the Calendar User Address
       (see <xref target="RFC5545" section="3.3.3" format="default" />)
@@ -190,7 +211,7 @@ Usage: processimip [ :addresses <string-list> ]
       </ol>
 
 
-      <t>The "processimip" action does not cancel the implicit keep.</t>
+      <t>The "processcalendar" action does not cancel the implicit keep.</t>
       <!--
       <t>A Sieve interpreter MUST implement the snooze action by
       delivering the message to a special "snoozed" mailbox within its
@@ -203,26 +224,38 @@ Usage: processimip [ :addresses <string-list> ]
         the addresses known to the implementation.</t>
       </section>
 
+      <section anchor="nonitip" numbered="true" toc="default">
+        <name>Non-iTIP Argument</name>
+        <t>The optional :nonitip argument is used to tell the
+        implementation that it can process calendar data that is not an
+        iTIP message - it does not contain METHOD and/or ORGANIZER
+        properties.</t>
+
+        <t>If :nonitip is omitted, the implementation MUST ignore
+        calendar data that does not contain METHOD and ORGANIZER
+        properties.</t>
+      </section>
+
       <section anchor="updatesonly" numbered="true" toc="default">
         <name>Updates Only Argument</name>
         <t>The optional :updatesonly argument is used to limit the
-        messages processed to those targeting existing iCalendar
+        messages processed to those targeting existing calendar
         objects only.
-        If the message contains a new iCalendar object (initial
+        If the message contains a new calendar object (initial
         invitation), the implementation MUST NOT add the object to a
         calendar.</t>
 
-        <t>If :updatesonly is omitted, new iCalendar objects (initial
+        <t>If :updatesonly is omitted, new calendar objects (initial
         invitations) may be added to one of the user's calendars.</t>
       </section>
 
       <section anchor="calendarid" numbered="true" toc="default">
         <name>Calendar ID Argument</name>
         <t>The optional :calendarid argument specifies the identifier
-        of the calendar onto which new iCalendar objects (initial
+        of the calendar onto which new calendar objects (initial
         invitations) should placed.</t>
 
-        <t>If :calendarid is omitted, new iCalendar objects will be
+        <t>If :calendarid is omitted, new calendar objects will be
         placed on the user's "default" calendar as determined by the
         implementation.</t>
       </section>
@@ -230,11 +263,11 @@ Usage: processimip [ :addresses <string-list> ]
       <section anchor="deletecanceled" numbered="true" toc="default">
         <name>Delete Canceled Argument</name>
         <t>The optional :deletecanceled argument is used to tell the
-        implementation that if it receives a cancelation message,
-        it should remove the associated iCalendar object from the
+        implementation that if it receives a cancellation message,
+        it should remove the associated calendar object from the
         calendar.</t>
 
-        <t>If :deletecanceled is omitted, the associated iCalendar
+        <t>If :deletecanceled is omitted, the associated calendar
         object will be marked as canceled and will remain on the
         calendar.</t>
       </section>
@@ -247,12 +280,13 @@ Usage: processimip [ :addresses <string-list> ]
 
         <ul>
           <li>"no_action": No action was performed
-          (E.g., the message wasn't an iMIP message, or
-          the message contained a new iCalendar object but the
+          (E.g., the message didn't contain calendar data, or
+          the message contained a new calendar object but the
           ":updatesonly" argument was used)</li>        
-          <li>"added": A new iCalendar object was added to a calendar</li>
-          <li>"update": An iCalendar resource was updated or canceled</li>
-          <li>"error": An error processing the iMIP message occurred</li>
+          <li>"added": A new calendar object was added to a calendar</li>
+          <li>"update": A calendar resource was updated or canceled</li>
+          <li>"error": An error processing the message and/or calendar
+          data occurred</li>
         </ul>
       </section>
 
@@ -265,10 +299,46 @@ Usage: processimip [ :addresses <string-list> ]
 
       <section anchor="examples" numbered="true" toc="default">
         <name>Examples</name>
-        <t>TODO: Actually add examples.</t>
+        <t>The following example specifies email addresses belonging
+        to the user and  the identifier of the calendar onto
+        which to place new calendar objects:</t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+require [ "processcalendar" ];
+
+processcalendar :addresses [ "me@example.com", "alsome@example.com" ]
+                :calendarid "1ea6d86b-6c7f-48a2-bed3-2a4c40ec281a";
+]]></artwork>
+
+        <t>The following example tells the interpreter to process
+        flight itineraries from a particular airline:</t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+require [ "processcalendar" ];
+
+if allof (address ["from", "sender"] "airline@example.com",
+          header :contains "subject" "itinerary") {
+   processcalendar :nonitip;
+}
+]]></artwork>
+
+        <t>The following example adds headers to the message if
+        calendar data isn't processed :</t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+require [ "processcalendar", "variables", "editheader" ];
+
+set "processcal_outcome" "no_action";
+set "processcal_error" "";
+
+processcalendar :outcome "processcal_outcome"
+                :errstr "processimip_error";
+
+if not string :is "${processcal_outcome}" ["added", "updated"] {
+   addheader "X-ProcessCal-Outcome" "${processcal_outcome}";
+   addheader "X-ProcessCal-Error" "${processcal_error}";
+}
+]]></artwork>
       </section>
 
-    </section> <!-- processimip -->
+    </section> <!-- processcalendar -->
 
     <section anchor="impl" numbered="true" toc="default">
       <name>Implementation Status</name>
@@ -338,9 +408,9 @@ Usage: processimip [ :addresses <string-list> ]
         <ul empty="true" spacing="normal">
           <li>To: iana@iana.org</li>
           <li>Subject: Registration of new Sieve extension</li>
-          <li>Capability name: processimip</li>
-          <li>Description: Adds the "processimip" action command to
-            add and update iCalendar objects on a user's calendars.</li>
+          <li>Capability name: processcalendar</li>
+          <li>Description: Adds the "processcalendar" action command to
+            add and update items on a user's calendars.</li>
           <li>RFC number: RFC XXXX</li>
           <li>Contact address: The Sieve discussion list
             &lt;sieve@ietf.org&gt;</li>
@@ -376,6 +446,7 @@ Usage: processimip [ :addresses <string-list> ]
       </references>
       <references>
         <name>Informative References</name>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5545.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5546.xml"/>
         <!--
@@ -383,12 +454,22 @@ Usage: processimip [ :addresses <string-list> ]
       <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5231.xml"?>
 -->
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
+      <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-calext-jscalendarbis.xml"/>
       </references>
     </references>
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
-      <t>Changes since draft-murchison-sieve-processimip-01:</t>
+      <t>Changes since draft-ietf-sieve-processimip-01:</t>
+      <ol>
+        <li>Changed the name of the action from processimip to
+        processcalendar.</li>
+        <li>The action is now independent of iMIP and is calendar data
+        format agnostic.</li>
+        <li>Added examples.</li>
+      </ol>
+
+      <t>Changes since draft-ietf-sieve-processimip-00:</t>
       <ol>
         <li>No changes.</li>
       </ol>
