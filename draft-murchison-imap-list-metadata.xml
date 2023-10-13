@@ -14,7 +14,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
      ipr="trust200902"
-     docName="draft-murchison-imap-list-metadata-01"
+     docName="draft-murchison-imap-list-metadata-02"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -29,7 +29,7 @@
     <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
     Mailbox METADATA in Extended LIST</title>
     <seriesInfo name="Internet-Draft"
-                value="draft-murchison-imap-list-metadata-01"/>
+                value="draft-murchison-imap-list-metadata-02"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -282,23 +282,29 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
       <name>References</name>
       <references>
         <name>Normative References</name>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5258.xml"?>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml"?>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5464.xml"?>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9051.xml"?>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5258.xml"/>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml"/>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5464.xml"/>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9051.xml"/>
       </references>
 <!--
       <references>
         <name>Informative References</name>
-        <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5819.xml"?>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5819.xml"?>
         </references>
 -->
     </references>
 
     <section numbered="true" toc="default">
       <name>Change History (To be removed by RFC Editor before     publication)</name>
+      <t>Changes from draft-murchison-imap-list-metadata-01:
+      </t>
+      <ul spacing="normal">
+        <li>None.</li>
+      </ul>
+
       <t>Changes from draft-murchison-imap-list-metadata-00:
       </t>
       <ul spacing="normal">
