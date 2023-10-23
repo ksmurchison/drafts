@@ -12,7 +12,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      ipr="trust200902"
      category="info"
-     docName="draft-murchison-imap-esearch-return-opt-registry-00"
+     docName="draft-murchison-imap-esearch-return-opt-registry-01"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -28,7 +28,7 @@
     </title>
 
     <seriesInfo name="Internet-Draft"
-                value="draft-murchison-imap-esearch-return-opt-registry-00"/>
+                value="draft-murchison-imap-esearch-return-opt-registry-01"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -227,7 +227,7 @@
               <td>
                 <xref target="RFC5267"
                       section="4.4" sectionFormat="parens"/>,
-                <xref target="I-D.ietf-extra-imap-partial"
+                <xref target="RFC9394"
                       section="3.1" sectionFormat="parens"/></td>
             </tr>
             <tr>
@@ -306,8 +306,8 @@
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6203.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7162.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9051.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-imap-partial.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-extra-sieve-action-registry.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9122.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9394.xml"/>
       </references>
 
     </references>
@@ -316,8 +316,18 @@
       <name>Acknowledgements</name>
       <t>
         Portions of the text in the document have been borrowed from
-        <xref target="I-D.ietf-extra-sieve-action-registry"/>.
+        <xref target="RFC9122"/>.
       </t>
     </section>
+
+    <section numbered="true" toc="default">
+      <name>Change History (To be removed by RFC Editor before publication)</name>
+      <t>Changes from draft-murchison-imap-esearch-return-opt-registry-00:
+      </t>
+      <ul spacing="normal">
+        <li>Updated references with RFC 9122 and RFC 9394.</li>
+      </ul>
+    </section>
+
   </back>
 </rfc>
