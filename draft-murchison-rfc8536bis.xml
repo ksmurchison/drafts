@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-07" updates=""
+     docName="draft-murchison-rfc8536bis-08" updates=""
      ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-07"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-08"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -765,7 +765,7 @@
 	      of the "TZ" environment variable as defined in
               Section 8.3 of the "Base Definitions" volume of
               <xref target="POSIX" format="default"/> with ASCII
-              encoding, possibly utilizing
+              encoding, possibly utilizing the
               <xref target="tzstrext" format="default">
               extension described below</xref>
               in version 3 and higher files.
@@ -3828,6 +3828,13 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+	<name>Since rfc8536bis-07</name>
+	<ul spacing="normal">
+          <li>Miscellaneous editorial changes.</li>
+	</ul>
+      </section>
 
       <section numbered="true" toc="default">
 	<name>Since rfc8536bis-06</name>
