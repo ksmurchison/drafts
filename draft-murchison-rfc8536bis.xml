@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-08" updates=""
+     docName="draft-murchison-rfc8536bis-09" updates=""
      ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-08"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-09"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -842,7 +842,7 @@
             </li>
           </ul>
 
-          <t>A TZif file that uses the above extensions
+          <t>A TZif file that uses the above extension
           MUST be designated as version 3 (or higher),
           even if a future version of POSIX adopts this extension.</t>
         </section>
@@ -869,7 +869,7 @@
         should generate a version 4 file only if its leap-second table
         either expires or is truncated at the start.  Likewise, a
         writer not generating a version 4 file should generate a
-        version 3 file only if TZ string extensions are necessary to
+        version 3 file only if the TZ string extension is necessary to
         accurately model transition times.</li>
 
         <li>To save space, writers of version 2+ files MAY output a
@@ -1343,7 +1343,7 @@ EST5EDT,M3.2.0,M11.1.0
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8536.xml"/>
 
         <reference anchor="tz-link"
-                   target="https://www.iana.org/time-zones/tz-link.html">
+                   target="https://www.iana.org/time-zones/repository/tz-link.html">
           <front>
             <title>
               Time zone and daylight saving time data
@@ -1628,8 +1628,8 @@ EST5EDT,M3.2.0,M11.1.0
             <tr>
               <td align="left">005</td>
               <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">020</td>
@@ -1671,10 +1671,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">044</td>
@@ -1701,16 +1701,16 @@ EST5EDT,M3.2.0,M11.1.0
               <td align="left">050</td>
               <td align="left">55 54 43 00</td>
               <td align="left">designations[0]</td>
-              <td align="left">"UTC"</td>
+              <td align="left">"UTC\0"</td>
             </tr>
             <tr>
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">054</td>
@@ -1728,10 +1728,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[1]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">062</td>
@@ -1749,10 +1749,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[2]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">070</td>
@@ -1770,10 +1770,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[3]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">078</td>
@@ -1791,10 +1791,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[4]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">086</td>
@@ -1812,10 +1812,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[5]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">094</td>
@@ -1833,10 +1833,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[6]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">102</td>
@@ -1854,10 +1854,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[7]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">110</td>
@@ -1875,10 +1875,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[8]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">118</td>
@@ -1896,10 +1896,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[9]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">126</td>
@@ -1917,10 +1917,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[10]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">134</td>
@@ -1938,10 +1938,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[11]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">142</td>
@@ -1959,10 +1959,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[12]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">150</td>
@@ -1980,10 +1980,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[13]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">158</td>
@@ -2001,10 +2001,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[14]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">166</td>
@@ -2022,10 +2022,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[15]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">174</td>
@@ -2043,10 +2043,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[16]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">182</td>
@@ -2064,10 +2064,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[17]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">190</td>
@@ -2085,10 +2085,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[18]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">198</td>
@@ -2106,10 +2106,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[19]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">206</td>
@@ -2127,10 +2127,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[20]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">214</td>
@@ -2148,10 +2148,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[21]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">222</td>
@@ -2169,10 +2169,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[22]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">230</td>
@@ -2190,10 +2190,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[23]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">238</td>
@@ -2211,10 +2211,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[24]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">246</td>
@@ -2232,10 +2232,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[25]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">254</td>
@@ -2253,10 +2253,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[26]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">262</td>
@@ -2333,8 +2333,8 @@ EST5EDT,M3.2.0,M11.1.0
             <tr>
               <td align="left">005</td>
               <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">020</td>
@@ -2466,16 +2466,16 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">079</td>
               <td align="left">ff ff 6c 02</td>
               <td align="left">utoff</td>
-              <td align="left">-37886 (-10:21:26)</td>
+              <td align="left">-37886 (-10:31:26)</td>
             </tr>
             <tr>
               <td align="left">083</td>
@@ -2493,10 +2493,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[1]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">085</td>
@@ -2520,10 +2520,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[2]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">091</td>
@@ -2547,10 +2547,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[3]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">097</td>
@@ -2574,10 +2574,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[4]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">103</td>
@@ -2601,10 +2601,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[5]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">109</td>
@@ -2631,31 +2631,31 @@ EST5EDT,M3.2.0,M11.1.0
               <td align="left">115</td>
               <td align="left">4c 4d 54 00</td>
               <td align="left">designations[0]</td>
-              <td align="left">"LMT"</td>
+              <td align="left">"LMT\0"</td>
             </tr>
             <tr>
               <td align="left">119</td>
               <td align="left">48 53 54 00</td>
               <td align="left">designations[4]</td>
-              <td align="left">"HST"</td>
+              <td align="left">"HST\0"</td>
             </tr>
             <tr>
               <td align="left">123</td>
               <td align="left">48 44 54 00</td>
               <td align="left">designations[8]</td>
-              <td align="left">"HDT"</td>
+              <td align="left">"HDT\0"</td>
             </tr>
             <tr>
               <td align="left">127</td>
               <td align="left">48 57 54 00</td>
               <td align="left">designations[12]</td>
-              <td align="left">"HWT"</td>
+              <td align="left">"HWT\0"</td>
             </tr>
             <tr>
               <td align="left">131</td>
               <td align="left">48 50 54 00</td>
               <td align="left">designations[16]</td>
-              <td align="left">"HPT"</td>
+              <td align="left">"HPT\0"</td>
             </tr>
             <tr>
               <td colspan="4"/>
@@ -2753,8 +2753,8 @@ EST5EDT,M3.2.0,M11.1.0
             <tr>
               <td align="left">152</td>
               <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">167</td>
@@ -2886,16 +2886,16 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">254</td>
               <td align="left">ff ff 6c 02</td>
               <td align="left">utoff</td>
-              <td align="left">-37886 (-10:21:26)</td>
+              <td align="left">-37886 (-10:31:26)</td>
             </tr>
             <tr>
               <td align="left">258</td>
@@ -2913,10 +2913,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[1]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">260</td>
@@ -2940,10 +2940,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[2]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">266</td>
@@ -2967,10 +2967,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[3]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">272</td>
@@ -2994,10 +2994,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[4]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">278</td>
@@ -3021,10 +3021,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[5]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">284</td>
@@ -3051,31 +3051,31 @@ EST5EDT,M3.2.0,M11.1.0
               <td align="left">290</td>
               <td align="left">4c 4d 54 00</td>
               <td align="left">designations[0]</td>
-              <td align="left">"LMT"</td>
+              <td align="left">"LMT\0"</td>
             </tr>
             <tr>
               <td align="left">294</td>
               <td align="left">48 53 54 00</td>
               <td align="left">designations[4]</td>
-              <td align="left">"HST"</td>
+              <td align="left">"HST\0"</td>
             </tr>
             <tr>
               <td align="left">298</td>
               <td align="left">48 44 54 00</td>
               <td align="left">designations[8]</td>
-              <td align="left">"HDT"</td>
+              <td align="left">"HDT\0"</td>
             </tr>
             <tr>
               <td align="left">302</td>
               <td align="left">48 57 54 00</td>
               <td align="left">designations[12]</td>
-              <td align="left">"HWT"</td>
+              <td align="left">"HWT\0"</td>
             </tr>
             <tr>
               <td align="left">306</td>
               <td align="left">48 50 54 00</td>
               <td align="left">designations[16]</td>
-              <td align="left">"HPT"</td>
+              <td align="left">"HPT\0"</td>
             </tr>
             <tr>
               <td colspan="4"/>
@@ -3219,20 +3219,20 @@ EST5EDT,M3.2.0,M11.1.0
         </ol>
       </section>
 
-      <section anchor="v3example" numbered="true" toc="default">
-        <name>Truncated Version 3 File Representing Asia/Jerusalem</name>
+      <section anchor="v2truncated" numbered="true" toc="default">
+        <name>Truncated Version 2 File Representing Pacific/Johnston</name>
 
-        <t>The following TZif file has been truncated to start on
-        2038-01-01T00:00:00Z.</t>
+        <t>The following TZif file has been truncated to end on
+        2004-06-161T00:00:00Z (the atoll was abandoned sometime on
+        2004-06-15).</t>
 
         <t>In this example:</t>
 
         <ul spacing="normal">
-          <li>The start time value can not be represented using 32
-          bits, so the version 1 header contains only the required
+          <li>The version 1 header contains only the required
           minimum data, which will be ignored by readers.</li>
 
-          <li>The version 3 header leverages the fact that by specifying
+          <li>The version 2 header leverages the fact that by specifying
           'isutcnt' and 'isstdcnt' as zero, all transition times
           associated with local time types are assumed to be specified
           as local wall-clock time
@@ -3240,8 +3240,11 @@ EST5EDT,M3.2.0,M11.1.0
           and standard/wall indicators in
           <xref target="data" format="default"/>).</li>
 
-          <li>The TZ string value has been line-wrapped for
-          presentation purposes only.</li>
+          <li>The time type of the last transition has designation "-00",
+          indicating that local time is unspecified.</li>
+
+          <li>The TZ string is empty, indicating that there are no
+          known future transitions.</li>
         </ul>
 
         <table align="center">
@@ -3262,15 +3265,15 @@ EST5EDT,M3.2.0,M11.1.0
             </tr>
             <tr>
               <td align="left">004</td>
-              <td align="left">33</td>
+              <td align="left">32</td>
               <td align="left">version</td>
-              <td align="left">'3' (3)</td>
+              <td align="left">'2' (2)</td>
             </tr>
             <tr>
               <td align="left">005</td>
               <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">020</td>
@@ -3312,10 +3315,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">044</td>
@@ -3342,7 +3345,547 @@ EST5EDT,M3.2.0,M11.1.0
               <td align="left">050</td>
               <td align="left">00</td>
               <td align="left">designations[0]</td>
+              <td align="left">"\0"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">051</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">055</td>
+              <td align="left">32</td>
+              <td align="left">version</td>
+              <td align="left">'2' (2)</td>
+            </tr>
+            <tr>
+              <td align="left">056</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"></td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">071</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isutcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">075</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">079</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">leapcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">083</td>
+              <td align="left">00 00 00 08</td>
+              <td align="left">timecnt</td>
+              <td align="left">8</td>
+            </tr>
+            <tr>
+              <td align="left">087</td>
+              <td align="left">00 00 00 07</td>
+              <td align="left">typecnt</td>
+              <td align="left">7</td>
+            </tr>
+            <tr>
+              <td align="left">091</td>
+              <td align="left">00 00 00 18</td>
+              <td align="left">charcnt</td>
+              <td align="left">24</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">095</td>
+              <td align="left">ff ff ff ff 74 e0 70 be</td>
+              <td align="left">trans time[0]</td>
+              <td align="left">-2334101314 (1896-01-13T22:31:26Z)</td>
+            </tr>
+            <tr>
+              <td align="left">103</td>
+              <td align="left">ff ff ff ff bb 05 43 48</td>
+              <td align="left">trans time[1]</td>
+              <td align="left">-1157283000 (1933-04-30T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">111</td>
+              <td align="left">ff ff ff ff bb 21 71 58</td>
+              <td align="left">trans time[2]</td>
+              <td align="left">-1155436200 (1933-05-21T21:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">119</td>
+              <td align="left">ff ff ff ff cb 89 3d c8</td>
+              <td align="left">trans time[3]</td>
+              <td align="left">-880198200 (1942-02-09T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">127</td>
+              <td align="left">ff ff ff ff d2 23 f4 70</td>
+              <td align="left">trans time[4]</td>
+              <td align="left">-769395600 (1945-08-14T23:00:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">135</td>
+              <td align="left">ff ff ff ff d2 61 49 38</td>
+              <td align="left">trans time[5]</td>
+              <td align="left">-765376200 (1945-09-30T11:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">143</td>
+              <td align="left">ff ff ff ff d5 8d 73 48</td>
+              <td align="left">trans time[6]</td>
+              <td align="left">-712150200 (1947-06-08T12:30:00Z)</td>
+            </tr>
+            <tr>
+              <td align="left">151</td>
+              <td align="left">00 00 00 00 40 cf 8d 80</td>
+              <td align="left">trans time[7]</td>
+              <td align="left">1087344000 (2004-06-16T00:00:00Z)</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">159</td>
+              <td align="left">02</td>
+              <td align="left">trans type[0]</td>
+              <td align="left">2</td>
+            </tr>
+            <tr>
+              <td align="left">160</td>
+              <td align="left">03</td>
+              <td align="left">trans type[1]</td>
+              <td align="left">3</td>
+            </tr>
+            <tr>
+              <td align="left">161</td>
+              <td align="left">02</td>
+              <td align="left">trans type[2]</td>
+              <td align="left">2</td>
+            </tr>
+            <tr>
+              <td align="left">162</td>
+              <td align="left">04</td>
+              <td align="left">trans type[3]</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td align="left">163</td>
+              <td align="left">05</td>
+              <td align="left">trans type[4]</td>
+              <td align="left">5</td>
+            </tr>
+            <tr>
+              <td align="left">164</td>
+              <td align="left">02</td>
+              <td align="left">trans type[5]</td>
+              <td align="left">2</td>
+            </tr>
+            <tr>
+              <td align="left">165</td>
+              <td align="left">06</td>
+              <td align="left">trans type[6]</td>
+              <td align="left">6</td>
+            </tr>
+            <tr>
+              <td align="left">166</td>
+              <td align="left">01</td>
+              <td align="left">trans type[7]</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">167</td>
+              <td align="left">ff ff 6c 02</td>
+              <td align="left">utoff</td>
+              <td align="left">-37886 (-10:31:26)</td>
+            </tr>
+            <tr>
+              <td align="left">171</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">172</td>
+              <td align="left">04</td>
+              <td align="left">desigidx</td>
+              <td align="left">4</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[1]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">173</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">utoff</td>
+              <td align="left">0 (+00:00)</td>
+            </tr>
+            <tr>
+              <td align="left">177</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">178</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[2]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">179</td>
+              <td align="left">ff ff 6c 58</td>
+              <td align="left">utoff</td>
+              <td align="left">-37800 (-10:30)</td>
+            </tr>
+            <tr>
+              <td align="left">183</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">184</td>
+              <td align="left">08</td>
+              <td align="left">desigidx</td>
+              <td align="left">8</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[3]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">185</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">189</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">190</td>
+              <td align="left">0c</td>
+              <td align="left">desigidx</td>
+              <td align="left">12</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[4]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">191</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">195</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">196</td>
+              <td align="left">10</td>
+              <td align="left">desigidx</td>
+              <td align="left">16</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[5]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">197</td>
+              <td align="left">ff ff 7a 68</td>
+              <td align="left">utoff</td>
+              <td align="left">-34200 (-09:30)</td>
+            </tr>
+            <tr>
+              <td align="left">201</td>
+              <td align="left">01</td>
+              <td align="left">isdst</td>
+              <td align="left">1 (yes)</td>
+            </tr>
+            <tr>
+              <td align="left">202</td>
+              <td align="left">14</td>
+              <td align="left">desigidx</td>
+              <td align="left">20</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[6]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">203</td>
+              <td align="left">ff ff 73 60</td>
+              <td align="left">utoff</td>
+              <td align="left">-36000 (-10:00)</td>
+            </tr>
+            <tr>
+              <td align="left">207</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">208</td>
+              <td align="left">08</td>
+              <td align="left">desigidx</td>
+              <td align="left">8</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">209</td>
+              <td align="left">2d 30 30 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"-00\0"</td>
+            </tr>
+            <tr>
+              <td align="left">213</td>
+              <td align="left">4c 4d 54 00</td>
+              <td align="left">designations[4]</td>
+              <td align="left">"LMT\0"</td>
+            </tr>
+            <tr>
+              <td align="left">217</td>
+              <td align="left">48 53 54 00</td>
+              <td align="left">designations[8]</td>
+              <td align="left">"HST\0"</td>
+            </tr>
+            <tr>
+              <td align="left">221</td>
+              <td align="left">48 44 54 00</td>
+              <td align="left">designations[12]</td>
+              <td align="left">"HDT\0"</td>
+            </tr>
+            <tr>
+              <td align="left">225</td>
+              <td align="left">48 57 54 00</td>
+              <td align="left">designations[16]</td>
+              <td align="left">"HWT\0"</td>
+            </tr>
+            <tr>
+              <td align="left">229</td>
+              <td align="left">48 50 54 00</td>
+              <td align="left">designations[20]</td>
+              <td align="left">"HPT\0"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">233</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+            <tr>
+              <td align="left">234</td>
+              <td align="left"></td>
+              <td align="left">TZ string</td>
               <td align="left">""</td>
+            </tr>
+            <tr>
+              <td align="left">234</td>
+              <td align="left">0a</td>
+              <td align="left">NL</td>
+              <td align="left">'\n'</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section anchor="v3example" numbered="true" toc="default">
+        <name>Truncated Version 3 File Representing Asia/Jerusalem</name>
+
+        <t>The following TZif file has been truncated to start on
+        2038-01-01T00:00:00Z.</t>
+
+        <t>In this example:</t>
+
+        <ul spacing="normal">
+          <li>The start time value can not be represented using 32
+          bits, so the version 1 header contains only the required
+          minimum data, which will be ignored by readers.</li>
+
+          <li>The version 3 header leverages the fact that by specifying
+          'isutcnt' and 'isstdcnt' as zero, all transition times
+          associated with local time types are assumed to be specified
+          as local wall-clock time
+          (see the definitions of UT/local indicators
+          and standard/wall indicators in
+          <xref target="data" format="default"/>).</li>
+
+          <li>Time type 0 has designation "-00", indicating that local
+          time is unspecified prior to the truncation time.</li>
+
+          <li>The TZ string value has been line-wrapped for
+          presentation purposes only.</li>
+        </ul>
+
+        <table align="center">
+          <thead>
+            <tr>
+              <th align="left">File Offset</th>
+              <th align="left">Hexadecimal Octets</th>
+              <th align="left">Record Name / Field Name</th>
+              <th align="left">Field Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">000</td>
+              <td align="left">54 5a 69 66</td>
+              <td align="left">magic</td>
+              <td align="left">"TZif"</td>
+            </tr>
+            <tr>
+              <td align="left">004</td>
+              <td align="left">33</td>
+              <td align="left">version</td>
+              <td align="left">'3' (3)</td>
+            </tr>
+            <tr>
+              <td align="left">005</td>
+              <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
+              <td align="left"></td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">020</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isutcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">024</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">isstdcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">028</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">leapcnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">032</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">timecnt</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td align="left">036</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">typecnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td align="left">040</td>
+              <td align="left">00 00 00 01</td>
+              <td align="left">charcnt</td>
+              <td align="left">1</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[0]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">044</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">utoff</td>
+              <td align="left">0 (+00:00)</td>
+            </tr>
+            <tr>
+              <td align="left">048</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">049</td>
+              <td align="left">00</td>
+              <td align="left">desigidx</td>
+              <td align="left">0</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">050</td>
+              <td align="left">00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"\0"</td>
             </tr>
             <tr>
               <td colspan="4"/>
@@ -3362,8 +3905,8 @@ EST5EDT,M3.2.0,M11.1.0
             <tr>
               <td align="left">056</td>
               <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">071</td>
@@ -3391,15 +3934,15 @@ EST5EDT,M3.2.0,M11.1.0
             </tr>
             <tr>
               <td align="left">087</td>
-              <td align="left">00 00 00 01</td>
+              <td align="left">00 00 00 02</td>
               <td align="left">typecnt</td>
-              <td align="left">1</td>
+              <td align="left">2</td>
             </tr>
             <tr>
               <td align="left">091</td>
-              <td align="left">00 00 00 04</td>
+              <td align="left">00 00 00 08</td>
               <td align="left">charcnt</td>
-              <td align="left">4</td>
+              <td align="left">8</td>
             </tr>
             <tr>
               <td colspan="4"/>
@@ -3415,24 +3958,24 @@ EST5EDT,M3.2.0,M11.1.0
             </tr>
             <tr>
               <td align="left">103</td>
-              <td align="left">00</td>
+              <td align="left">01</td>
               <td align="left">trans type[0]</td>
-              <td align="left">0</td>
+              <td align="left">1</td>
             </tr>
             <tr>
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">104</td>
-              <td align="left">00 00 1c 20</td>
+              <td align="left">00 00 00 00</td>
               <td align="left">utoff</td>
-              <td align="left">7200 (+02:00)</td>
+              <td align="left">0 (+00:00)</td>
             </tr>
             <tr>
               <td align="left">108</td>
@@ -3450,29 +3993,62 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[1]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
               <td align="left">110</td>
-              <td align="left">49 53 54 00</td>
-              <td align="left">designations[0]</td>
-              <td align="left">"IST"</td>
+              <td align="left">00 00 1c 20</td>
+              <td align="left">utoff</td>
+              <td align="left">7200 (+02:00)</td>
+            </tr>
+            <tr>
+              <td align="left">114</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">115</td>
+              <td align="left">04</td>
+              <td align="left">desigidx</td>
+              <td align="left">4</td>
             </tr>
             <tr>
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left">114</td>
+              <td align="left">116</td>
+              <td align="left">2d 30 30 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"-00\0"</td>
+            </tr>
+            <tr>
+              <td align="left">120</td>
+              <td align="left">49 53 54 00</td>
+              <td align="left">designations[4]</td>
+              <td align="left">"IST\0"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left">124</td>
               <td align="left">0a</td>
               <td align="left">NL</td>
               <td align="left">'\n'</td>
             </tr>
             <tr>
-              <td align="left">115</td>
-              <td align="left">49 53 54 2d 32 49 44 54 2c
-              4d 33 2e 34 2e 34 2f 32 36 2c 4d 31 30 2e 35 2e 30</td>
+              <td align="left">125</td>
+              <td align="left">49 53 54 2d 32 49 44 54 2c 4d 33 2e 34
+              2e 34 2f 32 36 2c 4d 31 30 2e 35 2e 30</td>
               <td align="left">TZ string</td>
-              <td align="left">"IST-2IDT,<br/>M3.4.4/26,M10.5.0"</td>
+              <td align="left">"IST-2IDT,M3.4.4/26,M10.5.0"</td>
             </tr>
             <tr>
-              <td align="left">141</td>
+              <td align="left">151</td>
               <td align="left">0a</td>
               <td align="left">NL</td>
               <td align="left">'\n'</td>
@@ -3482,7 +4058,7 @@ EST5EDT,M3.2.0,M11.1.0
       </section>
 
       <section anchor="v4example" numbered="true" toc="default">
-        <name>Truncated Version 4 File Representing America/New_York</name>
+        <name>Truncated Version 4 File Representing Europe/London</name>
 
         <t>The following TZif file has been truncated to start on
         2022-01-01T00:00:00Z.</t>
@@ -3492,6 +4068,7 @@ EST5EDT,M3.2.0,M11.1.0
         <ul spacing="normal">
           <li>The version 1 header contains only the required
           minimum data, which will be ignored by readers.</li>
+
           <li>The version 4 header leverages the fact that by specifying
           'isutcnt' and 'isstdcnt' as zero, all transition times
           associated with local time types are assumed to be specified
@@ -3499,6 +4076,9 @@ EST5EDT,M3.2.0,M11.1.0
           (see the definitions of UT/local indicators
           and standard/wall indicators in
           <xref target="data" format="default"/>).</li>
+
+          <li>Time type 0 has designation "-00", indicating that local
+          time is unspecified prior to the truncation time.</li>
 
           <li>The first leap-second occurrence is the most recent one
           prior to the truncation time.</li>
@@ -3536,8 +4116,8 @@ EST5EDT,M3.2.0,M11.1.0
             <tr>
               <td align="left">005</td>
               <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">020</td>
@@ -3579,10 +4159,10 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">044</td>
@@ -3609,7 +4189,7 @@ EST5EDT,M3.2.0,M11.1.0
               <td align="left">050</td>
               <td align="left">00</td>
               <td align="left">designations[0]</td>
-              <td align="left">""</td>
+              <td align="left">"\0"</td>
             </tr>
             <tr>
               <td colspan="4"/>
@@ -3629,8 +4209,8 @@ EST5EDT,M3.2.0,M11.1.0
             <tr>
               <td align="left">056</td>
               <td align="left">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</td>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">071</td>
@@ -3658,15 +4238,15 @@ EST5EDT,M3.2.0,M11.1.0
             </tr>
             <tr>
               <td align="left">087</td>
-              <td align="left">00 00 00 01</td>
+              <td align="left">00 00 00 02</td>
               <td align="left">typecnt</td>
-              <td align="left">1</td>
+              <td align="left">2</td>
             </tr>
             <tr>
               <td align="left">091</td>
-              <td align="left">00 00 00 04</td>
+              <td align="left">00 00 00 08</td>
               <td align="left">charcnt</td>
-              <td align="left">4</td>
+              <td align="left">8</td>
             </tr>
             <tr>
               <td colspan="4"/>
@@ -3675,31 +4255,31 @@ EST5EDT,M3.2.0,M11.1.0
               <td align="left">095</td>
               <td align="left">00 00 00 00 61 cf 99 9b</td>
               <td align="left">trans time[0]</td>
-              <td align="left">1640995227 (2022-01-01T00:00:00Z)</td>
+              <td align="left">1640995227 (2022-01-01T00:00:27Z)</td>
             </tr>
             <tr>
               <td colspan="4"/>
             </tr>
             <tr>
               <td align="left">103</td>
-              <td align="left">00</td>
+              <td align="left">01</td>
               <td align="left">trans type[0]</td>
-              <td align="left">0</td>
+              <td align="left">1</td>
             </tr>
             <tr>
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">localtimetype[0]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
               <td align="left">104</td>
-              <td align="left">ff ff b9 b0</td>
+              <td align="left">00 00 00 00</td>
               <td align="left">utoff</td>
-              <td align="left">-18000 (-05:00)</td>
+              <td align="left">0 (+00:00)</td>
             </tr>
             <tr>
               <td align="left">108</td>
@@ -3717,28 +4297,61 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">localtimetype[1]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
               <td align="left">110</td>
-              <td align="left">45 53 54 00</td>
-              <td align="left">designations[0]</td>
-              <td align="left">"EST"</td>
+              <td align="left">00 00 00 00</td>
+              <td align="left">utoff</td>
+              <td align="left">0 (+00:00)</td>
+            </tr>
+            <tr>
+              <td align="left">114</td>
+              <td align="left">00</td>
+              <td align="left">isdst</td>
+              <td align="left">0 (no)</td>
+            </tr>
+            <tr>
+              <td align="left">115</td>
+              <td align="left">04</td>
+              <td align="left">desigidx</td>
+              <td align="left">4</td>
             </tr>
             <tr>
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
-              <td align="left">leapsecond[0]</td>
-              <td align="left"/>
+              <td align="left">116</td>
+              <td align="left">2d 30 30 00</td>
+              <td align="left">designations[0]</td>
+              <td align="left">"-00\0"</td>
             </tr>
             <tr>
-              <td align="left">114</td>
+              <td align="left">120</td>
+              <td align="left">47 4d 54 00</td>
+              <td align="left">designations[4]</td>
+              <td align="left">"GMT\0"</td>
+            </tr>
+            <tr>
+              <td colspan="4"/>
+            </tr>
+            <tr>
+              <td align="left"></td>
+              <td align="left"></td>
+              <td align="left">leapsecond[0]</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">124</td>
               <td align="left">00 00 00 00 58 68 46 9a</td>
               <td align="left">occurrence</td>
               <td align="left">1483228826 (2016-12-31T23:59:60Z)</td>
             </tr>
             <tr>
-              <td align="left">122</td>
+              <td align="left">132</td>
               <td align="left">00 00 00 1b</td>
               <td align="left">correction</td>
               <td align="left">27</td>
@@ -3747,19 +4360,19 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left"/>
-              <td align="left"/>
+              <td align="left"></td>
+              <td align="left"></td>
               <td align="left">leapsecond[1]</td>
-              <td align="left"/>
+              <td align="left"></td>
             </tr>
             <tr>
-              <td align="left">126</td>
-              <td align="left">00 00 00 00 62 ba 44 9b</td>
+              <td align="left">136</td>
+              <td align="left">00 00 00 00 66 7d fd 1b</td>
               <td align="left">occurrence</td>
-              <td align="left">1656374427 (2022-06-28T00:00:00Z)</td>
+              <td align="left">1719532827 (2024-06-28T00:00:01Z)</td>
             </tr>
             <tr>
-              <td align="left">134</td>
+              <td align="left">144</td>
               <td align="left">00 00 00 1b</td>
               <td align="left">correction</td>
               <td align="left">27</td>
@@ -3768,20 +4381,20 @@ EST5EDT,M3.2.0,M11.1.0
               <td colspan="4"/>
             </tr>
             <tr>
-              <td align="left">138</td>
+              <td align="left">148</td>
               <td align="left">0a</td>
               <td align="left">NL</td>
               <td align="left">'\n'</td>
             </tr>
             <tr>
-              <td align="left">139</td>
-              <td align="left">45 53 54 35 45 44 54 2c 4d 33 2e 32 2e 30 2c
-              4d 31 31 2e 31 2e 30</td>
+              <td align="left">149</td>
+              <td align="left">47 4d 54 30 42 53 54 2c 4d 33 2e 35 2e
+              30 2f 31 2c 4d 31 30 2e 35 2e 30</td>
               <td align="left">TZ string</td>
-              <td align="left">"EST5EDT,<br/>M3.2.0,M11.1.0"</td>
+              <td align="left">"GMT0BST,M3.5.0/1,M10.5.0"</td>
             </tr>
             <tr>
-              <td align="left">161</td>
+              <td align="left">173</td>
               <td align="left">0a</td>
               <td align="left">NL</td>
               <td align="left">'\n'</td>
@@ -3817,6 +4430,9 @@ EST5EDT,M3.2.0,M11.1.0
         and <xref target="Err6757" format="default"/>
         as well as several other errors in the examples.</li>
 
+        <li>Added an <xref target="v2truncated" format="default">
+        example of a TZif file truncated at the end.</xref></li>
+
         <li>Added informational notes to
         <xref target="v3example" format="default"/>.</li>
 
@@ -3828,6 +4444,17 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+	<name>Since rfc8536bis-08</name>
+	<ul spacing="normal">
+          <li>Added an example of a TZif file truncated at the
+          end.</li>
+          <li>Fixed utoff value of LMT in Honolulu example.</li>
+          <li>Updated "tz-link" URL.</li>
+          <li>Miscellaneous editorial changes.</li>
+	</ul>
+      </section>
 
       <section numbered="true" toc="default">
 	<name>Since rfc8536bis-07</name>
