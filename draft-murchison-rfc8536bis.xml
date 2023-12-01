@@ -118,7 +118,7 @@
       "Time zone and daylight saving time data"</xref>
       for more detailed information about civil timekeeping data and
       practice):
-	
+
       </t>
       <dl newline="false" spacing="normal">
         <dt>Coordinated Universal Time (UTC):</dt>
@@ -130,11 +130,11 @@
         <dt>Daylight Saving Time (DST):</dt>
         <dd>
           The time according to a location's law or practice,
-	  when adjusted as necessary from standard time.  The
-	  adjustment may be positive or negative, and the amount of
-	  adjustment may vary depending on the date and time; the TZif
-	  format even allows the adjustment to be zero, although this
-	  is not common practice.
+          when adjusted as necessary from standard time.  The
+          adjustment may be positive or negative, and the amount of
+          adjustment may vary depending on the date and time; the TZif
+          format even allows the adjustment to be zero, although this
+          is not common practice.
         </dd>
         <dt>International Atomic Time (TAI):</dt>
         <dd>
@@ -149,27 +149,27 @@
           Each inserted or deleted leap second occurs at the end of a
           UTC month, that is, a month using the Gregorian calendar and
           the UTC timescale.
-	</dd>
+        </dd>
         <dt>Leap-Second Correction (LEAPCORR):</dt>
         <dd>
-	  The value of TAI - UTC - 10 for timestamps after the
-	  first leap second, and zero for timestamps before that.
-	  The expression "TAI - UTC - 10" comes from the fact
-	  that TAI - UTC was defined to be 10 just prior to
-	  the first leap second in 1972, so clocks with leap
-	  seconds have a zero LEAPCORR before the first leap
-	  second.
-	</dd>
+          The value of TAI - UTC - 10 for timestamps after the
+          first leap second, and zero for timestamps before that.
+          The expression "TAI - UTC - 10" comes from the fact
+          that TAI - UTC was defined to be 10 just prior to
+          the first leap second in 1972, so clocks with leap
+          seconds have a zero LEAPCORR before the first leap
+          second.
+        </dd>
         <dt>Local Time:</dt>
         <dd>
-	  Civil time for a particular location.  Its offset
-	  from universal time can depend on the date and time of day.
+          Civil time for a particular location.  Its offset
+          from universal time can depend on the date and time of day.
         </dd>
         <dt>POSIX Epoch:</dt>
         <dd>
-	  1970-01-01 00:00:00 UTC, the basis for absolute timestamps
-	  in this document.
-	</dd>
+          1970-01-01 00:00:00 UTC, the basis for absolute timestamps
+          in this document.
+        </dd>
         <dt>Standard Time:</dt>
         <dd>
           The time according to a location's law or practice,
@@ -201,10 +201,10 @@
         </dd>
         <dt>Transition Time:</dt>
         <dd>
-	  The moment of occurrence of a time change that is not a leap
-	  second.  It is identified with a signed integer count of
-	  UNIX leap time seconds since the POSIX epoch.
-	</dd>
+          The moment of occurrence of a time change that is not a leap
+          second.  It is identified with a signed integer count of
+          UNIX leap time seconds since the POSIX epoch.
+        </dd>
         <dt>Universal Time (UT):</dt>
         <dd>
           The basis of civil time.
@@ -219,31 +219,31 @@
         <dt>UNIX Time:</dt>
         <dd>
           The time as returned by the time() function provided by the C
-	  programming language
+          programming language
           (see Section 3 of the "System Interfaces" volume of
           <xref target="POSIX" format="default"/>).
           This is an integer number of seconds
-	  since the POSIX epoch, not counting
+          since the POSIX epoch, not counting
           leap seconds.  As an extension to POSIX, negative values
           represent times before the POSIX epoch, using UT.
         </dd>
         <dt>UNIX Leap Time:</dt>
         <dd>
           UNIX time plus all preceding leap-second corrections.
-	  For example, if the first leap-second record in a TZif file
+          For example, if the first leap-second record in a TZif file
           occurs at 1972-06-30 23:59:60 UTC, the UNIX leap time for
           the timestamp 1972-07-01 00:00:00 UTC would be 78796801, one
           greater than the UNIX time for the same timestamp.
           Similarly, if the second leap-second record occurs at
-	  1972-12-31 23:59:60 UTC, it accounts for the first leap second,
-	  so the UNIX leap time of 1972-12-31 23:59:60 UTC would be 94694401,
-	  and the UNIX leap time of 1973-01-01 00:00:00 UTC would be 94694402.
-	  If a TZif file specifies no leap-second records,
-	  UNIX leap time is equal to UNIX time.
-	</dd>
+          1972-12-31 23:59:60 UTC, it accounts for the first leap second,
+          so the UNIX leap time of 1972-12-31 23:59:60 UTC would be 94694401,
+          and the UNIX leap time of 1973-01-01 00:00:00 UTC would be 94694402.
+          If a TZif file specifies no leap-second records,
+          UNIX leap time is equal to UNIX time.
+        </dd>
         <dt>Wall Time:</dt>
         <dd>
-	  Another name for local time; short for "wall-clock time".
+          Another name for local time; short for "wall-clock time".
         </dd>
       </dl>
     </section>
@@ -281,10 +281,10 @@
       billion years into the past or future.</t>
 
       <t>
-	NOTE: All multi-octet integer values MUST be stored in
-	network octet order format (high-order octet first, otherwise
-	known as big-endian), with all bits significant. Signed
-	integer values MUST be represented using two's complement.
+        NOTE: All multi-octet integer values MUST be stored in
+        network octet order format (high-order octet first, otherwise
+        known as big-endian), with all bits significant. Signed
+        integer values MUST be represented using two's complement.
       </t>
       <t>A TZif file is structured as follows:</t>
 
@@ -335,61 +335,61 @@
         <dl newline="false" spacing="normal">
           <dt>magic:</dt>
           <dd>
-	      The four-octet <xref target="RFC20" format="default">ASCII</xref>
+            The four-octet <xref target="RFC20" format="default">ASCII</xref>
               sequence "TZif" (0x54 0x5A 0x69 0x66),
               which identifies the file as utilizing the Time Zone
               Information Format.
-	    </dd>
+          </dd>
           <dt>ver(sion):</dt>
           <dd>
             <t>
-	      An octet identifying the version of the
+              An octet identifying the version of the
               file's format.  The value MUST be one of the following:
 
             </t>
             <dl newline="false" spacing="normal">
               <dt>NUL (0x00)</dt>
               <dd>
-		  Version 1 - The file contains only the version 1
+                Version 1 - The file contains only the version 1
                   header and data block.
-	          Version 1 files MUST NOT contain a version 2+ header,
+                  Version 1 files MUST NOT contain a version 2+ header,
                   data block, or footer.
-	        </dd>
+              </dd>
               <dt>'2' (0x32)</dt>
               <dd>
-		  Version 2 - The file MUST contain the version 1
-	          header and data block, a version 2+ header and data
+                Version 2 - The file MUST contain the version 1
+                header and data block, a version 2+ header and data
                   block, and a footer.
                   The TZ string in the
-		  <xref target="footer" format="default">footer</xref>, if
+                  <xref target="footer" format="default">footer</xref>, if
                   nonempty, MUST strictly adhere to the
-		  requirements for the TZ environment variable
+                  requirements for the TZ environment variable
                   as defined in
                   Section 8.3 of the "Base Definitions" volume of
-	          <xref target="POSIX" format="default"/>
-		  and MUST encode the POSIX portable character set as
-		  ASCII.
-		  The leap-second records MUST NOT be
+                  <xref target="POSIX" format="default"/>
+                  and MUST encode the POSIX portable character set as
+                  ASCII.
+                  The leap-second records MUST NOT be
                   <xref target="truncation" format="default">
                     truncated at the start</xref>,
-		  and MUST NOT contain an expiration time.
-	        </dd>
+                    and MUST NOT contain an expiration time.
+              </dd>
               <dt>'3' (0x33)</dt>
               <dd>
-		  Version 3 - The file MUST conform to all version 2
-		  requirements, except that any TZ string in the
-		  <xref target="footer" format="default">footer</xref>
-		  MAY use the TZ string extension
+                Version 3 - The file MUST conform to all version 2
+                requirements, except that any TZ string in the
+                <xref target="footer" format="default">footer</xref>
+                MAY use the TZ string extension
                   <xref target="tzstrext" format="default">
                     described below</xref>.
-	        </dd>
+              </dd>
               <dt>'4' (0x34)</dt>
               <dd>
-		  Version 4 - The file MUST conform to all version 3
-		  requirements, except that the leap-second records
-		  MAY be truncated at the start, and
-		  MAY contain an expiration time.
-	        </dd>
+                Version 4 - The file MUST conform to all version 3
+                requirements, except that the leap-second records
+                MAY be truncated at the start, and
+                MAY contain an expiration time.
+              </dd>
             </dl>
           </dd>
           <dt>isutcnt:</dt>
@@ -397,34 +397,34 @@
               A four-octet unsigned integer specifying the number of
               UT/local indicators contained in the data block --
               MUST either be zero or equal to "typecnt".
-	    </dd>
+          </dd>
           <dt>isstdcnt:</dt>
           <dd>
               A four-octet unsigned integer specifying the number of
               standard/wall indicators contained in the data block --
               MUST either be zero or equal to "typecnt".
-	    </dd>
+          </dd>
           <dt>leapcnt:</dt>
           <dd>
               A four-octet unsigned integer specifying the number of
               leap-second records contained in the data block.
-	    </dd>
+          </dd>
           <dt>timecnt:</dt>
           <dd>
               A four-octet unsigned integer specifying the number of
               transition times contained in the data block.
-	    </dd>
+          </dd>
           <dt>typecnt:</dt>
           <dd>
               A four-octet unsigned integer specifying the number of
               local time type records contained in the data block --
               MUST NOT be zero.
-	      (Although local time type records convey no useful
-	      information in files that have nonempty TZ strings but
-	      no transitions, at least one such record is nevertheless
-	      required because many TZif readers reject files that
-	      have zero time types.)
-	    </dd>
+              (Although local time type records convey no useful
+              information in files that have nonempty TZ strings but
+              no transitions, at least one such record is nevertheless
+              required because many TZif readers reject files that
+              have zero time types.)
+          </dd>
           <dt>charcnt:</dt>
           <dd>
               A four-octet unsigned integer specifying the total number
@@ -432,12 +432,12 @@
               contained in the data block - MUST NOT be zero.
               The count includes the trailing NUL (0x00) octet at the
               end of the last time zone designation.
-	    </dd>
+          </dd>
         </dl>
         <t>Although the version 1 and 2+ headers have the same format,
-	magic number, and version fields, their count
-	fields may differ, because the version 1 data can be a subset of
-	the version 2+ data.</t>
+        magic number, and version fields, their count
+        fields may differ, because the version 1 data can be a subset of
+        the version 2+ data.</t>
       </section>
 
       <section anchor="data" numbered="true" toc="default">
@@ -485,28 +485,28 @@
         <dl newline="false" spacing="normal">
           <dt>transition times:</dt>
           <dd>
-	      A series of four- or eight-octet UNIX leap time values sorted
+            A series of four- or eight-octet UNIX leap time values sorted
               in strictly ascending order.
               Each value is used as a transition time at which the rules
               for computing local time may change.
-	      The number of time values is specified by the "timecnt"
+              The number of time values is specified by the "timecnt"
               field in the header.
-	      Each time value SHOULD be at least -2**59.
-	      (-2**59 is the greatest negated power of 2 that predates
-	      the Big Bang, and avoiding earlier timestamps works
-	      around known TZif reader bugs relating to outlandishly
-	      negative timestamps.)
-	    </dd>
+              Each time value SHOULD be at least -2**59.
+              (-2**59 is the greatest negated power of 2 that predates
+              the Big Bang, and avoiding earlier timestamps works
+              around known TZif reader bugs relating to outlandishly
+              negative timestamps.)
+          </dd>
           <dt>transition types:</dt>
           <dd>
-	      A series of one-octet unsigned integers specifying the
+            A series of one-octet unsigned integers specifying the
               type of local time of the corresponding transition time.
               These values serve as zero-based indices into the array
               of local time type records.
-	      The number of type indices is specified by the "timecnt"
+              The number of type indices is specified by the "timecnt"
               field in the header.
               Each type index MUST be in the range [0, "typecnt" - 1].
-	    </dd>
+          </dd>
           <dt>local time type records:</dt>
           <dd>
             <t>
@@ -528,19 +528,19 @@
                   A four-octet signed integer specifying the number of
                   seconds to be added to UT in order to determine local
                   time. The value MUST NOT be -2**31 and SHOULD be in
-		  the range [-89999, 93599] (i.e., its value SHOULD be
+                  the range [-89999, 93599] (i.e., its value SHOULD be
                   more than -25 hours and less than 26 hours).
-		  Avoiding -2**31 allows 32-bit clients to negate
-		  the value without overflow.
-		  Restricting it to [-89999, 93599] allows easy support by
-		  implementations that already support the
-		  POSIX-required range [-24:59:59, 25:59:59].
+                  Avoiding -2**31 allows 32-bit clients to negate
+                  the value without overflow.
+                  Restricting it to [-89999, 93599] allows easy support by
+                  implementations that already support the
+                  POSIX-required range [-24:59:59, 25:59:59].
                 </dd>
               <dt>(is)dst:</dt>
               <dd>
                   A one-octet value indicating whether local
                   time should be considered Daylight Saving Time (DST).
-		  The value MUST be 0 or 1.
+                  The value MUST be 0 or 1.
                   A value of one (1) indicates that this type of time is DST.
                   A value of zero (0) indicates that this time type
                   is standard time.
@@ -551,12 +551,12 @@
                   index into the series of time zone designation octets,
                   thereby selecting a particular designation string.
                   Each index MUST be in the range [0, "charcnt" - 1]; it
-		  designates the NUL&nbhy;terminated string of octets
-		  starting at position "idx" in the time zone
-		  designations.  (This string MAY be empty.)  A NUL
-		  octet MUST exist in the time zone designations at or
-		  after position "idx".
-		  If the designation string is "-00", the time type is a
+                  designates the NUL&nbhy;terminated string of octets
+                  starting at position "idx" in the time zone
+                  designations.  (This string MAY be empty.)  A NUL
+                  octet MUST exist in the time zone designations at or
+                  after position "idx".
+                  If the designation string is "-00", the time type is a
                   placeholder indicating that local time is unspecified.
                 </dd>
             </dl>
@@ -569,11 +569,11 @@
               "charcnt" field in the header.
               Two designations MAY overlap if one is a
               suffix of the other.
-	      The character encoding of time zone designation strings
-	      is not specified; however,
+              The character encoding of time zone designation strings
+              is not specified; however,
               see <xref target="interop" format="default"/>
-	      of this document.
-	    </dd>
+              of this document.
+          </dd>
           <dt>leap-second records:</dt>
           <dd>
             <t>
@@ -608,39 +608,39 @@
             <dl newline="false" spacing="normal">
               <dt>occur(rence):</dt>
               <dd>
-	          A four- or eight-octet UNIX leap time value specifying the
-		  time at which a leap-second correction occurs
-		  or at which the leap-second table expires.
-		  The first value, if present, MUST be nonnegative,
-		  and each leap second MUST occur at the end of a UTC
-		  month.
+                A four- or eight-octet UNIX leap time value specifying the
+                time at which a leap-second correction occurs
+                or at which the leap-second table expires.
+                The first value, if present, MUST be nonnegative,
+                and each leap second MUST occur at the end of a UTC
+                month.
                 </dd>
               <dt>corr(ection):</dt>
               <dd>
                 <t>
-	          A four-octet signed integer specifying the value
-		  of LEAPCORR on or after the occurrence.
+                  A four-octet signed integer specifying the value
+                  of LEAPCORR on or after the occurrence.
 
-		  If "leapcnt" is zero, LEAPCORR is zero for all timestamps;
-		  otherwise, for timestamps before the first occurrence time,
-		  LEAPCORR is zero if the first correction is one (1)
-		  or minus one (-1),
-		  and is unspecified otherwise (which can happen only in files
-		  <xref target="truncation" format="default">
+                  If "leapcnt" is zero, LEAPCORR is zero for all timestamps;
+                  otherwise, for timestamps before the first occurrence time,
+                  LEAPCORR is zero if the first correction is one (1)
+                  or minus one (-1),
+                  and is unspecified otherwise (which can happen only in files
+                  <xref target="truncation" format="default">
                     truncated at the start</xref>).
 
                 </t>
                 <t>
-		  The first leap second is a positive leap second if and
-		  only if its correction is positive.
-		  Each correction after the first MUST differ from the
-		  previous correction by either
-		  one (1) for a positive leap second or
-		  minus one (-1) for a negative leap second,
-		  except that in version 4 files with two or more leap-second
+                  The first leap second is a positive leap second if and
+                  only if its correction is positive.
+                  Each correction after the first MUST differ from the
+                  previous correction by either
+                  one (1) for a positive leap second or
+                  minus one (-1) for a negative leap second,
+                  except that in version 4 files with two or more leap-second
                   records, the correction value of the last two records
                   MAY be the same, with the occurrence of last record
-		  indicating the expiration time of the leap-second table.
+                  indicating the expiration time of the leap-second table.
                 </t>
 
                 <t>
@@ -672,7 +672,7 @@
               A series of one-octet values indicating whether
               the transition times associated with local time types were
               specified as standard time or wall-clock time.
-	      Each value MUST be 0 or 1.
+              Each value MUST be 0 or 1.
               A value of one (1) indicates standard time. The value
               MUST be set to one (1) if the corresponding
               UT/local indicator is set to one (1).
@@ -682,13 +682,13 @@
               If "isstdcnt" is zero (0), all transition times
               associated with local time types are assumed to be
               specified as wall time.
-	    </dd>
+          </dd>
           <dt>UT/local indicators:</dt>
           <dd anchor="utlocal">
               A series of one-octet values indicating whether
               the transition times associated with local time types were
               specified as UT or local time.
-	      Each value MUST be 0 or 1.
+              Each value MUST be 0 or 1.
               A value of one (1) indicates UT,
               and the corresponding standard/wall indicator MUST also
               be set to one (1).
@@ -698,7 +698,7 @@
               If "isutcnt" is zero (0), all transition times
               associated with local time types are assumed to be
               specified as local time.
-	    </dd>
+          </dd>
         </dl>
 
         <t>The type corresponding to a transition time specifies local
@@ -713,7 +713,7 @@
         If there are no transitions, local time for all timestamps is
         specified by the TZ string in the footer if present and
         nonempty; otherwise, it is specified by time type 0.
-	A time type with a designation string of "-00" represents an
+        A time type with a designation string of "-00" represents an
         unspecified local time.
         </t>
 
@@ -730,8 +730,8 @@
         "AKST9AKDT").</t>
 
         <t>In order to eliminate unused space in a TZif file, every
-	nonzero local time type index SHOULD appear at least once in the
-	transition type array.
+        nonzero local time type index SHOULD appear at least once in the
+        transition type array.
         Likewise, every octet in the time zone designations array
         SHOULD be used by at least one time type record.</t>
       </section>
@@ -760,32 +760,32 @@
           <dt>TZ string:</dt>
           <dd>
               A rule for computing local time changes after the last
-	      transition time stored in the version 2+ data block.
-	      The string is either empty or uses the expanded format
-	      of the "TZ" environment variable as defined in
+              transition time stored in the version 2+ data block.
+              The string is either empty or uses the expanded format
+              of the "TZ" environment variable as defined in
               Section 8.3 of the "Base Definitions" volume of
               <xref target="POSIX" format="default"/> with ASCII
               encoding, possibly utilizing the
               <xref target="tzstrext" format="default">
               extension described below</xref>
               in version 3 and higher files.
-	      If the string is empty, the corresponding information is
-	      not available.
-	      If the string is nonempty and one or more transitions
-	      appear in the version 2+ data, the string MUST be
-	      consistent with the last version 2+ transition. In other words,
+              If the string is empty, the corresponding information is
+              not available.
+              If the string is nonempty and one or more transitions
+              appear in the version 2+ data, the string MUST be
+              consistent with the last version 2+ transition. In other words,
               evaluating the TZ string at the time of the last
               transition should yield the same time type as was specified in
-	      the last transition.
-	      The string MUST NOT contain NUL octets or be
-	      NUL&nbhy;terminated, and it
+              the last transition.
+              The string MUST NOT contain NUL octets or be
+              NUL&nbhy;terminated, and it
               SHOULD NOT begin with the ':' (colon) character.
             </dd>
         </dl>
 
         <t>The TZif footer is present only in version 2 and higher files,
-	as the obsolescent version 1 format was designed before the
-	need for a footer was apparent.</t>
+        as the obsolescent version 1 format was designed before the
+        need for a footer was apparent.</t>
 
         <section anchor="permdst" numbered="true" toc="default">
           <name>All-Year Daylight Saving Time</name>
@@ -815,10 +815,10 @@
           <name>TZ String Extension</name>
 
           <t>The TZ string in a version 3 or higher TZif file MAY use the
-	  following extension to POSIX TZ strings.
-	  This extension is described using the terminology of
+          following extension to POSIX TZ strings.
+          This extension is described using the terminology of
             Section 8.3 of the "Base Definitions" volume of 
-	    <xref target="POSIX" format="default"/>.
+            <xref target="POSIX" format="default"/>.
           </t>
 
           <ul spacing="normal">
@@ -861,8 +861,8 @@
         times after the year 2038.</li>
 
         <li>Readers that understand only version 1 MUST ignore
-	any data that extends beyond the calculated end of the version
-	1 data block.</li>
+        any data that extends beyond the calculated end of the version
+        1 data block.</li>
 
         <li>Other than version 1, writers should generate the lowest
         version number needed by a file's data.  For example, a writer
@@ -873,39 +873,39 @@
         accurately model transition times.</li>
 
         <li>To save space, writers of version 2+ files MAY output a
-	placeholder version 1 data block with all counts zero except
-	that "typecnt" and "charcnt" are both one (1).
-	If this is done, obsolescent version-1-only readers MUST
-	interpret these files as lacking time changes and time zone
-	abbreviations.</li>
+        placeholder version 1 data block with all counts zero except
+        that "typecnt" and "charcnt" are both one (1).
+        If this is done, obsolescent version-1-only readers MUST
+        interpret these files as lacking time changes and time zone
+        abbreviations.</li>
 
         <li>Unless the version 1 data block is a placeholder,
-	the sequence of timestamps defined by the version 1
+        the sequence of timestamps defined by the version 1
         header and data block SHOULD be a contiguous sub-sequence
-	of the timestamps defined by the version 2+ header and data
-	block, and by the footer.
-	This guideline helps obsolescent version 1 readers
-	agree with current readers about timestamps within the
-	contiguous sub-sequence.</li>
+        of the timestamps defined by the version 2+ header and data
+        block, and by the footer.
+        This guideline helps obsolescent version 1 readers
+        agree with current readers about timestamps within the
+        contiguous sub-sequence.</li>
 
         <li>When a TZif file contains a leap-second table expiration
-	time, TZif readers SHOULD either refuse to process
-	post-expiration timestamps, or process them as if the expiration
-	time did not exist (possibly with an error indication).</li>
+        time, TZif readers SHOULD either refuse to process
+        post-expiration timestamps, or process them as if the expiration
+        time did not exist (possibly with an error indication).</li>
 
         <li>Time zone designations SHOULD consist of at least three (3)
         and no more than six (6) ASCII characters from the set of
-	alphanumerics, '-', and '+'.
-	This is for compatibility with POSIX requirements for
-	time zone abbreviations.</li>
+        alphanumerics, '-', and '+'.
+        This is for compatibility with POSIX requirements for
+        time zone abbreviations.</li>
 
         <li>When reading a version 2 or higher file, readers
-	SHOULD ignore the version 1 header and data block except for
+        SHOULD ignore the version 1 header and data block except for
         the purpose of skipping over them.</li>
 
         <li>Readers SHOULD calculate the total lengths of the
-	headers and data blocks and check that they all fit within
-	the actual file size, as part of a validity check for the file.</li>
+        headers and data blocks and check that they all fit within
+        the actual file size, as part of a validity check for the file.</li>
 
         <li>
           <t>When a TZif file is used in a MIME message entity, it SHOULD
@@ -916,7 +916,7 @@
               <xref target="tzif-leap" format="default">
               "application/tzif-leap"</xref>
               to indicate that leap-second records are included in the
-	      TZif data as necessary (none are necessary if the file
+              TZif data as necessary (none are necessary if the file
               is truncated to a range that precedes the first leap
             second).</li>
 
@@ -969,35 +969,35 @@
         <xref target="RFC7808" section="3.9" format="default"/>,
         a TZDIST service MAY truncate time zone transition data.
         A truncated TZif file is valid from its first and up to, but
-	not including, its last version 2+ transition time, if present.</t>
+        not including, its last version 2+ transition time, if present.</t>
 
         <t>When truncating the start of a TZif file, the service MUST
-	supply in the version 2+ data a first transition time that is
+        supply in the version 2+ data a first transition time that is
         the start point of the truncation range.
         As with untruncated TZif files, time type 0 indicates local
         time immediately before the start point, and the time type of
         the first transition indicates local time thereafter.
-	Time type 0 SHOULD be a placeholder indicating that local time
+        Time type 0 SHOULD be a placeholder indicating that local time
         is unspecified.</t>
 
         <t>When truncating the start of a TZif file containing
-	leap-second records, the service MUST keep all leap-second
-	records governing timestamps within the truncation range,
-	even if the first such record precedes the start point of
-	the truncation range.
-	If the truncated leap-second table is nonempty,
-	its first record MUST have a positive correction
-	if and only if it represents a positive leap second.</t>
+        leap-second records, the service MUST keep all leap-second
+        records governing timestamps within the truncation range,
+        even if the first such record precedes the start point of
+        the truncation range.
+        If the truncated leap-second table is nonempty,
+        its first record MUST have a positive correction
+        if and only if it represents a positive leap second.</t>
 
         <t>When truncating the end of a TZif file, the service MUST
-	supply in the version 2+ data a last transition time that is
+        supply in the version 2+ data a last transition time that is
         the end point of the truncation range and MUST supply an
         empty TZ string.
         As with untruncated TZif files with empty TZ strings, a
         truncated TZif file does not indicate local time after the
         last transition.
         To this end, the time type of the last transition SHOULD be a
-	placeholder indicating that local time is unspecified.</t>
+        placeholder indicating that local time is unspecified.</t>
 
         <t>All represented information that falls inside the
         truncation range MUST be the same as that represented by a
@@ -1324,13 +1324,13 @@ EST5EDT,M3.2.0,M11.1.0
 
         <reference anchor="ITU-R-TF.460"
                    target="https://www.itu.int/rec/R-REC-TF.460/en">
-	  <front>
+          <front>
             <title>Standard-frequency and time-signal emissions</title>
-	    <author>
+            <author>
               <organization>International Telecommunications Union</organization>
-	    </author>
-	    <date month="February" year="2002" />
-	  </front>
+            </author>
+            <date month="February" year="2002" />
+          </front>
           <seriesInfo name="ITU-R" value="Recommendation TF.460" />
         </reference>
       </references>
@@ -1422,7 +1422,7 @@ EST5EDT,M3.2.0,M11.1.0
       Most of these are problems in generating TZif files for use by
       readers conforming to
       <xref target="EGGERT-TZ" format="default">
-	predecessors of this specification</xref>.
+        predecessors of this specification</xref>.
       The goals of this section are:</t>
 
       <ol spacing="normal" type="1">
@@ -1452,83 +1452,83 @@ EST5EDT,M3.2.0,M11.1.0
 
       <ul spacing="normal">
         <li>Some readers examine only version 1 data.
-	As a partial workaround, a writer can output as much version 1
+        As a partial workaround, a writer can output as much version 1
         data as possible.
-	However, a reader should ignore version 1 data and use
-	version 2+ data, even if the reader's native timestamps have only
+        However, a reader should ignore version 1 data and use
+        version 2+ data, even if the reader's native timestamps have only
         32 bits.</li>
 
         <li>Some readers designed for version 2 might mishandle
         timestamps after a version 3 or higher file's last transition, because
         they cannot parse extensions to POSIX in the TZ-like string.
-	As a partial workaround, a writer can output more transitions
+        As a partial workaround, a writer can output more transitions
         than necessary, so that only far-future timestamps are
         mishandled by version 2 readers.</li>
 
         <li>Some readers designed for version 2 do not support
-	permanent daylight saving time with transitions after 24:00
-	-- e.g., a TZ string
+        permanent daylight saving time with transitions after 24:00
+        -- e.g., a TZ string
         "EST5EDT,0/0,J365/25" denoting permanent Eastern Daylight Time
         (-04).
-	As a workaround, a writer can substitute standard time
-	for two time zones east, e.g.,
-	"XXX3EDT4,0/0,J365/23"
-	for a time zone with a never-used standard time (XXX, -03)
-	and negative daylight saving time (EDT, -04) all year.
-	Alternatively,
-	as a partial workaround a writer can substitute standard time
+        As a workaround, a writer can substitute standard time
+        for two time zones east, e.g.,
+        "XXX3EDT4,0/0,J365/23"
+        for a time zone with a never-used standard time (XXX, -03)
+        and negative daylight saving time (EDT, -04) all year.
+        Alternatively,
+        as a partial workaround a writer can substitute standard time
         for the next time zone east -- e.g., "AST4" for permanent
         Atlantic Standard Time (-04).</li>
 
         <li>Some readers designed for version 2 or 3, and that require strict
-	conformance to RFC 8536, reject version 4 files whose leap-second
-	tables are truncated at the start or that end in expiration times.</li>
+        conformance to RFC 8536, reject version 4 files whose leap-second
+        tables are truncated at the start or that end in expiration times.</li>
 
         <li>Some readers ignore the footer and instead predict future
         timestamps from the time type of the last transition.
-	As a partial workaround, a writer can output more transitions
+        As a partial workaround, a writer can output more transitions
         than necessary.</li>
 
         <li>Some readers do not use time type 0 for timestamps before
         the first transition, in that they infer a time type using a
         heuristic that does not always select time type 0.
-	As a partial workaround, a writer can output a dummy (no-op)
-	first transition at an early time.</li>
+        As a partial workaround, a writer can output a dummy (no-op)
+        first transition at an early time.</li>
 
         <li>Some readers mishandle timestamps before the first
         transition that has a timestamp not less than -2**31.
-	Readers that support only 32-bit timestamps are likely to be
+        Readers that support only 32-bit timestamps are likely to be
         more prone to this problem, for example, when they process
         64-bit transitions, only some of which are representable in 32
         bits.
-	As a partial workaround, a writer can output a dummy
+        As a partial workaround, a writer can output a dummy
         transition at timestamp -2**31.</li>
 
         <li>Some readers mishandle a transition if its timestamp has
         the minimum possible signed 64-bit value.
-	Timestamps less than -2**59 are not recommended.</li>
+        Timestamps less than -2**59 are not recommended.</li>
 
         <li>Some readers mishandle POSIX-style TZ strings that
-	contain "&lt;" or "&gt;".
-	As a partial workaround, a writer can avoid using '&lt;' or '&gt;'
-	for time zone abbreviations containing only alphabetic
+        contain "&lt;" or "&gt;".
+        As a partial workaround, a writer can avoid using '&lt;' or '&gt;'
+        for time zone abbreviations containing only alphabetic
         characters.</li>
 
         <li>Many readers mishandle time zone abbreviations that contain
         non-ASCII characters.
-	These characters are not recommended.</li>
+        These characters are not recommended.</li>
 
         <li>Some readers may mishandle time zone abbreviations that
         contain fewer than 3 or more than 6 characters, or that
         contain ASCII characters other than alphanumerics, '-', and
         '+'.
-	These abbreviations are not recommended.</li>
+        These abbreviations are not recommended.</li>
 
-	<li>This specification does not dictate how readers should deal
-	with timestamps when local time is unspecified.
-	Common practice is for readers to report UT with designation
+        <li>This specification does not dictate how readers should deal
+        with timestamps when local time is unspecified.
+        Common practice is for readers to report UT with designation
         string "-00".
-	A reader could return an error indication instead.</li>
+        A reader could return an error indication instead.</li>
 
         <li>Some readers mishandle TZif files that specify
         daylight saving time UT offsets that are less than the UT
@@ -1538,23 +1538,23 @@ EST5EDT,M3.2.0,M11.1.0
         "IST-1GMT0,M10.5.0,M3.5.0/1", observing standard time
         (IST, +01) in summer and daylight saving time (GMT, +00) in
         winter.
-	As a partial workaround, a writer can output data for the
+        As a partial workaround, a writer can output data for the
         equivalent of the POSIX TZ string "GMT0IST,M3.5.0/1,M10.5.0",
-	thus swapping standard and daylight saving time.
-	Although this workaround misidentifies which part of the year
+        thus swapping standard and daylight saving time.
+        Although this workaround misidentifies which part of the year
         uses daylight saving time, it records UT offsets and time zone
         abbreviations correctly.</li>
 
         <li>Some readers generate ambiguous timestamps for positive
         leap seconds that occur when the UTC offset is not a multiple
         of 60 seconds.
-	For example, in a timezone with UTC offset +01:23:45 and with
-	a positive leap second 78796801 (1972-06-30 23:59:60 UTC),
+        For example, in a timezone with UTC offset +01:23:45 and with
+        a positive leap second 78796801 (1972-06-30 23:59:60 UTC),
         some readers will map both 78796800 and 78796801 to 01:23:45
         local time the next day instead of mapping the latter to
         01:23:46, and they will map 78796815 to 01:23:59 instead of to
         01:23:60.
-	This has not yet been a practical problem, since no civil
+        This has not yet been a practical problem, since no civil
         authority has observed such UTC offsets since leap seconds
         were introduced in 1972.</li>
       </ul>
@@ -3212,7 +3212,7 @@ EST5EDT,M3.2.0,M11.1.0
 
           <li>Look up the TZ string in the footer ("HST10"), which
           indicates that the time zone designation is "HST" year-round, and
-	  the offset to UTC is 10:00.</li>
+          the offset to UTC is 10:00.</li>
 
           <li>Subtract the UTC offset from the time of interest to
           yield a standard local time of 2018-12-31T14:00:00-10:00 (HST).</li>
@@ -4411,13 +4411,13 @@ EST5EDT,M3.2.0,M11.1.0
         <li>Added definition of Leap Second.</li>
 
         <li>Added specification of the version 4 format and the
-	optional leap-second table truncation and expiration,
-	along with an example and relevant
-	interoperability considerations.</li>
+        optional leap-second table truncation and expiration,
+        along with an example and relevant
+        interoperability considerations.</li>
 
-	<li>Documented the longstanding practice that UT with
-	designation string "-00" denotes unspecified local time.
-	Added recommendation that this designation string should be
+        <li>Documented the longstanding practice that UT with
+        designation string "-00" denotes unspecified local time.
+        Added recommendation that this designation string should be
         used for timestamps excluded by TZif file truncation.</li>
 
         <li>Required support in version 2 files for all-year daylight
@@ -4449,34 +4449,34 @@ EST5EDT,M3.2.0,M11.1.0
       <t>This section is to be removed by RFC Editor before publication.</t>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-09</name>
-	<ul spacing="normal">
+        <name>Since rfc8536bis-09</name>
+        <ul spacing="normal">
           <li>Clarified text of the example in the description of
           leap-second table expiration.</li>
-	</ul>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-08</name>
-	<ul spacing="normal">
+        <name>Since rfc8536bis-08</name>
+        <ul spacing="normal">
           <li>Added an example of a TZif file truncated at the
           end.</li>
           <li>Fixed utoff value of LMT in Honolulu example.</li>
           <li>Updated "tz-link" URL.</li>
           <li>Miscellaneous editorial changes.</li>
-	</ul>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-07</name>
-	<ul spacing="normal">
+        <name>Since rfc8536bis-07</name>
+        <ul spacing="normal">
           <li>Miscellaneous editorial changes.</li>
-	</ul>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-06</name>
-	<ul spacing="normal">
+        <name>Since rfc8536bis-06</name>
+        <ul spacing="normal">
           <li>Moved the specification of an all-year daylight saving time
           <xref target="permdst" format="default">TZ string</xref>,
           to its own section as it is NOT an extension.</li>
@@ -4485,41 +4485,41 @@ EST5EDT,M3.2.0,M11.1.0
           <li>Updated "tz-link" title and reference.</li>
           <li>Updated reference to RFC 7231 to RFC 9110.</li>
           <li>Miscellaneous editorial changes.</li>
-	</ul>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-05</name>
-	<ul spacing="normal">
+        <name>Since rfc8536bis-05</name>
+        <ul spacing="normal">
           <li>Clarified the specification of an all-year daylight saving time
           <xref target="permdst" format="default">TZ string</xref>,
           and changed the example to use negative DST.</li>
-	</ul>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-04</name>
-	<ul spacing="normal">
+        <name>Since rfc8536bis-04</name>
+        <ul spacing="normal">
           <li>None.</li>
-	</ul>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-03</name>
-	<ul spacing="normal">
+        <name>Since rfc8536bis-03</name>
+        <ul spacing="normal">
           <li>Noted that erratum <xref target="Err6757" format="default"/>
           has been addressed.</li>
           <li>Added a definition of Leap Second, including UTC month.</li>
-	</ul>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
-	<name>Since rfc8536bis-02</name>
-	<ul spacing="normal">
-	  <li>Documented "-00" as meaning unspecified local time.</li>
-	  <li>Recommended that "-00" be used for timestamps that
-	    are unspecified due to TZif file truncation.</li>
-	</ul>
+        <name>Since rfc8536bis-02</name>
+        <ul spacing="normal">
+          <li>Documented "-00" as meaning unspecified local time.</li>
+          <li>Recommended that "-00" be used for timestamps that
+          are unspecified due to TZif file truncation.</li>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
@@ -4540,9 +4540,9 @@ EST5EDT,M3.2.0,M11.1.0
 
         <ul spacing="normal">
           <li>Added specification of the version 4 format and the
-	    optional leap-second table truncation and expiration,
-	    along with an example and relevant
-	    interoperability considerations.</li>
+          optional leap-second table truncation and expiration,
+          along with an example and relevant
+          interoperability considerations.</li>
 
             <li>Specified column widths in example tables.</li>
 
