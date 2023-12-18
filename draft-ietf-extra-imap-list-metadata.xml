@@ -14,7 +14,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
      ipr="trust200902"
-     docName="draft-ietf-extra-imap-list-metadata-00"
+     docName="draft-ietf-extra-imap-list-metadata-01"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -29,7 +29,7 @@
     <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
     Mailbox METADATA in Extended LIST</title>
     <seriesInfo name="Internet-Draft"
-                value="draft-ietf-extra-imap-list-metadata-00"/>
+                value="draft-ietf-extra-imap-list-metadata-01"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -191,7 +191,7 @@ S: A02 OK List completed.
       <xref target="RFC5464"/>.</t>
 
       <artwork name="" type="" align="left" alt=""><![CDATA[
-return-option =/ "METADATA" "(" entry *(SP entry) ")"
+return-option =/ "METADATA" SP "(" entry *(SP entry) ")"
 ]]></artwork>
 
     </section> <!-- Syntax -->
@@ -281,6 +281,12 @@ return-option =/ "METADATA" "(" entry *(SP entry) ")"
 
     <section numbered="true" toc="default">
       <name>Change History (To be removed by RFC Editor before publication)</name>
+      <t>Changes from draft-ietfextra-imap-list-metadata-00:
+      </t>
+      <ul spacing="normal">
+        <li>Added missing SP in ABNF.</li>
+      </ul>
+
       <t>Changes from draft-murchison-imap-list-metadata-02:
       </t>
       <ul spacing="normal">
