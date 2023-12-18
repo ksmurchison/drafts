@@ -41,8 +41,7 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes" ?>
 <!-- If "yes", causes the references to be sorted in order of tags.
-			 This doesn't have any effect unless symrefs is "yes"
-          also. -->
+     This doesn't have any effect unless symrefs is "yes" also. -->
 <!-- These two save paper: Just setting compact to "yes" makes savings by not starting each 
      main section on a new page but does not omit the blank lines between list items. 
      If subcompact is also "yes" the blank lines between list items are also omitted. -->
@@ -65,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-08"
+     docName="draft-ietf-emailcore-as-09"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,8 +86,8 @@
 
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
-	   Core Email Protocols</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-08"/>
+    Core Email Protocols</title> 
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-09"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -143,7 +142,6 @@
          files in a meta tag but they have no effect on text or nroff output. -->
     <!-- <keyword>Text</keyword> (as many of those elements as needed -->
 
-	
     <abstract>
       <t> Electronic mail is one of the oldest Internet
       applications that is still in very active use.  While the
@@ -194,26 +192,28 @@
       <name>Applicability of Some SMTP Provisions</name>
       <t> Over the years since <xref target="RFC5321"/> was
         published in October 2008, usage of SMTP has evolved, machines and 
-	network speeds have increased, and the frequency with which
-	SMTP senders and receivers have to be prepared to deal with
-	systems that are disconnected from the Internet for long
-	periods or that require many hops to reach has decreased.
-	During the same period, the IETF
+        network speeds have increased, and the frequency with which
+        SMTP senders and receivers have to be prepared to deal with
+        systems that are disconnected from the Internet for long
+        periods or that require many hops to reach has decreased.
+        During the same period, the IETF
 
-	<!-- Could say "Internet" above, but I'm not sure it would be true -->
+        <!-- Could say "Internet" above, but I'm not sure it would be true -->
 
-	has become much more sensitive to privacy and security
-	issues and the need to be more resistant or robust against
-	spam and other attacks.  In addition SMTP (and Message
-	Format) extensions have been introduced that are expected to
-	evolve the Internet's mail system to better accommodate
-	environments in which Basic Latin Script is not the
-	norm.</t>
+        has become much more sensitive to privacy and security
+        issues and the need to be more resistant or robust against
+        spam and other attacks.  In addition SMTP (and Message
+        Format) extensions have been introduced that are expected to
+        evolve the Internet's mail system to better accommodate
+        environments in which Basic Latin Script is not the norm.
+      </t>
+
       <t> This section describes adjustments
-	that may be appropriate for SMTP under various circumstances
-	and discusses the applicability of other protocols that
-	represent newer work or that are intended to deal with
-	relatively newer issues.</t>
+      that may be appropriate for SMTP under various circumstances
+      and discusses the applicability of other protocols that
+      represent newer work or that are intended to deal with
+      relatively newer issues.</t>
+
       <section numbered="true" toc="default">
         <name>Handling of the Domain Argument to the EHLO Command</name>
         <t> If the <tt>Domain</tt> argument to
@@ -326,12 +326,16 @@
             field) and "local-part" (left hand side of email addresses).
             Use of empty quoted strings is in particular problematic in
             the "local-part".
-            For example, all of the following email addresses are non
-            interoperable: 
+            For example, all of the following email addresses are
+            non-interoperable:
         </t>
-        <t>"".bar@example.com </t>
-        <t>foo.""@example.net</t>
-        <t>""@example.com</t>
+
+        <ul empty="true">
+          <li>"".bar@example.com </li>
+          <li>foo.""@example.net</li>
+          <li>""@example.com</li>
+        </ul>
+
         <t>Use of empty quoted strings is fine in "display-name".</t>
       </section>
 
@@ -345,9 +349,10 @@
           FOR clause in Received header fields can result in disclosure
           of PII.  As such, the FOR clause MUST NOT be generated if the
           message copy is associated with multiple recipients from
-          mutliple SMTP RCPT commands. Otherwise, the value of the FOR
-          clause MUST contain the RCPT address that caused the message
-          to be routed to the recipient of the given copy of the message.</t>
+          mutliple SMTP RCPT commands.
+          Otherwise, the value of the FOR clause MUST contain the RCPT
+          address that caused the message to be routed to the
+          recipient of the given copy of the message.</t>
 
           <t>Note however, that if a mail system generates a FOR clause
           when there is only a single recipient, and doesn't generate
@@ -375,11 +380,6 @@
         </section>
       </section>
 
-      <section numbered="true" toc="default">
-        <name>Use of Time Zones in Date and Received Header Fields</name>
-        <t>Recommendations on the use of "-0000" as a time zone
-        offset, etc (Issue #55)...</t>
-      </section>
       <section numbered="true" toc="default">
         <name>Line Length Limits</name>
         <t>Clarify 78 octet limit versus 998 line length limit
@@ -411,7 +411,7 @@
       <t>While case-sensitivity is specified as an absolute
       requirement, it is important to stress that most
       implementations do not make case distinctions in local parts
-      (most treat “smith”, “Smith”, and “SMITH” as the same), and
+      (most treat "smith", "Smith", and "SMITH" as the same), and
       most implementations do preserve the case that is received
       (from SMTP or HTTP, from address books, or from user
       input).
@@ -626,7 +626,7 @@
           truth.</t>
         <t>SMTP AUTH defines a method for a client to identify
           itself to a Message Submission Agent (MSA) when presenting a
-          message for transmission, usually using port 587 rather than
+          message for transmission, usually using ports 465 or 587 rather than
           the traditional port 25. The most common implementation of
           SMTP AUTH is for a person to present a username and password
           to their mailbox provider's outbound SMTP server when
@@ -649,12 +649,12 @@
     </section>
     <!--
       <section title="Other Stuff">
-	<t> It is fairly clear that there will be things that do not
-	fit into the sections outlined above.  As one example, if
-	the IETF wants to say something specific about signatures
-	over headers or what (non-trace) headers may reasonably be
-	altered in transit, that may be more appropriate to other
-        sections than to any of the three suggested above.</t>
+      <t> It is fairly clear that there will be things that do not
+      fit into the sections outlined above.  As one example, if
+      the IETF wants to say something specific about signatures
+      over headers or what (non-trace) headers may reasonably be
+      altered in transit, that may be more appropriate to other
+      sections than to any of the three suggested above.</t>
       </section>
 -->
       <section anchor="Acknowledgments" numbered="true" toc="default">
@@ -697,19 +697,19 @@
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
 
-<!-- the following is the minimum to make xml2rfc happy -->	  
+<!-- the following is the minimum to make xml2rfc happy -->
    <!--   <reference anchor="min_ref">
 
         <front>
           <title>Minimal Reference</title>
           <author initials="authInitials" surname="authSurName">
             <organization></organization>
-	        <address/>
+            <address/>
           </author>
           <date year="2006" />
         </front>
-      </reference>  -->
-    </references>
+        </reference>  -->
+      </references>
       <references>
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/>
@@ -768,7 +768,7 @@
 
       <!-- A reference written by by an organization not a person. 
            NOTE: This reference is not referenced: this is immoral in I-Ds and RFCs, but may not
-	   be in other technical documents. It will be flagged when strict="yes". -->
+           be in other technical documents. It will be flagged when strict="yes". -->
 
    <!--      <reference anchor="DOMINATION"
                  target="http://www.example.com/dominator.html">
@@ -780,11 +780,11 @@
           <date year="1984" />
         </front>
       </reference>  -->
-	   
+
     </references>
     </references>
     <!--   Sections below here become  Appendices.  -->
-	
+
     <section anchor="ChangeLog" numbered="true" toc="default">
       <name>Change Log</name>
       <t>RFC Editor: Please remove this appendix before publication.</t>
@@ -793,21 +793,21 @@
         to draft-ietf-emailcore-as-00</name>
         <ul spacing="normal">
           <li> Change of filename, metadata, and date to reflect
-	  transition to WG document for new emailcore WG.  No
-	  other substantive changes </li>
+          transition to WG document for new emailcore WG.
+          No other substantive changes </li>
         </ul>
       </section>
       <section numbered="true" toc="default">
         <name>Changes from draft-ietf-emailcore-as-00 (2020-10-06) to -01</name>
         <ul spacing="normal">
           <li>Added co-authors (list is in alphabetical order for
-	  the present). </li>
+          the present). </li>
           <li> Updated references to 5321bis and 5322bis. </li>
           <li> Added note at top, "This version is provided as a
-	  document management convenience to update the author
-	  list and make an un-expired version available to the
-	  WG.  There are no substantive changes from the prior
-	  version", which should be removed for version -02.</li>
+          document management convenience to update the author
+          list and make an un-expired version available to the
+          WG.  There are no substantive changes from the prior
+          version", which should be removed for version -02.</li>
         </ul>
       </section>
       <section numbered="true" toc="default">
@@ -869,12 +869,22 @@
         </ul>
       </section>
       <section numbered="true" toc="default">
-        <name>Changes from draft-ietf-emailcore-as-07 (2022-03-13) to -08</name>
+        <name>Changes from draft-ietf-emailcore-as-07 (2023-03-13) to -08</name>
         <ul spacing="normal">
           <li>Added text addressing use of Received
           header fields by MUAs (issue #85).</li>
           <li>Added advice against use of Percent-Encoding non-ASCII
           characters in email addresses (issue #78).</li>
+          <li>Miscellaneous editorial changes.</li>
+        </ul>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-08 (2023-12-XX) to -09</name>
+        <ul spacing="normal">
+          <li>Acknowledge the existence of port 465 for submission
+          (issue #80).</li>
+          <li>Remove "Use of Time Zones in Date and Received Header
+          Fields" placeholder (issue #66).</li> 
           <li>Miscellaneous editorial changes.</li>
         </ul>
       </section>
