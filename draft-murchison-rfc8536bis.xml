@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-11" updates=""
+     docName="draft-murchison-rfc8536bis-12" updates=""
      ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-11"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-12"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -864,11 +864,13 @@
         any data that extends beyond the calculated end of the version
         1 data block.</li>
 
-        <li>Other than version 1, writers should generate the lowest
-        version number needed by a file's data.  For example, a writer
-        should generate a version 4 file only if its leap-second table
+        <li>Other than version 1, writers SHOULD generate the lowest
+        version number needed by a file's data.
+        This helps interoperability with older readers.
+        For example, a writer
+        SHOULD generate a version 4 file only if its leap-second table
         either expires or is truncated at the start.  Likewise, a
-        writer not generating a version 4 file should generate a
+        writer not generating a version 4 file SHOULD generate a
         version 3 file only if the TZ string extension is necessary to
         accurately model transition times.</li>
 
@@ -891,7 +893,10 @@
         <li>When a TZif file contains a leap-second table expiration
         time, TZif readers SHOULD either refuse to process
         post-expiration timestamps, or process them as if the expiration
-        time did not exist (possibly with an error indication).</li>
+        time did not exist (possibly with an error indication).
+        This lessens disagreement among implementations when
+        processing far-future timestamps that cannot yet be handled
+        exactly.</li>
 
         <li>Time zone designations SHOULD consist of at least three (3)
         and no more than six (6) ASCII characters from the set of
@@ -901,7 +906,10 @@
 
         <li>When reading a version 2 or higher file, readers
         SHOULD ignore the version 1 header and data block except for
-        the purpose of skipping over them.</li>
+        the purpose of skipping over them.
+        This improves compatibility among readers of nonconforming
+        files where version 2+ data is not upward compatible with
+        version 1.</li>
 
         <li>Readers SHOULD calculate the total lengths of the
         headers and data blocks and check that they all fit within
@@ -978,7 +986,8 @@
         time immediately before the start point, and the time type of
         the first transition indicates local time thereafter.
         Time type 0 SHOULD be a placeholder indicating that local time
-        is unspecified.</t>
+        is unspecified, so that the reader is unambiguously informed
+        of truncation at the start.</t>
 
         <t>When truncating the start of a TZif file containing
         leap-second records, the service MUST keep all leap-second
@@ -1129,9 +1138,9 @@ EST5EDT,M3.2.0,M11.1.0
           <dt>Subtype name:</dt>
           <dd>tzif</dd>
           <dt>Required parameters:</dt>
-          <dd>none</dd>
+          <dd>N/A</dd>
           <dt>Optional parameters:</dt>
-          <dd>none</dd>
+          <dd>N/A</dd>
           <dt>Encoding considerations:</dt>
           <dd>binary</dd>
           <dt>Security considerations:</dt>
@@ -4450,6 +4459,14 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+        <name>Since rfc8536bis-11</name>
+        <ul spacing="normal">
+          <li>Clarified the consequences of not abiding by some SHOULDs.</li>
+          <li>Miscellaneous editorial changes.</li>
+        </ul>
+      </section>
 
       <section numbered="true" toc="default">
         <name>Since rfc8536bis-10</name>
