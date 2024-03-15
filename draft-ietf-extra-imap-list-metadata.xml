@@ -14,7 +14,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
      ipr="trust200902"
-     docName="draft-ietf-extra-imap-list-metadata-01"
+     docName="draft-ietf-extra-imap-list-metadata-02"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -29,7 +29,7 @@
     <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
     Mailbox METADATA in Extended LIST</title>
     <seriesInfo name="Internet-Draft"
-                value="draft-ietf-extra-imap-list-metadata-01"/>
+                value="draft-ietf-extra-imap-list-metadata-02"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -200,7 +200,7 @@ return-option =/ "METADATA" SP "(" entry *(SP entry) ")"
       <name>Security Considerations</name>
       <t>This specification does not introduce any additional security
       concerns beyond those described in
-      <xref target="RFC5258"/>.</t>
+      <xref target="RFC5258"/> and <xref target="RFC5464"/>.</t>
     </section> <!-- Security -->
 
     <section anchor="privacy" numbered="true" toc="default">
@@ -281,6 +281,12 @@ return-option =/ "METADATA" SP "(" entry *(SP entry) ")"
 
     <section numbered="true" toc="default">
       <name>Change History (To be removed by RFC Editor before publication)</name>
+      <t>Changes from draft-ietfextra-imap-list-metadata-01:
+      </t>
+      <ul spacing="normal">
+        <li>Updated Security Considerations to also reference RFC 5464.</li>
+      </ul>
+
       <t>Changes from draft-ietfextra-imap-list-metadata-00:
       </t>
       <ul spacing="normal">
