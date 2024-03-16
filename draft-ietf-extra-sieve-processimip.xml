@@ -13,14 +13,14 @@
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std" consensus="yes" ipr="trust200902"
-     docName="draft-ietf-extra-processimip-03"
+     docName="draft-ietf-extra-processimip-04"
      obsoletes="" updates="" submissionType="IETF" xml:lang="en"
      tocInclude="true" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.12.2 -->
   <front>
     <title abbrev="Sieve Process iMIP">Sieve Email Filtering:
     Extension for Processing Calendar Attachments</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-sieve-processimip-03"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-sieve-processimip-04"/>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
@@ -74,26 +74,12 @@
       machine-readable calendar data that is encapsulated in an
       email message using Multipurpose Internet Mail Extensions (MIME).</t>
     </abstract>
-
+<!--
     <note title="Open Issues">
       <ul>
-        <li>Should we discuss how to handle multiple MIME parts
-        containing machine-readable calendar data?.
-        Should we prioritize one format over the other?
-        Should we prioritize by order/depth?
-        What if the data differs between parts?
-        </li>
-
-        <li>Should we discuss inline attachments in any way?
-        SHOULD/MUST scan and reject as appropriate, or just mention in
-        Security Considerations?</li>
-
-        <li>Do we want to leverage the "extlists" extension and add a
-        :list argument for only accepting events/invitations from
-        certain ORGANIZERS?</li>
       </ul>
     </note>
-
+-->
   </front>
 
   <middle>
@@ -165,6 +151,7 @@ Usage: processcalendar [ :allowpublic ]
                        [ :addresses <string-list> ]
                        [ :updatesonly / :calendarid <string> ]
                        [ :deletecancelled ]
+                       [ :organizers <ext-list-name: string> ]
                        [ :outcome <variablename: string> ]
                        [ :errstr <variablename: string> ]
 ]]></artwork>
@@ -180,6 +167,16 @@ Usage: processcalendar [ :allowpublic ]
       deleted from a given calendar.</t>
 
       <t>This action can be used with or without the
+      <xref target="RFC6134">"extlists"</xref> extension.
+      When the "extlists" extension is enabled in a script using
+      &lt;require "extlists"&gt;, the script can use the
+      <xref target="organizers">:organizers</xref> arguments to the
+      "processcalendar" action as described below.
+      When the "extlists" extension is not enabled, the :organizers
+      argument MUST NOT be used and MUST cause an error
+      according to <xref target="RFC5228" />.</t>
+
+      <t>This action can be used with or without the
       <xref target="RFC5229">"variables"</xref> extension.
       When the "variables" extension is enabled in a script using
       &lt;require "variables"&gt;, the script can use the
@@ -189,43 +186,15 @@ Usage: processcalendar [ :allowpublic ]
       When the "variables" extension is not enabled, the :outcome
       and :errstr arguments MUST NOT be used and MUST cause an error
       according to <xref target="RFC5228" />.</t>
-<!--
-      <t>Unless the <xref target="nonitip">":nonitip"</xref> argument is used,
-      "processcalendar" MUST NOT process a message unless it is a
-      well-formed iMIP message and one of the recipient user's email
-      addresses matches the Calendar User Address
-      (see <xref target="RFC5545" section="3.3.3" format="default" />)
-      of the intended target of the message, as determined by the
-      iTIP method (see <xref target="RFC5546" section="1.4" />)
-      of the message:</t>
 
-      <ul empty="true" spacing="normal">
-        <li>"REPLY": Value of the "Organizer" property
-        (see <xref target="RFC5545" section="3.8.4.1" />)</li>
-        <li>"REQUEST", "CANCEL", "ADD":
-        Value of one of the "Attendee" properties
-        (see <xref target="RFC5545" section="3.8.4.3" />)</li>  
-      </ul>
+      <t>If a mail messages contains calendar data in multiple
+      <xref target="RFC2045">MIME</xref> parts, this action MUST
+      verify that the calendar data in each event are semantically
+      equalivalent to one another.  If the data is found to be
+      sematically different, the action MUST NOT process the message.
+      Otherwise, the action MUST only process one representation of
+      the data.</t>
 
-      <t>The recipient user's email address matches the Calender User
-      Address of the target if the Calendar User Address is in the
-      form of a mailto URI and the email address matches the
-      "addr-spec" of the URI.</t>
-
-      <t>An email address is considered to belong to the recipient if
-      it is one of:</t>
-
-      <ol>
-        <li>an email address known by the implementation to be
-        associated with the recipient,</li>
-
-        <li>the final envelope recipient address if it's available to
-        the implementation, or</li>
-
-        <li>an address specified by the script writer via the
-        <xref target="addresses">:addresses</xref> argument.</li>
-      </ol>
--->
       <t>This action MUST NOT make any changes to the participant
       status of the recipient when processing the calendar data.
       The mechanism for a recipient to change their participant status
@@ -320,6 +289,25 @@ Usage: processcalendar [ :allowpublic ]
         remain on the calendar.</t>
       </section>
 
+      <section anchor="organizers" numbered="true" toc="default">
+        <name>Organizers Argument</name>
+        <t>The optional :organizers argument is used to specify
+        an external list of email addresses from which the
+        recipient is willing to accept public events, invites,
+        updates, and cancellations.
+        Implementations MUST NOT process calendar data unless is it is
+        a well-formed iTIP message and one of the addresses in the
+        external list matches the Calendar User Address of the
+        "Organizer" property.
+        An email address in the external list matches the Calender User
+        Address of the "Organizer" property if it is in the form of a
+        mailto URI and the email address matches the "addr-spec" of
+        the URI.</t>
+
+        <t>If :organizers is omitted, no validation of the "Organizer"
+        property is performed.</t>
+      </section>
+
       <section anchor="outcome" numbered="true" toc="default">
         <name>Outcome Argument</name>
         <t>The optional :outcome argument specifies the name of a
@@ -329,13 +317,13 @@ Usage: processcalendar [ :allowpublic ]
         <ul>
           <li>"no_action": No action was performed
           (E.g., the message didn't contain calendar data, or
-          the message contained a new calendar object but the
-          :updatesonly argument was used)</li>        
+          the set of provided options prevented the message from being
+          processed).</li>
           <li>"added": A new calendar object was added to a calendar</li>
           <li>"updated": A calendar resource was updated, cancelled, or
           removed from the calendar.</li>
-          <li>"error": An error processing the message and/or calendar
-          data occurred</li>
+          <li>"error": The message would have been processed but
+          encountered an error in doing so.</li>
         </ul>
       </section>
 
@@ -483,6 +471,19 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
         extension) can be used to make processcalendar conditional
         on the sender being "trustworthy".</li>
       </ul>
+
+      <t>Additionally, if the calendar data has embedded (a.k.a. inline)
+      attachments, implementations SHOULD:</t>
+
+      <ul>
+        <li>Decode the embedded attachment, if necessary.</li>
+
+        <li>Scan the (decoded) attachment for malicious content.</li>
+      </ul>
+
+      <t>If an attachment is found to be malicious, processcalendar
+      MUST NOT process the calendar data.</t>
+          
     </section>
 
     <section anchor="privacy" numbered="true" toc="default">
@@ -558,6 +559,7 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5229.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6047.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6134.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9122.xml"/>
 
         <reference anchor="CALSPAM"
@@ -581,7 +583,6 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5235.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5546.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5429.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6134.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
       <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-calext-jscalendarbis.xml"/>
       </references>
@@ -589,6 +590,15 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
+      <t>Changes since draft-ietf-sieve-processimip-03:</t>
+      <ol>
+        <li>Added text about multiple MIME parts containing calendar data.</li>
+        <li>Added text about embedded attachments to Security
+        Considerations.</li>
+        <li>Added :organizers option if "extlists" is supported.</li>
+        <li>Miscellaneous editorial changes.</li>
+      </ol>
+
       <t>Changes since draft-ietf-sieve-processimip-02:</t>
       <ol>
         <li>Renamed :nonitip to :allowpublic to cover both non-iTIP
