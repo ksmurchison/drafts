@@ -13,14 +13,14 @@
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std" consensus="yes" ipr="trust200902"
-     docName="draft-ietf-extra-processimip-04"
+     docName="draft-ietf-extra-processimip-05"
      obsoletes="" updates="" submissionType="IETF" xml:lang="en"
      tocInclude="true" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.12.2 -->
   <front>
     <title abbrev="Sieve Process iMIP">Sieve Email Filtering:
     Extension for Processing Calendar Attachments</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-sieve-processimip-04"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-sieve-processimip-05"/>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
@@ -170,7 +170,7 @@ Usage: processcalendar [ :allowpublic ]
       <xref target="RFC6134">"extlists"</xref> extension.
       When the "extlists" extension is enabled in a script using
       &lt;require "extlists"&gt;, the script can use the
-      <xref target="organizers">:organizers</xref> arguments to the
+      <xref target="organizers">:organizers</xref> argument to the
       "processcalendar" action as described below.
       When the "extlists" extension is not enabled, the :organizers
       argument MUST NOT be used and MUST cause an error
@@ -189,7 +189,7 @@ Usage: processcalendar [ :allowpublic ]
 
       <t>If a mail messages contains calendar data in multiple
       <xref target="RFC2045">MIME</xref> parts, this action MUST
-      verify that the calendar data in each event are semantically
+      verify that the calendar data in each part are semantically
       equalivalent to one another.  If the data is found to be
       sematically different, the action MUST NOT process the message.
       Otherwise, the action MUST only process one representation of
@@ -590,6 +590,11 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
 
     <section title="Change History (To be removed by RFC Editor before
                     publication)">
+      <t>Changes since draft-ietf-sieve-processimip-04:</t>
+      <ol>
+        <li>Miscellaneous editorial changes.</li>
+      </ol>
+
       <t>Changes since draft-ietf-sieve-processimip-03:</t>
       <ol>
         <li>Added text about multiple MIME parts containing calendar data.</li>
