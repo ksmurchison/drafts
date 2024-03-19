@@ -14,7 +14,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
      ipr="trust200902"
-     docName="draft-ietf-extra-imap-list-metadata-03"
+     docName="draft-ietf-extra-imap-list-metadata-04"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -29,7 +29,7 @@
     <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
     Mailbox METADATA in Extended LIST</title>
     <seriesInfo name="Internet-Draft"
-                value="draft-ietf-extra-imap-list-metadata-03"/>
+                value="draft-ietf-extra-imap-list-metadata-04"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -138,6 +138,11 @@
 
     <section numbered="true" toc="default">
       <name>Examples</name>
+      <t>The following are examples of fetching metadata of
+      only the top level of the mailbox hierarchies with different
+      sets of selection criteria
+      (see <xref target="RFC9051" section="6.3.9"/>).</t>
+
       <t keepWithNext="true">
 	In this example:
       </t>
@@ -145,8 +150,8 @@
         <li>The "color" annotation for the "foo" mailbox has not been
         set, so the METADATA response has a value of "NIL" (has no
         value).</li>
-        <li>The "bar" mailbox doesn't exist, so it has no METADATA
-        response.</li>
+        <li>"bar" has children, but isn't an actual mailbox itself,
+        so it has no METADATA response.</li>
       </ul>
 
       <t>NOTE: '\' line wrapping per <xref target="RFC8792"/></t>
@@ -286,7 +291,14 @@ return-option =/ "METADATA" SP "(" entry *(SP entry) ")"
     </references>
 
     <section numbered="true" toc="default">
-      <name>Change History (To be removed by RFC Editor before publication)</name>
+      <name>Change History (To be removed by RFC Editor before
+      publication)</name>
+      <t>Changes from draft-ietfextra-imap-list-metadata-03:
+      </t>
+      <ul spacing="normal">
+        <li>Clarified why "bar" is returned in the first example.</li>
+      </ul>
+
       <t>Changes from draft-ietfextra-imap-list-metadata-02:
       </t>
       <ul spacing="normal">
