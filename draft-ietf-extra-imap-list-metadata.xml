@@ -14,7 +14,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
      ipr="trust200902"
-     docName="draft-ietf-extra-imap-list-metadata-02"
+     docName="draft-ietf-extra-imap-list-metadata-03"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -29,7 +29,7 @@
     <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
     Mailbox METADATA in Extended LIST</title>
     <seriesInfo name="Internet-Draft"
-                value="draft-ietf-extra-imap-list-metadata-02"/>
+                value="draft-ietf-extra-imap-list-metadata-03"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -138,9 +138,6 @@
 
     <section numbered="true" toc="default">
       <name>Examples</name>
-      <t>Note that the line wrapping of the extended LIST commands
-      below is for editorial purposes only.</t>
-
       <t keepWithNext="true">
 	In this example:
       </t>
@@ -152,8 +149,10 @@
         response.</li>
       </ul>
 
+      <t>NOTE: '\' line wrapping per <xref target="RFC8792"/></t>
+
       <artwork name="" type="" align="left" alt=""><![CDATA[
-C: A01 LIST "" %
+C: A01 LIST "" % \
          RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
 S: * LIST () "." "INBOX"
 S: * METADATA INBOX ("/shared/vendor/cmu/cyrus-imapd/color" "#b71c1c")
@@ -170,8 +169,10 @@ S: A01 OK List completed.
           selection criteria.
       </t>
 
+      <t>NOTE: '\' line wrapping per <xref target="RFC8792"/></t>
+
       <artwork name="" type="" align="left" alt=""><![CDATA[
-C: A02 LIST (SUBSCRIBED RECURSIVEMATCH) "" %
+C: A02 LIST (SUBSCRIBED RECURSIVEMATCH) "" % \
          RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
 S: * LIST (\Subscribed) "." "INBOX"
 S: * METADATA INBOX ("/shared/vendor/cmu/cyrus-imapd/color" "#b71c1c")
@@ -277,10 +278,21 @@ return-option =/ "METADATA" SP "(" entry *(SP entry) ")"
         <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
         <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9051.xml"/>
       </references>
+
+      <references>
+        <name>Informative References</name>
+        <xi:include href="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8792.xml"/>
+      </references>
     </references>
 
     <section numbered="true" toc="default">
       <name>Change History (To be removed by RFC Editor before publication)</name>
+      <t>Changes from draft-ietfextra-imap-list-metadata-02:
+      </t>
+      <ul spacing="normal">
+        <li>Used RFC 8792 '\' folding of the examples.</li>
+      </ul>
+
       <t>Changes from draft-ietfextra-imap-list-metadata-01:
       </t>
       <ul spacing="normal">
