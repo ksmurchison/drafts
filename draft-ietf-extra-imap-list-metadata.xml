@@ -14,7 +14,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
      ipr="trust200902"
-     docName="draft-ietf-extra-imap-list-metadata-04"
+     docName="draft-ietf-extra-imap-list-metadata-05"
      obsoletes=""
      updates=""
      submissionType="IETF"
@@ -29,7 +29,7 @@
     <title abbrev="IMAP LIST-METADATA">IMAP4 Extension for Returning
     Mailbox METADATA in Extended LIST</title>
     <seriesInfo name="Internet-Draft"
-                value="draft-ietf-extra-imap-list-metadata-04"/>
+                value="draft-ietf-extra-imap-list-metadata-05"/>
 
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
@@ -157,8 +157,12 @@
       <t>NOTE: '\' line wrapping per <xref target="RFC8792"/></t>
 
       <artwork name="" type="" align="left" alt=""><![CDATA[
+C: A00 CAPABILITY
+S: * CAPABILITY IMAP4rev1 IMAP4rev2 \
+                LIST-EXTENDED LIST-METADATA METADATA
+S: A00 OK Completed.      
 C: A01 LIST "" % \
-         RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
+            RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
 S: * LIST () "." "INBOX"
 S: * METADATA INBOX ("/shared/vendor/cmu/cyrus-imapd/color" "#b71c1c")
 S: * LIST () "." "foo"
@@ -178,7 +182,7 @@ S: A01 OK List completed.
 
       <artwork name="" type="" align="left" alt=""><![CDATA[
 C: A02 LIST (SUBSCRIBED RECURSIVEMATCH) "" % \
-         RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
+            RETURN (METADATA ("/shared/vendor/cmu/cyrus-imapd/color"))
 S: * LIST (\Subscribed) "." "INBOX"
 S: * METADATA INBOX ("/shared/vendor/cmu/cyrus-imapd/color" "#b71c1c")
 S: * LIST () "." "foo" (CHILDINFO ("SUBSCRIBED"))
@@ -221,16 +225,15 @@ return-option =/ "METADATA" SP "(" entry *(SP entry) ")"
       <section numbered="true" toc="default">
         <name>Registration of IMAP capability LIST-METADATA</name>
         <t>This document defines the "LIST-METADATA" IMAP capability
-        to be added to the registry defined in
-        <xref target="RFC9051" section="12.1"/>.</t>
+        to be added to registry located at
+        <eref target="https://www.iana.org/assignments/imap-capabilities/imap-capabilities.xhtml"/>.</t>
       </section>
 
       <section numbered="true" toc="default">
         <name>Registration of LIST-EXTENDED option METADATA</name>
-        <t>This section registers the "METADATA" option to be added to the
-        registry defined in
-        <xref target="RFC5258" section="9"/>.
-        </t>
+        <t>This section registers the "METADATA" LIST-EXTENDED option
+        to be added to the registry located at
+        <eref target="https://www.iana.org/assignments/imap-list-extended/imap-list-extended.xhtml#imap-list-extended-1"/>.</t>
         <dl newline="true" spacing="normal">
           <dt>LIST-EXTENDED option name:</dt>
           <dd>
@@ -293,25 +296,32 @@ return-option =/ "METADATA" SP "(" entry *(SP entry) ")"
     <section numbered="true" toc="default">
       <name>Change History (To be removed by RFC Editor before
       publication)</name>
-      <t>Changes from draft-ietfextra-imap-list-metadata-03:
+      <t>Changes from draft-ietf-extra-imap-list-metadata-04:
+      </t>
+      <ul spacing="normal">
+        <li>Added CAPABILITY command/response to example.</li>
+        <li>Reference IANA registries by their URLs.</li>
+      </ul>
+
+      <t>Changes from draft-ietf-extra-imap-list-metadata-03:
       </t>
       <ul spacing="normal">
         <li>Clarified why "bar" is returned in the first example.</li>
       </ul>
 
-      <t>Changes from draft-ietfextra-imap-list-metadata-02:
+      <t>Changes from draft-ietf-extra-imap-list-metadata-02:
       </t>
       <ul spacing="normal">
         <li>Used RFC 8792 '\' folding of the examples.</li>
       </ul>
 
-      <t>Changes from draft-ietfextra-imap-list-metadata-01:
+      <t>Changes from draft-ietf-extra-imap-list-metadata-01:
       </t>
       <ul spacing="normal">
         <li>Updated Security Considerations to also reference RFC 5464.</li>
       </ul>
 
-      <t>Changes from draft-ietfextra-imap-list-metadata-00:
+      <t>Changes from draft-ietf-extra-imap-list-metadata-00:
       </t>
       <ul spacing="normal">
         <li>Added missing SP in ABNF.</li>
