@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-12" updates=""
+     docName="draft-murchison-rfc8536bis-13" updates=""
      ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-12"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-13"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -1159,7 +1159,8 @@ EST5EDT,M3.2.0,M11.1.0
           <dd>
             This media type is designed for widespread use by
             applications that need to use or exchange time zone
-            information, such as the
+            information relative to UNIX Time,
+            such as the
             <xref target="ZIC" format="default">
             Time Zone Information Compiler (zic)</xref>
             and the
@@ -1229,7 +1230,8 @@ EST5EDT,M3.2.0,M11.1.0
           <dd>
             This media type is designed for widespread use by
             applications that need to use or exchange time zone
-            information, such as the
+            information relative to UNIX Leap Time,
+            such as the
             <xref target="ZIC" format="default">
               Time Zone Information Compiler (zic)
             </xref>
@@ -1319,9 +1321,7 @@ EST5EDT,M3.2.0,M11.1.0
             <author initials="M" surname="Kerrisk" fullname="Michael Kerrisk">
               <organization/>
             </author>
-            <date month="February" day="25" year="2010"/>
           </front>
-          <seriesInfo name="man-pages" value="release 4.16"/>
         </reference>
 
         <reference anchor="GNU-C" target="https://www.gnu.org/software/libc/">
@@ -1330,7 +1330,6 @@ EST5EDT,M3.2.0,M11.1.0
             <author initials="" surname="" fullname="">
               <organization/>
             </author>
-            <date month="" year=""/>
           </front>
         </reference>
 
@@ -1362,7 +1361,6 @@ EST5EDT,M3.2.0,M11.1.0
             </title>
             <author initials="P." surname="Eggert" fullname="Paul Eggert"/>
             <author initials="A.D." surname="Olson" fullname="Arthur David Olson"/>
-            <date year="2022"/>
           </front>
         </reference>
 
@@ -1373,7 +1371,6 @@ EST5EDT,M3.2.0,M11.1.0
             <author initials="" surname="" fullname="">
               <organization/>
             </author>
-            <date month="March" year="2021"/>
           </front>
         </reference>
 
@@ -4459,6 +4456,15 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+        <name>Since rfc8536bis-12</name>
+        <ul spacing="normal">
+          <li>Clarified the difference between the two media types in their
+          IANA registrations.</li>
+          <li>Removed dates from references to dynamic content.</li>
+        </ul>
+      </section>
 
       <section numbered="true" toc="default">
         <name>Since rfc8536bis-11</name>
