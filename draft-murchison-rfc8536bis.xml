@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-13" updates=""
+     docName="draft-murchison-rfc8536bis-14" updates=""
      ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-13"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-14"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -898,11 +898,18 @@
         processing far-future timestamps that cannot yet be handled
         exactly.</li>
 
-        <li>Time zone designations SHOULD consist of at least three (3)
+        <li>Time zone designations MUST consist of at least three (3)
         and no more than six (6) ASCII characters from the set of
         alphanumerics, '-', and '+'.
-        This is for compatibility with POSIX requirements for
+        This is compatible with POSIX requirements for
         time zone abbreviations.</li>
+
+        <li>A reader that encounters a time zone designation containing
+        bytes other than ASCII alphanumerics, '-', and '+' SHOULD
+        act if the designation instead contained a signed numeric string
+        derived from the UT offset, for example, "-10" and "+0530" to
+        indicate 10 hours east and 5.5 hours west of Greenwich,
+        respectively.</li>
 
         <li>When reading a version 2 or higher file, readers
         SHOULD ignore the version 1 header and data block except for
@@ -938,7 +945,35 @@
         <li>Common interoperability issues and possible workarounds
         are described in <xref target="issues" format="default"/>.</li>
       </ul>
-    </section>
+    </section> <!-- interop -->
+
+    <section anchor="i18n" numbered="true" toc="default">
+      <name>Internationalization Considerations</name>
+
+      <t>TZif time zone designations contain only ASCII alphanumerics,
+      "-", and "+". Commonly used designations include numeric strings
+      like "-10" and "+0530" for UT offsets, and English-language
+      abbreviations like "CEST" for Central European Summer Time and
+      "GMT" for Greenwich Mean Time. It is the TZif reader's
+      responsibility to substitute different abbreviations when needed
+      for internationalization, such as substituting "HNC" (l'heure
+      normale du Centre) for "CST" (Central Standard Time) in
+      French-speaking regions. This substitution can be problematic,
+      as abbreviations can be ambiguous: for example, "CST" commonly
+      stands for China Standard Time and Cuba Standard Time as well as
+      Central Standard Time. One approach for addressing this issue
+      can be found in the timezone charts of the
+      <xref target="CLDR">
+      Unicode Common Locale Data Repository (CLDR) Project.</xref></t>
+
+      <t>Although the original TZif design allowed for any nonzero
+      octets in time zone designations and it was common practice
+      until the mid-1990s for designations to contain ASCII spaces,
+      designations are now limited to ASCII alphanumerics, "-", and
+      "+" to avoid confusion and to encourage portability to a wide
+      variety of locales.</t>
+
+    </section> <!-- i18n -->
 
     <section anchor="tzdist" numbered="true" toc="default">
       <name>Use with the Time Zone Data Distribution Service</name>
@@ -985,7 +1020,7 @@
         As with untruncated TZif files, time type 0 indicates local
         time immediately before the start point, and the time type of
         the first transition indicates local time thereafter.
-        Time type 0 SHOULD be a placeholder indicating that local time
+        Time type 0 MUST be a placeholder indicating that local time
         is unspecified, so that the reader is unambiguously informed
         of truncation at the start.</t>
 
@@ -1005,7 +1040,7 @@
         As with untruncated TZif files with empty TZ strings, a
         truncated TZif file does not indicate local time after the
         last transition.
-        To this end, the time type of the last transition SHOULD be a
+        To this end, the time type of the last transition MUST be a
         placeholder indicating that local time is unspecified.</t>
 
         <t>All represented information that falls inside the
@@ -1099,6 +1134,14 @@ EST5EDT,M3.2.0,M11.1.0
       information is used in many critical applications,
       integrity protection may be required and must be provided
       externally.</t>
+
+      <t>As discussed in <xref target="RFC7808" section="8"/>,
+      transmission of time zone data over an insecure communication
+      channel could result in tampered data, harming calendaring and
+      scheduling operations. As such, TZif data transmitted over a
+      public communications channel MUST be protected with a security
+      layer such as that provided by <xref target="RFC8446">
+      Transport Layer Security (TLS)</xref>.</t>
     </section>
 
     <section anchor="privacy" numbered="true" toc="default">
@@ -1385,6 +1428,17 @@ EST5EDT,M3.2.0,M11.1.0
           </front>
         </reference>
 
+        <reference anchor="CLDR"
+                   target="https://cldr.unicode.org/">
+          <front>
+            <title>Unicode CLDR Project</title>
+            <author initials='' surname='' fullname=''>
+              <organization>Unicode, Inc.</organization>
+            </author>
+            <date month='' year='2024'/>
+          </front>
+        </reference>
+
         <reference anchor="Err6426"
                    target="https://www.rfc-editor.org/errata/eid6426">
           <front>
@@ -1464,7 +1518,7 @@ EST5EDT,M3.2.0,M11.1.0
         As a partial workaround, a writer can output as much version 1
         data as possible.
         However, a reader should ignore version 1 data and use
-        version 2+ data, even if the reader's native timestamps have only
+        version 2+ data, even if the reader's timestamps have only
         32 bits.</li>
 
         <li>Some readers designed for version 2 might mishandle
@@ -1501,7 +1555,7 @@ EST5EDT,M3.2.0,M11.1.0
         <li>Some readers do not use time type 0 for timestamps before
         the first transition, in that they infer a time type using a
         heuristic that does not always select time type 0.
-        As a partial workaround, a writer can output a dummy (no-op)
+        As a partial workaround, a writer can output a placeholder (no-op)
         first transition at an early time.</li>
 
         <li>Some readers mishandle timestamps before the first
@@ -1510,7 +1564,7 @@ EST5EDT,M3.2.0,M11.1.0
         more prone to this problem, for example, when they process
         64-bit transitions, only some of which are representable in 32
         bits.
-        As a partial workaround, a writer can output a dummy
+        As a partial workaround, a writer can output a placeholder
         transition at timestamp -2**31.</li>
 
         <li>Some readers mishandle a transition if its timestamp has
@@ -1585,7 +1639,7 @@ EST5EDT,M3.2.0,M11.1.0
         that contain '+', '-', or digits.</li>
 
         <li>Some readers mishandle UT offsets that are out of the
-        traditional range of -12 through +12 hours and so do not
+        conventional range of -12 through +12 hours and so do not
         support locations like Kiritimati that are outside this
         range.</li>
 
@@ -4456,6 +4510,19 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+        <name>Since rfc8536bis-13</name>
+        <ul spacing="normal">
+          <li>Referenced Section 8 of RFC 7808 in Security Considerations.</li>
+          <li>Changed some terminology in Appendix A to be more
+          inclusive.</li>
+          <li>Added Internationalization Considerations section and
+          clarified the requirements for time zone designation
+          strings.</li>
+          <li>Stiffened the requirements for truncating TZif files.</li>
+        </ul>
+      </section>
 
       <section numbered="true" toc="default">
         <name>Since rfc8536bis-12</name>
