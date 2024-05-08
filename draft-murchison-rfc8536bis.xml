@@ -15,7 +15,7 @@
 <?rfc tocdepth="3"?>
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std"
-     docName="draft-murchison-rfc8536bis-14" updates=""
+     docName="draft-murchison-rfc8536bis-15" updates=""
      ipr="trust200902" obsoletes="8536" consensus="true"
      submissionType="IETF" xml:lang="en" tocInclude="true"
      symRefs="true" sortRefs="true" tocDepth="3" version="3">
@@ -25,7 +25,7 @@
     <title abbrev="TZif">
       The Time Zone Information Format (TZif)
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-14"/>
+    <seriesInfo name="Internet-Draft" value="draft-murchison-rfc8536bis-15"/>
 
     <author initials="A.D." surname="Olson" fullname="Arthur David Olson">
       <organization/>
@@ -908,7 +908,7 @@
         bytes other than ASCII alphanumerics, '-', and '+' SHOULD
         act if the designation instead contained a signed numeric string
         derived from the UT offset, for example, "-10" and "+0530" to
-        indicate 10 hours east and 5.5 hours west of Greenwich,
+        indicate 10 hours west and 5.5 hours east of Greenwich,
         respectively.</li>
 
         <li>When reading a version 2 or higher file, readers
@@ -4510,6 +4510,13 @@ EST5EDT,M3.2.0,M11.1.0
       <name>Change Log</name>
 
       <t>This section is to be removed by RFC Editor before publication.</t>
+
+      <section numbered="true" toc="default">
+        <name>Since rfc8536bis-14</name>
+        <ul spacing="normal">
+          <li>Correct direction reversal with UT offsets -10 and +0530.</li>
+        </ul>
+      </section>
 
       <section numbered="true" toc="default">
         <name>Since rfc8536bis-13</name>
