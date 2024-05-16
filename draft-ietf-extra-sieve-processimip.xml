@@ -13,14 +13,14 @@
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std" consensus="yes" ipr="trust200902"
-     docName="draft-ietf-extra-processimip-05"
+     docName="draft-ietf-extra-processimip-07"
      obsoletes="" updates="" submissionType="IETF" xml:lang="en"
      tocInclude="true" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.12.2 -->
   <front>
     <title abbrev="Sieve Process iMIP">Sieve Email Filtering:
     Extension for Processing Calendar Attachments</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-sieve-processimip-05"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-extra-processimip-07"/>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
@@ -99,7 +99,9 @@
       iTIP method property
       (see <xref target="RFC5546" section="1.4" sectionFormat="comma"/>),
       or the enclosed data may be in some other machine-readable format
-      (E.g. <xref target="I-D.ietf-calext-jscalendarbis">JSCalendar</xref>).
+<!--      (E.g. <xref target="I-D.ietf-calext-jscalendarbis">-->
+      (E.g. <xref target="RFC8984">
+      JSCalendar</xref>).
       </t>
 
       <t>This document defines an extension to the
@@ -153,7 +155,7 @@ Usage: processcalendar [ :allowpublic ]
                        [ :deletecancelled ]
                        [ :organizers <ext-list-name: string> ]
                        [ :outcome <variablename: string> ]
-                       [ :errstr <variablename: string> ]
+                       [ :reason <variablename: string> ]
 ]]></artwork>
 
       <t>The "processcalendar" action is used to parse encapsulated
@@ -181,17 +183,17 @@ Usage: processcalendar [ :allowpublic ]
       When the "variables" extension is enabled in a script using
       &lt;require "variables"&gt;, the script can use the
       <xref target="outcome">:outcome</xref> and 
-      <xref target="errstr">:errstr</xref> arguments to the
-      "processcalendar" action described below.
+      <xref target="reason">:reason</xref> arguments to the
+      "processcalendar" action as described below.
       When the "variables" extension is not enabled, the :outcome
-      and :errstr arguments MUST NOT be used and MUST cause an error
+      and :reason arguments MUST NOT be used and MUST cause an error
       according to <xref target="RFC5228" />.</t>
 
       <t>If a mail messages contains calendar data in multiple
       <xref target="RFC2045">MIME</xref> parts, this action MUST
       verify that the calendar data in each part are semantically
-      equalivalent to one another.  If the data is found to be
-      sematically different, the action MUST NOT process the message.
+      equivalent to one another.  If the data is found to be
+      semantically different, the action MUST NOT process the message.
       Otherwise, the action MUST only process one representation of
       the data.</t>
 
@@ -205,11 +207,32 @@ Usage: processcalendar [ :allowpublic ]
 
       <section anchor="allowpublic" numbered="true" toc="default">
         <name>Allow Public Argument</name>
+<!--
         <t>The optional :allowpublic argument is used to tell the
-        implementation that it can process calendar data that is not an
-        iTIP message (it does not contain METHOD and/or ORGANIZER
-        properties) or the METHOD is PUBLISH.</t>
+        implementation that it can process calendar data that
+        is not an iTIP message (it does not contain METHOD and/or
+        ORGANIZER properties) or the METHOD is PUBLISH.</t>
+-->
+        <t>The optional :allowpublic argument is used to tell the
+        implementation that it can process calendar data that
+        does not contain any ATTENDEE properties, such as
+        iTIP messages where the METHOD is PUBLISH, or non-iTIP
+        messages where the calendar data does not contain METHOD and/or
+        ORGANIZER properties.</t>
 
+        <t>If used in conjunction with the <xref target="organizers">
+        :organizers</xref> argument, the implementation MUST NOT
+        process non-iTIP messages.</t>
+<!--
+        <t>The optional :allowpublic argument is used to tell the
+        implementation that it can process calendar data that
+        does not contain any ATTENDEE properties.
+        If used in conjunction with the <xref target="organizers">
+        :organizers</xref> argument, the implementation MUST NOT
+        process calendar data unless is it is a well-formed iTIP
+        message, including those in which the METHOD is PUBLISH.
+        Otherwise, non-iTIP calendar data may be processed.</t>
+-->
         <t>If :allowpublic is omitted, the implementation MUST NOT
         process calendar data unless is it is a well-formed iTIP
         message and one of the recipient user's email addresses
@@ -227,7 +250,7 @@ Usage: processcalendar [ :allowpublic ]
           (see <xref target="RFC5545" section="3.8.4.3" />)</li>  
         </ul>
 
-        <t>The recipient user's email address matches the Calender User
+        <t>The recipient user's email address matches the Calendar User
         Address of the target if the Calendar User Address is in the
         form of a mailto URI and the email address matches the
         "addr-spec" of the URI.</t>
@@ -265,6 +288,10 @@ Usage: processcalendar [ :allowpublic ]
 
         <t>If :updatesonly is omitted, new calendar objects may be
         added to one of the user's calendars.</t>
+
+        <t>The :updatesonly and <xref target="calendarid">:calendarid</xref>
+        arguments are incompatible with each other.  It is an error if
+        both arguments are used in the same "processcalendar" action.</t>
       </section>
 
       <section anchor="calendarid" numbered="true" toc="default">
@@ -275,6 +302,10 @@ Usage: processcalendar [ :allowpublic ]
         <t>If :calendarid is omitted, new calendar objects will be
         placed on the user's "default" calendar as determined by the
         implementation.</t>
+
+        <t>The <xref target="updatesonly">:updatesonly</xref> and :calendarid
+        arguments are incompatible with each other.  It is an error if
+        both arguments are used in the same "processcalendar" action.</t>
       </section>
 
       <section anchor="deletecancelled" numbered="true" toc="default">
@@ -299,7 +330,7 @@ Usage: processcalendar [ :allowpublic ]
         a well-formed iTIP message and one of the addresses in the
         external list matches the Calendar User Address of the
         "Organizer" property.
-        An email address in the external list matches the Calender User
+        An email address in the external list matches the Calendar User
         Address of the "Organizer" property if it is in the form of a
         mailto URI and the email address matches the "addr-spec" of
         the URI.</t>
@@ -327,13 +358,16 @@ Usage: processcalendar [ :allowpublic ]
         </ul>
       </section>
 
-      <section anchor="errstr" numbered="true" toc="default">
-        <name>Error String Argument</name>
-        <t>The optional :errstr argument specifies the name of a
+      <section anchor="reason" numbered="true" toc="default">
+        <name>Reason Argument</name>
+        <t>The optional :reason argument specifies the name of a
         variable into which a string describing the reason for the
         outcome will be stored.
         If no reason for the outcome is available, implementations
         MUST set the variable to the empty string.</t>
+        <t>For example, an outcome of "no_action" may have a reason of
+        "only processing updates" or an outcome of "error" may have a
+        reason of "missing UID property".</t>
       </section>
 
       <section anchor="interaction" numbered="true" toc="default">
@@ -381,14 +415,14 @@ if allof (address ["from", "sender"] "airline@example.com",
 require [ "processcalendar", "variables", "editheader" ];
 
 set "processcal_outcome" "no_action";
-set "processcal_error" "";
+set "processcal_reason" "";
 
 processcalendar :outcome "processcal_outcome"
-                :errstr "processcal_error";
+                :reason "processcal_reason";
 
 if not string :is "${processcal_outcome}" ["added", "updated"] {
    addheader "X-ProcessCal-Outcome" "${processcal_outcome}";
-   addheader "X-ProcessCal-Error" "${processcal_error}";
+   addheader "X-ProcessCal-Reason" "${processcal_reason}";
 }
 ]]></artwork>
       </section>
@@ -423,13 +457,16 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
 
         <section anchor="cyrus" toc="exclude" numbered="true">
         <name>Cyrus Server</name>
-        <t>The open source <eref target="http://www.cyrusimap.org/">Cyrus Server</eref> project
+        <t>The open source
+        <eref target="http://www.cyrusimap.org/">Cyrus Server</eref> project
         is a highly scalable enterprise mail system which supports
 	Sieve email filtering at the point of final delivery.  This
         production level Sieve implementation supports all of the
-        requirements described in this document.  This implementation
+        mandatory functionality described in this document and is
+        currently being updated to support the optional functionality.
+        This implementation
         is freely distributable under a BSD style license from
-	<eref target="http://www.cmu.edu/computing/">
+	<eref target="https://www.cmu.edu/computing/">
           Computing Services at Carnegie Mellon University</eref>.</t>
       </section>
 
@@ -461,15 +498,33 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
         received from a potentially malicious sender.
         The <xref target="RFC5228">address and envelope</xref> tests
         (optionally along with the <xref target="RFC6134">extlists</xref>
-        extension) can be used to make processcalendar conditional
-        on the sender not being "untrustworthy".</li>
+        extension) can be used to create a "deny list" and make
+        processcalendar conditional on the sender not being a member
+        of that list.</li>
 
         <li>Similarly, processcalendar SHOULD only process calendar
         data received from a known sender.
         The <xref target="RFC5228">address and envelope</xref> tests
         (optionally along with the <xref target="RFC6134">extlists</xref>
-        extension) can be used to make processcalendar conditional
-        on the sender being "trustworthy".</li>
+        extension) can be used to create an "allow list" and make
+        processcalendar conditional on the sender being a member of
+        that list.</li>
+
+        <li>Processcalendar SHOULD NOT process calendar data received
+        from an untrustworthy sender.  Trustworthiness may depend on
+        whether the message has a valid signature (see
+        <xref target="RFC8551"/>) and/or on whether one or more of
+        <xref target="RFC7208">Sender Policy Framework (SPF)</xref>,
+        <xref target="RFC6376">DomainKeys Identified Mail (DKIM)
+        Signatures</xref>,
+        <xref target="RFC7489">Domain-based Message Authentication,
+        Reporting, and Conformance (DMARC)</xref> passes or fails on
+        the message.
+        The mechanism by which a Sieve interpreter accesses the results of
+        such checks is outside the scope of this document, but if the
+        results are available in the message's header fields,
+        the <xref target="RFC5228">header</xref> test can be used to make
+        processcalendar conditional on the sender being trustworthy.</li>
       </ul>
 
       <t>Additionally, if the calendar data has embedded (a.k.a. inline)
@@ -584,12 +639,38 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5546.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5429.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
-      <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-calext-jscalendarbis.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8984.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8551.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7489.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7208.xml"/>
+<!--      <xi:include href="https://datatracker.ietf.org/doc/bibxml3/draft-ietf-calext-jscalendarbis.xml"/>-->
       </references>
     </references>
 
-    <section title="Change History (To be removed by RFC Editor before
-                    publication)">
+    <section
+        title="Change History (To be removed by RFC Editor before publication)">
+      <t>Changes since draft-ietf-sieve-processimip-06:</t>
+      <ol>
+        <li>Fixed example that was still using :errstr rather than
+        :reason.</li>
+        <li>Explicitly stated that the :updateonly and :calendarid
+        options are incompatible with each each.</li>
+        <li>Explicitly stated that if :allowpublic is used with :organizers
+        that non-iTIP messages MUST NOT be processed.</li>
+        <li>Updated security considerations to use "deny list" and
+        "allow list", and to add a bullet discussing use of S/MIME,
+        SPF, DKIM, and DMARC.</li>
+        <li>Updated the status of the Cyrus implementation.</li>
+        <li>Miscellaneous editorial changes.</li>
+      </ol>
+
+      <t>Changes since draft-ietf-sieve-processimip-05:</t>
+      <ol>
+        <li>Renamed :errstr to :reason and added examples.</li>
+        <li>Miscellaneous editorial changes.</li>
+      </ol>
+
       <t>Changes since draft-ietf-sieve-processimip-04:</t>
       <ol>
         <li>Miscellaneous editorial changes.</li>
