@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-09"
+     docName="draft-ietf-emailcore-as-10"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-09"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-10"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -448,12 +448,24 @@
         <t>Proper generation and transmission of email addresses
         containing non-ASCII characters is discussed in
         <xref target="RFC6530"/>.
-        SMTP clients and servers that attempt to use the popular web
-        convention of Percent-Encoding non-ASCII characters
+        <xref target="RFC6530" section="9"/> says: "a downgrade
+        mechanism that transforms the local part of an email address
+        cannot be utilized in transit."
+        Hence SMTP clients and servers MUST NOT try to encode
+        non-ASCII email addresses as ASCII addresses.
+        In particular, they MUST not use web URI percent encoding
         (see <xref target="RFC3986" section="2.1"/>)
-        SHALL NOT assume that a downstream system
-        will interpret the email address accordingly without prior
-        knowledge.</t>
+        nor Internationalized Domain Names for Applications (IDNA)
+        (see <xref target="RFC5891" section="4.4"/>)
+        <xref target="RFC3492">Punycode</xref> in the local-part of an
+        address, nor the former in the domain-part, since neither
+        will produce a valid address.</t>
+
+        <t>In some cases, servers or clients may be able to use local
+        knowledge to substitute ASCII addresses for specific non-ASCII
+        addresses, but that is beyond the scope of this memo.
+        See <xref target="RFC6530" section="8"/> for further discussion.
+        </t>
       </section>
 
       <section numbered="true" toc="default">
@@ -733,6 +745,8 @@
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4880.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
 
@@ -879,12 +893,22 @@
         </ul>
       </section>
       <section numbered="true" toc="default">
-        <name>Changes from draft-ietf-emailcore-as-08 (2023-12-XX) to -09</name>
+        <name>Changes from draft-ietf-emailcore-as-08 (2023-12-18) to -09</name>
         <ul spacing="normal">
           <li>Acknowledge the existence of port 465 for submission
           (issue #80).</li>
           <li>Remove "Use of Time Zones in Date and Received Header
           Fields" placeholder (issue #66).</li> 
+          <li>Miscellaneous editorial changes.</li>
+        </ul>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-09 (2024-07-XX) to -10</name>
+        <ul spacing="normal">
+          <li>Applied final proposed text for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/78">
+            #78</eref> (advice against using URL %-encoding).</li>
           <li>Miscellaneous editorial changes.</li>
         </ul>
       </section>
