@@ -155,6 +155,66 @@
       makes recommendations for the use of features of the core
       protocols.</t>
     </abstract>
+
+    <note title="Open Issues">
+      <ul>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/40">
+            #40 - Recommended SMTP Extensions</eref>:
+            Requires discussion of current/new text.
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/78">
+            #78 - Advice against using URL %-encoding on non-ASCII email
+            addresses</eref>:
+            Is the "final" proposed text in <xref target="non-ascii"/>
+            sufficient?
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/79">
+            #79 - Add Internationalization Considerations
+            Section</eref>:
+            Requires discussion of any new text.
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/84">
+            #84 - Handling of Trace Header Fields by MUAs</eref>:
+            Is the proposed text in <xref target="trace"/> sufficient?
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/85">
+            #85 - What mail agents should do/not do with Received
+            header fields</eref>:
+            Is the proposed text intended to replace some/all of the
+            text in <xref target="received-consumption"/>?
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/86">
+            #86 - Expand on operational meaning of being a Trace
+            Header Field</eref>:
+            Requires discussion of any new text.
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/92">
+            #92 - CNAME handling in "5.1. Locating the Target Host"</eref>:
+            Requires discussion of any new text.
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/93">
+            #93 - "7.3. VRFY, EXPN, and Security" should point to SMTP
+            AUTH RFC</eref>:
+            Requires discussion of any new text.
+        </li>
+      </ul>
+    </note>
   </front>
   <middle>
     <section numbered="true" toc="default">
@@ -362,7 +422,7 @@
           involved.</t>
         </section>
 
-        <section numbered="true" toc="default">
+        <section anchor="received-consumption" numbered="true" toc="default">
           <name>Consumption</name>
           <t>Received header fields are primarily for use when there are
           concerns about a message, such as to analyze handling or
@@ -380,10 +440,15 @@
         </section>
       </section>
 
-      <section numbered="true" toc="default">
-        <name>Line Length Limits</name>
-        <t>Clarify 78 octet limit versus 998 line length limit
-          (Issue #38)...</t>
+      <section anchor="trace" numbered="true" toc="default">
+        <name>Handling of Trace Header Fields</name>
+
+        <t>A mail user agent (MUA) that uses an existing email message
+        as a template for editing with the intention of sending it to
+        new set of recipients (this is sometimes implemented as "edit
+        as a new message" feature) SHOULD strip
+        <xref target="I-D.ietf-emailcore-rfc5322bis" section="3.6.7">
+        trace header fields</xref>.</t>
       </section>
     </section>
 
@@ -442,7 +507,7 @@
         containing such delimiters.</t>
       </section>
 
-      <section numbered="true" toc="default">
+      <section anchor="non-ascii" numbered="true" toc="default">
         <name>Use of non-ASCII Characters</name>
 
         <t>Proper generation and transmission of email addresses
@@ -905,11 +970,24 @@
       <section numbered="true" toc="default">
         <name>Changes from draft-ietf-emailcore-as-09 (2024-07-XX) to -10</name>
         <ul spacing="normal">
-          <li>Applied final proposed text for issue
+          <li>Added Open Issues Section</li>
+          <li>Removed placeholder for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/38">
+            #38 - Clarify 78 octet limit versus 998 line length
+          limit</eref>
+          </li>
+          <li>Applied "final" proposed text for issue
           <eref
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/78">
-            #78</eref> (advice against using URL %-encoding).</li>
-          <li>Miscellaneous editorial changes.</li>
+          #78 - Advice against using URL %-encoding on non-ASCII email
+          addresses</eref>
+          </li>
+          <li>Applied proposed text for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/84">
+          #84 - Handling of Trace Header Fields by MUAs</eref>
+          </li>
         </ul>
       </section>
     </section>
