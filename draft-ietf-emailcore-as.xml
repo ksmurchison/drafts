@@ -190,8 +190,8 @@
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/85">
             #85 - What mail agents should do/not do with Received
             header fields</eref>:
-            Is the proposed text intended to replace some/all of the
-            text in <xref target="received-consumption"/>?
+            Is the proposed text intended to replace just some or all
+            of the text in <xref target="received-consumption"/>?
         </li>
         <li>
           <eref
@@ -445,10 +445,10 @@
 
         <t>A mail user agent (MUA) that uses an existing email message
         as a template for editing with the intention of sending it to
-        new set of recipients (this is sometimes implemented as "edit
-        as a new message" feature) SHOULD strip
-        <xref target="I-D.ietf-emailcore-rfc5322bis" section="3.6.7">
-        trace header fields</xref>.</t>
+        a new set of recipients (this is sometimes implemented as "edit
+        as a new message" feature) SHOULD strip trace header fields
+        (see <xref target="I-D.ietf-emailcore-rfc5322bis" section="3.6.7"/>).
+        </t>
       </section>
     </section>
 
@@ -518,7 +518,7 @@
         cannot be utilized in transit."
         Hence SMTP clients and servers MUST NOT try to encode
         non-ASCII email addresses as ASCII addresses.
-        In particular, they MUST not use web URI percent encoding
+        In particular, they MUST NOT use web URI percent encoding
         (see <xref target="RFC3986" section="2.1"/>)
         nor Internationalized Domain Names for Applications (IDNA)
         (see <xref target="RFC5891" section="4.4"/>)
@@ -968,7 +968,7 @@
         </ul>
       </section>
       <section numbered="true" toc="default">
-        <name>Changes from draft-ietf-emailcore-as-09 (2024-07-XX) to -10</name>
+        <name>Changes from draft-ietf-emailcore-as-09 (2024-07-02) to -10</name>
         <ul spacing="normal">
           <li>Added Open Issues Section</li>
           <li>Removed placeholder for issue
