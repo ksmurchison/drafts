@@ -13,14 +13,14 @@
 <?rfc strict="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std" consensus="yes" ipr="trust200902"
-     docName="draft-ietf-extra-processimip-07"
+     docName="draft-ietf-extra-processimip-08"
      obsoletes="" updates="" submissionType="IETF" xml:lang="en"
      tocInclude="true" symRefs="true" sortRefs="true" version="3">
   <!-- xml2rfc v2v3 conversion 3.12.2 -->
   <front>
     <title abbrev="Sieve Process iMIP">Sieve Email Filtering:
     Extension for Processing Calendar Attachments</title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-extra-processimip-07"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-extra-processimip-08"/>
     <author initials="K." surname="Murchison" fullname="Kenneth Murchison">
       <organization abbrev="Fastmail">Fastmail US LLC</organization>
       <address>
@@ -587,7 +587,9 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
           <li>Subject: Registration of new Sieve action</li>
           <li>Name: processcalendar</li>
           <li>Description: Add and update items on a user's calendars</li>
-          <li>References: RFC XXXX</li>
+          <li>References: RFC XXXX <xref target="RFC5229"/>
+                          <xref target="RFC6134"/></li>
+          <li>Capabilities: "processcalendar", "variables", "extlists"</li>
           <li>Action Interactions: This action is incompatible with
           "reject" and "ereject" actions</li>
           <li>Cancels Implicit Keep? No</li>
@@ -650,6 +652,12 @@ if not string :is "${processcal_outcome}" ["added", "updated"] {
 
     <section
         title="Change History (To be removed by RFC Editor before publication)">
+      <t>Changes since draft-ietf-sieve-processimip-07:</t>
+      <ol>
+        <li>Fixed Sieve Action registration to include all associated
+        capabilites and their references.</li>
+      </ol>
+
       <t>Changes since draft-ietf-sieve-processimip-06:</t>
       <ol>
         <li>Fixed example that was still using :errstr rather than
