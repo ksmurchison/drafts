@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-10"
+     docName="draft-ietf-emailcore-as-11"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-10"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-11"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -163,6 +163,7 @@
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/40">
             #40 - Recommended SMTP Extensions</eref>:
             Requires discussion of current/new text.
+            Do we remove DSN from the list?
         </li>
         <li>
           <eref
@@ -212,6 +213,12 @@
             #93 - "7.3. VRFY, EXPN, and Security" should point to SMTP
             AUTH RFC</eref>:
             Requires discussion of any new text.
+        </li>
+        <li>
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
+            #94 - Use of Quoted Strings</eref>:
+            Requires discussion of proposed text.
         </li>
       </ul>
     </note>
@@ -987,6 +994,16 @@
           <eref
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/84">
           #84 - Handling of Trace Header Fields by MUAs</eref>
+          </li>
+        </ul>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-10 (2024-07-03) to -11</name>
+        <ul spacing="normal">
+          <li>Added Open Issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
+            #94 - Use of Quoted Strings</eref>
           </li>
         </ul>
       </section>
