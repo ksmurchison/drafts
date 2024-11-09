@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-11"
+     docName="draft-ietf-emailcore-as-13"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-11"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-13"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -118,12 +118,14 @@
         <email>murch@fastmailteam.com</email>
       </address>
     </author>
+<!--
     <author initials="E." surname="Sam" fullname="E Sam" role="editor">
       <organization/>
       <address>
         <email>winshell64@gmail.com </email>
       </address>
     </author>
+-->
     <date/>
     <!-- Meta-data Declarations -->
     <area>ART</area>
@@ -160,65 +162,16 @@
       <ul>
         <li>
           <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/40">
-            #40 - Recommended SMTP Extensions</eref>:
-            Requires discussion of current/new text.
-            Do we remove DSN from the list?
-        </li>
-        <li>
-          <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/78">
-            #78 - Advice against using URL %-encoding on non-ASCII email
-            addresses</eref>:
-            Is the "final" proposed text in <xref target="non-ascii"/>
-            sufficient?
-        </li>
-        <li>
-          <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/79">
-            #79 - Add Internationalization Considerations
-            Section</eref>:
-            Requires discussion of any new text.
-        </li>
-        <li>
-          <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/84">
-            #84 - Handling of Trace Header Fields by MUAs</eref>:
-            Is the proposed text in <xref target="trace"/> sufficient?
-        </li>
-        <li>
-          <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/85">
-            #85 - What mail agents should do/not do with Received
-            header fields</eref>:
-            Is the proposed text intended to replace just some or all
-            of the text in <xref target="received-consumption"/>?
-        </li>
-        <li>
-          <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/86">
-            #86 - Expand on operational meaning of being a Trace
-            Header Field</eref>:
-            Requires discussion of any new text.
-        </li>
-        <li>
-          <eref
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/92">
             #92 - CNAME handling in "5.1. Locating the Target Host"</eref>:
-            Requires discussion of any new text.
+            Per IETF 120, Klensin to propose text.
         </li>
         <li>
           <eref
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/93">
             #93 - "7.3. VRFY, EXPN, and Security" should point to SMTP
             AUTH RFC</eref>:
-            Requires discussion of any new text.
-        </li>
-        <li>
-          <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
-            #94 - Use of Quoted Strings</eref>:
-            Requires discussion of proposed text.
+            Per IETF 120, Alexey to propose text or close issue.
         </li>
       </ul>
     </note>
@@ -333,30 +286,40 @@
           that contain single label domains. </t>
       </section>
 
-      <section numbered="true" toc="default">
+      <section numbered="true" anchor="smtp-ext" toc="default">
         <name>Use of SMTP Extensions</name>
         <t>As SMTP has evolved over the years, several extensions
-          have become ubiquitous.
-          As a result, the following extensions MUST be supported by SMTP
-          senders and receivers:
-
-        </t>
+        have become ubiquitous.
+        As a result, the following extensions MUST be supported by SMTP
+        senders and receivers:</t>
+        
         <ul spacing="normal">
           <li>
             <xref target="RFC6152">8-bit MIME</xref></li>
-          <li>
-            <xref target="RFC3461">Deliver Status Notifications</xref></li>
         </ul>
         <t>Similarly, the following extensions SHOULD be supported by SMTP
-          senders and receivers:
+          senders and receivers:</t>
 
-        </t>
-        <ul spacing="normal">
+          <ul spacing="normal">
           <li>
             <xref target="RFC2920">Command Pipelining</xref></li>
           <li>
-            <xref target="RFC6531">Internationalized Email</xref></li>
+            Internationalized Email (<xref target="RFC6530"/>,
+          <xref target="RFC6531"/>, <xref target="RFC6532"/>)</li>
         </ul>
+
+        <t><xref target="RFC3461">Delivery Status Notifications</xref>
+        requests, while recommended and useful if supported, have not
+        been widely implemented and deployed.
+        Mail systems that send such requests should be prepared for
+        systems that receive them to not recognize or support them.
+        Note that this extension for notification requests is distinct
+        from the format of notifications defined in
+        <xref target="RFC3464"/> and <xref target="RFC6533"/>
+        and, the special media type defined in <xref target="RFC6522"/>.
+        All of those SHOULD be supported.
+        </t>
+
         <t>Furthermore, while Enhanced Mail System Status Codes
           (<xref target="RFC3463"/>, <xref target="RFC5248"/>)
           are widely supported, they are not ubiquitous.
@@ -377,7 +340,7 @@
       <name>Applicability of Message Format Provisions</name>
       <t> This section describes adjustments to the Internet Message
         Format that may be appropriate under various circumstances. </t>
-      <section numbered="true" toc="default">
+      <section numbered="true" anchor="empty-quoted" toc="default">
         <name>Use of Empty Quoted Strings</name>
         <t>
             The <tt>quoted-string</tt> ABNF
@@ -387,23 +350,23 @@
             While it allows for empty quoted string, such construct is
             going to cause interoperability issues when used in certain
             header fields.
-            In particular, use of empty quoted  strings is NOT
-            RECOMMENDED in "received-token" (a component of a Received
-            header field), "keywords" (a component of a Keywords header
-            field) and "local-part" (left hand side of email addresses).
-            Use of empty quoted strings is in particular problematic in
-            the "local-part".
-            For example, all of the following email addresses are
+            In particular, use of empty quoted  strings is discouraged
+            in "received-token" (a component of a Received
+            header field).
+            For example, the following email header field is
             non-interoperable:
         </t>
 
         <ul empty="true">
-          <li>"".bar@example.com </li>
-          <li>foo.""@example.net</li>
-          <li>""@example.com</li>
+          <li>Received: from node.example by x.y.test "" foo; 21 Nov 1997 10:01:22 -0600</li>
         </ul>
 
-        <t>Use of empty quoted strings is fine in "display-name".</t>
+        <t>Use of empty quoted strings is fine in "display-name".
+        For example, the following email header field is interoperable:</t>
+
+        <ul empty="true">
+          <li>To: "" &lt;test@example.com&gt;</li>
+        </ul>
       </section>
 
       <section numbered="true" toc="default">
@@ -431,31 +394,42 @@
 
         <section anchor="received-consumption" numbered="true" toc="default">
           <name>Consumption</name>
-          <t>Received header fields are primarily for use when there are
-          concerns about a message, such as to analyze handling or
-          delivery problems, or to aid evaluation of a message with
-          suspicious content or attributes. Received header fields are
-          easily created and have no direct security or privacy
-          protections.</t>
+          <t>Received header fields support analysis of handling and
+          delivery problems, as well as aiding evaluation of a message
+          with suspicious content or attributes. The fields are easily
+          created and have no direct security or privacy protections,
+          and the fields can contain personally sensitive
+          information.
+          </t>
 
-          <t>Therefore, the fields do not warrant automatic trust. They
-          should be used with care, for whatever information is deemed
-          valuable, and especially when syntax or values occur that are
-          not defined by the specifications
+          <t>Therefore, the fields do not warrant automatic trust and
+          do warrant careful consideration before disclosing to
+          others. They should be used with care, for whatever
+          information is deemed valuable, and especially when syntax
+          or values occur that are not defined by the specifications
           <xref target="I-D.ietf-emailcore-rfc5321bis"/>
           <xref target="I-D.ietf-emailcore-rfc5322bis"/>.</t>
         </section>
       </section>
 
       <section anchor="trace" numbered="true" toc="default">
-        <name>Handling of Trace Header Fields</name>
+        <name>Reuse of Existing Messages</name>
 
-        <t>A mail user agent (MUA) that uses an existing email message
-        as a template for editing with the intention of sending it to
-        a new set of recipients (this is sometimes implemented as "edit
-        as a new message" feature) SHOULD strip trace header fields
-        (see <xref target="I-D.ietf-emailcore-rfc5322bis" section="3.6.7"/>).
-        </t>
+        <t>Many mail user agents (MUAs) have functions which use an
+        existing email message as a template for editing a new
+        message. For example, an MUA may take an existing message,
+        allow the user to replace the originator and destinations,
+        edit parts of the body, and send it on to the new
+        recipients. When performing such functions, the MUA SHOULD:</t>
+
+        <ul spacing="normal">
+          <li>Remove all header fields unknown to the MUA</li>
+          <li>Remove any header fields that are only pertinent to the
+          transport of the original message, such as trace header
+          fields
+          (see <xref target="I-D.ietf-emailcore-rfc5322bis"
+          section="3.6.7"/>)</li>
+        </ul>
       </section>
     </section>
 
@@ -523,15 +497,28 @@
         <xref target="RFC6530" section="9"/> says: "a downgrade
         mechanism that transforms the local part of an email address
         cannot be utilized in transit."
-        Hence SMTP clients and servers MUST NOT try to encode
-        non-ASCII email addresses as ASCII addresses.
-        In particular, they MUST NOT use web URI percent encoding
-        (see <xref target="RFC3986" section="2.1"/>)
-        nor Internationalized Domain Names for Applications (IDNA)
-        (see <xref target="RFC5891" section="4.4"/>)
-        <xref target="RFC3492">Punycode</xref> in the local-part of an
-        address, nor the former in the domain-part, since neither
-        will produce a valid address.</t>
+
+        This is actually just a special case of a principle, discussed
+        in <xref target="I-D.ietf-emailcore-rfc5321bis" section="2.3.11"/>
+        and elsewhere, that nothing other than the final delivery
+        system should attempt to interpret or alter the local-part of
+        an address.
+        In particular, they MUST NOT:</t>
+
+        <ul spacing="normal">
+          <li>use web URI percent encoding
+          (see <xref target="RFC3986" section="2.1"/>)
+          in either the local-part or the domain-part of an
+          address</li>
+          <li>perform Internationalized Domain Names for Applications
+          (IDNA) Punycode Conversion
+          (see <xref target="RFC5891" section="4.4"/>)
+          on the local-part of an address</li>
+        </ul>
+
+        <t>since none of these encodings will produce an address
+        that is guaranteed to be treated as equivalent to the original
+        one.</t>
 
         <t>In some cases, servers or clients may be able to use local
         knowledge to substitute ASCII addresses for specific non-ASCII
@@ -539,7 +526,32 @@
         See <xref target="RFC6530" section="8"/> for further discussion.
         </t>
       </section>
+<!--
+      <section numbered="true" toc="default">
+        <name>Use of Quoted Strings in Local Parts</name>
 
+        <t>The <tt>quoted-string</tt> ABNF
+            non-terminal is used in various places in
+            <xref target="I-D.ietf-emailcore-rfc5321bis"/> and
+            <xref target="I-D.ietf-emailcore-rfc5322bis"/>
+            grammar as a way to allow strings that are otherwise
+            forbidden in mailbox local parts. In practice, quoted
+            strings in "local-part" (left hand side of email
+            addresses) do not work reliably in SMTP and therefore
+            their use is discouraged.
+            For example, all of the following email addresses are
+            non-interoperable:
+        </t>
+
+        <ul empty="true">
+          <li>"".bar@example.com </li>
+          <li>foo.""@example.net</li>
+          <li>""@example.com</li>
+          <li>"a..b"@example.com</li>
+        </ul>
+
+      </section>
+-->
       <section numbered="true" toc="default">
         <name>Use and Validation in HTML and Other Contexts</name>
 
@@ -751,8 +763,9 @@
         misunderstandings within the RFCs.</t>
 
         <t>Special thanks to the following for providing significant
-        portions of text for this document: Todd Herr, Barry Leiba,
-        John Levine, Alexey Melnikov.</t>
+        portions of text for this document: Dave Crocker, Todd Herr,
+        Barry Leiba, John Levine, Alexey Melnikov, Pete Resnick, and
+        E. Sam.</t>
       </section>
     <!-- Possibly a 'Contributors' section ... -->
 
@@ -803,7 +816,9 @@
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5248.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6152.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2920.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6532.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7085.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
@@ -818,26 +833,12 @@
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
+<!--        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>-->
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
-
-<!--        <xi:include
-     href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/> -->
-        <reference anchor="RFC6530" target="https://www.rfc-editor.org/info/rfc6530">
-          <front>
-            <title>Overview and Framework for Internationalized Email</title>
-            <author initials="J." surname="Klensin" fullname="John C. Klensin">
-              <organization/>
-            </author>
-            <author initials="Y." surname="Ko" fullname="YangWoo Ko">
-              <organization/>
-            </author>
-            <date year="2010" month="February"/>
-          </front>
-          <seriesInfo name="RFC" value="6530"/>
-          <seriesInfo name="DOI" value="10.17487/RFC6530"/>
-        </reference>
 
         <reference anchor="HTML" target="https://html.spec.whatwg.org/">
           <front>
@@ -1005,6 +1006,45 @@
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
             #94 - Use of Quoted Strings</eref>
           </li>
+        </ul>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-11 (2024-10-21) to -12</name>
+        <ul spacing="normal">
+          <li>Applied new proposed text to <xref target="empty-quoted"/></li>
+          <li>Applied new proposed text for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/40">
+          #40 - Recommended SMTP Extensions</eref>
+          </li>
+          <li>Applied new proposed text for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/78">
+          #78 - Advice against using URL %-encoding on non-ASCII email
+          addresses</eref>
+          </li>
+          <li>Applied new proposed text for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/84">
+          #84 - Handling of Trace Header Fields by MUAs</eref>
+          </li>
+          <li>Applied new proposed text for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/85">
+            #85 - What mail agents should do/not do with Received
+          header fields</eref>
+          </li>
+        </ul>
+      </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-12 (2024-11-09) to -13</name>
+        <ul spacing="normal">
+          <li>Fixed discussion of Punycode (domain-part -> local-part)
+          in <xref target="non-ascii"/></li>
+          <li>Removed Keywords from discussion in
+          <xref target="empty-quoted"/></li>
+          <li>Added example of empty display-name in
+          <xref target="empty-quoted"/></li>
         </ul>
       </section>
     </section>
