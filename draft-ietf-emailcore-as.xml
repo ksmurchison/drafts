@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-13"
+     docName="draft-ietf-emailcore-as-14"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-13"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-14"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -168,10 +168,11 @@
         </li>
         <li>
           <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/93">
-            #93 - "7.3. VRFY, EXPN, and Security" should point to SMTP
-            AUTH RFC</eref>:
-            Per IETF 120, Alexey to propose text or close issue.
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/113">
+            #113 - More explanation of the advantages of transport and
+            encryption between SMTP systems... probably in the
+            A/S</eref>:
+            What, if anything, needs to be done here?
         </li>
       </ul>
     </note>
@@ -295,17 +296,23 @@
         
         <ul spacing="normal">
           <li>
-            <xref target="RFC6152">8-bit MIME</xref></li>
+            <xref target="RFC3207">Secure SMTP over Transport Layer Security</xref>
+          </li>
+          <li>
+            <xref target="RFC6152">8-bit MIME</xref>
+          </li>
         </ul>
         <t>Similarly, the following extensions SHOULD be supported by SMTP
           senders and receivers:</t>
 
           <ul spacing="normal">
           <li>
-            <xref target="RFC2920">Command Pipelining</xref></li>
+            <xref target="RFC2920">Command Pipelining</xref>
+          </li>
           <li>
             Internationalized Email (<xref target="RFC6530"/>,
-          <xref target="RFC6531"/>, <xref target="RFC6532"/>)</li>
+            <xref target="RFC6531"/>, <xref target="RFC6532"/>)
+          </li>
         </ul>
 
         <t><xref target="RFC3461">Delivery Status Notifications</xref>
@@ -611,38 +618,75 @@
         "in the clear". Years of operational experience have shown
         that such transmission exposes the message to easy compromise,
         including wiretapping and spoofing. To mitigate these risks,
-        operation of SMTP has evolved over the years so that it is
-        used with the benefit of
-        <xref target="RFC8446">Transport Layer Security (TLS)</xref>
-        to provide both confidentiality and authentication in the
-        transmission of messages. This section discusses those topics
-        and their most common uses.</t>
-      <t>It is important that the reader understand what is meant by
-        the terms "Authentication" and "Confidentiality", and for that
-        we will borrow directly from RFC8446.
+        several protocols, mechanisms, and extensions have been
+        developed that provide security services to email, some of
+        which are outside the SMTP protocol itself.
+        The most important of these include, but are not limited to:</t>
 
-      </t>
-      <ul spacing="normal">
-        <li>Authentication is the process of establishing the
-          identity of one or more of the endpoints of a communication
-          channel. TLS only requires authentication of the server side
-          of the communication channel; authentication of the client
-          side is optional.</li>
-        <li>The term "confidentiality" describes a state where the
-          data (i.e., the message) is transmitted in a way that it is
-          only visible to the endpoints of a communication
-          channel.</li>
-      </ul>
-      <t>It is not uncommon for implementers to use the term
-        "encryption" to mean "confidentiality", but this is not quite
-        correct. Rather, encryption using TLS is the current method by
-        which confidentiality is achieved with SMTP, but that does not
-        mean that future methods might not be developed.</t>
-      <t>Note: With typical email use of TLS, authentication only is
-        performed for the target receiving server and is not done for
-        the sending client. That is, it serves to validate that the
-        connection has been made to the intended server, but does not
-        validate who initiated it.</t>
+        <ul spacing="normal">
+          <li>
+            <xref target="RFC8446">TLS</xref>,
+            <xref target="RFC3207">STARTTLS</xref>,
+            <xref target="RFC8461">MTA-STS</xref>, and
+            <xref target="RFC7672">DANE for SMTP</xref>
+            offer confidentiality services between servers.
+          </li>
+          <li>
+            <xref target="RFC6376">DKIM</xref>,
+            <xref target="RFC7489">DMARC</xref>,
+            <xref target="RFC8617">ARC</xref>, and
+            <xref target="RFC7208">SPF</xref>
+            offer message level authentication services.
+          </li>
+          <li>
+            <xref target="RFC4954">SMTP Authentication</xref>
+            offers authenticating clients connecting to server.
+          </li>
+          <li>
+            <xref target="RFC8551">S/MIME</xref> and
+            <xref target="RFC9580">OpenPGP</xref> exist to allow for message
+            confidentiality outside of the operation of SMTP.
+          </li>
+        </ul>
+
+        <t>The following sections discuss these facilities and their
+        most common uses.</t>
+
+        <section anchor="tls" numbered="true" toc="default">
+          <name>Transport Layer Security</name>
+          <t>SMTP has evolved over the years so that it is
+          used with the benefit of
+          <xref target="RFC8446">Transport Layer Security (TLS)</xref>
+          to provide both confidentiality and authentication in the
+          transmission of messages.</t>
+
+          <t>It is important that the reader understand what is meant by
+          the terms "Authentication" and "Confidentiality", and for that
+          we will borrow directly from RFC8446.
+          </t>
+
+          <ul spacing="normal">
+            <li>Authentication is the process of establishing the
+            identity of one or more of the endpoints of a communication
+            channel. TLS only requires authentication of the server side
+            of the communication channel; authentication of the client
+            side is optional.</li>
+            <li>The term "confidentiality" describes a state where the
+            data (i.e., the message) is transmitted in a way that it is
+            only visible to the endpoints of a communication
+            channel.</li>
+          </ul>
+          <t>It is not uncommon for implementers to use the term
+          "encryption" to mean "confidentiality", but this is not quite
+          correct. Rather, encryption using TLS is the current method by
+          which confidentiality is achieved with SMTP, but that does not
+          mean that future methods might not be developed.</t>
+          <t>Note: With typical email use of TLS, authentication only is
+          performed for the target receiving server and is not done for
+          the sending client. That is, it serves to validate that the
+          connection has been made to the intended server, but does not
+          validate who initiated it.</t>
+        </section> <!-- TLS -->
       <section numbered="true" toc="default">
         <name>Optional Confidentiality</name>
         <t>The most common implementation of message confidentiality
@@ -670,7 +714,8 @@
           storage in plain text should be expected!</t>
       </section>
       <section numbered="true" toc="default">
-        <name>Required Confidentiality, with Receiving Server Authentication</name>
+        <name>Required Confidentiality,
+        with Receiving Server Authentication</name>
         <t>Two protocols exist that move message confidentiality
           from optional to required (with conditions as noted below) -
           <xref target="RFC8461">MTA-STS</xref> and
@@ -726,12 +771,15 @@
           the traditional port 25. The most common implementation of
           SMTP AUTH is for a person to present a username and password
           to their mailbox provider's outbound SMTP server when
-          configuring their MUA for sending mail.</t>
+        configuring their MUA for sending mail.</t>
+        <t>SMPT AUTH MAY be used to limit unauthorized use of VRFY and
+        EXPN commands as described in
+        <xref target="I-D.ietf-emailcore-rfc5321bis" section="7.3"/>.</t>
       </section>
       <section numbered="true" toc="default">
         <name>Message-Level Confidentiality</name>
         <t>Protocols such as <xref target="RFC8551">S/MIME</xref>
-          and <xref target="RFC4880">OpenPGP</xref> exist to allow for
+          and <xref target="RFC9580">OpenPGP</xref> exist to allow for
           message confidentiality outside of the operation of
           SMTP. That is to say, using these protocols results in
           encryption of the message prior to its being submitted to
@@ -764,6 +812,7 @@
 
         <t>Special thanks to the following for providing significant
         portions of text for this document: Dave Crocker, Todd Herr,
+        Tero Kivinen,
         Barry Leiba, John Levine, Alexey Melnikov, Pete Resnick, and
         E. Sam.</t>
       </section>
@@ -829,13 +878,14 @@
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8551.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7208.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7672.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4880.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9580.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
 <!--        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>-->
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
@@ -1047,6 +1097,20 @@
           <xref target="empty-quoted"/></li>
         </ul>
       </section>
-    </section>
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-13 (2025-01-30) to -14</name>
+        <ul spacing="normal">
+          <li>Added STARTTLS to the MUST implement list in
+          <xref target="smtp-ext"/></li>
+          <li>Added Alexey Melnokov's proposed text for issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
+            #93 - "VRFY, EXPN, and Security" should point to SMTP AUTH RFC</eref>
+          </li>
+          <li>Applied (with some editorial changes), Tero Kivinen's proposed
+          text to <xref target="conf-auth"/>. </li>
+        </ul>
+      </section> 
+   </section>
   </back>
 </rfc>
