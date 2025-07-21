@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-14"
+     docName="draft-ietf-emailcore-as-16"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-14"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-16"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -187,7 +187,9 @@
       <xref target="I-D.ietf-emailcore-rfc5321bis">Simple Mail
       Transfer Protocol (SMTP)</xref> and the
       <xref target="I-D.ietf-emailcore-rfc5322bis">Internet Message
-      Format (IMF)</xref>, and some extensions that have been built on
+		 Format (IMF)</xref>,
+	  <!-- 20250226 JcK -->
+	  and some extensions and other protocols that have been built on
       them.
       In order to promote interoperability amongst senders, receivers,
       and intermediaries, it includes discussions and recommendations
@@ -212,8 +214,10 @@
     <section numbered="true" toc="default">
       <name>Applicability of Some SMTP Provisions</name>
       <t> Over the years since <xref target="RFC5321"/> was
-        published in October 2008, usage of SMTP has evolved, machines and 
-        network speeds have increased, and the frequency with which
+        published in October 2008, usage of SMTP has evolved,
+		machines and
+	  <!-- 20250226 JcK -->		
+        network speeds have increased, and the frequency with which most
         SMTP senders and receivers have to be prepared to deal with
         systems that are disconnected from the Internet for long
         periods or that require many hops to reach has decreased.
@@ -229,8 +233,10 @@
         environments in which Basic Latin Script is not the norm.
       </t>
 
-      <t> This section describes adjustments
-      that may be appropriate for SMTP under various circumstances
+	  <t> This section describes
+	  <!-- 20250226 JcK -->		 
+		 describes configuration options and other considerations
+		 about SMTP that may be appropriate under various circumstances
       and discusses the applicability of other protocols that
       represent newer work or that are intended to deal with
       relatively newer issues.</t>
@@ -266,7 +272,9 @@
       </section>
       <section numbered="true" toc="default">
         <name>Use of Addresses in Top-Level Domains</name>
-        <t> While addresses in top-level domains (TLDs) are
+		<t> While addresses in top-level domains (TLDs)
+		   <!-- 20250226 JcK -->
+		    (i.e., single-label domains) are
           syntactically valid, mail to these addresses has never
           worked reliably.
           A handful of country code TLDs have top level MX records but
@@ -283,7 +291,8 @@
           root, mail in computer science departments started to fail
           as mail to bob@cs was now treated as mail to
           Czechoslovakia.
-          Hence, for reliable service, mail SHOULD NOT use addreses
+		  <!-- 20250226 JcK  (typo corrected) -->
+		  Hence, for reliable service, mail SHOULD NOT use addresses
           that contain single label domains. </t>
       </section>
 
@@ -296,8 +305,10 @@
         
         <ul spacing="normal">
           <li>
-            <xref target="RFC3207">Secure SMTP over Transport Layer Security</xref>
-          </li>
+            <xref target="RFC3207">Secure SMTP over Transport Layer
+			   Security</xref> 
+			<!-- 20250226 JcK -->
+		  (Cf. discussion in <xref target="tls"/>.)</li>
           <li>
             <xref target="RFC6152">8-bit MIME</xref>
           </li>
@@ -343,9 +354,10 @@
         </t>
       </section>
     </section>
-    <section numbered="true" toc="default">
-      <name>Applicability of Message Format Provisions</name>
-      <t> This section describes adjustments to the Internet Message
+	<section numbered="true" toc="default">   
+	   <name>Applicability of Message Format Provisions</name>
+	  <!-- 20250226 JcK -->		   
+      <t> This section describes considerations about the Internet Message
         Format that may be appropriate under various circumstances. </t>
       <section numbered="true" anchor="empty-quoted" toc="default">
         <name>Use of Empty Quoted Strings</name>
@@ -359,13 +371,16 @@
             header fields.
             In particular, use of empty quoted  strings is discouraged
             in "received-token" (a component of a Received
-            header field).
-            For example, the following email header field is
+            header field) and "local-part" (left hand side of email addresses).
+            For example, all of the following email header fields are
             non-interoperable:
         </t>
 
         <ul empty="true">
           <li>Received: from node.example by x.y.test "" foo; 21 Nov 1997 10:01:22 -0600</li>
+	  <li>From: "".bar@example.com</li>
+	  <li>To: foo.""@example.net</li>
+	  <li>Cc: ""@example.com</li>
         </ul>
 
         <t>Use of empty quoted strings is fine in "display-name".
@@ -384,9 +399,9 @@
           <t>Email addresses are commonly classified as Personally
           Identifiable Information (PII). Improper application of the
           FOR clause in Received header fields can result in disclosure
-          of PII.  As such, the FOR clause MUST NOT be generated if the
+          of PII.  As such, the FOR clause SHOULD NOT be generated if the
           message copy is associated with multiple recipients from
-          mutliple SMTP RCPT commands.
+          multiple SMTP RCPT commands.
           Otherwise, the value of the FOR clause MUST contain the RCPT
           address that caused the message to be routed to the
           recipient of the given copy of the message.</t>
@@ -424,7 +439,12 @@
 
         <t>Many mail user agents (MUAs) have functions which use an
         existing email message as a template for editing a new
-        message. For example, an MUA may take an existing message,
+		message.
+		<!-- 20250226 JcK -->
+		These functions are different from traditional forwarding
+		functions.  Those generally preserve the original message as a
+		body part or just the message body as quoted text.
+		For example, an MUA may take an existing message,
         allow the user to replace the originator and destinations,
         edit parts of the body, and send it on to the new
         recipients. When performing such functions, the MUA SHOULD:</t>
@@ -497,10 +517,11 @@
 
       <section anchor="non-ascii" numbered="true" toc="default">
         <name>Use of non-ASCII Characters</name>
-
+	  <!-- 20250226 JcK -->	
         <t>Proper generation and transmission of email addresses
-        containing non-ASCII characters is discussed in
-        <xref target="RFC6530"/>.
+        containing non-ASCII characters is discussed in the SMTPUTF8
+		documents
+        <xref target="RFC6530"/> <xref target="RFC6531"/> <xref target="RFC6532"/>.
         <xref target="RFC6530" section="9"/> says: "a downgrade
         mechanism that transforms the local part of an email address
         cannot be utilized in transit."
@@ -568,7 +589,11 @@
         grammar for a 'Mailbox' in
         <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>
         (the lack of quoted strings and limited characters allowed in
-        domains).
+		domains).
+		<!-- 20250226 JcK -->
+		As of the time this document was written, non-ASCII characters
+		(as discussed in <xref target="non-ascii"/> above) were also
+		not permitted.
         Implementations that intend to accept email addresses in HTML
         forms are encouraged to consult the valid email address
         grammar in
@@ -587,8 +612,10 @@
 
           <li>Some mail systems allow a trailing dot ('.') in the
           domain part of email addresses (as allowed by
-          <xref target="RFC1035">Domain Names</xref>), but this is
-          not interoperable with all systems.
+		  <xref target="RFC1035">Domain Names</xref>
+		  <!-- 20250226 JcK -->
+		  but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
+		  and is hence not interoperable with all systems.
           Consequently, implementations are encouraged to strip trailing
           dots from the domain part of email addresses.</li>
         </ul>
@@ -604,8 +631,10 @@
         Format (IMF)</xref> 
         specification and its predecessors, MIME features such as
         non-textual message bodies, multi-part message bodies, and the
-        use of character sets other than US-ASCII in message bodies and
-        header fields have become nearly ubiquitous in contemporary
+		use of character sets other than US-ASCII in message bodies
+
+	  <!-- 20250226 JcK  "and header fields" dropped-->
+        have become nearly ubiquitous in contemporary
         email.
         As a result, IMF generators and parsers are expected to support MIME.
       </t>
@@ -634,8 +663,12 @@
           <li>
             <xref target="RFC6376">DKIM</xref>,
             <xref target="RFC7489">DMARC</xref>,
-            <xref target="RFC8617">ARC</xref>, and
-            <xref target="RFC7208">SPF</xref>
+            <xref target="RFC8617">ARC</xref>,
+            <xref target="RFC7208">SPF</xref>,
+            <xref target="RFC8551">S/MIME</xref>,
+            <xref target="RFC9580">OpenPGP</xref>, and
+	    <xref target="I-D.ietf-lamps-header-protection">
+	      Header Protection for Cryptographically Protected E-mail</xref>,
             offer message level authentication services.
           </li>
           <li>
@@ -739,6 +772,7 @@
           use Opportunistic TLS or clear-text to transmit the
           message.</t>
       </section>
+<!--
       <section numbered="true" toc="default">
         <name>Message-Level Authentication</name>
         <t>Protocols exist to allow for authentication of different
@@ -757,6 +791,50 @@
           email message, and not with establishing the identity of the
           receiving server.</t>
       </section>
+-->
+      <section numbered="true" toc="default">
+        <name>Message-Level Authentication</name>
+        <t>Protocols exist to allow for authentication of different
+        identities associated with an email message:</t>
+	<ul>
+	  <li>
+            <xref target="RFC7208">SPF</xref> provides a method to
+	    ensure that the sending mail server is authorized to
+	    originate mail from the sender's domain.
+	  </li>
+	  <li>
+            <xref target="RFC6376">DKIM</xref> provides a method to
+	    detect forged sender addresses in an email (spoofing).
+	  </li>
+	  <li>
+          <xref target="RFC7489">DMARC</xref>
+          relies on SPF and DKIM to allow for validation of the domain
+          in the visible From header.
+	  </li>
+	  <li>
+	    <xref target="RFC8617">ARC</xref> provides a method for each
+          hop to record results of authentication checks performed at
+          that hop.
+	  </li>
+	  <li>
+	    <xref target="RFC8551">S/MIME</xref>
+            and <xref target="RFC9580">OpenPGP</xref>,
+	    along with
+	    <xref target="I-D.ietf-lamps-header-protection">
+	      Header Protection for
+	      Cryptographically Protected E-mail</xref>,
+	    allow for emails to be digitally signed, thereby providing
+	    a method to verify that an email was actually sent
+	    by the entity claiming to be the sender.
+	  </li>
+	</ul>
+        <t>All of these are outside the scope of this document, as
+          they are outside the scope of SMTP. They deal with
+          validating the authorized usage of one or more domains in an
+          email message, and not with establishing the identity of the
+          receiving server.</t>
+      </section>
+
       <section numbered="true" toc="default">
         <name>SMTP Authentication</name>
         <t><xref target="RFC4954">SMTP Authentication</xref>,
@@ -828,7 +906,16 @@
     <section anchor="Security" numbered="true" toc="default">
       <name>Security Considerations</name>
       <t>Security and privacy considerations are discussed throughout
-      this document as they pertain to the referenced specifications.</t>
+		 this document as they pertain to the referenced specifications.
+		 <!-- 20250226 JcK -->
+	  Special note should be taken of the interaction between 
+	  confidentiality and authentication mechanism that are applicable
+	  to Internet links and therefore potentially sensitive to the
+	  multi-hop design of SMTP.  Unless the relevant messages and
+	  mechanisms are protected from tampering or content exposure on
+	  systems that are the endpoints of those links, the security of
+	  the mechanisms depends on trust in those intermediate
+	  endpoints. </t> 
     </section>
   </middle>
   <!--  *****BACK MATTER ***** -->
@@ -889,6 +976,7 @@
 <!--        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>-->
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-header-protection.xml"/>
 
         <reference anchor="HTML" target="https://html.spec.whatwg.org/">
           <front>
@@ -1102,13 +1190,47 @@
         <ul spacing="normal">
           <li>Added STARTTLS to the MUST implement list in
           <xref target="smtp-ext"/></li>
-          <li>Added Alexey Melnokov's proposed text for issue
+          <li>Added Alexey Melnikov's proposed text for issue
           <eref
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
             #93 - "VRFY, EXPN, and Security" should point to SMTP AUTH RFC</eref>
           </li>
           <li>Applied (with some editorial changes), Tero Kivinen's proposed
           text to <xref target="conf-auth"/>. </li>
+        </ul>
+      </section> 
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-14 (2025-02-27) to -15</name>
+        <ul spacing="normal">
+          <li>Miscellaneous editorial changes</li>
+        </ul>
+      </section> 
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-15 (2025-03-18) to -16</name>
+        <ul spacing="normal">
+          <li>Changed "FOR clause MUST NOT be generated if the message
+	  copy is associated with multiple recipients from multiple
+	  SMTP RCPT commands" to "SHOULD NOT".</li>
+          <li>Reintroduced examples of non-interoperable local-parts
+	  containing empty quoted strings (issue 
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
+            #93</eref>).
+          </li>
+          <li>Added short descriptions of SPF and DKIM, and added
+	  S/MIME, OpenPGP, and Header Protection for Cryptographically
+	  Protected E-mail as methods of Message-Level Authentication
+	  (issues 
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
+            #110</eref>,
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
+            #132</eref>,
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
+            #133</eref>).
+	  </li>
         </ul>
       </section> 
    </section>
