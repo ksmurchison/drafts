@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-17"
+     docName="draft-ietf-emailcore-as-18"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-17"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-18"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -764,7 +764,7 @@
           connection has been made to the intended server, but does not
           validate who initiated it.</t>
         </section> <!-- TLS -->
-      <section numbered="true" toc="default">
+      <section numbered="true" anchor="opp-tls" toc="default">
         <name>Opportunistic Confidentiality</name>
         <t>The most common implementation of message confidentiality
           is what's known as "opportunistic TLS", which is frequently
@@ -797,7 +797,13 @@
           <t>Note that while TLS provides protection while the message is
           in transit, there is no guarantee that the message will be
           stored in encrypted fashion at its destination. In fact,
-          storage in plain text should be expected!</t>
+          storage in plain text should be expected!
+          Also, in a situation where a message traverses multiple hops
+          through multiple SMTP servers, each intermediate server will
+          have access to the plain text of the message. The only way
+          to completely assure confidentiality so that no one server has
+          access to the contents of a message is to use message-level
+          confidentiality as described in <xref target="message-conf"/>.</t>
       </section>
       <section numbered="true" anchor="enforced-tls" toc="default">
         <name>Enforced Confidentiality,
@@ -816,7 +822,13 @@
         <t>These two protocols differ from Opportunistic TLS in that
           they require receiving server authentication and there is no
           fallback to sending in the clear if negotiation of an
-          encrypted connection fails.</t>
+        encrypted connection fails.</t>
+        <t>However, as noted in <xref target="opp-tls"/>,
+        both SMTP servers will most likely have access to the plain
+        text of the message, as will all SMTP servers where multiple
+        hops are involved. Again, only message-level confidentiality
+        described in <xref target="message-conf"/> will prevent that
+        lack of confidentiality.</t>
         <t>Note that both protocols mentioned in this section rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
@@ -845,7 +857,7 @@
           receiving server.</t>
       </section>
 -->
-      <section numbered="true" toc="default">
+      <section numbered="true" anchor="message-conf" toc="default">
         <name>Message-Level Authentication</name>
         <t>Protocols exist to allow for authentication of different
         identities associated with an email message:</t>
@@ -1339,6 +1351,13 @@
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/138">
             #138</eref>).
           </li>
+        </ul>
+      </section> 
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-17 to -18</name>
+        <ul spacing="normal">
+          <li>Added text clarifying that hop-by-hop confidentiality
+          does not guarantee end-to-end confidentiality.</li>
         </ul>
       </section> 
    </section>
