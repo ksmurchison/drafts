@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-16"
+     docName="draft-ietf-emailcore-as-17"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-16"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-17"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -157,7 +157,7 @@
       makes recommendations for the use of features of the core
       protocols.</t>
     </abstract>
-
+<!--
     <note title="Open Issues">
       <ul>
         <li>
@@ -175,7 +175,8 @@
             What, if anything, needs to be done here?
         </li>
       </ul>
-    </note>
+      </note>
+      -->
   </front>
   <middle>
     <section numbered="true" toc="default">
@@ -619,6 +620,49 @@
           Consequently, implementations are encouraged to strip trailing
           dots from the domain part of email addresses.</li>
         </ul>
+<!--
+        <t>Email addresses are frequently used as input in HyperText
+        Markup Language (HTML) forms but the allowed grammar
+        of these email addresses is not compatible with the
+        grammar for a 'Mailbox' in
+        <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>.
+        Specifically, the HTML form grammar:</t>
+        
+        <ul spacing="normal">
+          <li>Does not supported quoted strings.</li>
+          <li>Only allows a limited set of characters in domains.</li>
+          <li>Allows leading, trailing, or consecutive unquoted dots
+          ('.') in the local-part of email addresses.</li>
+          <li>As of the time this document was written, non-ASCII characters
+	  (as discussed in <xref target="non-ascii"/> above) were also
+	  not permitted.</li>
+        </ul>
+
+        <t>Consequently, implementations that intend to accept email
+        addresses in HTML forms are encouraged to use the following,
+        more restricted 'Mailbox' grammar:</t>
+
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+        Limited-Mailbox = Dot-string "@" Domain
+        ]]></artwork>
+
+        <t>Additionally, the following general guidance is provided:</t>
+
+        <ul spacing="normal">
+          <li>Implementations are discouraged from accepting
+          addresses having leading, trailing, or
+          consecutive unquoted dots ('.') in the local-part, as few
+          mail systems support them.</li>
+
+          <li>Some mail systems allow a trailing dot ('.') in the
+          domain part of email addresses (as allowed by
+		  <xref target="RFC1035">Domain Names</xref>
+		  but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
+		  and is hence not interoperable with all systems.
+          Consequently, implementations are encouraged to strip trailing
+          dots from the domain part of email addresses.</li>
+        </ul>
+-->
       </section>
     </section>
 
@@ -714,14 +758,14 @@
           correct. Rather, encryption using TLS is the current method by
           which confidentiality is achieved with SMTP, but that does not
           mean that future methods might not be developed.</t>
-          <t>Note: With typical email use of TLS, authentication only is
+          <t>Note that with typical email use of TLS, authentication only is
           performed for the target receiving server and is not done for
           the sending client. That is, it serves to validate that the
           connection has been made to the intended server, but does not
           validate who initiated it.</t>
         </section> <!-- TLS -->
       <section numbered="true" toc="default">
-        <name>Optional Confidentiality</name>
+        <name>Opportunistic Confidentiality</name>
         <t>The most common implementation of message confidentiality
           is what's known as "opportunistic TLS", which is frequently
           referred to as "opportunistic encryption". With this method,
@@ -734,23 +778,32 @@
           text.</t>
         <t>Opportunistic TLS is confidentiality without
           authentication, because no effort is made to authenticate
-          the receiving server, and it is optional confidentiality due
+          the receiving server, and it is opportunistic confidentiality due
           to the ability to fall back to transmission in the clear if
           a secure connection cannot be established. That said, most
           modern implementations of SMTP support this method,
           especially at the largest mailbox providers, and so the vast
           majority of email traffic is encrypted during its time
           transiting from the client to the server.</t>
-        <t>Note: While TLS provides protection while the message is
+<!--
+          <t>Note that opportunistic TLS via the
+          <xref target="RFC3207">STARTTLS</xref> extension is
+          vulnerable to man-in-the-middle attacks.
+          <xref target="enforced-tls">Enforced confidentiality</xref>
+          can be used to mitigate these attacks.</t>
+
+<t>Also note
+-->
+          <t>Note that while TLS provides protection while the message is
           in transit, there is no guarantee that the message will be
           stored in encrypted fashion at its destination. In fact,
           storage in plain text should be expected!</t>
       </section>
-      <section numbered="true" toc="default">
-        <name>Required Confidentiality,
+      <section numbered="true" anchor="enforced-tls" toc="default">
+        <name>Enforced Confidentiality,
         with Receiving Server Authentication</name>
         <t>Two protocols exist that move message confidentiality
-          from optional to required (with conditions as noted below) -
+          from opportunistic to enforced (with conditions as noted below) -
           <xref target="RFC8461">MTA-STS</xref> and
           <xref target="RFC7672">DANE for SMTP</xref>.
           While they differ in their implementation details, receiving
@@ -764,7 +817,7 @@
           they require receiving server authentication and there is no
           fallback to sending in the clear if negotiation of an
           encrypted connection fails.</t>
-        <t>Note: Both protocols mentioned in this section rely not
+        <t>Note that both protocols mentioned in this section rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
           client does not implement or understand the protocol
@@ -803,8 +856,10 @@
 	    originate mail from the sender's domain.
 	  </li>
 	  <li>
-            <xref target="RFC6376">DKIM</xref> provides a method to
-	    detect forged sender addresses in an email (spoofing).
+            <xref target="RFC6376">DKIM</xref> permits a person, role,
+            or organization to claim some responsibility for an email
+            message by associating a <xref target="RFC1034">domain name</xref>
+            with the message, which they are authorized to use.
 	  </li>
 	  <li>
           <xref target="RFC7489">DMARC</xref>
@@ -868,6 +923,30 @@
           independent of SMTP, they are out of scope for this
           document.</t>
       </section>
+      <section numbered="true" toc="default">
+        <name>Confidentiality Requirements</name>
+        <t>The vast majority of email sent on the Internet at present
+        does not use message-level confidentiality. It has been
+        recognized that Internet traffic is exposed to both active
+        attack and passive monitoring
+        (see <xref target="RFC3365">BCP61</xref>,
+        <xref target="RFC1984">BCP200</xref>), and therefore that
+        message transmission over SMTP is subject to both.
+        To mitigate these risks, opportunistic confidentiality is now
+        widely implemented and used in Internet email, and some
+        deployment and use of enforced confidentiality is also now
+        seen. Therefore, confidentiality (for example, the STARTTLS
+        extension) MUST be implemented by SMTP servers in order to at
+        least provide over-the-wire confidentiality during an
+        individual SMTP exchange. That said, there are many legacy
+        implementations of SMTP that are still in widespread use in
+        both private and Internet-connected networks, and most
+        receiving servers implementations will be expected to be
+        capable of receiving such messages. Therefore, SMTP servers
+        MUST be configurable to allow for receiving messages without
+        confidentiality between servers in order to maximize
+        interoperation.</t>
+      </section>
     </section>
     <!--
       <section title="Other Stuff">
@@ -925,11 +1004,10 @@
       <name>References</name>
       <references>
         <name>Normative References</name>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2026.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
-
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2026.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
 <!-- the following is the minimum to make xml2rfc happy -->
    <!--   <reference anchor="min_ref">
 
@@ -945,38 +1023,41 @@
       </references>
       <references>
         <name>Informative References</name>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2034.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3461.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3463.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5248.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6152.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2920.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6532.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7085.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7489.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8617.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8461.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8551.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7208.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7672.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9580.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
-        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
-<!--        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>-->
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-header-protection.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.1034.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.1984.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2034.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3365.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3461.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3463.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5248.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6152.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2920.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6532.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7085.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7489.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8617.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8461.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8551.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7208.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7672.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9580.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
+<!--        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>-->
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-header-protection.xml"/>
 
         <reference anchor="HTML" target="https://html.spec.whatwg.org/">
           <front>
@@ -1231,6 +1312,33 @@
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/94">
             #133</eref>).
 	  </li>
+        </ul>
+      </section> 
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-16 to -17</name>
+        <ul spacing="normal">
+          <li>Changed all instances of "optional confidentiality" to
+          "opportunistic confidentiality" and all instances of
+          "required confidentiality" to "enforced confidentiality".
+          (issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/113">
+            #113</eref>)
+          </li>
+
+          <li>Added Section "6.7 Confidentiality Requirements"
+          (issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/113">
+            #113</eref>)
+          </li>
+
+          <li>Updated DKIM description to use a slight modification to
+          the first sentence of RFC 6376 Introduction (issue  
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/138">
+            #138</eref>).
+          </li>
         </ul>
       </section> 
    </section>
