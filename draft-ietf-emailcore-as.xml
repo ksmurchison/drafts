@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-18"
+     docName="draft-ietf-emailcore-as-19"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-18"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-19"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -584,45 +584,10 @@
       <section numbered="true" toc="default">
         <name>Use and Validation in HTML and Other Contexts</name>
 
-        <t>Email addresses are frequently used as input in HyperText
-        Markup Language (HTML) forms but the allowed grammar
-        of these email addresses is more restrictive than the
-        grammar for a 'Mailbox' in
-        <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>
-        (the lack of quoted strings and limited characters allowed in
-		domains).
-		<!-- 20250226 JcK -->
-		As of the time this document was written, non-ASCII characters
-		(as discussed in <xref target="non-ascii"/> above) were also
-		not permitted.
-        Implementations that intend to accept email addresses in HTML
-        forms are encouraged to consult the valid email address
-        grammar in
-        <xref target="HTML" section="4.10.5.1.5"
-              relative="#valid-e-mail-address"/>.</t>
-
-        <t>Additionally, the following general guidance is provided:</t>
-
-        <ul spacing="normal">
-          <li>Few mail systems allow leading, trailing, or
-          consecutive unquoted dots ('.') in the local-part of
-          email addresses even though the HTML grammar referenced
-          above currently allows them.
-          Consequently, implementations are discouraged from accepting
-          such addresses.</li>
-
-          <li>Some mail systems allow a trailing dot ('.') in the
-          domain part of email addresses (as allowed by
-		  <xref target="RFC1035">Domain Names</xref>
-		  <!-- 20250226 JcK -->
-		  but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
-		  and is hence not interoperable with all systems.
-          Consequently, implementations are encouraged to strip trailing
-          dots from the domain part of email addresses.</li>
-        </ul>
-<!--
-        <t>Email addresses are frequently used as input in HyperText
-        Markup Language (HTML) forms but the allowed grammar
+        <t>Email addresses are frequently used as input in
+        HyperText Markup Language (HTML) forms
+        (see <xref target="HTML5" section="4.10.5.1.5"
+              relative="#valid-e-mail-address"/>) but the allowed grammar
         of these email addresses is not compatible with the
         grammar for a 'Mailbox' in
         <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>.
@@ -632,37 +597,29 @@
           <li>Does not supported quoted strings.</li>
           <li>Only allows a limited set of characters in domains.</li>
           <li>Allows leading, trailing, or consecutive unquoted dots
-          ('.') in the local-part of email addresses.</li>
+          ('.') in the local-part of email addresses, although few
+          mail systems support them. Consequently, implementations are
+          discouraged from accepting such addresses.</li>
           <li>As of the time this document was written, non-ASCII characters
 	  (as discussed in <xref target="non-ascii"/> above) were also
 	  not permitted.</li>
         </ul>
 
         <t>Consequently, implementations that intend to accept email
-        addresses in HTML forms are encouraged to use the following,
-        more restricted 'Mailbox' grammar:</t>
+        addresses in HTML forms are encouraged to use at least the the
+        following, more restricted 'Mailbox' grammar:</t>
 
         <artwork name="" type="" align="left" alt=""><![CDATA[
         Limited-Mailbox = Dot-string "@" Domain
         ]]></artwork>
 
-        <t>Additionally, the following general guidance is provided:</t>
-
-        <ul spacing="normal">
-          <li>Implementations are discouraged from accepting
-          addresses having leading, trailing, or
-          consecutive unquoted dots ('.') in the local-part, as few
-          mail systems support them.</li>
-
-          <li>Some mail systems allow a trailing dot ('.') in the
-          domain part of email addresses (as allowed by
-		  <xref target="RFC1035">Domain Names</xref>
-		  but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
-		  and is hence not interoperable with all systems.
-          Consequently, implementations are encouraged to strip trailing
-          dots from the domain part of email addresses.</li>
-        </ul>
--->
+        <t>Additionally, some mail systems allow a trailing dot ('.') in the
+        domain part of email addresses (as allowed by
+	<xref target="RFC1035">Domain Names</xref>
+	but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
+	and is hence not interoperable with all systems.
+        Consequently, implementations are encouraged to strip trailing
+        dots from the domain part of email addresses.</t>
       </section>
     </section>
 
@@ -776,25 +733,26 @@
           transmits the message in encrypted form; if negotiation
           fails, the client falls back to sending the message in clear
           text.</t>
-        <t>Opportunistic TLS is confidentiality without
-          authentication, because no effort is made to authenticate
-          the receiving server, and it is opportunistic confidentiality due
+
+          <t>Opportunistic TLS is optional confidentiality due
           to the ability to fall back to transmission in the clear if
-          a secure connection cannot be established. That said, most
-          modern implementations of SMTP support this method,
-          especially at the largest mailbox providers, and so the vast
+          a secure connection cannot be established.
+          Opportunistic TLS is often configured to provide
+          confidentiality without authentication, where no effort is
+          made to authenticate the receiving server
+          <xref target="RFC3207" section="4.1" sectionFormat="comma"/>.
+          Most modern implementations of SMTP support this method
+          and so the vast
           majority of email traffic is encrypted during its time
           transiting from the client to the server.</t>
-<!--
+
           <t>Note that opportunistic TLS via the
           <xref target="RFC3207">STARTTLS</xref> extension is
           vulnerable to man-in-the-middle attacks.
           <xref target="enforced-tls">Enforced confidentiality</xref>
           can be used to mitigate these attacks.</t>
 
-<t>Also note
--->
-          <t>Note that while TLS provides protection while the message is
+          <t>Also, note that while TLS provides protection while the message is
           in transit, there is no guarantee that the message will be
           stored in encrypted fashion at its destination. In fact,
           storage in plain text should be expected!
@@ -1071,7 +1029,7 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-header-protection.xml"/>
 
-        <reference anchor="HTML" target="https://html.spec.whatwg.org/">
+        <reference anchor="HTML5" target="https://html.spec.whatwg.org/">
           <front>
             <title>HTML Living Standard</title>
             <author>
@@ -1358,6 +1316,32 @@
         <ul spacing="normal">
           <li>Added text clarifying that hop-by-hop confidentiality
           does not guarantee end-to-end confidentiality.</li>
+        </ul>
+      </section> 
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-18 to -19</name>
+        <ul spacing="normal">
+          <li>
+            Added text stating that STARTTLS is vulnerable to
+            man-in-middle-attacks (issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/134">
+            #134</eref>)
+          </li>
+          <li>
+            Rewrote opening paragraph of Opportunistic Confidentiality
+            based on Rob Sayre's suggestions (issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/135">
+            #135</eref>)
+          </li>
+          <li>
+            Rewrote text discussing use of email addresses in HTML
+            forms and provided a more restricted Mailbox ABNF (issue
+          <eref
+              target="https://github.com/ietf-wg-emailcore/emailcore/issues/137">
+            #137</eref>)
+          </li>
         </ul>
       </section> 
    </section>
