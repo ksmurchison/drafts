@@ -64,7 +64,7 @@
 
 <!-- This is -00b, the posting draft -->
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-19"
+     docName="draft-ietf-emailcore-as-20"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +87,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-19"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-20"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -281,8 +281,8 @@
           A handful of country code TLDs have top level MX records but
           they have never been widely used nor 
           well supported. In 2013 <xref target="RFC7085"/> found 18
-          TLDs with MX records, which dropped to 17 in 2021 despite
-          many new TLDs having been added. </t>
+          TLDs with MX records, which dropped to 17 in 2021 and to
+          11 in 2025 despite many new TLDs having been added. </t>
         <t> Mail sent to addresses with single label domains has
           typically expected the address to be an abbreviation to be
           completed by a search list, so mail to bob@sales would be
@@ -594,11 +594,11 @@
         Specifically, the HTML form grammar:</t>
         
         <ul spacing="normal">
-          <li>Does not supported quoted strings.</li>
+          <li>Does not support quoted strings.</li>
           <li>Only allows a limited set of characters in domains.</li>
           <li>Allows leading, trailing, or consecutive unquoted dots
           ('.') in the local-part of email addresses, although few
-          mail systems support them. Consequently, implementations are
+          mail systems support them. Therefore, implementations are
           discouraged from accepting such addresses.</li>
           <li>As of the time this document was written, non-ASCII characters
 	  (as discussed in <xref target="non-ascii"/> above) were also
@@ -758,9 +758,12 @@
           storage in plain text should be expected!
           Also, in a situation where a message traverses multiple hops
           through multiple SMTP servers, each intermediate server will
-          have access to the plain text of the message. The only way
-          to completely assure confidentiality so that no one server has
-          access to the contents of a message is to use message-level
+          have access to the plain text of the message.
+<!--          The only way to completely assure confidentiality so that no
+          one server has access to the-->
+          The only way to prevent any of the intermediate
+          servers from having access to the plain text
+          contents of a message is to use message-level
           confidentiality as described in <xref target="message-conf"/>.</t>
       </section>
       <section numbered="true" anchor="enforced-tls" toc="default">
@@ -781,12 +784,18 @@
           they require receiving server authentication and there is no
           fallback to sending in the clear if negotiation of an
         encrypted connection fails.</t>
+
         <t>However, as noted in <xref target="opp-tls"/>,
         both SMTP servers will most likely have access to the plain
         text of the message, as will all SMTP servers where multiple
-        hops are involved. Again, only message-level confidentiality
-        described in <xref target="message-conf"/> will prevent that
-        lack of confidentiality.</t>
+        hops are involved.
+        Again, only message-level confidentiality
+        described in <xref target="message-conf"/> will prevent
+<!--        that lack of confidentiality.-->
+        those SMTP servers from having access to the plain text
+        content of the message.
+        </t>
+
         <t>Note that both protocols mentioned in this section rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
@@ -795,27 +804,8 @@
           use Opportunistic TLS or clear-text to transmit the
           message.</t>
       </section>
-<!--
+
       <section numbered="true" toc="default">
-        <name>Message-Level Authentication</name>
-        <t>Protocols exist to allow for authentication of different
-          identities associated with an email message -
-          <xref target="RFC7208">SPF</xref> and
-          <xref target="RFC6376">DKIM</xref>.
-          A third protocol, <xref target="RFC7489">DMARC</xref>,
-          relies on SPF and DKIM to allow for validation of the domain
-          in the visible From header, and a fourth,
-          <xref target="RFC8617">ARC</xref>, provides a way for each
-          hop to record results of authentication checks performed at
-          that hop.</t>
-        <t>All of these are outside the scope of this document, as
-          they are outside the scope of SMTP. They deal with
-          validating the authorized usage of one or more domains in an
-          email message, and not with establishing the identity of the
-          receiving server.</t>
-      </section>
--->
-      <section numbered="true" anchor="message-conf" toc="default">
         <name>Message-Level Authentication</name>
         <t>Protocols exist to allow for authentication of different
         identities associated with an email message:</t>
@@ -879,7 +869,7 @@
         EXPN commands as described in
         <xref target="I-D.ietf-emailcore-rfc5321bis" section="7.3"/>.</t>
       </section>
-      <section numbered="true" toc="default">
+      <section numbered="true" anchor="message-conf" toc="default">
         <name>Message-Level Confidentiality</name>
         <t>Protocols such as <xref target="RFC8551">S/MIME</xref>
           and <xref target="RFC9580">OpenPGP</xref> exist to allow for
@@ -1341,6 +1331,20 @@
           <eref
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/137">
             #137</eref>)
+          </li>
+        </ul>
+      </section> 
+      <section numbered="true" toc="default">
+        <name>Changes from draft-ietf-emailcore-as-19 to -20</name>
+        <ul spacing="normal">
+          <li>
+            Updated stats regarding MX records on top-level domains.
+          </li>
+          <li>
+            Tweaked hop-by-hop confidentiality text again (Pete).
+          </li>
+          <li>
+            Miscellaneous editorial changes.
           </li>
         </ul>
       </section> 
