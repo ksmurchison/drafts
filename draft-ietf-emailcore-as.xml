@@ -606,7 +606,7 @@
         </ul>
 
         <t>Consequently, implementations that intend to accept email
-        addresses in HTML forms are encouraged to use at least the the
+        addresses in HTML forms are encouraged to support at least the the
         following, more restricted 'Mailbox' grammar:</t>
 
         <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -702,9 +702,16 @@
           <ul spacing="normal">
             <li>Authentication is the process of establishing the
             identity of one or more of the endpoints of a communication
-            channel. TLS only requires authentication of the server side
+            channel.
+            TLS can be used without authentication (as described in
+            <xref target="opp-tls"/>), but even when it does use
+            authentication, it typically only requires the
+            authentication of the server side of the communication
+            channel (see <xref target="enforced-tls"/>).
+<!--            TLS only requires authentication of the server side
             of the communication channel; authentication of the client
-            side is optional.</li>
+            side is optional.-->
+            </li>
             <li>The term "confidentiality" describes a state where the
             data (i.e., the message) is transmitted in a way that it is
             only visible to the endpoints of a communication
@@ -715,11 +722,22 @@
           correct. Rather, encryption using TLS is the current method by
           which confidentiality is achieved with SMTP, but that does not
           mean that future methods might not be developed.</t>
+<!--
           <t>Note that with typical email use of TLS, authentication only is
           performed for the target receiving server and is not done for
           the sending client. That is, it serves to validate that the
           connection has been made to the intended server, but does not
           validate who initiated it.</t>
+-->
+          <t>TLS only provides confidentiality while the message is in
+          transit. Both of the servers will have access to the plain
+          text of the message and there is no guarantee that the
+          message will be stored in an encrypted fashion at its
+          destination.  In fact, storage in plain text should be
+          expected!  Furthermore, in situations where a message
+          traverses multiple hops through multiple SMTP servers, each
+          intermediate server will have also access to the plain text
+          of the message.</t>
         </section> <!-- TLS -->
       <section numbered="true" anchor="opp-tls" toc="default">
         <name>Opportunistic Confidentiality</name>
@@ -751,20 +769,20 @@
           vulnerable to man-in-the-middle attacks.
           <xref target="enforced-tls">Enforced confidentiality</xref>
           can be used to mitigate these attacks.</t>
-
+<!--
           <t>Also, note that while TLS provides protection while the message is
           in transit, there is no guarantee that the message will be
           stored in encrypted fashion at its destination. In fact,
           storage in plain text should be expected!
           Also, in a situation where a message traverses multiple hops
           through multiple SMTP servers, each intermediate server will
-          have access to the plain text of the message.
+          have access to the plain text of the message.-->
 <!--          The only way to completely assure confidentiality so that no
           one server has access to the-->
-          The only way to prevent any of the intermediate
+<!--          The only way to prevent any of the intermediate
           servers from having access to the plain text
           contents of a message is to use message-level
-          confidentiality as described in <xref target="message-conf"/>.</t>
+          confidentiality as described in <xref target="message-conf"/>.</t>-->
       </section>
       <section numbered="true" anchor="enforced-tls" toc="default">
         <name>Enforced Confidentiality,
@@ -782,20 +800,19 @@
           not yet mandatory.</t>
         <t>These two protocols differ from Opportunistic TLS in that
           they require receiving server authentication and there is no
-          fallback to sending in the clear if negotiation of an
-        encrypted connection fails.</t>
-
+          fallback to sending in the clear.</t>
+<!--
         <t>However, as noted in <xref target="opp-tls"/>,
         both SMTP servers will most likely have access to the plain
         text of the message, as will all SMTP servers where multiple
         hops are involved.
         Again, only message-level confidentiality
-        described in <xref target="message-conf"/> will prevent
+        described in <xref target="message-conf"/> will prevent-->
 <!--        that lack of confidentiality.-->
-        those SMTP servers from having access to the plain text
+<!--        those SMTP servers from having access to the plain text
         content of the message.
         </t>
-
+-->
         <t>Note that both protocols mentioned in this section rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
@@ -875,13 +892,16 @@
           and <xref target="RFC9580">OpenPGP</xref> exist to allow for
           message confidentiality outside of the operation of
           SMTP. That is to say, using these protocols results in
-          encryption of the message prior to its being submitted to
+          encryption of the message body prior to its being submitted to
           the SMTP communications channel, and decryption of the
           message is the responsibility of the message
           recipient. There are numerous implementations of these
           protocols, too many to list here. As they operate fully
           independent of SMTP, they are out of scope for this
-          document.</t>
+        document.</t>
+        <t><xref target="I-D.ietf-lamps-header-protection">
+          Header Protection for Cryptographically Protected E-mail</xref>
+	  extends S/MIME such that some	message headers can be encrypted.</t>
       </section>
       <section numbered="true" toc="default">
         <name>Confidentiality Requirements</name>
@@ -1341,7 +1361,22 @@
             Updated stats regarding MX records on top-level domains.
           </li>
           <li>
-            Tweaked hop-by-hop confidentiality text again (Pete).
+            Tweaked hop-by-hop confidentiality text again (Resnick).
+          </li>
+          <li>
+            Made clear that TLS authentication is optional (Resnick/Sayre).
+          </li>
+          <li>
+            Removed hop-by-hop paragraph in Opportunistic
+            Confidentiality as its now discussed in TLS section (Sayre).
+          </li>
+          <li>
+            Removed hop-by-hop paragraph in Enforced
+            Confidentiality as its now discussed in TLS section (Sayre).
+          </li>
+          <li>
+            Added reference to LAMPS in Message-Level Confidentiality
+            (Sayre).
           </li>
           <li>
             Miscellaneous editorial changes.
