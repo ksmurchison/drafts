@@ -62,9 +62,11 @@
      "updates" and "obsoletes" attributes can also be specified here, their arguments are
         comma-separated lists of RFC numbers (just the numbers) -->
 
-<!-- This is -00b, the posting draft -->
+<!-- emailcore-as-21b 2025-08-10.  Posting version.
+     Note CREF questions in Section 4 from -21a removed -->
+
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-20"
+     docName="draft-ietf-emailcore-as-21"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -87,7 +89,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-20"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-21"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -581,47 +583,92 @@
 
       </section>
 -->
-      <section numbered="true" toc="default">
-        <name>Use and Validation in HTML and Other Contexts</name>
+      <section numbered="true" toc="default" anchor="HTML-validation">
+        <name>Use and Validation in HTML</name>
 
         <t>Email addresses are frequently used as input in
         HyperText Markup Language (HTML) forms
         (see <xref target="HTML5" section="4.10.5.1.5"
-              relative="#valid-e-mail-address"/>) but the allowed grammar
-        of these email addresses is not compatible with the
-        grammar for a 'Mailbox' in
-        <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>.
-        Specifically, the HTML form grammar:</t>
+              relative="#valid-e-mail-address"/>) but the allowed
+		grammar 
+        of these email addresses is inconsistent with that allowed by
+		the grammar for a 'Mailbox' in
+        <xref target="I-D.ietf-emailcore-rfc5321bis"
+			 section="4.1.2"/>,
+		the grammars for use of non-ASCII email address specified in
+		<xref target="RFC5890">RFC 5890</xref>, and common practices
+		on the network.
+        Specifically, the HTML grammar for elements specified as email
+		addresses:</t>
         
         <ul spacing="normal">
           <li>Does not support quoted strings.</li>
-          <li>Only allows a limited set of characters in domains.</li>
-          <li>Allows leading, trailing, or consecutive unquoted dots
-          ('.') in the local-part of email addresses, although few
-          mail systems support them. Therefore, implementations are
-          discouraged from accepting such addresses.</li>
-          <li>As of the time this document was written, non-ASCII characters
-	  (as discussed in <xref target="non-ascii"/> above) were also
-	  not permitted.</li>
+          <li>Only allows a limited set of characters other than
+			 letters and digits in domain names.  In particular, the
+			 character "+", which is heavily used in some email
+			 contexts, is not permitted.</li>  
+		  <li>Allows leading, trailing, or consecutive unquoted dots
+			 ('.') in the local-part of email addresses, although few
+			 mail systems support their use in that context.</li>		
+          <li>As of the time this document was written, non-ASCII
+			 characters (as discussed in <xref target="non-ascii"/>
+			 above) were also not permitted in either the local-part
+			 or the domain-part of an email address.</li>
         </ul>
 
-        <t>Consequently, implementations that intend to accept email
-        addresses in HTML forms are encouraged to support at least the the
-        following, more restricted 'Mailbox' grammar:</t>
+		<t>Consequently, installations defining rules for assigning or
+		   allocating email addresses and that expect the syntax of
+		   those addresses to be checked by HTML forms, should
+		   consider the restrictions imposed by current and past
+		   syntax specifications for those forms in their decisions,
+		   weighing them against local needs and other restrictions.
+		   Where HTML rules allow syntax variations that the IETF
+		   specifications cited above do not, those variations should
+		   be avoided because they are unlikely to be accepted across
+		   the Internet email environment.</t>
+     
+	  </section>
 
-        <artwork name="" type="" align="left" alt=""><![CDATA[
-        Limited-Mailbox = Dot-string "@" Domain
-        ]]></artwork>
-
-        <t>Additionally, some mail systems allow a trailing dot ('.') in the
-        domain part of email addresses (as allowed by
-	<xref target="RFC1035">Domain Names</xref>
-	but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
-	and is hence not interoperable with all systems.
-        Consequently, implementations are encouraged to strip trailing
-        dots from the domain part of email addresses.</t>
-      </section>
-    </section>
+	  <section numbered="true" toc="default" anchor="Other-Restrictions">
+		 <name>Mailbox Name Syntax Use and Restrictions in Other
+			Contexts</name>
+		 <ol>
+			<li><t>Additionally, some mail systems allow a trailing dot ('.') 
+			   in the domain part of email addresses (as allowed as a
+			   notation by <xref target="RFC1035">Domain Names</xref>
+			   but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
+		       and is hence not interoperable with all systems.
+		       Consequently, implementations are encouraged to strip any
+		       trailing dots that might appear in the domain part of
+		       email addresses.</t>
+		    </li>
+	        <li> <t> More generally, mail systems that intend to check the
+			   syntax of email addresses for which they are not
+			   responsible for final delivery should be aware that
+			   there are many reasons that might cause an address to
+			   "look strange".
+			   <!-- 20250808 following changed per discussion with Levine 
+			   Those include mechanisms for organizing messages on
+			   delivery systems, security issues (particularly
+			   efforts to identify messages other than those from the
+			   supposed sender), and even SMTP extensions that change
+			   permitted syntax. -->
+			   The most common cases include mechanisms for organizing messages on
+			   delivery systems and security issues (particularly
+			   efforts to identify messages other than those from the
+			   supposed sender).
+			   Especially when a relay system is involved, unless the
+			   mail system has special knowledge about the message
+			   and its originator the best option is to treat the
+			   address as valid unless it actually violates
+			   restrictions of the
+			   <xref target="I-D.ietf-emailcore-rfc5321bis">SMTP </xref> 
+			   syntax.  Section 6.4 of that document contains
+			   additional information that might be helpful.</t>
+			</li>
+			</ol>
+	  </section>
+	  </section>
 
       <section numbered="true" toc="default">
       <name>Use of Multipurpose Internet Mail Extensions (MIME)</name>
@@ -1029,6 +1076,7 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9580.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5890.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
@@ -1047,7 +1095,11 @@
               Working Group</organization>
             </author>
             <date day="4" month="October" year="2022"/>
-          </front>
+		  </front>
+		  <annotation> Note that as a Living Standard, the text,
+			 specifications, and even the section number given in the
+			 text above may have changed before the reference is
+			 used.</annotation>
         </reference>
         <!-- Right back at the beginning we defined an entity which (we asserted) would contain
              XML needed for a reference... this is where we use it. -->
@@ -1382,7 +1434,18 @@
             Miscellaneous editorial changes.
           </li>
         </ul>
-      </section> 
+	  </section>
+
+	  <section numbered="true" toc="default">
+		 <name>Changes from draft-ietf-emailcore-as-20 to -21</name>
+		 <ul spacing="normal">
+			<li> Restructured <xref target="HTML-validation"/>, added
+			   new <xref target="Other-Restrictions"/>, and updated
+			   reference <xref target="HTML5"/>.
+			</li>
+		 </ul>
+	  </section>
+	  
    </section>
   </back>
 </rfc>
