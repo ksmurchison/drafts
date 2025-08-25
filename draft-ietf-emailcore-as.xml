@@ -252,7 +252,7 @@
           server may refuse any mail from the client as part of
           established anti-abuse practice.
           Operational experience has demonstrated that the lack of
-          a matching address record for the the domain name
+          a matching address record for the domain name
           argument is at best an indication of a poorly-configured
           MTA, and at worst that of an abusive host. </t>
       </section>
@@ -752,8 +752,8 @@
             channel.
             TLS can be used without authentication (as described in
             <xref target="opp-tls"/>), but even when it does use
-            authentication, it typically only requires the
-            authentication of the server side of the communication
+            authentication, it typically only
+            authenticates the server side of the communication
             channel (see <xref target="enforced-tls"/>).
 <!--            TLS only requires authentication of the server side
             of the communication channel; authentication of the client
@@ -780,11 +780,11 @@
           transit. Both of the servers will have access to the plain
           text of the message and there is no guarantee that the
           message will be stored in an encrypted fashion at its
-          destination.  In fact, storage in plain text should be
-          expected!  Furthermore, in situations where a message
+          destination.  Furthermore, in situations where a message
           traverses multiple hops through multiple SMTP servers, each
           intermediate server will have also access to the plain text
-          of the message.</t>
+          of the message.  In fact, storage in plain text should be
+          expected!</t>
         </section> <!-- TLS -->
       <section numbered="true" anchor="opp-tls" toc="default">
         <name>Opportunistic Confidentiality</name>
@@ -839,11 +839,9 @@
           <xref target="RFC8461">MTA-STS</xref> and
           <xref target="RFC7672">DANE for SMTP</xref>.
           While they differ in their implementation details, receiving
-          servers relying on either protocol are stating that they
+          servers relying on either protocol can state that they
           only accept mail if the transmission can be encrypted with
-          TLS, and a failure to negotiate a secure connection MUST
-          result in the sending client refusing to transmit the
-          message. Support for both protocols is increasing, but is
+          TLS. Support for both protocols is increasing, but is
           not yet mandatory.</t>
         <t>These two protocols differ from Opportunistic TLS in that
           they require receiving server authentication and there is no
@@ -863,7 +861,7 @@
         <t>Note that both protocols mentioned in this section rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
-          client does not implement or understand the protocol
+          client does not implement the protocol
           requested by the receiving server, the sending client will
           use Opportunistic TLS or clear-text to transmit the
           message.</t>
@@ -967,11 +965,9 @@
         least provide over-the-wire confidentiality during an
         individual SMTP exchange. That said, there are many legacy
         implementations of SMTP that are still in widespread use in
-        both private and Internet-connected networks, and most
-        receiving servers implementations will be expected to be
-        capable of receiving such messages. Therefore, SMTP servers
-        MUST be configurable to allow for receiving messages without
-        confidentiality between servers in order to maximize
+        both private and Internet-connected networks.  Therefore, SMTP
+        servers MUST be configurable to allow for receiving messages
+        without confidentiality between servers in order to maximize
         interoperation.</t>
       </section>
     </section>
