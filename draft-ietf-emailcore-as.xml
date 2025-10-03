@@ -63,10 +63,15 @@
         comma-separated lists of RFC numbers (just the numbers) -->
 
 <!-- emailcore-as-21b 2025-08-10.  Posting version.
-     Note CREF questions in Section 4 from -21a removed -->
+    Note CREF questions in Section 4 from -21a removed -->
+<!-- emailcore-as-22a and 22b Changes to Section 4.3, including adding
+    and then removing 4.4
+    -22c preliminary changes to Section 6
+    -22d Section 6.1 reorganization into subsections
+-->
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-21"
+     docName="draft-ietf-emailcore-as-22"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -89,7 +94,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-21"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-22"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -158,32 +163,31 @@
       among many of those protocols and provides guidance and
       makes recommendations for the use of features of the core
       protocols.</t>
-    </abstract>
-<!--
+	</abstract>
+	
+<!-- issues listed in this draft note updated to -22 
     <note title="Open Issues">
       <ul>
-        <li>
-          <eref
-              target="https://github.com/ietf-wg-emailcore/emailcore/issues/92">
-            #92 - CNAME handling in "5.1. Locating the Target Host"</eref>:
-            Per IETF 120, Klensin to propose text.
-        </li>
         <li>
           <eref
               target="https://github.com/ietf-wg-emailcore/emailcore/issues/113">
             #113 - More explanation of the advantages of transport and
             encryption between SMTP systems... probably in the
             A/S</eref>:
-            What, if anything, needs to be done here?
+	        What, if anything, needs to be done here?
+	        ** With luck, the new Section 6 handles this adequately
         </li>
       </ul>
       </note>
       -->
   </front>
+  
   <middle>
     <section numbered="true" toc="default">
       <name>Introduction</name>
-      <t>This document is an
+	  <t>This document is an
+		 <!-- RFC Editor: As of 20250810, next reference did not format
+		 properly-->
       <xref target="RFC2026" section="3.2" sectionFormat="comma">
         Applicability Statement</xref> that provides guidance in the
         use of the Internet's core email specifications, the
@@ -238,7 +242,7 @@
 
 	  <t> This section describes
 	  <!-- 20250226 JcK -->		 
-		 describes configuration options and other considerations
+		 configuration options and other considerations
 		 about SMTP that may be appropriate under various circumstances
       and discusses the applicability of other protocols that
       represent newer work or that are intended to deal with
@@ -260,10 +264,10 @@
         <name>Use of Address Literals</name>
         <t> The <tt>address-literal</tt> ABNF
           non-terminal is used in various places in
-          <xref target="I-D.ietf-emailcore-rfc5321bis"/> grammar
-          however, for SMTP connections over the public internet,
+          <xref target="I-D.ietf-emailcore-rfc5321bis"/> grammar.
+          However, for SMTP connections over the public internet,
           an <tt>address-literal</tt>
-          as the argument to EHLO command or the
+          as the argument to the EHLO command or the
           <tt>Domain</tt> part of the
           <tt>Mailbox</tt> argument to the MAIL
           FROM command is quite likely to result in the message
@@ -289,7 +293,7 @@
           typically expected the address to be an abbreviation to be
           completed by a search list, so mail to bob@sales would be
           completed to bob@sales.example.com.
-          This shortcut has led to unfortunate consequnces; in one
+          This shortcut has led to unfortunate consequences; in one
           famous case, in 1991 when the .CS domain was added to the
           root, mail in computer science departments started to fail
           as mail to bob@cs was now treated as mail to
@@ -311,7 +315,7 @@
             <xref target="RFC3207">Secure SMTP over Transport Layer
 			   Security</xref> 
 			<!-- 20250226 JcK -->
-		  (Cf. discussion in <xref target="tls"/>.)</li>
+		  (Cf. discussion in <xref target="transport-sec"/>.)</li>
           <li>
             <xref target="RFC6152">8-bit MIME</xref>
           </li>
@@ -323,9 +327,9 @@
           <li>
             <xref target="RFC2920">Command Pipelining</xref>
           </li>
-          <li>
-            Internationalized Email (<xref target="RFC6530"/>,
-            <xref target="RFC6531"/>, <xref target="RFC6532"/>)
+          <li>  <!-- 20250824 converted references to a group to add a few more
+			 RFCs and eliminate the awkward parenthetical -->
+            Internationalized Email <xref target="SMTPUTF8"/>
           </li>
         </ul>
 
@@ -524,7 +528,7 @@
         <t>Proper generation and transmission of email addresses
         containing non-ASCII characters is discussed in the SMTPUTF8
 		documents
-        <xref target="RFC6530"/> <xref target="RFC6531"/> <xref target="RFC6532"/>.
+        <xref target="SMTPUTF8" />.
         <xref target="RFC6530" section="9"/> says: "a downgrade
         mechanism that transforms the local part of an email address
         cannot be utilized in transit."
@@ -547,7 +551,7 @@
           on the local-part of an address</li>
         </ul>
 
-        <t>since none of these encodings will produce an address
+        <t>Neither of these encodings will produce an address
         that is guaranteed to be treated as equivalent to the original
         one.</t>
 
@@ -583,11 +587,32 @@
 
       </section>
 -->
-      <section numbered="true" toc="default" anchor="HTML-validation">
-        <name>Use and Validation in HTML</name>
 
-        <t>Email addresses are frequently used as input in
-        HyperText Markup Language (HTML) forms
+	  <section numbered="true" toc="default" anchor="HTML-validation">
+        <name>Use and Validation of Email Address Syntax</name>
+
+        <t>Email addresses are frequently used as input to, or
+		   validated by, forms managed by various libraries, some
+		   tied to  Versions of HyperText Markup Language (HTML) or
+		   other specs and others to client-side libraries developed
+		   in Javascript or other languages.
+		   In some cases, those who define or supply those systems
+		   may have found and corrected errors long ago, but old
+		   versions or interpretations are still in use.  The allowed
+		   grammar for email addresses as incorporated in those tools,
+		   and hence in various applications, may be inconsistent with
+	       that allowed  by the grammar for a "Mailbox" in 
+	       <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>,
+		   the grammars for use of non-ASCII email addresses
+		   specified in
+		   <xref target="IDNA2008"> the IDNA specifications</xref>, and
+	       common practices on the network.  Specifically, the
+		   following differences from the standards mentioned above
+		   have been observed frequently enough that implementers
+		   should be aware of them.  In no particular order, the
+		   important ones are:</t>
+ 
+        <!-- deleted HyperText Markup Language (HTML) forms
         (see <xref target="HTML5" section="4.10.5.1.5"
               relative="#valid-e-mail-address"/>) but the allowed
 		grammar 
@@ -599,82 +624,77 @@
 		<xref target="RFC5890">RFC 5890</xref>, and common practices
 		on the network.
         Specifically, the HTML grammar for elements specified as email
-		addresses:</t>
+		addresses:</t>  )  -->
         
         <ul spacing="normal">
-          <li>Does not support quoted strings.</li>
-          <li>Only allows a limited set of characters other than
-			 letters and digits in domain names.  In particular, the
-			 character "+", which is heavily used in some email
-			 contexts, is not permitted.</li>  
-		  <li>Allows leading, trailing, or consecutive unquoted dots
-			 ('.') in the local-part of email addresses, although few
-			 mail systems support their use in that context.</li>		
-          <li>As of the time this document was written, non-ASCII
-			 characters (as discussed in <xref target="non-ascii"/>
-			 above) were also not permitted in either the local-part
+          <li>Absence of support for quoted strings.</li>
+          <li>Even when restricted to the ASCII charset, some systems have a
+			 restricted character repertoire as compared to the 
+			 applicable standards.  For domain names, only a limited
+			 set of characters other than letters and digits are
+			 allowed.  As a particularly important example for the
+			 local-part, the character "+", which is heavily used in
+			 some email contexts, is sometimes not permitted, as are
+			 characters that historically had special meanings in some
+			 gateway contexts such as "%" and "/".</li>  
+		  <li>Some systems allow leading, trailing, or consecutive
+			 unquoted dots ('.') in the local-part of email
+			 addresses, although few mail systems support their use
+			 in that context. Taking advantage of that flexibility is
+			 NOT RECOMMENDED.</li>		
+          <li>As of the time this document was written, many systems
+			 still do not allow non-ASCII characters (as discussed in
+			 <xref target="non-ascii"/> above) in either the local-part
 			 or the domain-part of an email address.</li>
-        </ul>
-
-		<t>Consequently, installations defining rules for assigning or
-		   allocating email addresses and that expect the syntax of
-		   those addresses to be checked by HTML forms, should
-		   consider the restrictions imposed by current and past
-		   syntax specifications for those forms in their decisions,
-		   weighing them against local needs and other restrictions.
-		   Where HTML rules allow syntax variations that the IETF
-		   specifications cited above do not, those variations should
-		   be avoided because they are unlikely to be accepted across
-		   the Internet email environment.</t>
-     
-	  </section>
-
-	  <section numbered="true" toc="default" anchor="Other-Restrictions">
-		 <name>Mailbox Name Syntax Use and Restrictions in Other
-			Contexts</name>
-		 <ol>
 			<li><t>Additionally, some mail systems allow a trailing dot ('.') 
 			   in the domain part of email addresses (as allowed as a
-			   notation by <xref target="RFC1035">Domain Names</xref>
+			   notation by the basic
+			   <xref target="RFC1035">Domain Names specification</xref>
 			   but prohibited by <xref target="I-D.ietf-emailcore-rfc5321bis"/>),
 		       and is hence not interoperable with all systems.
 		       Consequently, implementations are encouraged to strip any
 		       trailing dots that might appear in the domain part of
-		       email addresses.</t>
-		    </li>
-	        <li> <t> More generally, mail systems that intend to check the
-			   syntax of email addresses for which they are not
-			   responsible for final delivery should be aware that
-			   there are many reasons that might cause an address to
-			   "look strange".
-			   <!-- 20250808 following changed per discussion with Levine 
-			   Those include mechanisms for organizing messages on
-			   delivery systems, security issues (particularly
-			   efforts to identify messages other than those from the
-			   supposed sender), and even SMTP extensions that change
-			   permitted syntax. -->
-			   The most common cases include mechanisms for organizing messages on
-			   delivery systems and security issues (particularly
-			   efforts to identify messages other than those from the
-			   supposed sender).
-			   Especially when a relay system is involved, unless the
-			   mail system has special knowledge about the message
-			   and its originator the best option is to treat the
-			   address as valid unless it actually violates
-			   restrictions of the
-			   <xref target="I-D.ietf-emailcore-rfc5321bis">SMTP </xref> 
-			   syntax.  Section 6.4 of that document contains
-			   additional information that might be helpful.</t>
-			</li>
-			</ol>
+			   email addresses.</t></li>
+		</ul>
+		<t> More generally, mail systems that are not responsible for
+		   final delivery of a message, but that intend to check the 
+		   syntax of its email addresses, should be aware that
+		   there are many reasons that might cause a valid address to
+		   "look strange" or be rejected by tools that are
+		   inconsistent with these email standards.</t>
+		<t>In addition to the specific examples above, the most
+		   common cases include mechanisms for organizing messages on 
+		   delivery systems and security issues (particularly
+		   efforts to identify messages other than those from the
+		   supposed sender).
+		   Especially when a relay system is involved, unless the
+		   mail system has special knowledge about the message
+		   and its originator, the best option is to treat the
+		   address as valid unless the address in question actually
+		   violates restrictions of the
+		   <xref target="I-D.ietf-emailcore-rfc5321bis">SMTP </xref> 
+		   syntax.  Section 6.4 of that document contains
+		   additional information that might be helpful.</t>
+
+		<t>Installations defining rules for assigning or
+		   allocating email addresses that expect the syntax of
+		   those addresses to be checked by tools with their own,
+		   more restrictive, rules should use care to consider both
+		   current and past versions of syntax specifications
+		   for those mechanisms in their decisions, weighing them
+		   against local needs and other restrictions. 
+		   Where those other rules allow syntax variations that the
+		   IETF specifications cited above do not, those variations should
+		   be avoided because they are unlikely to be accepted across
+		   the Internet email environment.</t>
 	  </section>
-	  </section>
+	</section>
 
       <section numbered="true" toc="default">
       <name>Use of Multipurpose Internet Mail Extensions (MIME)</name>
       <t>Although the <xref target="RFC2045">Multipurpose Internet
         Mail Extensions (MIME)</xref> specification and its
-        predecessors have remained separate from the
+        predecessors and updates have remained separate from the
         <xref target="I-D.ietf-emailcore-rfc5322bis">Internet Message
         Format (IMF)</xref> 
         specification and its predecessors, MIME features such as
@@ -696,7 +716,7 @@
         that such transmission exposes the message to easy compromise,
         including wiretapping and spoofing. To mitigate these risks,
         several protocols, mechanisms, and extensions have been
-        developed that provide security services to email, some of
+        developed that provide security services to email, most of
         which are outside the SMTP protocol itself.
         The most important of these include, but are not limited to:</t>
 
@@ -706,7 +726,8 @@
             <xref target="RFC3207">STARTTLS</xref>,
             <xref target="RFC8461">MTA-STS</xref>, and
             <xref target="RFC7672">DANE for SMTP</xref>
-            offer confidentiality services between servers.
+            offer confidentiality services between SMTP Clients and
+			the Servers to which they are transmitting messages.
           </li>
           <li>
             <xref target="RFC6376">DKIM</xref>,
@@ -715,35 +736,46 @@
             <xref target="RFC7208">SPF</xref>,
             <xref target="RFC8551">S/MIME</xref>,
             <xref target="RFC9580">OpenPGP</xref>, and
-	    <xref target="I-D.ietf-lamps-header-protection">
+	    <xref target="RFC9788">
 	      Header Protection for Cryptographically Protected E-mail</xref>,
             offer message level authentication services.
           </li>
           <li>
             <xref target="RFC4954">SMTP Authentication</xref>
-            offers authenticating clients connecting to server.
+            offers authentication services for an SMTP client
+			connecting to an SMTP server.
           </li>
           <li>
             <xref target="RFC8551">S/MIME</xref> and
-            <xref target="RFC9580">OpenPGP</xref> exist to allow for message
-            confidentiality outside of the operation of SMTP.
+            <xref target="RFC9580">OpenPGP</xref> allow for message
+            confidentiality outside of the operation of SMTP and were
+			originally focused only on the message content.
           </li>
         </ul>
 
         <t>The following sections discuss these facilities and their
         most common uses.</t>
 
-        <section anchor="tls" numbered="true" toc="default">
-          <name>Transport Layer Security</name>
-          <t>SMTP has evolved over the years so that it is
-          used with the benefit of
+        <section anchor="transport-sec" numbered="true" toc="default">
+		   <name>Security at the Transport Layer</name>
+		   <!-- 20250827, Restructured Section 6.
+		   Title changed to to distinguish from security at the
+		   transport level more generally.
+		   See Klensin-> Resnick email on list 2025-08-26
+		   -->
+          <t>The Internet email environment has evolved over the years so that
+			 the SMTP protocol itself can be used in conjunction with
           <xref target="RFC8446">Transport Layer Security (TLS)</xref>
-          to provide both confidentiality and authentication in the
+		  protocol
+          to provide both confidentiality and server authentication in the
           transmission of messages.</t>
 
           <t>It is important that the reader understand what is meant by
-          the terms "Authentication" and "Confidentiality", and for that
-          we will borrow directly from RFC8446.
+          the terms "Authentication" and "Confidentiality" in this
+		  context, and for that
+		  we will borrow directly from the TLS specification
+		  <xref target="RFC8446"/> (although the pointers to other
+		  sections given are to this document).
           </t>
 
           <ul spacing="normal">
@@ -752,8 +784,8 @@
             channel.
             TLS can be used without authentication (as described in
             <xref target="opp-tls"/>), but even when it does use
-            authentication, it typically only requires the
-            authentication of the server side of the communication
+			authentication, it typically only authenticates
+			the server side of the communication
             channel (see <xref target="enforced-tls"/>).
 <!--            TLS only requires authentication of the server side
             of the communication channel; authentication of the client
@@ -766,9 +798,10 @@
           </ul>
           <t>It is not uncommon for implementers to use the term
           "encryption" to mean "confidentiality", but this is not quite
-          correct. Rather, encryption using TLS is the current method by
-          which confidentiality is achieved with SMTP, but that does not
-          mean that future methods might not be developed.</t>
+          correct. Rather, encryption using TLS is the most common current method by
+          <!-- "most common" added above, per Resnick msg to list 2025-08-25 -->
+		  which confidentiality is achieved with SMTP, but that does not
+          mean that other methods might not be used or future ones developed.</t>
 <!--
           <t>Note that with typical email use of TLS, authentication only is
           performed for the target receiving server and is not done for
@@ -776,21 +809,31 @@
           connection has been made to the intended server, but does not
           validate who initiated it.</t>
 -->
-          <t>TLS only provides confidentiality while the message is in
-          transit. Both of the servers will have access to the plain
+
+	   <section anchor="tls" numbered="true" toc="default">
+		  <name> The TLS Protocol </name>
+		  <t>The TLS Protocol <xref target="RFC8446"/> 
+			 provides confidentiality while the message is in
+			 transit from an SMTP client to the next SMTP server.
+			 <!-- Per Klensin-> Resnick note 20250826, "from..." added
+			 to above and "servers" below changed to "client and
+			 server" -->
+			 Both client and server will have access to the plain
           text of the message and there is no guarantee that the
           message will be stored in an encrypted fashion at its
-          destination.  In fact, storage in plain text should be
-          expected!  Furthermore, in situations where a message
-          traverses multiple hops through multiple SMTP servers, each
-          intermediate server will have also access to the plain text
-          of the message.</t>
+		  destination.
+		  <!-- Changed per Resnick-Klensin discussion on 20250826 -->
+		  Furthermore, in situations where a message traverses
+		  multiple hops through multiple SMTP servers, each
+		  intermediate server will typically store the message in
+		  plain text and hence have access to that plain text of the
+		  message. </t>
         </section> <!-- TLS -->
       <section numbered="true" anchor="opp-tls" toc="default">
         <name>Opportunistic Confidentiality</name>
         <t>The most common implementation of message confidentiality
-          is what's known as "opportunistic TLS", which is frequently
-          referred to as "opportunistic encryption". With this method,
+          is known as "opportunistic TLS", which is frequently
+          referred to as "opportunistic encryption".  With this method,
           a receiving server announces in its greeting that it is
           capable of supporting TLS encryption through the presence of
           the "STARTTLS" keyword. The sending client then attempts to
@@ -800,7 +843,8 @@
           text.</t>
 
           <t>Opportunistic TLS is optional confidentiality due
-          to the ability to fall back to transmission in the clear if
+          to provision in the TLS protocol for falling back to
+		  transmission in the clear if 
           a secure connection cannot be established.
           Opportunistic TLS is often configured to provide
           confidentiality without authentication, where no effort is
@@ -809,7 +853,8 @@
           Most modern implementations of SMTP support this method
           and so the vast
           majority of email traffic is encrypted during its time
-          transiting from the client to the server.</t>
+		  transiting from the client to the next server.</t>
+	   <!-- above change, Resnick -> Klensin 20250825 -->
 
           <t>Note that opportunistic TLS via the
           <xref target="RFC3207">STARTTLS</xref> extension is
@@ -839,35 +884,28 @@
           <xref target="RFC8461">MTA-STS</xref> and
           <xref target="RFC7672">DANE for SMTP</xref>.
           While they differ in their implementation details, receiving
-          servers relying on either protocol are stating that they
+          servers relying on either protocol can state that they
           only accept mail if the transmission can be encrypted with
-          TLS, and a failure to negotiate a secure connection MUST
+		  TLS.
+		  <!-- rest of sentence removed 20250826 per email discussion:
+		  and a failure to negotiate a secure connection MUST
           result in the sending client refusing to transmit the
-          message. Support for both protocols is increasing, but is
+		  message. -->
+		  Support for both protocols is increasing, but is
           not yet mandatory.</t>
         <t>These two protocols differ from Opportunistic TLS in that
           they require receiving server authentication and there is no
           fallback to sending in the clear.</t>
-<!--
-        <t>However, as noted in <xref target="opp-tls"/>,
-        both SMTP servers will most likely have access to the plain
-        text of the message, as will all SMTP servers where multiple
-        hops are involved.
-        Again, only message-level confidentiality
-        described in <xref target="message-conf"/> will prevent-->
-<!--        that lack of confidentiality.-->
-<!--        those SMTP servers from having access to the plain text
-        content of the message.
-        </t>
--->
-        <t>Note that both protocols mentioned in this section rely not
+
+        <t>Note that the protocols mentioned in this section rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
-          client does not implement or understand the protocol
+          client does not support the protocol
           requested by the receiving server, the sending client will
           use Opportunistic TLS or clear-text to transmit the
           message.</t>
-      </section>
+	  </section>
+	  </section>
 
       <section numbered="true" toc="default">
         <name>Message-Level Authentication</name>
@@ -895,23 +933,11 @@
           hop to record results of authentication checks performed at
           that hop.
 	  </li>
-	  <li>
-	    <xref target="RFC8551">S/MIME</xref>
-            and <xref target="RFC9580">OpenPGP</xref>,
-	    along with
-	    <xref target="I-D.ietf-lamps-header-protection">
-	      Header Protection for
-	      Cryptographically Protected E-mail</xref>,
-	    allow for emails to be digitally signed, thereby providing
-	    a method to verify that an email was actually sent
-	    by the entity claiming to be the sender.
-	  </li>
 	</ul>
         <t>All of these are outside the scope of this document, as
-          they are outside the scope of SMTP. They deal with
-          validating the authorized usage of one or more domains in an
-          email message, and not with establishing the identity of the
-          receiving server.</t>
+          they are outside the scope of SMTP.  All of them are subject
+		  to risks of compromise on systems processing messages
+		  between transport links as discussed above.</t>
       </section>
 
       <section numbered="true" toc="default">
@@ -920,8 +946,10 @@
           which is often abbreviated as SMTP AUTH,
           is an extension to SMTP. While its name might suggest
           that it would be within scope for this section of the
-          Applicability Statement, nothing could be further from the
-          truth.</t>
+		  Applicability Statement, that is not the case.</t>
+		  <!-- 20250828 "nothing could be further from the
+          truth." dropped as hyperbole.  Many things could be further
+		  from the truth.  -->
         <t>SMTP AUTH defines a method for a client to identify
           itself to a Message Submission Agent (MSA) when presenting a
           message for transmission, usually using ports 465 or 587 rather than
@@ -929,34 +957,36 @@
           SMTP AUTH is for a person to present a username and password
           to their mailbox provider's outbound SMTP server when
         configuring their MUA for sending mail.</t>
-        <t>SMPT AUTH MAY be used to limit unauthorized use of VRFY and
+        <t>SMTP AUTH MAY be used to limit unauthorized use of VRFY and
         EXPN commands as described in
         <xref target="I-D.ietf-emailcore-rfc5321bis" section="7.3"/>.</t>
-      </section>
+	  </section>
+	  
       <section numbered="true" anchor="message-conf" toc="default">
         <name>Message-Level Confidentiality</name>
         <t>Protocols such as <xref target="RFC8551">S/MIME</xref>
           and <xref target="RFC9580">OpenPGP</xref> exist to allow for
           message confidentiality outside of the operation of
-          SMTP. That is to say, using these protocols results in
+          SMTP.  In other words, using these protocols results in
           encryption of the message body prior to its being submitted to
-          the SMTP communications channel, and decryption of the
-          message is the responsibility of the message
-          recipient. There are numerous implementations of these
-          protocols, too many to list here. As they operate fully
-          independent of SMTP, they are out of scope for this
-        document.</t>
-        <t><xref target="I-D.ietf-lamps-header-protection">
+          the SMTP communications channel.  Decryption of the
+          message is then the responsibility of the message
+		  recipient.  There are numerous implementations of S/MIME and
+		  OpenPGP, too many to list here. As both operate fully
+          independent of SMTP, a more detailed discussion is out of
+		  scope for this document.</t>
+        <t><xref target="RFC9788">
           Header Protection for Cryptographically Protected E-mail</xref>
-	  extends S/MIME such that some	message headers can be encrypted.</t>
+	      extends S/MIME such that some	message headers can be
+		  encrypted.</t> 
       </section>
       <section numbered="true" toc="default">
         <name>Confidentiality Requirements</name>
         <t>The vast majority of email sent on the Internet at present
         does not use message-level confidentiality. It has been
         recognized that Internet traffic is exposed to both active
-        attack and passive monitoring
-        (see <xref target="RFC3365">BCP61</xref>,
+        attacks and passive monitoring
+        (see <xref target="RFC3365">BCP61</xref> and
         <xref target="RFC1984">BCP200</xref>), and therefore that
         message transmission over SMTP is subject to both.
         To mitigate these risks, opportunistic confidentiality is now
@@ -967,8 +997,8 @@
         least provide over-the-wire confidentiality during an
         individual SMTP exchange. That said, there are many legacy
         implementations of SMTP that are still in widespread use in
-        both private and Internet-connected networks, and most
-        receiving servers implementations will be expected to be
+        both private and Internet-connected networks and
+        receiving server implementations will often be expected to be
         capable of receiving such messages. Therefore, SMTP servers
         MUST be configurable to allow for receiving messages without
         confidentiality between servers in order to maximize
@@ -1015,7 +1045,7 @@
 		 this document as they pertain to the referenced specifications.
 		 <!-- 20250226 JcK -->
 	  Special note should be taken of the interaction between 
-	  confidentiality and authentication mechanism that are applicable
+	  confidentiality and authentication mechanisms that are applicable
 	  to Internet links and therefore potentially sensitive to the
 	  multi-hop design of SMTP.  Unless the relevant messages and
 	  mechanisms are protected from tampering or content exposure on
@@ -1060,9 +1090,6 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5248.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6152.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2920.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6532.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7085.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
@@ -1076,8 +1103,6 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9580.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4954.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5890.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
@@ -1085,9 +1110,24 @@
 <!--        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>-->
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-lamps-header-protection.xml"/>
+		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9788.xml"/>
 
-        <reference anchor="HTML5" target="https://html.spec.whatwg.org/">
+		<referencegroup anchor="IDNA2008">
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5890.xml"/>
+		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5891.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5892.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5893.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5894.xml"/>
+		</referencegroup>
+
+		<referencegroup anchor="SMTPUTF8">
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6532.xml"/>
+		</referencegroup>  
+
+		<!-- (dropped 202508-12, -21
+		<reference anchor="HTML5" target="https://html.spec.whatwg.org/">
           <front>
             <title>HTML Living Standard</title>
             <author>
@@ -1100,7 +1140,7 @@
 			 specifications, and even the section number given in the
 			 text above may have changed before the reference is
 			 used.</annotation>
-        </reference>
+        </reference>  -->
         <!-- Right back at the beginning we defined an entity which (we asserted) would contain
              XML needed for a reference... this is where we use it. -->
 
@@ -1427,7 +1467,7 @@
             Confidentiality as its now discussed in TLS section (Sayre).
           </li>
           <li>
-            Added reference to LAMPS in Message-Level Confidentiality
+            Added reference to LAMPS documents in Message-Level Confidentiality
             (Sayre).
           </li>
           <li>
@@ -1439,10 +1479,32 @@
 	  <section numbered="true" toc="default">
 		 <name>Changes from draft-ietf-emailcore-as-20 to -21</name>
 		 <ul spacing="normal">
-			<li> Restructured <xref target="HTML-validation"/>, added
-			   new <xref target="Other-Restrictions"/>, and updated
-			   reference <xref target="HTML5"/>.
+			<li> Restructured <xref target="HTML-validation"/> and
+			   eliminated the dependency of the discussion on
+			   deviations from the core email specs on, e.g., various
+			   versons of HTML.
+			   <br/>
+			   Added new Section 4.4, and
+			   eliminated references that are now unnecessary.
 			</li>
+			<li> Minor editorial corrections. </li>
+		 </ul>
+	  </section>
+	  <section numbered="true" toc="default">
+		 <name>Changes from draft-ietf-emailcore-as-21 to -22</name>
+		 <ul spacing="normal">
+			<li> Rewrote <xref target="HTML-validation"/> to further
+			   reflect the "there are problems out there" approach,
+			   further reducing the dependencies associated with HTML.
+			   Re-integrated the Section 4.4 material that was
+			   separated in -21.
+			</li>
+			<li> Rewrote and reorganized <xref target="conf-auth"/>,
+			   grouping TLS-related material into another layer of
+			   subsections (<xref target="transport-sec"/>) and
+			   applying a set of changes agreed by the WG.</li>
+			<li> Numerous, but individually minor, editorial
+			   adjustments and corrections.</li>
 		 </ul>
 	  </section>
 	  
