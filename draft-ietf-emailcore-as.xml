@@ -5,73 +5,23 @@
   <!ENTITY nbhy   "&#8209;">
   <!ENTITY wj     "&#8288;">
 ]>
-<!-- Extra statement used by XSLT processors to control the output style. -->
+
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-<!-- Processing Instructions- PIs (for a complete list and description,
-     see file http://xml.resource.org/authoring/README.html.
-     You may find that some sphisticated editors are not able to edit PIs when palced here.
-     An alternative position is just inside the rfc elelment as noted below. -->
-<!-- Some of the more generally applicable PIs that most I-Ds might want to use -->
-<!-- Try to enforce the ID-nits conventions and DTD validity -->
+
 <?rfc strict="yes" ?>
-<!-- Items used when reviewing the document -->
-<!-- Controls display of <cref> elements -->
 <?rfc comments="yes" ?>
-<!-- When no, put comments at end in comments section,
-     otherwise, put inline -->
 <?rfc inline="yes" ?>
-<!-- When yes, insert editing marks: editing marks consist of a 
-     string such as <29> printed in the blank line at the 
-     beginning of each paragraph of text. -->
 <?rfc editing="no" ?>
-<!-- Create Table of Contents (ToC) and set some options for it.  
-     Note the ToC may be omitted for very short documents,but idnits insists on a ToC 
-     if the document has more than 15 pages. -->
 <?rfc toc="yes"?>
 <?rfc tocompact="yes"?>
-<!-- If "yes" eliminates blank lines before main section entries. -->
 <?rfc tocdepth="3"?>
-<!-- Sets the number of levels of sections/subsections... in ToC.
-   Can be overridden by 'toc="include"/"exclude"' on the section
-   element-->
-<!-- Choose the options for the references. 
-     Some like symbolic tags in the references (and citations) and others prefer 
-     numbers. The RFC Editor always uses symbolic tags.
-     The tags used are the anchor attributes of the references. -->
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes" ?>
-<!-- If "yes", causes the references to be sorted in order of tags.
-     This doesn't have any effect unless symrefs is "yes" also. -->
-<!-- These two save paper: Just setting compact to "yes" makes savings by not starting each 
-     main section on a new page but does not omit the blank lines between list items. 
-     If subcompact is also "yes" the blank lines between list items are also omitted. -->
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<!-- end of list of popular I-D processing instructions -->
-<!-- Information about the document.
-     category values: std, bcp, info, exp, and historic
-     For Internet-Drafts, specify attribute "ipr".
-         original ipr values are: full3978, noModification3978, noDerivatives3978), 
-         2008 IETF Trust versions: trust200811, noModificationTrust200811, noDerivativeTrust200811
-         2009/Current: trust200902, noModificationTrust200902, noDerivativesTrust200902, pre5378Trust200902
-     Also for Internet-Drafts, you must specify a value for attributes "docName" which is 
-        typically the file name under which it is filed but need not be.
-     If relevant, "iprExtract" may be specified to denote the anchor attribute value of a
-        section that can be extracted for separate publication, it is only useful when the value
-        of "ipr" does not give the Trust full rights.
-     "updates" and "obsoletes" attributes can also be specified here, their arguments are
-        comma-separated lists of RFC numbers (just the numbers) -->
-
-<!-- emailcore-as-21b 2025-08-10.  Posting version.
-    Note CREF questions in Section 4 from -21a removed -->
-<!-- emailcore-as-22a and 22b Changes to Section 4.3, including adding
-    and then removing 4.4
-    -22c preliminary changes to Section 6
-    -22d Section 6.1 reorganization into subsections
--->
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-22"
+     docName="draft-ietf-emailcore-as-23"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -84,9 +34,6 @@
      sortRefs="true"
      consensus="true"
      version="3">
-  <!-- xml2rfc v2v3 conversion 3.15.0 -->
-  <!-- obsoletes='2821, 821' updates='1123'
-        category='std' (bcp, info, exp, historic)  -->   
 
 
   <!-- ***** FRONT MATTER ***** -->
@@ -94,8 +41,8 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-22"/>
-    <!-- add 'role="editor"' below for the editors if appropriate -->
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-23"/>
+	
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
       <organization/>
@@ -125,31 +72,16 @@
         <email>murch@fastmailteam.com</email>
       </address>
     </author>
-<!--
-    <author initials="E." surname="Sam" fullname="E Sam" role="editor">
-      <organization/>
-      <address>
-        <email>winshell64@gmail.com </email>
-      </address>
-    </author>
--->
-    <date/>
-    <!-- Meta-data Declarations -->
+
+	<date/>
+
     <area>ART</area>
     <workgroup>EMAILCORE</workgroup>
     <keyword>SMTP</keyword>
     <keyword>MIME</keyword>
     <keyword>TLS</keyword>
-    <keyword>DMARC</keyword>
-    <!-- WG name at the upper left corner of the doc,
-         IETF fine for individual submissions.  You can also
-         omit this element in which case it defaults to "Network Working Group" -
-         a hangover from the ancient history of the IETF!
-         <workgroup>Network Working Group</workgroup>   -->
-
-    <!-- You can add <keyword/> elements here.  They will be incorporated into HTML output
-         files in a meta tag but they have no effect on text or nroff output. -->
-    <!-- <keyword>Text</keyword> (as many of those elements as needed -->
+	<keyword>DMARC</keyword>
+	<keyword>Internet Mail Format</keyword>
 
     <abstract>
       <t> Electronic mail is one of the oldest Internet
@@ -165,7 +97,8 @@
       protocols.</t>
 	</abstract>
 	
-<!-- issues listed in this draft note updated to -22 
+	<!-- Retaining this note outline as a placeholder in case needed
+	   later.   Issues listed in this draft note updated to -22 
     <note title="Open Issues">
       <ul>
         <li>
@@ -195,7 +128,6 @@
       Transfer Protocol (SMTP)</xref> and the
       <xref target="I-D.ietf-emailcore-rfc5322bis">Internet Message
 		 Format (IMF)</xref>,
-	  <!-- 20250226 JcK -->
 	  and some extensions and other protocols that have been built on
       them.
       In order to promote interoperability amongst senders, receivers,
@@ -223,14 +155,14 @@
       <t> Over the years since <xref target="RFC5321"/> was
         published in October 2008, usage of SMTP has evolved,
 		machines and
-	  <!-- 20250226 JcK -->		
         network speeds have increased, and the frequency with which most
         SMTP senders and receivers have to be prepared to deal with
         systems that are disconnected from the Internet for long
         periods or that require many hops to reach has decreased.
         During the same period, the IETF
 
-        <!-- Could say "Internet" above, but I'm not sure it would be true -->
+        <!-- Could say "Internet" instead of "IETF" above, but I'm
+		   not sure it would be true --> 
 
         has become much more sensitive to privacy and security
         issues and the need to be more resistant or robust against
@@ -241,7 +173,6 @@
       </t>
 
 	  <t> This section describes
-	  <!-- 20250226 JcK -->		 
 		 configuration options and other considerations
 		 about SMTP that may be appropriate under various circumstances
       and discusses the applicability of other protocols that
@@ -280,7 +211,6 @@
       <section numbered="true" toc="default">
         <name>Use of Addresses in Top-Level Domains</name>
 		<t> While addresses in top-level domains (TLDs)
-		   <!-- 20250226 JcK -->
 		    (i.e., single-label domains) are
           syntactically valid, mail to these addresses has never
           worked reliably.
@@ -298,7 +228,6 @@
           root, mail in computer science departments started to fail
           as mail to bob@cs was now treated as mail to
           Czechoslovakia.
-		  <!-- 20250226 JcK  (typo corrected) -->
 		  Hence, for reliable service, mail SHOULD NOT use addresses
           that contain single label domains. </t>
       </section>
@@ -314,7 +243,6 @@
           <li>
             <xref target="RFC3207">Secure SMTP over Transport Layer
 			   Security</xref> 
-			<!-- 20250226 JcK -->
 		  (Cf. discussion in <xref target="transport-sec"/>.)</li>
           <li>
             <xref target="RFC6152">8-bit MIME</xref>
@@ -327,9 +255,7 @@
           <li>
             <xref target="RFC2920">Command Pipelining</xref>
           </li>
-          <li>  <!-- 20250824 converted references to a group to add a few more
-			 RFCs and eliminate the awkward parenthetical -->
-            Internationalized Email <xref target="SMTPUTF8"/>
+          <li>  Internationalized Email <xref target="SMTPUTF8"/>
           </li>
         </ul>
 
@@ -363,7 +289,6 @@
     </section>
 	<section numbered="true" toc="default">   
 	   <name>Applicability of Message Format Provisions</name>
-	  <!-- 20250226 JcK -->		   
       <t> This section describes considerations about the Internet Message
         Format that may be appropriate under various circumstances. </t>
       <section numbered="true" anchor="empty-quoted" toc="default">
@@ -447,7 +372,6 @@
         <t>Many mail user agents (MUAs) have functions which use an
         existing email message as a template for editing a new
 		message.
-		<!-- 20250226 JcK -->
 		These functions are different from traditional forwarding
 		functions.  Those generally preserve the original message as a
 		body part or just the message body as quoted text.
@@ -518,17 +442,27 @@
         Since only the final delivery system can properly interpret
         the local-part of an address, originating and transit/relay
         mail systems are discouraged from making any assumptions as to
-        address equivalency or from making any changes to local-parts
+        address equivalence or from making any changes to local-parts
         containing such delimiters.</t>
       </section>
 
       <section anchor="non-ascii" numbered="true" toc="default">
         <name>Use of non-ASCII Characters</name>
-	  <!-- 20250226 JcK -->	
         <t>Proper generation and transmission of email addresses
         containing non-ASCII characters is discussed in the SMTPUTF8
 		documents
-        <xref target="SMTPUTF8" />.
+		<xref target="SMTPUTF8" />
+		<!-- When I made Pete's correction (20250830 note) for the
+		above, it left "[IDNA2008]" without a citation.  I think one
+		is desirable, so contrived an addition to the sentence as...
+		-->
+		<!-- Rob Sayer prefers the reference be elsewhere.  His
+		reasoning and my response are at
+		&lt;https://mailarchive.ietf.org/arch/msg/emailcore/MGJ8OJLL4hWEKXtFAUiWRIiPugs&gt;
+		-->
+		with more details for the domain-part in the
+		<xref target="IDNA2008"> specifications for Internationalized
+		   Domain Names</xref>.
         <xref target="RFC6530" section="9"/> says: "a downgrade
         mechanism that transforms the local part of an email address
         cannot be utilized in transit."
@@ -561,32 +495,6 @@
         See <xref target="RFC6530" section="8"/> for further discussion.
         </t>
       </section>
-<!--
-      <section numbered="true" toc="default">
-        <name>Use of Quoted Strings in Local Parts</name>
-
-        <t>The <tt>quoted-string</tt> ABNF
-            non-terminal is used in various places in
-            <xref target="I-D.ietf-emailcore-rfc5321bis"/> and
-            <xref target="I-D.ietf-emailcore-rfc5322bis"/>
-            grammar as a way to allow strings that are otherwise
-            forbidden in mailbox local parts. In practice, quoted
-            strings in "local-part" (left hand side of email
-            addresses) do not work reliably in SMTP and therefore
-            their use is discouraged.
-            For example, all of the following email addresses are
-            non-interoperable:
-        </t>
-
-        <ul empty="true">
-          <li>"".bar@example.com </li>
-          <li>foo.""@example.net</li>
-          <li>""@example.com</li>
-          <li>"a..b"@example.com</li>
-        </ul>
-
-      </section>
--->
 
 	  <section numbered="true" toc="default" anchor="HTML-validation">
         <name>Use and Validation of Email Address Syntax</name>
@@ -605,27 +513,13 @@
 	       <xref target="I-D.ietf-emailcore-rfc5321bis" section="4.1.2"/>,
 		   the grammars for use of non-ASCII email addresses
 		   specified in
-		   <xref target="IDNA2008"> the IDNA specifications</xref>, and
+		   <xref target="SMTPUTF8"> the SMTPUTF8 specifications</xref>, and
 	       common practices on the network.  Specifically, the
 		   following differences from the standards mentioned above
 		   have been observed frequently enough that implementers
 		   should be aware of them.  In no particular order, the
 		   important ones are:</t>
- 
-        <!-- deleted HyperText Markup Language (HTML) forms
-        (see <xref target="HTML5" section="4.10.5.1.5"
-              relative="#valid-e-mail-address"/>) but the allowed
-		grammar 
-        of these email addresses is inconsistent with that allowed by
-		the grammar for a 'Mailbox' in
-        <xref target="I-D.ietf-emailcore-rfc5321bis"
-			 section="4.1.2"/>,
-		the grammars for use of non-ASCII email address specified in
-		<xref target="RFC5890">RFC 5890</xref>, and common practices
-		on the network.
-        Specifically, the HTML grammar for elements specified as email
-		addresses:</t>  )  -->
-        
+         
         <ul spacing="normal">
           <li>Absence of support for quoted strings.</li>
           <li>Even when restricted to the ASCII charset, some systems have a
@@ -700,8 +594,6 @@
         specification and its predecessors, MIME features such as
         non-textual message bodies, multi-part message bodies, and the
 		use of character sets other than US-ASCII in message bodies
-
-	  <!-- 20250226 JcK  "and header fields" dropped-->
         have become nearly ubiquitous in contemporary
         email.
         As a result, IMF generators and parsers are expected to support MIME.
@@ -749,7 +641,13 @@
             <xref target="RFC8551">S/MIME</xref> and
             <xref target="RFC9580">OpenPGP</xref> allow for message
             confidentiality outside of the operation of SMTP and were
-			originally focused only on the message content.
+			originally focused only on the message content.  Newer
+			specifications (see below) extend them to cover header
+			confidentiality as well.
+			<!-- Resnick note 20250830: drop "and were...content"??
+			   20250901: added last sentence .. my preference is to not
+			   drag in 9788 and its complicated title here.
+			-->
           </li>
         </ul>
 
@@ -758,11 +656,6 @@
 
         <section anchor="transport-sec" numbered="true" toc="default">
 		   <name>Security at the Transport Layer</name>
-		   <!-- 20250827, Restructured Section 6.
-		   Title changed to to distinguish from security at the
-		   transport level more generally.
-		   See Klensin-> Resnick email on list 2025-08-26
-		   -->
           <t>The Internet email environment has evolved over the years so that
 			 the SMTP protocol itself can be used in conjunction with
           <xref target="RFC8446">Transport Layer Security (TLS)</xref>
@@ -787,9 +680,6 @@
 			authentication, it typically only authenticates
 			the server side of the communication
             channel (see <xref target="enforced-tls"/>).
-<!--            TLS only requires authentication of the server side
-            of the communication channel; authentication of the client
-            side is optional.-->
             </li>
             <li>The term "confidentiality" describes a state where the
             data (i.e., the message) is transmitted in a way that it is
@@ -799,30 +689,18 @@
           <t>It is not uncommon for implementers to use the term
           "encryption" to mean "confidentiality", but this is not quite
           correct. Rather, encryption using TLS is the most common current method by
-          <!-- "most common" added above, per Resnick msg to list 2025-08-25 -->
 		  which confidentiality is achieved with SMTP, but that does not
           mean that other methods might not be used or future ones developed.</t>
-<!--
-          <t>Note that with typical email use of TLS, authentication only is
-          performed for the target receiving server and is not done for
-          the sending client. That is, it serves to validate that the
-          connection has been made to the intended server, but does not
-          validate who initiated it.</t>
--->
 
 	   <section anchor="tls" numbered="true" toc="default">
 		  <name> The TLS Protocol </name>
 		  <t>The TLS Protocol <xref target="RFC8446"/> 
 			 provides confidentiality while the message is in
 			 transit from an SMTP client to the next SMTP server.
-			 <!-- Per Klensin-> Resnick note 20250826, "from..." added
-			 to above and "servers" below changed to "client and
-			 server" -->
 			 Both client and server will have access to the plain
           text of the message and there is no guarantee that the
           message will be stored in an encrypted fashion at its
 		  destination.
-		  <!-- Changed per Resnick-Klensin discussion on 20250826 -->
 		  Furthermore, in situations where a message traverses
 		  multiple hops through multiple SMTP servers, each
 		  intermediate server will typically store the message in
@@ -842,8 +720,10 @@
           fails, the client falls back to sending the message in clear
           text.</t>
 
+	   <!-- Resnick note 20250830: Applied what I think was Pete's
+	      correction.  Is it right now?? -->
           <t>Opportunistic TLS is optional confidentiality due
-          to provision in the TLS protocol for falling back to
+          to provision for falling back to
 		  transmission in the clear if 
           a secure connection cannot be established.
           Opportunistic TLS is often configured to provide
@@ -854,29 +734,15 @@
           and so the vast
           majority of email traffic is encrypted during its time
 		  transiting from the client to the next server.</t>
-	   <!-- above change, Resnick -> Klensin 20250825 -->
 
           <t>Note that opportunistic TLS via the
           <xref target="RFC3207">STARTTLS</xref> extension is
           vulnerable to man-in-the-middle attacks.
           <xref target="enforced-tls">Enforced confidentiality</xref>
           can be used to mitigate these attacks.</t>
-<!--
-          <t>Also, note that while TLS provides protection while the message is
-          in transit, there is no guarantee that the message will be
-          stored in encrypted fashion at its destination. In fact,
-          storage in plain text should be expected!
-          Also, in a situation where a message traverses multiple hops
-          through multiple SMTP servers, each intermediate server will
-          have access to the plain text of the message.-->
-<!--          The only way to completely assure confidentiality so that no
-          one server has access to the-->
-<!--          The only way to prevent any of the intermediate
-          servers from having access to the plain text
-          contents of a message is to use message-level
-          confidentiality as described in <xref target="message-conf"/>.</t>-->
       </section>
-      <section numbered="true" anchor="enforced-tls" toc="default">
+
+	  <section numbered="true" anchor="enforced-tls" toc="default">
         <name>Enforced Confidentiality,
         with Receiving Server Authentication</name>
         <t>Two protocols exist that move message confidentiality
@@ -887,10 +753,6 @@
           servers relying on either protocol can state that they
           only accept mail if the transmission can be encrypted with
 		  TLS.
-		  <!-- rest of sentence removed 20250826 per email discussion:
-		  and a failure to negotiate a secure connection MUST
-          result in the sending client refusing to transmit the
-		  message. -->
 		  Support for both protocols is increasing, but is
           not yet mandatory.</t>
         <t>These two protocols differ from Opportunistic TLS in that
@@ -933,9 +795,21 @@
           hop to record results of authentication checks performed at
           that hop.
 	  </li>
+	  <li>
+	    <xref target="RFC8551">S/MIME</xref>
+            and <xref target="RFC9580">OpenPGP</xref>,
+	    along with
+	    <xref target="RFC9788">
+	      Header Protection for
+	      Cryptographically Protected E-mail</xref>,
+	    allow for email messages to be digitally signed, thereby providing
+	    a method to verify that an email message was actually sent
+	    by the entity claiming to be the sender.
+	  </li>	 
 	</ul>
         <t>All of these are outside the scope of this document, as
-          they are outside the scope of SMTP.  All of them are subject
+          they are outside the scope of SMTP.  All of them are, to
+		  greater or lesser degrees,  subject
 		  to risks of compromise on systems processing messages
 		  between transport links as discussed above.</t>
       </section>
@@ -947,9 +821,7 @@
           is an extension to SMTP. While its name might suggest
           that it would be within scope for this section of the
 		  Applicability Statement, that is not the case.</t>
-		  <!-- 20250828 "nothing could be further from the
-          truth." dropped as hyperbole.  Many things could be further
-		  from the truth.  -->
+
         <t>SMTP AUTH defines a method for a client to identify
           itself to a Message Submission Agent (MSA) when presenting a
           message for transmission, usually using ports 465 or 587 rather than
@@ -1005,18 +877,10 @@
         interoperation.</t>
       </section>
     </section>
-    <!--
-      <section title="Other Stuff">
-      <t> It is fairly clear that there will be things that do not
-      fit into the sections outlined above.  As one example, if
-      the IETF wants to say something specific about signatures
-      over headers or what (non-trace) headers may reasonably be
-      altered in transit, that may be more appropriate to other
-      sections than to any of the three suggested above.</t>
-      </section>
--->
-      <section anchor="Acknowledgments" numbered="true" toc="default">
-      <name>Acknowledgments</name>
+
+	<section anchor="Acknowledgments" numbered="true" toc="default">
+	   <name>Acknowledgments</name>
+	   <!-- ??? Needs work -->
       <t>The Emailcore group arose out of discussions on the
         ietf-smtp group over changes and additions that should be made
         to the core email protocols.
@@ -1030,20 +894,19 @@
         Barry Leiba, John Levine, Alexey Melnikov, Pete Resnick, and
         E. Sam.</t>
       </section>
-    <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" numbered="true" toc="default">
       <name>IANA Considerations</name>
       <t>This memo includes no requests to or actions for IANA.  The
       IANA registries associated with the protocol specifications
-      it references are specified in their respective documents.</t>
+      they reference are specified in their respective documents.</t>
     </section>
 
     <section anchor="Security" numbered="true" toc="default">
       <name>Security Considerations</name>
       <t>Security and privacy considerations are discussed throughout
 		 this document as they pertain to the referenced specifications.
-		 <!-- 20250226 JcK -->
+
 	  Special note should be taken of the interaction between 
 	  confidentiality and authentication mechanisms that are applicable
 	  to Internet links and therefore potentially sensitive to the
@@ -1054,6 +917,7 @@
 	  endpoints. </t> 
     </section>
   </middle>
+
   <!--  *****BACK MATTER ***** -->
 
   <back>
@@ -1065,19 +929,8 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
-<!-- the following is the minimum to make xml2rfc happy -->
-   <!--   <reference anchor="min_ref">
-
-        <front>
-          <title>Minimal Reference</title>
-          <author initials="authInitials" surname="authSurName">
-            <organization></organization>
-            <address/>
-          </author>
-          <date year="2006" />
-        </front>
-        </reference>  -->
-      </references>
+	  </references>
+	  
       <references>
         <name>Informative References</name>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.1034.xml"/>
@@ -1107,9 +960,9 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
-<!--        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3492.xml"/>-->
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
+          <!-- Next was I-D.ietf-lamps-header-protection -->
 		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9788.xml"/>
 
 		<referencegroup anchor="IDNA2008">
@@ -1125,42 +978,10 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6532.xml"/>
 		</referencegroup>  
-
-		<!-- (dropped 202508-12, -21
-		<reference anchor="HTML5" target="https://html.spec.whatwg.org/">
-          <front>
-            <title>HTML Living Standard</title>
-            <author>
-              <organization>Web Hypertext Application Technology
-              Working Group</organization>
-            </author>
-            <date day="4" month="October" year="2022"/>
-		  </front>
-		  <annotation> Note that as a Living Standard, the text,
-			 specifications, and even the section number given in the
-			 text above may have changed before the reference is
-			 used.</annotation>
-        </reference>  -->
-        <!-- Right back at the beginning we defined an entity which (we asserted) would contain
-             XML needed for a reference... this is where we use it. -->
-
-      <!-- A reference written by by an organization not a person. 
-           NOTE: This reference is not referenced: this is immoral in I-Ds and RFCs, but may not
-           be in other technical documents. It will be flagged when strict="yes". -->
-
-   <!--      <reference anchor="DOMINATION"
-                 target="http://www.example.com/dominator.html">
-        <front>
-          <title>Ultimate Plan for Taking Over the World</title>
-          <author>
-            <organization>Mad Dominators, Inc.</organization>
-          </author>
-          <date year="1984" />
-        </front>
-      </reference>  -->
-
-    </references>
-    </references>
+	  </references>
+	  
+	</references>
+	
     <!--   Sections below here become  Appendices.  -->
 
     <section anchor="ChangeLog" numbered="true" toc="default">
@@ -1505,6 +1326,20 @@
 			   applying a set of changes agreed by the WG.</li>
 			<li> Numerous, but individually minor, editorial
 			   adjustments and corrections.</li>
+		 </ul>
+	  </section>
+
+	  <section numbered="true" toc="default">
+		 <name>Changes from draft-ietf-emailcore-as-22 to -23</name>
+		 <ul spacing="normal">
+			<li> Corrected an error in which IDNA2008 documents were
+			   cited rather than SMTPUTF8 ones and tuned text
+			   slightly. </li>
+			<li> Tuned discussions of S/MIME, PGP, and RFC 9788
+			   slightly, including new text in
+			   <xref target="message-conf"/> </li>
+			<li> Corrected an error in the description of
+			   Opportunistic TLS.</li>
 		 </ul>
 	  </section>
 	  
