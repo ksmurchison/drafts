@@ -21,7 +21,7 @@
 <?rfc subcompact="no" ?>
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-24"
+     docName="draft-ietf-emailcore-as-25"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -41,7 +41,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-24"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-25"/>
 	
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -73,7 +73,7 @@
       </address>
     </author>
 
-	<date/>  <!-- 2025-06-15 -->
+	<date/>  <!-- 2025-10-18 -->
 
     <area>ART</area>
     <workgroup>EMAILCORE</workgroup>
@@ -985,7 +985,8 @@
 		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
 		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6854.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
+		<xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
+
           <!-- Next was I-D.ietf-lamps-header-protection -->
 		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9788.xml"/>
 
@@ -1004,7 +1005,7 @@
 		</referencegroup>
 
 		<reference anchor="SMTP-IANA-cleanup"
-              target="https://datatracker.ietf.org/doc/draft-melnikov-smtp-iana-cleanup/">
+              target="https://datatracker.ietf.org/doc/draft-ietf-emailcore-iana-cleanup/">
           <front>
 			 <title>Updates to SMTP related IANA registries</title>
 			 <author initials="A." surname="Melnikov"
@@ -1012,9 +1013,7 @@
 				<organization/>
 			 </author>
           </front>
-		  <annotation>Work in progress.  This document is expected to
-			 be adopted as an EMAILCORE work item before this I-D goes
-			 to the IESG, with an update to the "target" URL.</annotation>
+		  <annotation>Work in progress.</annotation>
 		</reference>
 
 	  </references>  <!-- end Informative References -->
@@ -1390,6 +1389,17 @@
 			   document to warn people that would be coming.</li>
 			<li> Added a brief description/ comments about group
 			   syntax (Section <xref target="GroupSyntax"/>. </li>
+			<li> Small editorial correction.</li>
+		 </ul>
+	  </section>
+
+	  <section numbered="true" toc="default">
+		 <name>Changes from draft-ietf-emailcore-as-24 to -25</name>
+		 <ul spacing="normal">
+			<li> Corrected the SMTP-iana-cleanup reference to point to
+			   the WG-adopted document,
+			   draft-ietf-emailcore-iana-cleanup, replacing the
+			   reference to draft-melnikov-smtp-iana-cleanup.</li>
 		 </ul>
 	  </section>
 
