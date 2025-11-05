@@ -21,7 +21,7 @@
 <?rfc subcompact="no" ?>
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-23"
+     docName="draft-ietf-emailcore-as-24"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -41,7 +41,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-23"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-24"/>
 	
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -73,7 +73,7 @@
       </address>
     </author>
 
-	<date/>
+	<date/>  <!-- 2025-06-15 -->
 
     <area>ART</area>
     <workgroup>EMAILCORE</workgroup>
@@ -187,7 +187,7 @@
           server may refuse any mail from the client as part of
           established anti-abuse practice.
           Operational experience has demonstrated that the lack of
-          a matching address record for the the domain name
+          a matching address record for the domain name
           argument is at best an indication of a poorly-configured
           MTA, and at worst that of an abusive host. </t>
       </section>
@@ -388,7 +388,22 @@
           (see <xref target="I-D.ietf-emailcore-rfc5322bis"
           section="3.6.7"/>)</li>
         </ul>
-      </section>
+	  </section>
+
+	  <section numbered="true" toc="default" anchor="GroupSyntax">
+		 <name> Group Syntax </name>
+		 <t> "Group" syntax
+			<xref target="I-D.ietf-emailcore-rfc5322bis"/>
+			<xref target="RFC6854"/>
+			has been a long-standing construct in the specification,
+			going back to <xref target="RFC822">RFC 822</xref>, but
+			it has had little use in all that time.  It is therefore
+			possible that use of it in a message will conform with
+			the specifications but not be supported by some
+			implementations.</t> 
+	  </section>
+	  
+
     </section>
 
     <section numbered="true" toc="default">
@@ -897,9 +912,16 @@
 
     <section anchor="IANA" numbered="true" toc="default">
       <name>IANA Considerations</name>
-      <t>This memo includes no requests to or actions for IANA.  The
-      IANA registries associated with the protocol specifications
-      they reference are specified in their respective documents.</t>
+	  <t>This memo includes no requests to or actions for IANA.  The
+		 IANA registries associated with the protocol specifications
+		 they reference are specified in their respective documents.
+	     A companion document
+		 <xref target="SMTP-IANA-cleanup"/> that will 
+	     complete the work on reorganizing and updating the email
+	     registries begun in
+		 <xref target="I-D.ietf-emailcore-rfc5321bis"/> is under
+		 development.
+	  </t>
     </section>
 
     <section anchor="Security" numbered="true" toc="default">
@@ -932,7 +954,8 @@
 	  </references>
 	  
       <references>
-        <name>Informative References</name>
+		 <name>Informative References</name>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.822.xml"/>	 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.1034.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.1984.xml"/>
@@ -959,7 +982,8 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
+		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
+		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6854.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5322bis.xml"/>
           <!-- Next was I-D.ietf-lamps-header-protection -->
@@ -977,8 +1001,23 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6530.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6531.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6532.xml"/>
-		</referencegroup>  
-	  </references>
+		</referencegroup>
+
+		<reference anchor="SMTP-IANA-cleanup"
+              target="https://datatracker.ietf.org/doc/draft-melnikov-smtp-iana-cleanup/">
+          <front>
+			 <title>Updates to SMTP related IANA registries</title>
+			 <author initials="A." surname="Melnikov"
+					 fullname="Alexey Melnikov">
+				<organization/>
+			 </author>
+          </front>
+		  <annotation>Work in progress.  This document is expected to
+			 be adopted as an EMAILCORE work item before this I-D goes
+			 to the IESG, with an update to the "target" URL.</annotation>
+		</reference>
+
+	  </references>  <!-- end Informative References -->
 	  
 	</references>
 	
@@ -1340,9 +1379,20 @@
 			   <xref target="message-conf"/> </li>
 			<li> Corrected an error in the description of
 			   Opportunistic TLS.</li>
+			<li> A few small editorial changes/ corrections. </li>
 		 </ul>
 	  </section>
-	  
+
+	  <section numbered="true" toc="default">
+		 <name>Changes from draft-ietf-emailcore-as-23 to -24</name>
+		 <ul spacing="normal">
+			<li> Added an informative reference to the iana-cleanup
+			   document to warn people that would be coming.</li>
+			<li> Added a brief description/ comments about group
+			   syntax (Section <xref target="GroupSyntax"/>. </li>
+		 </ul>
+	  </section>
+
    </section>
   </back>
 </rfc>
