@@ -21,7 +21,7 @@
 <?rfc subcompact="no" ?>
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     docName="draft-ietf-emailcore-as-25"
+     docName="draft-ietf-emailcore-as-26"
      ipr="trust200902"
      category="std"
      obsoletes=""
@@ -41,7 +41,7 @@
   <front>
     <title abbrev="Core Email A/S">Applicability Statement for IETF
     Core Email Protocols</title> 
-    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-25"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-emailcore-as-26"/>
 	
     <author fullname="John C Klensin" initials="J.C."
             surname="Klensin" role="editor">
@@ -266,8 +266,8 @@
         systems that receive them to not recognize or support them.
         Note that this extension for notification requests is distinct
         from the format of notifications defined in
-        <xref target="RFC3464"/> and <xref target="RFC6533"/>
-        and, the special media type defined in <xref target="RFC6522"/>.
+        <xref target="RFC3464"/> and <xref target="RFC6533"/>,
+        and the special media type defined in <xref target="RFC6522"/>.
         All of those SHOULD be supported.
         </t>
 
@@ -298,7 +298,7 @@
             non-terminal is used in various places in
             <xref target="I-D.ietf-emailcore-rfc5322bis"/>
             grammar.
-            While it allows for empty quoted string, such construct is
+            While it allows for empty quoted string, such a construct is
             going to cause interoperability issues when used in certain
             header fields.
             In particular, use of empty quoted  strings is discouraged
@@ -631,6 +631,7 @@
           <li>
             <xref target="RFC8446">TLS</xref>,
             <xref target="RFC3207">STARTTLS</xref>,
+            <xref target="RFC8689">Require TLS</xref>,
             <xref target="RFC8461">MTA-STS</xref>, and
             <xref target="RFC7672">DANE for SMTP</xref>
             offer confidentiality services between SMTP Clients and
@@ -757,32 +758,46 @@
           can be used to mitigate these attacks.</t>
       </section>
 
-	  <section numbered="true" anchor="enforced-tls" toc="default">
+      <section numbered="true" anchor="enforced-tls" toc="default">
         <name>Enforced Confidentiality,
-        with Receiving Server Authentication</name>
-        <t>Two protocols exist that move message confidentiality
-          from opportunistic to enforced (with conditions as noted below) -
-          <xref target="RFC8461">MTA-STS</xref> and
-          <xref target="RFC7672">DANE for SMTP</xref>.
-          While they differ in their implementation details, receiving
-          servers relying on either protocol can state that they
-          only accept mail if the transmission can be encrypted with
-		  TLS.
-		  Support for both protocols is increasing, but is
-          not yet mandatory.</t>
-        <t>These two protocols differ from Opportunistic TLS in that
-          they require receiving server authentication and there is no
-          fallback to sending in the clear.</t>
+            with Receiving Server Authentication</name>
 
-        <t>Note that the protocols mentioned in this section rely not
+          <t>Three protocols exist that move message confidentiality
+          from opportunistic to enforced (with conditions as noted below) -
+          <xref target="RFC8689">Require TLS</xref>,
+          <xref target="RFC8461">MTA-STS</xref>, and
+          <xref target="RFC7672">DANE for SMTP</xref>.</t>
+
+          <t>Require TLS allows sending clients to require
+          that mail only be transmitted encrypted with TLS.
+          If a TLS-protected SMTP session (with authenticated
+          certificate) can not be established with
+          the receiving server, the sending client will not transmit
+          the message.</t>
+
+          <t>While they differ in their implementation details, receiving
+          servers relying on MTA-STS and DANE for SMTP can state that they
+          only accept mail if the transmission can be encrypted with
+	  TLS.
+          These two protocols differ from Opportunistic TLS in that they
+          require receiving server authentication once the relevant receiver
+          policy is discovered. In the case of MTA-STS, initial discovery and
+          policy refresh may be vulnerable to downgrade attack. DANE policy
+          discovery is downgrade-resistant (relying on DNSSEC to prevent
+          false denial or tampering with policy lookup).</t>
+
+          <t>Note that MTA-STS and DANE for SMTP rely not
           only on the receiving server but also the sending client
           supporting the protocol intended to be used. If the sending
           client does not support the protocol
           requested by the receiving server, the sending client will
           use Opportunistic TLS or clear-text to transmit the
           message.</t>
-	  </section>
-	  </section>
+
+	  <t>Support for all of the protocols mentioned in this
+          section is increasing, but is not yet mandatory.</t>
+      </section>
+    </section>
 
       <section numbered="true" toc="default">
         <name>Message-Level Authentication</name>
@@ -822,20 +837,19 @@
 	    by the entity claiming to be the sender.
 	  </li>	 
 	</ul>
-        <t>All of these are outside the scope of this document, as
-          they are outside the scope of SMTP.  All of them are, to
-		  greater or lesser degrees,  subject
-		  to risks of compromise on systems processing messages
-		  between transport links as discussed above.</t>
+        <t>
+          A more detailed discussion of these mechanisms is out of scope for this
+          document.
+          All of them are, to greater or lesser degrees, subject to
+          risks of compromise on systems processing messages between
+          transport links as discussed above.</t>
       </section>
 
       <section numbered="true" toc="default">
         <name>SMTP Authentication</name>
         <t><xref target="RFC4954">SMTP Authentication</xref>,
           which is often abbreviated as SMTP AUTH,
-          is an extension to SMTP. While its name might suggest
-          that it would be within scope for this section of the
-		  Applicability Statement, that is not the case.</t>
+          is an extension to SMTP.</t>
 
         <t>SMTP AUTH defines a method for a client to identify
           itself to a Message Submission Agent (MSA) when presenting a
@@ -982,6 +996,7 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6533.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6522.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3464.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8689.xml"/>
 		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3207.xml"/>
 		<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6854.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-emailcore-rfc5321bis.xml"/>
@@ -1341,7 +1356,7 @@
 			<li> Restructured <xref target="HTML-validation"/> and
 			   eliminated the dependency of the discussion on
 			   deviations from the core email specs on, e.g., various
-			   versons of HTML.
+			   versions of HTML.
 			   <br/>
 			   Added new Section 4.4, and
 			   eliminated references that are now unnecessary.
@@ -1401,6 +1416,30 @@
 			   draft-ietf-emailcore-iana-cleanup, replacing the
 			   reference to draft-melnikov-smtp-iana-cleanup.</li>
 		 </ul>
+	  </section>
+
+	  <section numbered="true" toc="default">
+	    <name>Changes from draft-ietf-emailcore-as-25 to -26</name>
+	    <ul spacing="normal">
+	      <li>Removed a couple of misplaced and/or no longer
+              relevent "out of scope" statements. (issue
+              <eref
+                  target="https://github.com/ietf-wg-emailcore/emailcore/issues/145">
+                #140</eref>)</li>
+              <li>Clarify that Require TLS (RFC8689) also addresses the
+              downgrade attack in STARTTLS (issue
+              <eref
+                  target="https://github.com/ietf-wg-emailcore/emailcore/issues/145">
+                #144</eref>).
+              </li>
+              <li>Added text stating that MTA-STS is vulnerable to downgrade
+              attacks during discovery (issue
+              <eref
+                  target="https://github.com/ietf-wg-emailcore/emailcore/issues/145">
+                #145</eref>).
+              </li>
+              <li>Miscellaneous editoral changes.</li>
+	    </ul>
 	  </section>
 
    </section>
